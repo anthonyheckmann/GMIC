@@ -32,27 +32,11 @@
                   which can be used to ease the installation of <b><font color="#000066">G'MIC</font></b>, and to get quick updates as well.
                   Ubuntu users are invited to use this PPA, by typing the commands:
                   <pre style="font-family:monospace;">
-                    sudo add-apt-repository ppa:otto-kesselgulasch/gimp<br/>
-                    sudo apt-get update<br/>
+                    sudo add-apt-repository ppa:otto-kesselgulasch/gimp
+                    sudo apt-get update
                     sudo apt-get install gmic gimp-gmic
                   </pre>
                   </li>
-                <li><b><font color="black">Alternate repository:</font></b>
-                  A repository of <b><font color="#000066">G'MIC</font></b> packages for <b>Debian or Ubuntu Linux</b> is available,
-                  and can be added to your <tt>/etc/apt/sources.list</tt> file:<br/><br/>
-                  <tt style="font-family:monospace;">
-                    deb http://download.tuxfamily.org/ekdforum/ekd/gmic/gmic_apt xxxx contrib
-                  </tt><br/><br/>
-                  where <tt>xxxx</tt> can be replaced by <tt>etch</tt>, <tt>lenny</tt>, <tt>squeeze</tt>, <tt>sid</tt>, <tt>dapper</tt>, <tt>edgy</tt>, <tt>feisty</tt>,
-                  <tt>gutsy</tt>, <tt>hardy</tt>, <tt>intrepid</tt>, <tt>jaunty</tt>, <tt>karmic</tt>, <tt>lucid</tt>, <tt>maverick</tt>, <tt>natty</tt>, <tt>oneiric</tt>
-                  or <tt>precise-pangolin</tt>,
-                  depending on your distribution version.
-                  <br/><br/>Then, type:
-                  <pre style="font-family:monospace;">
-                    apt-get update
-                    apt-get install gmic
-                  </pre>
-                </li>
               </ul>
             </td>
         </tr></table>
@@ -72,18 +56,16 @@
         </ul>
     </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
 
-  <div id="bloc_option"><div id="top_bleu"><div id="text_top">CVS repository</div></div>
+  <div id="bloc_option"><div id="top_bleu"><div id="text_top">Git repository</div></div>
     <div id="center"><div id="text_centre_intro">
-        The source code of <b><font color="#000066">G'MIC</font></b> is hosted on a CVS repository with public access.
-        Accessing it via CVS ensures you get the latest code available, and will ease the
-        updates as well (knowing the tool <i>cvs</i> is needed indeed). To do this, just
-        type the commands:
+        The source code of <b><font color="#000066">G'MIC</font></b> is hosted on a <a href="http://git-scm.com/"><i>git</i></a> repository with public access.
+        Accessing it via <a href="http://git-scm.com/"><i>git</i></a> ensures you get the latest code available, and will ease the
+        updates as well. To do this, just type the commands:
         <pre style="font-family:monospace;">
-          export CVS_RSH=ssh<br/>
-          cvs -d:pserver:anonymous@gmic.cvs.sourceforge.net:/cvsroot/gmic co gmic
+          git clone http://git.code.sf.net/p/gmic/source gmic
         </pre>
-        in your favorite console. Nevertheless, you have to know that some code in the CVS version
-        may be experimental, so always test the latest stable archive before complaining !
+        in your favorite console. Nevertheless, you have to know that the code in the repository version
+        is under development and may be experimental, so always test the latest stable archive before complaining !
     </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
 
 <!--#include file="copyright.html" -->
