@@ -1,8 +1,8 @@
 #!/bin/bash
 cd ../
-cvs update
+git pull
 cd ../CImg
-cvs update
+git pull
 cd ../gmic/src
 rm -f CImg.h
 ln -s ../../CImg/CImg.h .
