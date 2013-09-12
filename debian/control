@@ -1,0 +1,25 @@
+Source: gmic
+Section: graphics
+Priority: optional
+Maintainer: Bernd Zeimetz <bzed@debian.org>
+Build-Depends: debhelper (>= 7.0.50),
+ libgimp2.0-dev (>= 2.4),
+ libx11-dev, libxrandr-dev, libfftw3-dev | fftw3-dev,
+ libopenexr-dev, libqt4-core
+Standards-Version: 3.9.2
+Homepage: http://gmic.sourceforge.net/
+Vcs-Git: git://git.debian.org/collab-maint/gmic.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/gmic.git
+
+Package: gmic
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Enhances : gimp
+Description: GREYC's Magic for Image Computing
+ G'MIC is an open and full-featured framework for image processing, providing
+ several different user interfaces to convert/manipulate/filter/visualize
+ generic image datasets, from 1d scalar signals to 3d+t sequences of
+ multi-spectral volumetric images.
+ .
+ This package contains the stand-alone binary, the library file, the
+ gimp plug-in and the webcam gui.

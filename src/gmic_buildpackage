@@ -1,0 +1,400 @@
+#!/bin/bash
+#
+#  File        : gmic_buildpackage
+#                ( Bash script )
+#
+#  Description : Build .tar.gz and .deb package files
+#                of G'MIC (GREYC's Magic for Image Computing).
+#
+#  Usage       : ./gmic_buildpackage [final]
+#
+#  Copyright   : David Tschumperle
+#                ( http://tschumperle.users.greyc.fr/ )
+#
+#  License     : CeCILL v2.0
+#                ( http://www.cecill.info/licences/Licence_CeCILL_V2-en.html )
+#
+#  This software is governed by the CeCILL  license under French law and
+#  abiding by the rules of distribution of free software.  You can  use,
+#  modify and/ or redistribute the software under the terms of the CeCILL
+#  license as circulated by CEA, CNRS and INRIA at the following URL
+#  "http://www.cecill.info".
+#
+#  As a counterpart to the access to the source code and  rights to copy,
+#  modify and redistribute granted by the license, users are provided only
+#  with a limited warranty  and the software's author,  the holder of the
+#  economic rights,  and the successive licensors  have only  limited
+#  liability.
+#
+#  In this respect, the user's attention is drawn to the risks associated
+#  with loading,  using,  modifying and/or developing or reproducing the
+#  software by the user in light of its specific status of free software,
+#  that may mean  that it is complicated to manipulate,  and  that  also
+#  therefore means  that it is reserved for developers  and  experienced
+#  professionals having in-depth computer knowledge. Users are therefore
+#  encouraged to load and test the software's suitability as regards their
+#  requirements in conditions enabling the security of their systems and/or
+#  data to be ensured and,  more generally, to use and operate it in the
+#  same conditions as regards security.
+#
+#  The fact that you are presently reading this means that you have had
+#  knowledge of the CeCILL license and that you accept its terms.
+#
+
+# Handle package building on Windows.
+#------------------------------------
+if [ "$OSTYPE" == "msys" ]; then
+    echo &&
+    echo " - Build G'MIC package for Windows." &&
+    cd &&
+    rm -rf gmic &&
+    cp -rf /e/src/gmic/src gmic &&
+    cd gmic &&
+    RELEASE0=`grep "#define gmic_version" gmic.h | tail -c 5` &&
+    RELEASE1=`echo $RELEASE0 | head -c 1` &&
+    RELEASE2=`echo $RELEASE0 | head -c 2 | tail -c 1` &&
+    RELEASE3=`echo $RELEASE0 | head -c 3 | tail -c 1` &&
+    RELEASE4=`echo $RELEASE0 | head -c 4 | tail -c 1` &&
+    VERSION=$RELEASE1.$RELEASE2.$RELEASE3.$RELEASE4 &&
+    if [ "$1" == "final" ]; then
+        SUFFIX="";
+        sed "s/IS_BETA_CFLAGS = -Dgmic_is_beta=1/IS_BETA_CFLAGS = /" Makefile > /tmp/Makefile
+        mv /tmp/Makefile Makefile
+    else SUFFIX=_beta;
+    fi &&
+    echo " - Release number : $VERSION$SUFFIX" &&
+    make clean &&
+    if [ "$1" == "final" ]; then
+        make
+        cp gmic_gimp.exe ../gmic_gimp_win32/
+        cp gmic_gimp.exe gmic.exe ../gmic_win32/
+        cd ../ &&
+        rm -rf gmic_${VERSION}${SUFFIX}_win32 &&
+        cp -rf gmic_win32 gmic_${VERSION}${SUFFIX}_win32 &&
+        zip -r -9 gmic_${VERSION}${SUFFIX}_win32.zip gmic_${VERSION}${SUFFIX}_win32 &&
+        zip -r -9 gmic_gimp_${VERSION}${SUFFIX}_win32.zip gmic_gimp_win32 &&
+        cp gmic_${VERSION}${SUFFIX}_win32.zip gmic_gimp_${VERSION}${SUFFIX}_win32.zip /e/src
+    else
+        make gimp;
+        cp gmic_gimp.exe ../gmic_gimp_win32/
+        cd ../ &&
+        cp -rf gmic_win32 gmic_${VERSION}${SUFFIX}_win32 &&
+        zip -r -9 gmic_gimp_${VERSION}${SUFFIX}_win32.zip gmic_gimp_win32 &&
+        cp gmic_gimp_${VERSION}${SUFFIX}_win32.zip /e/src
+    fi
+    return
+fi
+
+# Define release number.
+#-----------------------
+cd ${HOME}/dtschump/work/src
+RELEASE0=`grep "#define gmic_version" gmic/src/gmic.h | tail -c 5`
+RELEASE1=`echo $RELEASE0 | head -c 1`
+RELEASE2=`echo $RELEASE0 | head -c 2 | tail -c 1`
+RELEASE3=`echo $RELEASE0 | head -c 3 | tail -c 1`
+RELEASE4=`echo $RELEASE0 | head -c 4 | tail -c 1`
+VERSION=$RELEASE1.$RELEASE2.$RELEASE3.$RELEASE4
+DIR=/tmp/gmic-${VERSION}
+if [ "$1" == "final" ]; then SUFFIX=""; IS_BETA=""; else SUFFIX=_beta; IS_BETA=1; fi
+rm -f gmic_${VERSION}${SUFFIX}_*.deb gmic_${VERSION}${SUFFIX}.tar.gz gmic_${VERSION}${SUFFIX}_win32.zip \
+    gmic_gimp_${VERSION}${SUFFIX}_linux32.zip gmic_gimp_${VERSION}${SUFFIX}_linux64.zip \
+    gmic_gimp_${VERSION}${SUFFIX}_win32.zip gmic_gimp_${VERSION}${SUFFIX}_win32.exe
+
+echo
+echo " - Release number : $VERSION$SUFFIX"
+
+# Create default command file.
+#-----------------------------
+echo " - Create 'gmic_def.h' file"
+cd gmic/src/
+scp gmic_def.gmic ronounours,gmic@web.sourceforge.net:htdocs/gmic_def.$RELEASE1$RELEASE2$RELEASE3$RELEASE4
+make def
+./gmic_commit >& /dev/null
+
+# Perform filters update on the sourceforge server.
+#---------------------------------------------------
+echo " - Create list of filters."
+rm -f /tmp/gimp_filters.txt
+\gmic -update_gmic_gimp > /tmp/gimp_filters.txt
+size=`du -b /tmp/gimp_filters.txt | head -c 1`
+if [ "$size" != "0" ]; then
+     scp /tmp/gimp_filters.txt ronounours,gmic@web.sourceforge.net:htdocs/
+fi
+
+# Create man page.
+#-----------------
+echo " - Create man page."
+cd ../man
+rm -f man/gmic.1.gz
+echo -e "\
+.TH G'MIC 1 \"`date`\"\n\
+.SH NAME\n\
+gmic \\- Perform generic image processing operations, through the G'MIC language interpreter.\n\
+\n\
+.SH HELP\n\
+">gmic.1
+\gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help ascii 2>&1 | sed -e 's/'$(echo "\033")'/ESC/g' | \
+    sed 's/ESC\[4;31;59m/\\fB/g' | \
+    sed 's/ESC\[0;32;59m/\\fB/g' | \
+    sed 's/ESC\[1m/\\fB/g' | \
+    sed 's/ESC\[0;0;0m/\\fR/g' | \
+    sed 's/\\/\\\\/g' | \
+    sed 's/-/\\-/g' | \
+    sed 's/"/\\\"/g' |
+    sed "s/'/\\\'/g" >> gmic.1
+rm -f gmic.1.gz
+gzip gmic.1
+cvs commit -m ""
+cd ..
+
+# Create bash autocompletion script.
+#-----------------------------------
+echo " - Create bash autocompletion script."
+cd src/
+\gmic -v - gmic_def.gmic raw:gmic_def.gmic,uchar -document_gmic bash >& gmic_bashcompletion.sh
+chmod a+rx gmic_bashcompletion.sh
+cd ..
+
+# Create HTML reference and gallery pages.
+#------------------------------------------
+echo " - Create HTML reference page."
+cd html
+rm -f img/gmic_def*.jpg image.jpg
+ln -s img/tiger.jpg image.jpg
+\gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar -document_gmic images,img/
+\gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help html >& reference.shtml
+rm -f image.jpg
+\gmic ../src/gmic_def.gmic gallery.gmic -gmic_gallery
+cd ..
+
+# Create .pdf handbook.
+#----------------------
+echo " - Create PDF reference handbook."
+cd html
+\gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help latex >& reference.tex
+pdflatex reference.tex
+makeindex reference
+pdflatex reference.tex
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=gmic_reference.pdf reference.pdf
+rm -f reference.aux reference.idx reference.ind reference.out reference.ilg reference.log reference.pdf
+cd ..
+
+# Construct a clean version of G'MIC directory.
+#----------------------------------------------
+echo " - Construct clean version of the G'MIC directory."
+rm -rf $DIR
+mkdir $DIR
+cp -Lrf COPYING README $DIR
+mkdir $DIR/src
+cd src
+cp -Lrf CImg.h gmic.cpp gmic.h gmic_def.h gmic_def.gmic gmic_gimp.cpp gmic_in_script.scm gmic_use_lib.cpp gmic_bashcompletion.sh Makefile $DIR/src
+cd ..
+mkdir $DIR/man
+cd man
+cp -Lrf gmic.1.gz $DIR/man
+cd ..
+cp -Lrf debian html $DIR
+
+cd zart
+make clean
+mkdir $DIR/zart
+cp -Lrf images include src ui *.xml *.html Makefile README zart.pro zart.qrc $DIR/zart
+cd ..
+
+cd $DIR
+sed s\/_gmic_version\/$VERSION\/ README > /tmp/README
+mv /tmp/README README
+
+cd $DIR/debian
+sed s\/_gmic_version\/$VERSION\/ changelog > /tmp/changelog
+mv /tmp/changelog changelog
+
+cd $DIR/src
+if [ "$1" == "final" ]; then
+    sed "s/IS_BETA_CFLAGS = -Dgmic_is_beta=1/IS_BETA_CFLAGS = /" Makefile > /tmp/Makefile
+    mv /tmp/Makefile Makefile
+fi
+sed "s/IS_BETA_CFLAGS = /IS_BETA_CFLAGS = -Dcimg_use_vt100 /" Makefile > /tmp/Makefile
+mv /tmp/Makefile Makefile
+sed s\/_gmic_version\/$VERSION\/g Makefile > /tmp/Makefile
+mv /tmp/Makefile Makefile
+sed s\/_gmic_versio3\/$RELEASE1.$RELEASE2.$RELEASE3\/g Makefile > /tmp/Makefile
+mv /tmp/Makefile Makefile
+sed s\/_gmic_versio2\/$RELEASE1.$RELEASE2\/g Makefile > /tmp/Makefile
+mv /tmp/Makefile Makefile
+sed s\/_gmic_versio1\/$RELEASE1\/g Makefile > /tmp/Makefile
+mv /tmp/Makefile Makefile
+make clean
+rm -f gmic_buildpackage
+for i in *.h *.cpp *.gmic *.scm; do
+  sed -e 's/ *$//' $i >/tmp/gmic_buildpackage$$ && mv /tmp/gmic_buildpackage$$ $i
+done
+
+cd $DIR
+rm -rf debian/gmic
+rm -f `find . -name ".?*"`
+rm -f `find . -name "*~"`
+rm -r `find . -name "\#*"`
+rm -r `find . -name "CVS"`
+
+# Upload web page.
+#-----------------
+echo " - Upload G'MIC web page."
+cd $DIR/html
+scp -r * ronounours,gmic@web.sourceforge.net:htdocs/ >& /dev/null
+cd ..
+rm -rf html
+
+# Create .tar.gz source archives.
+#--------------------------------
+echo " - Create .tar.gz source archives."
+cd ..
+TARFILE=gmic_${VERSION}${SUFFIX}.tar
+rm -f ${TARFILE} ${TARFILE}.gz deb_${TARFILE} deb_${TARFILE}.gz
+tar chvf deb_${TARFILE} `basename $DIR`
+gzip deb_${TARFILE}
+cp deb_${TARFILE}.gz ${HOME}/work/src/
+rm -rf `basename $DIR`/debian
+tar chvf ${TARFILE} `basename $DIR`
+gzip ${TARFILE}
+cp ${TARFILE}.gz ${HOME}/work/src/
+
+FORGE=ronounours,gmic@frs.sourceforge.net:/home/frs/project/g/gm/gmic/
+if [ "$1" != "final" ]; then
+FORGE=${FORGE}beta/
+fi
+
+scp ${HOME}/work/src/${TARFILE}.gz $FORGE
+
+# Create debian packages for debian/ubuntu 32 and 64 bits.
+#---------------------------------------------------------
+echo " - Create debian packages."
+scp ${HOME}/work/src/deb_${TARFILE}.gz lynx.greyc.ensicaen.fr:/tmp/ &&
+ssh -f lynx.greyc.ensicaen.fr "\
+cd /tmp/ && \
+PAK=gmic_${VERSION}${SUFFIX}_i386.deb && \
+PLU=gmic_gimp_${VERSION}${SUFFIX}_linux32.zip && \
+STA=gmic_static_${VERSION}${SUFFIX}_linux32.zip && \
+DIR=gmic-${VERSION} && \
+rm -rf \$PAK \$PLU \$DIR && \
+touch deb_${TARFILE}.gz && \
+tar zxvf deb_${TARFILE}.gz && \
+find gmic-${VERSION} -exec touch {} \; && \
+cd \$DIR && \
+dpkg-buildpackage -j -rfakeroot; \
+mv ../gmic_${VERSION}_i386.deb ../\$PAK; \
+zip -j -r -9 ../\$PLU src/gmic_gimp README && \
+cd src && make clean && make static && mv gmic ../ && \
+cd .. && rm -rf man src zart debian && cd .. && \
+zip -j -r -9 \$STA \$DIR && \
+cp \$PLU \$PAK \$STA \$HOME/work/src/ && \
+echo LYNX_DONE " &
+
+scp ${HOME}/work/src/deb_${TARFILE}.gz gemini.ensicaen.fr:/tmp/ &&
+ssh -f gemini.ensicaen.fr "\
+cd /tmp/ && \
+PAK=gmic_${VERSION}${SUFFIX}_amd64.deb && \
+PLU=gmic_gimp_${VERSION}${SUFFIX}_linux64.zip && \
+STA=gmic_static_${VERSION}${SUFFIX}_linux64.zip && \
+DIR=gmic-${VERSION} && \
+rm -rf \$PAK \$PLU \$DIR && \
+touch deb_${TARFILE}.gz && \
+tar zxvf deb_${TARFILE}.gz && \
+find gmic-${VERSION} -exec touch {} \; && \
+cd \$DIR && \
+dpkg-buildpackage -j -rfakeroot; \
+mv ../gmic_${VERSION}_amd64.deb ../\$PAK; \
+zip -j -r -9 ../\$PLU src/gmic_gimp README && \
+cd src && make clean && make static && mv gmic ../ && \
+cd .. && rm -rf man src zart debian && cd .. && \
+zip -j -r -9 \$STA \$DIR && \
+cp \$PLU \$PAK \$STA \$HOME/work/src/ && \
+echo GEMINI_DONE " &
+
+cp -f ${HOME}/work/src/deb_${TARFILE}.gz /tmp/
+cd /tmp/ &&
+PAK=gmic_${VERSION}${SUFFIX}_quantal_i386.deb &&
+rm -rf $PAK $DIR &&
+touch deb_${TARFILE}.gz &&
+tar zxvf deb_${TARFILE}.gz &&
+find gmic-${VERSION} -exec touch {} \; &&
+cd ${DIR} &&
+dpkg-buildpackage -rfakeroot;
+cd .. &&
+cp gmic_${VERSION}_i386.deb ${HOME}/work/src/$PAK &&
+rm -f gmic_${VERSION}_i386.deb &&
+echo PICTOR_DONE
+
+# Wait for packages to be generated and copy them to Sourceforge FRS.
+#--------------------------------------------------------------------
+echo " - Waiting for all packages.".
+
+cd $DIR
+scp README $FORGE
+cd ${HOME}/work/src/
+
+FILE=gmic_${VERSION}${SUFFIX}_quantal_i386.deb
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+
+FILE=gmic_${VERSION}${SUFFIX}_i386.deb
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+
+FILE=gmic_gimp_${VERSION}${SUFFIX}_linux32.zip
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+if [ "$1" == "final" ]; then
+    scp ${FILE} ${FORGE}gmic_gimp_linux32.zip
+fi
+
+FILE=gmic_static_${VERSION}${SUFFIX}_linux32.zip
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+
+FILE=gmic_${VERSION}${SUFFIX}_amd64.deb
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+
+FILE=gmic_gimp_${VERSION}${SUFFIX}_linux64.zip
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+if [ "$1" == "final" ]; then
+    scp ${FILE} ${FORGE}gmic_gimp_linux64.zip
+fi
+
+FILE=gmic_static_${VERSION}${SUFFIX}_linux64.zip
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+
+FILE=gmic_gimp_${VERSION}${SUFFIX}_win32.zip
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+if [ "$1" == "final" ]; then
+    scp ${FILE} ${FORGE}gmic_gimp_win32.zip
+fi
+
+FILE=gmic_gimp_${VERSION}${SUFFIX}_win32.exe
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+if [ "$1" == "final" ]; then
+    scp ${FILE} ${FORGE}gmic_gimp_win32.exe
+fi
+
+if [ "$1" == "final" ]; then
+    FILE=gmic_${VERSION}${SUFFIX}_win32.zip
+    while [ ! -f ${FILE} ]; do sleep 10; done
+    sleep 10
+    scp ${FILE} $FORGE
+fi
+
+# End.

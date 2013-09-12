@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--#include file="../../header.html" -->
+<link href="../../style.css" rel="stylesheet" type="text/css">
+
+<div id="bloc_option">
+<div id="top_bleu">
+<div id="text_top">Tutorial
+</div>
+</div>
+<div id="center">
+<div id="text_centre_intro">
+
+<div id="gmic-tutorial">
+<h1>Command Line: First Steps</h1>
+<h3>0-introduction</h3>
+Before being a popular <a href=http://gmic.sourceforge.net/gimp.shtml id=zrw3 title="Gimp plugin">Gimp plugin</a>, G'mic is a command line tool devoted to image manipulation. This tutorial assumes that commands are given on a Unix shell command line. Windows will have to adapt, and might want to install <a href=http://www.mingw.org id=g_q6 title=MinGW>MinGW</a> to be more confortable with command line use.<br>
+G'MIC works also with Windows, but the interaction with the shell might work a little different in that case. The tutorial assumes version 1.3.3.3 of G'MIC.<br>
+  Every G'mic command line formally looks that way:<code><br>
+   gmic -instruction1 arguments -instruction2 arguments etc...</code><br>
+  Everything is explained in the <a href=http://gmic.sourceforge.net/reference.shtml id=f0gv title="official documentation page">official reference page</a>. But anyone human would need some more developed explanations. Here are some.<br>
+  <h3>    1-A basic example  </h3>
+  Before applying any treatment on an image, G'mic has to load it with the<code> -input</code> instruction. After any treatment being applied, you might want to unload the final result on your hard disk with the <code>-output</code> instruction.<br>
+  Let's use a basic example. To rotate 90° an image called image.jpg and get the result as a png file called image.png, you'd use the following command:<br>
+  <code>gmic -input image.jpg -rotate 90 -output image.png</code><br>
+  <br>
+  You'll notice that G'mic returns in your terminal the details of all the operations that occurred. For the previous command line, you should have had something like:<br>
+  <code> [gmic]-0./ Start G'MIC instance.<br>
+   [gmic]-0./ Input file 'image.jpg' at position [0] (1 image 512x384x1x3).<br>
+   [gmic]-1./ Rotate image [0] of 90 deg., black borders and linear interpolation.<br>
+   [gmic]-1./ Output image [0] as file 'image.png'.<br>
+   [gmic]-1./ End G'MIC instance.<br>
+  </code>So you won't be able to say that you didn't know what happened.<br>
+  <h3>    2-Aliases  </h3>
+  In order to save typing time, the most common instructions have aliases. For example, <code>-input</code> can be replaced by<code> -i </code>and <code>-output </code>by <code>-o</code>. So, our basic example can be rewritten as:<br>
+  <code> gmic -i image.jpg -rotate 90 -o image.png</code><br>
+  <br>
+  In fact, the <code>-input</code> instruction is that common that an even faster way to invoke it has been implemented in G'mic: just type the image name directly without any instruction before. Indeed, the next command line is the exact equivalent to the previous one:<br>
+  <i> gmic image.jpg -rotate 90 -o image.png</code><br>
+  <br>
+  Don't expect more, this is as fast as it can get.<br>
+  <h3>
+    3-Details about <code>-output</code>
+  </h3>
+  <h4>
+    3.1-Formats
+  </h4>
+  You can get an output anytime in the command line (before or after an operation) and the name of the output file determine the format. For instance, with the following command line, you get 3 images in 3 different formats, the bmp one has not undergone any rotation, the other ones have.<br>
+  <code> gmic image.jpg -o image.bmp -rotate 90 -o image.png -o image.tga</code><br>
+  <br>
+  By the way, by default, G'mic saves jpeg files with quality 100, wich is probably more than what you'd want. To save at quality 95, use <code>-o image.jpg,95</code><br>
+  <h4>
+    3.2-Display
+  </h4>
+  If you don't specify any <code>-output</code> (or <code>-o</code>) instruction or if you explicitly give the <code>-display </code>instruction, then G'mic will display your image on the screen. The 2 next command lines do the same thing: they display the image after a 45° rotation:<br>
+
+<code>gmic image.jpg -rotate 45</code><br>
+<code>gmic image.jpg -rotate 45 -display</code><br>
+  press 'q' to quit the display screen.<br>
+  <br>
+  There is actually a lot to say about the display screen, but it won't be said now.<br>
+<h3>
+    4-The arguments of the instruction<br>
+  </h3>
+  Since the beginning, the image is rotated, just rotated, but like most G'mic instructions, the <code>-rotate</code> instruction possesses many arguments to rotate in a specific way. If you look at the <a href=http://gmic.sourceforge.net/reference.shtml id=d7qb title="official documentation">official reference page</a>, you'll find the lines explaining how <code>-rotate </code>works. It begins by <br>
+   <b><code><font color=green>-rotate </font></b></code><code>angle,_borders,_interpolation,_cx[%],_cy[%],_zoom</code><br>
+  This means that <code>-rotate</code> may have until 6 arguments. The first one (<code>angle</code>) has to be specified. The other ones begin by an underscore, it means that they are optional. Just make some tests and you'll understand how it works. For example, try these lines:<br>
+  <code> gmic image.jpg -rotate 30,1<br>
+   gmic image.jpg -rotate 30,0,0,50%,50%<br>
+   gmic image.jpg -rotate 30,0,0,0%,0%,0.5</code><br>
+  <br>
+  Now, it should be a lot easier for you to use this <a href=http://gmic.sourceforge.net/reference.shtml id=k:yq title="official documentation">official reference page</a>. You can also get it off-line with <code>man gmic</code> or <code>gmic -h.</code><br>
+<h3>
+  5-dealing with several images
+</h3>
+<h4>
+  5.1-Many just like one<br>
+</h4>
+  You can deal with many images at a time, just load them all. For example, the following command lines load the images and display them:<br>
+  <code> gmic image1.jpg image2.jpg image3.jpg</code><br>
+  <code> gmic image*.jpg</code><br>
+  If you write your command lines </span>as in the previous chapter, then the G'mic instructions are applied on every loaded images. By using the next command line:<br>
+  <code> gmic image*.jpg -rotate 90 -o image.png<br>
+  </code>you tell G'mic to rotate all the <code>image*.jpg</code> files and to save them as a png file. But it won't save several images in one file called <code>image.png</code>, it will name them <code>image_</code><code>000001.png</code>, <code>image_</code><code>000002.png</code>, <code>image_000003.png</code>, etc.<br>
+<h4>
+  5.2-Restricting an instruction to only some images
+</h4>
+  You can specify on what images applying an instruction by adding the image number, starting by 0 under brackets:<br>
+
+<table border=0 cellpadding=0 cellspacing=0 class=zeroBorder id=mp6i>
+      <tr>
+        <td valign=top width=300>
+   <code>gmic image*.jpg -rotate[0] 90</code></td><td> only rotates the first loaded image.</td></tr>
+      <tr>
+        <td valign=top width=300>
+   <code>gmic image*.jpg -o[1] image.png</code></td><td> saves only the second one as <code>image.png</code>.</td></tr>
+</table>
+  If you use negative numbers, you start by the last one:<br>
+<table border=0 cellpadding=0 cellspacing=0 class=zeroBorder id=mp6i>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -rotate[-1] 90 </code></td><td> only rotates the last loaded image.</td></tr>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -rotate[-2] 90 </code></td><td>only rotates the second last one.</td></tr>
+</table>
+
+  You can also select a set of images to manipulate:<br>
+<table border=0 cellpadding=0 cellspacing=0 class=zeroBorder id=mp6i>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -rotate[0,2,-1] 90</code></td><td>rotates the first, the third and the last one.</td></tr>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -rotate[0-9] 90</code></td><td>rotates the 10 first images.</td></tr>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -rotate[0-9:3] 90</code></td><td>rotates every 3 images starting from the first one and finishing at the tenth one. It means the first, the fourth, the seventh and the tenth one.</td></tr>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -rotate[0,-4--1] 90</code></td><td>rotates the first and the 4 last ones.</td></tr>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -rotate[50%-100%] 90</code></td><td>rotates the second half of the image list.</td></tr>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -rotate[0,50%--1] 90</code></td><td>rotates the first image and the second half of the image list.</td></tr>
+</table>
+<h4>
+  5.3-Manipulating the image list<br>
+</h4>
+
+  As you have seen in the previous chapter, the image order is important. You can change that order at any time by using <code>-move </code>or <code>-reverse</code>:<br>
+<table border=0 cellpadding=0 cellspacing=0 class=zeroBorder id=mp6i>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -move[50%,100%] 1</code></td><td>moves the second half of the image list at the beginning.</td></tr>
+      <tr><td valign=top width=300>
+  <code> gmic image*.jpg -reverse</code></td><td>reverses the order of all the images.</td></tr>
+</table>
+  You can also keep only some of the images in your list with <code>-keep</code> or get rid of some with <code>-remove</code>. If you feel lost sometime, check what G'mic returns in your terminal, it should tell you how many images are left.<br>
+  
+  <h4>6-macros</h4>
+    <code>gmic -m my_macro-file image.jpg -my_rotate</code>
+    <code>Many macros already exist: </code>http://cimg.cvs.sourceforge.net/*checkout*/cimg/CImg/examples/gmic_def.raw<br>
+    <br style=COLOR:#999999>
+  <h4>7-going further</h4>
+    check that:<br>
+    http://gmic.sourceforge.net/gallery.shtml
+    http://cimg.cvs.sourceforge.net/*checkout*/cimg/CImg/examples/gmic_def.raw
+    <br>
+be careful that you should backslash special character in your terminal, thus "(" becomes "\(", ";" become "\;", "[" becomes "\[".<br>
+to test macros, you can put back the verbose mode by copying the custom command in a macro file and removing "-v -"
+    <br>
+    <br>
+    <br>
+    CC-BY-SA<br>
+  <div style=TEXT-ALIGN:right>
+      bad English?<br>
+      rough aesthetics?<br>
+      less clear than unclear?<br>
+      need to talk?<br>
+    zonder #@# tuxfamily.org<br>
+  </div>
+</div>
+</div>
+</div>
+<div id="footer"><img src="images/footer.jpg" />
+</div>
+</div>
+
+<!--#include file="../../copyright.html" -->
+<!--#include file="../../footer.html" -->
+

@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--#include file="header.html" -->
+<link href="style.css" rel="stylesheet" type="text/css">
+
+<div id="bloc_option"><div id="top_vert"><div id="text_top">Summary</div></div>
+<div id="center"><div id="text_centre_intro">
+
+  <table><tr>
+  <td>
+    <div><a href="img/gmicky_large.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gmicky_small.jpg"/></a>
+      <div class="highslide-caption"><i><b>Gmicky</b>, the G'MIC mascot, by <a href="http://www.mahvin.com/">Mahvin</a>.</i></div></div><br/>
+    <center><font size="-2"><i><b>Gmicky</b>, the G'MIC mascot<br/>
+          (by <a href="http://www.mahvin.com/">Mahvin</a>)</i></font><br/>
+
+      <a href="http://sourceforge.net/donate/index.php?group_id=234931"><img src="img/donate.png" border="0" alt="Support the G'MIC Project" /></a>
+      <br/><font size="-2">to help develop the project !</font>
+      <hr noshade="noshade" size="1" width="90%"></hr>
+
+    </center>
+  </td>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+  <td>
+    <b><font color="#000066">G'MIC</font></b> is an open and full-featured framework for image processing, providing
+    several different user interfaces to convert/manipulate/filter/visualize
+    generic image datasets, from 1d scalar signals to 3d+t sequences of
+    multi-spectral volumetric images.
+    Technically speaking, what it does is:
+    <ul>
+      <li>Define a lightweight but powerful <b>script language</b> (the <b><font color="#000066">G'MIC</font></b> language) dedicated to the design of
+        <b>image processing operators and pipelines</b>.</li><br/>
+      <li>Provide several user interfaces embedding the corresponding interpreter:</li><br/>
+      <ul>
+        <li>A command-line executable <b><a href="reference.shtml">gmic</a></b>, to use the <b><font color="#000066">G'MIC</font></b> framework from a shell.<br/>
+          In this setting, <b><font color="#000066">G'MIC</font></b> may be seen as a serious (and friendly) competitor of the <a href="http://www.imagemagick.org">ImageMagick</a>
+          or <a href="http://www.graphicsmagick.org">GraphicsMagick</a> software suites</a>.<br/><br/>
+        </li>
+        <li>A plug-in <b><a href="gimp.shtml">gmic_gimp</a></b>, to bring <b><font color="#000066">G'MIC</font></b> capabilities
+          to the <a href="http://www.gimp.org">GIMP</a> image retouching software.<br/><br/></li>
+        <li>A web service <a href="http://gmicol.greyc.fr"><b>G'MIC Online</b></a>, to allow users applying image processing algorithms
+        directly in a web browser.<br/><br/></li>
+        <li>A Qt-based interface <a href="img/zart.jpg" class="highslide" onclick="return hs.expand(this)"><b>ZArt</b></a><div class="highslide-caption">Screenshot of <b>ZArt</b> in action.</div>, for real-time manipulation of webcam images.<br/><br/></li>
+        <li>A thread-safe C++ library <b>libgmic</b>, to be linked to third-party applications.</li>
+      </ul>
+    </ul>
+
+    <b><font color="#000066">G'MIC</font></b> is focused on the design of possibly complex pipelines for converting, manipulating, filtering and visualizing
+    <b>generic 1d/2d/3d multi-spectral image datasets</b>. This includes of course color images,
+    but also more complex data as image sequences or 3d(+t) volumetric float-valued datasets.
+    <br/><br/>
+
+    <b><font color="#000066">G'MIC</font></b> is an <b>open framework</b>: the default language can be extended with
+    custom <b><font color="#000066">G'MIC</font></b>-written commands, defining thus new available image filters or effects. By the way, <b><font color="#000066">G'MIC</font></b> already
+    contains a substantial set of pre-defined image processing algorithms and pipelines (more than 1000).
+    <br/><br/>
+
+    <b><font color="#000066">G'MIC</font></b> has been designed with <b>portability</b> in mind and runs on different platforms (Windows, Unix, MacOSX).
+    It is distributed under the
+    <a href="http://www.cecill.info/licences/Licence_CeCILL_V2-en.html"><b>CeCILL</b></a> license (<b>GPL-compatible</b>).
+    Since 2008, it is developed in the
+    <a href="https://www.greyc.fr/image">Image Team</a>
+    of the
+    <a href="http://www.greyc.ensicaen.fr/">GREYC</a> laboratory, in Caen/France,
+    by permanent researchers working in the field of image processing on a daily basis.<br/><br/>
+ </td>
+ </tr></table>
+
+</div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
+<div id="bloc_option"><div id="top_bleu"><div id="text_top">Main features</div></div>
+<div id="center"><div id="text_centre_intro">
+
+  <b><font color="#000066">G'MIC</font></b> defines a complete image processing framework (provides interfaces for C++, shell, gimp and web),
+  and can manage generic image data as other image-related tools. More precisely:
+  <ul>
+    <li>It can process a wide variety of image types, including <b>multi-spectral</b>
+      (arbitray number of channels) and <b>3d volumetric</b> images, as well as <b>image sequences</b>, or <b>3d vector objects</b>.
+      Images with different <b>pixel types</b> are supported, allowing to process flawlessly images with 8bits
+      or 16bits integers per channel, as well as float-valued datasets.</li><br/>
+    <li>It internally works with <b>lists of images</b>. Image manipulations and interactions can be done either grouped or
+      focused on specific items.</li><br/>
+    <li>It provides small but efficient <b>visualization modules</b> dedicated to the exploration/viewing of
+      2d/3d multi-spectral images, 3d vector objects (elevation map, isocurves, isosurfaces,...), or 1d graph plots.</li><br/>
+    <li>It is <b>highly extensible</b> through the importation of
+      <b><a href="http://gmic.cvs.sourceforge.net/viewvc/gmic/gmic/src/gmic_def.gmic">custom command files</a></b>
+      which add new commands that become understood by the language interpreter.</li><br/>
+    <li>It proposes commands to handle custom <b>interactive windows</b> where events can be managed easily by the user.</li><br/>
+    <li>It is based on the latest development versions of the <a href="http://cimg.sourceforge.net"><b>CImg Library</b></a>,
+      a well established C++ template image processing toolkit, developed by the same team of developers.</li>
+  </ul>
+  </div>
+</div>
+<div id="footer"><img src="images/footer.jpg" /></div></div>
+
+<div id="bloc_option"><div id="top_bleu"><div id="text_top">Screenshots</div></div>
+<div id="center"><div id="text_centre_intro">
+
+  Here are some screenshots illustrating various uses of <b><font color="#000066">G'MIC</font></b>.
+  It shows how it is able to process and visualize different types of 1d/2d/3d image datasets.
+  <b><font color="#000066">G'MIC</font></b> is actually a handy toolbox for many image/signal processing applications.
+  See also the <a href="gallery.shtml">Gallery section</a> for more detailed examples on its use.
+  You can also try the <a href="http://gmicol.greyc.fr">online version</a> of G'MIC!<br/><br/>
+
+  <center>
+    <image src="img/ss_brain3d.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_cubism.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_anim3d.gif" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_surface.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_tiger.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_caesar.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_plot.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_object3d.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_morph.gif" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_lenacube3d.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_xlife.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_colors3d.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_xspline.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_lena_denoise.jpg" border="0" alt="G'MIC screenshot"></image>
+    <image src="img/ss_mandelbrot.png" border="0" alt="G'MIC screenshot"></image>
+  </center>
+<br/>
+</div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
+<div id="bloc_option"><div id="top_rouge"><div id="text_top">The Team</div></div>
+<div id="center"><div id="text_centre_intro">
+
+  Project Manager and Main Developer:
+  <ul>
+  <li> <a href="http://tschumperle.users.greyc.fr/"><b>David Tschumperl&eacute;</b></a></li>
+  </ul>
+  Contributors:
+  <ul>
+  <li><a href="http://www.aljacom.com/~gimp/"><b>Sylvie Alexandre</b></a> (packaging, testing, filters).</li>
+  <li><a href="http://www.partha.com"><b>Partha Bagchi</b></a> (packaging).</li>
+  <li><a href="http://greyc.stlo.unicaen.fr/bougleux/"><b>S&eacute;bastien Bougleux</b></a> (debugging).</li>
+  <li><b>J&eacute;rome Boulanger</b> (testing, code).</li>
+  <li><a href="http://www.xcfa.tuxfamily.org/"><b>Claude Bulin</b></a> (packaging).</li>
+  <li><b>Aur&eacute;lien Ceyden</b> (packaging).</li>
+  <li><a href="http://www.flickr.com/photos/fcollard/"><b>Fran&ccedil;ois Collard</b></a> (testing).</li>
+  <li><a href="http://blog.patdavid.net/"><b>Patrick David</b></a> (testing).</li>
+  <li><a href="https://www.greyc.fr/user/336"><b>Maxime Daisy</b></a> (code, testing).</li>
+  <li><a href="http://iainfergusson.co.nz/"><b>Iain Fergusson</b></a> (filters).</li>
+  <li><a href="http://www.lffl.org/"><b>Roberto Ferramosca</b></a> (packaging).</li>
+  <li><a href="http://zonderr.wordpress.com/"><b>J&eacute;rome Ferrari</b></a> (testing, code, tutorials).</li>
+  <li><a href="https://plus.google.com/u/0/117150607704159021783/posts"><b>Chris Fiedler</b></a> (gfx).</li>
+  <li><a href="http://www.greyc.ensicaen.fr/~seb/"><b>S&eacute;bastien Fourey</b></a> (ZArt code, G'MIC online).</li>
+  <li><a href="http://www.flickr.com/photos/53229621@N02/"><b>Gentlemanbeggar</b></a> (filters).</li>
+  <li><a href="http://claes-particle.blogspot.com/"><b>Claes Holmerson</b></a> (tutorials).</li>
+  <li><a href="http://www.flickr.com/photos/naggobot/"><b>Arto Huotari</b></a> (filters).</li>
+  <li><a href="http://www.flickr.com/photos/tomkeil/"><b>Tom Keil</b></a> (testing, filters, tutorials).</li>
+  <li><b>Andy Kelday</b> (testing, filters).</li>
+  <li><a href="http://ekd.tuxfamily.org/"><b>Angelo Lama</b></a> (testing, EKD integration).</li>
+  <li><a href="http://polariscorp.free.fr"><b>Stephane de la Linuxerie</b></a> (design).</li>
+  <li><a href="http://www.mahvin.com/"><b>Mahvin</b></a> (testing, design).</li>
+  <li><a href="http://www.omtefotograferen.nl/"><b>Mark</b></a> (translation).</li>
+  <li><a href="https://plus.google.com/115686188945991205104/about"><b>Jovana Milutinovich</b></a> (translation).</li>
+  <li><b>MareroQ</b> (translation).</li>
+  <li><a href="http://www.ramonmiranda.com/"><b>Ram&oacute;n Miranda</b></a> (testing, translation).</li>
+  <li><a href="http://photocomix-resources.deviantart.com/"><b>PhotoComiX</b></a> (testing, translation, filters).</li>
+  <li><a href="http://www.h-ps.demon.co.uk/"><b>James Prichard</b></a> (testing, filters).</li>
+  <li><a href="http://gilmoth.blogspot.com/"><b>Mauro Quercia</b></a> (translation).</li>
+  <li><b>Josef Radinger</b> (packaging).</li>
+  <li><a href="http://razgrizbox.wordpress.com"><b>Guilherme Razgriz</b></a> (translation).</li>
+  <li><a href="http://www.davidrevoy.com/"><b>David Revoy</b></a> (testing).</li>
+  <li><a href="http://karo03.bplaced.net/"><b>Karsten Rodenacker</b></a> (testing, packaging).</li>
+  <li><a href="http://www.flickr.com/photos/danisarda/"><b>Dani Sarda&agrave;</b></a> (translation).</li>
+  <li><b>Yuri Shemanin</b></a> (debugging).</li>
+  <li><a href="http://www.flickr.com/photos/44231967@N00/"><b>Stepanekos</b></a> (translation).</li>
+  <li><a href="https://plus.google.com/u/0/117581776478455814502/posts"><b>Thorsten "otto" Stettin</b></a> (packaging).</li>
+  <li><a href="http://bzed.de/"><b>Bernd Zeimetz</b></a> (packaging).</li>
+  </ul>
+</div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
+<div id="bloc_option"><div id="top_rouge"><div id="text_top">Resources</div></div>
+<div id="center"><div id="text_centre_intro">
+
+<center><table align="center" border="0" cellpadding="10" cellspacing="0" width="500">
+<tr>
+  <td><a href="img/flyer.pdf"><img height="256" src="img/flyer.jpg"></img></a></td>
+  <td><a href="img/gmic_slides.pdf"><img height="256" src="img/gmic_slides.jpg"></img></a></td>
+</tr>
+<tr>
+  <td>If you appreciate <b><font color="#000066">G'MIC</font></b>, feel free to hang a flyer somewhere to make this project more visible!</td>
+  <td>To learn more about the G'MIC project, you can also look at the presentation slides!</td>
+</tr>
+<tr>
+  <td><script type="text/javascript" src="http://www.ohloh.net/p/17120/widgets/project_basic_stats.js"></script></td>
+  <td><script type="text/javascript" src="http://www.ohloh.net/p/17120/widgets/project_cocomo.js"></script></td></tr><tr>
+</tr>
+
+</table>
+</center>
+</div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
+<!--#include file="copyright.html" -->
+<!--#include file="footer.html" -->

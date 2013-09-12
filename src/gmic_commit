@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ../
+cvs commit -m "$1"
+cd ../CImg
+cvs commit -m "$1"

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+cp gmic_def.gmic gmic_def.gmic_old
+cat gmic_def.gmic_old |
+sed 's/à/\&#224;/g' |
+sed 's/á/\&#225;/g' |
+sed 's/â/\&#226;/g' |
+sed 's/ã/\&#227;/g' |
+sed 's/ä/\&#228;/g' |
+sed 's/å/\&#229;/g' |
+sed 's/æ/\&#230;/g' |
+sed 's/ç/\&#231;/g' |
+sed 's/è/\&#232;/g' |
+sed 's/é/\&#233;/g' |
+sed 's/ê/\&#234;/g' |
+sed 's/ë/\&#235;/g' |
+sed 's/ì/\&#236;/g' |
+sed 's/í/\&#237;/g' |
+sed 's/î/\&#238;/g' |
+sed 's/ï/\&#239;/g' |
+sed 's/ğ/\&#240;/g' |
+sed 's/ñ/\&#241;/g' |
+sed 's/ò/\&#242;/g' |
+sed 's/ó/\&#243;/g' |
+sed 's/ô/\&#244;/g' |
+sed 's/õ/\&#245;/g' |
+sed 's/ö/\&#246;/g' |
+sed 's/ø/\&#248;/g' |
+sed 's/ù/\&#249;/g' |
+sed 's/ú/\&#250;/g' |
+sed 's/û/\&#251;/g' |
+sed 's/ü/\&#252;/g' |
+sed 's/ı/\&#253;/g' > gmic_def.gmic
+

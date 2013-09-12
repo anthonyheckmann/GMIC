@@ -1,0 +1,298 @@
+#@gmic
+#
+#  File        : gallery.gmic
+#                ( G'MIC custom command file )
+#
+#  Description : Define command to generate the gallery on the G'MIC web page.
+#                ( http://gmic.sourceforge.net )
+#
+#  Copyright   : David Tschumperle
+#                ( http://tschumperle.users.greyc.fr/ )
+#
+#  License     : CeCILL v2.0
+#                ( http://www.cecill.info/licences/Licence_CeCILL_V2-en.html )
+#
+#  This software is governed by the CeCILL  license under French law and
+#  abiding by the rules of distribution of free software.  You can  use,
+#  modify and/ or redistribute the software under the terms of the CeCILL
+#  license as circulated by CEA, CNRS and INRIA at the following URL
+#  "http://www.cecill.info".
+#
+#  As a counterpart to the access to the source code and  rights to copy,
+#  modify and redistribute granted by the license, users are provided only
+#  with a limited warranty  and the software's author,  the holder of the
+#  economic rights,  and the successive licensors  have only  limited
+#  liability.
+#
+#  In this respect, the user's attention is drawn to the risks associated
+#  with loading,  using,  modifying and/or developing or reproducing the
+#  software by the user in light of its specific status of free software,
+#  that may mean  that it is complicated to manipulate,  and  that  also
+#  therefore means  that it is reserved for developers  and  experienced
+#  professionals having in-depth computer knowledge. Users are therefore
+#  encouraged to load and test the software's suitability as regards their
+#  requirements in conditions enabling the security of their systems and/or
+#  data to be ensured and,  more generally, to use and operate it in the
+#  same conditions as regards security.
+#
+#  The fact that you are presently reading this means that you have had
+#  knowledge of the CeCILL license and that you accept its terms.
+#
+
+gmic_gallery : -skip ${1=84}
+  -e[^-1] "Generate gallery for the G'MIC web site, with thumbnail height $1."
+  -v -
+
+  # Clean files from a possible previous gallery generation.
+  -x "rm -f gallery.shtml img/gallery_*.jpg"
+
+  # Define and load test images.
+  img/chloe.jpg
+  img/fawn.jpg
+  img/house.jpg
+  img/statue.jpg
+  img/beach.jpg
+
+  nb_imgs=@#
+  -repeat @# --r2dy[$>] $1 width$>={w} -rm[-1] -done  # Get width of standard thumbnails.
+
+  # Define commands used to generate the gallery.
+  _nb_coms=-1
+
+  -_gmic_gallery " "
+  -_gmic_gallery " "
+  -_gmic_gallery " "
+  -_gmic_gallery " "
+  -_gmic_gallery " "
+
+  -_gmic_gallery "-luminance"
+  -_gmic_gallery "-solarize"
+  -_gmic_gallery "-negative"
+  -_gmic_gallery "-select_color 100,0,0,0 -n 0,255"
+  -_gmic_gallery "-array_fade 4,4"
+
+  -_gmic_gallery "--mirror[-1] x -fade_x 40,60"
+  -_gmic_gallery "-shift_tiles 20,20"
+  -_gmic_gallery "-fisheye 40"
+  -_gmic_gallery "-fisheye 50"
+  -_gmic_gallery "-shade_stripes 5,0"
+
+  -_gmic_gallery "-shade_stripes 40,1"
+  -_gmic_gallery "-tetris 10"
+  -_gmic_gallery "-blur 1 -gradient_orientation 2 -+ -n 0,255 -smooth 60,0,1,1,3"
+  -_gmic_gallery "-flower 30,5"
+  -_gmic_gallery "-water 30,1.5"
+
+  -_gmic_gallery "-wave 4,0.4"
+  -_gmic_gallery "-wave 15,0.2"
+  -_gmic_gallery "-deform 10"
+  -_gmic_gallery "-light_patch 4,0.7,1.7"
+  -_gmic_gallery "-mosaic 0.5,80,1"
+
+  -_gmic_gallery "-sponge 13"
+  -_gmic_gallery "-hearts 15"
+  -_gmic_gallery "-color_ellipses 1400,10,0.07"
+  -_gmic_gallery "-whirls 3"
+  -_gmic_gallery "-edges 15 -n 0,255"
+
+  -_gmic_gallery "-to_rgba -gimp_reflect 50,1,110,160,190,64,0,1.5,0,-3.30,7,1.5 -drgba"
+  -_gmic_gallery "-transform_polar R-r"
+  -_gmic_gallery "-drawing 200"
+  -_gmic_gallery "-draw_whirl 100"
+  -_gmic_gallery "-texturize_paper"
+
+  -_gmic_gallery "-stencilbw 30"
+  -_gmic_gallery "-glow 4"
+  -_gmic_gallery "-ditheredbw"
+  -_gmic_gallery "-dotsbw , -n 0,255"
+  -_gmic_gallery "-blur_radial 10"
+
+  -_gmic_gallery "-repeat 3 --deform[0] 10 -done -+ -n 0,255"
+  -_gmic_gallery "-flood 50%,50%,0,50,0,0.7,155,100,255"
+  -_gmic_gallery "--mirror x --mirror y -* -equalize 255 -n 0,255"
+  -_gmic_gallery "-kaleidoscope 0.5,0.5,50,20"
+  -_gmic_gallery "-noise 40 -cut 0,255 --meancurvature_flow[-1] 20 -sharpen[-1] 100 -a x"
+
+  -_gmic_gallery "-gradient_norm -sqrt -n 0,255"
+  -_gmic_gallery "-to_rgba -rotate_tiles 15,5,5 -drgba"
+  -_gmic_gallery "-taquin 5"
+  -_gmic_gallery "img/chloe.jpg -drop_shadow[-1] 3 -rotate[-1] 55 -blend alpha"
+  -_gmic_gallery "[-1] -deform 10 -morph 4,0.05 -a x"
+
+  -_gmic_gallery "-polaroid 20 -drop_shadow 3,3 -rotate 10,1 -drgba"
+  -_gmic_gallery "--plasma 10,10 -n[-1] 0.5,2.5 -n 0,255 -and -equalize 256"
+  -_gmic_gallery "100%,100% -mandelbrot[-1] -1.17229,-0.3038,-1.15209,-0.2836,1000 -map[-1] 0 -*[-2] 1.5 -+ -n 0,255"
+  -_gmic_gallery "--edges 15 -n 0,255 -fade_y 30,70"
+  -_gmic_gallery "-split_tiles 5,5 -blur 8 -sharpen 1000 -equalize 255 -append_tiles 5,5"
+
+  -_gmic_gallery "-imagecube3d -*3d 256 -r3d 1,1,0,60 512,512,1,3 -plasma[-1] 10,10 -n[-1] 0,128 -m3d 5 -db3d 0 -object3d[1] [0],50%,50% -k[1] -n 0,255"
+  -_gmic_gallery "-warp_perspective 0.3,0.9,0.5"
+  -_gmic_gallery "-rodilius ,"
+  -_gmic_gallery "-blur 3 -gradient2rgb 1"
+  -_gmic_gallery "-normalize_local 80,7"
+
+  -_gmic_gallery "-normalize_local 80,3"
+  -_gmic_gallery "-normalize_local 80,7"
+  -_gmic_gallery "-normalize_local 80,6,2"
+  -_gmic_gallery "-isophotes 4 -dilate 3 -i[0] (0;255^0;255^100;100) -r[0] [1],[1],1,3,3 -blend alpha"
+  -_gmic_gallery "-crop 30%,30%,70%,70% -resize 200%,200%,1,100%,5 -frame_fuzzy 30,30"
+
+  -_gmic_gallery "-cartoon 4,15"
+  -_gmic_gallery "-cartoon 4,15"
+  -_gmic_gallery "-cartoon 4,15"
+  -_gmic_gallery "-cartoon 4,15"
+  -_gmic_gallery "-cartoon 4,15"
+
+  -_gmic_gallery "-r2dx 300 -m3d 2 -elevation3d 0.3 -f3d 200 -snapshot3d 400,1.5"
+  -_gmic_gallery "-r2dx 300 -m3d 2 -elevation3d 0.3 -f3d 200 -snapshot3d 400,1.5"
+  -_gmic_gallery "-r2dx 300 -m3d 2 -elevation3d 0.3 -f3d 200 -snapshot3d 400,1.5"
+  -_gmic_gallery "-r2dx 300 -m3d 2 -elevation3d 0.3 -f3d 200 -snapshot3d 400,1.5"
+  -_gmic_gallery "-r2dx 300 -m3d 2 -elevation3d 0.3 -f3d 200 -snapshot3d 400,1.5"
+
+  -_gmic_gallery "-topographic_map 16,2"
+  -_gmic_gallery "-topographic_map 16,2"
+  -_gmic_gallery "-topographic_map 16,2"
+  -_gmic_gallery "-topographic_map 16,2"
+  -_gmic_gallery "-topographic_map 16,2"
+
+  -_gmic_gallery "--blur 10 -curvature[-1] -norm[-1] -+[-1] 0.01 -/ -equalize 255 -n 0,255"
+  -_gmic_gallery "--blur 10 -curvature[-1] -norm[-1] -+[-1] 0.01 -/ -equalize 255 -n 0,255"
+  -_gmic_gallery "--blur 10 -curvature[-1] -norm[-1] -+[-1] 0.01 -/ -equalize 255 -n 0,255"
+  -_gmic_gallery "--blur 10 -curvature[-1] -norm[-1] -+[-1] 0.01 -/ -equalize 255 -n 0,255"
+  -_gmic_gallery "--blur 10 -curvature[-1] -norm[-1] -+[-1] 0.01 -/ -equalize 255 -n 0,255"
+
+  -_gmic_gallery "-blur 1 -pencilbw 0.3"
+  -_gmic_gallery "-blur 1 -pencilbw 0.3"
+  -_gmic_gallery "-blur 1 -pencilbw 0.3"
+  -_gmic_gallery "-blur 1 -pencilbw 0.3"
+  -_gmic_gallery "-blur 1 -pencilbw 0.3"
+
+  -_gmic_gallery "-old_photo -drop_shadow 3,3 -rotate -5,1 -drgba"
+  -_gmic_gallery "-old_photo -drop_shadow 3,3 -rotate -10,1 -drgba"
+  -_gmic_gallery "-old_photo -drop_shadow 3,3 -rotate -15,1 -drgba"
+  -_gmic_gallery "-old_photo -drop_shadow 3,3 -rotate -20,1 -drgba"
+  -_gmic_gallery "-old_photo -drop_shadow 3,3 -rotate -25,1 -drgba"
+
+  -_gmic_gallery "-erode 10 --erode 3 -- -equalize 255 -smooth 40,0,1,1,3 -n 0,255 -negative"
+  -_gmic_gallery "-erode 10 --erode 3 -- -equalize 255 -smooth 60,0,1,1,3 -n 0,255 -negative"
+  -_gmic_gallery "-erode 10 --erode 3 -- -equalize 255 -smooth 80,0,1,1,3 -n 0,255 -negative"
+  -_gmic_gallery "-erode 10 --erode 3 -- -equalize 255 -smooth 100,0,1,1,3 -n 0,255 -negative"
+  -_gmic_gallery "-erode 10 --erode 3 -- -equalize 255 -smooth 120,0,1,1,3 -n 0,255 -negative"
+
+  -_gmic_gallery "-light_relief ,"
+  -_gmic_gallery "-light_relief ,"
+  -_gmic_gallery "-light_relief ,"
+  -_gmic_gallery "-light_relief ,"
+  -_gmic_gallery "-light_relief ,"
+
+  -_gmic_gallery "--warhol 2 -fade_radial 50,70"
+  -_gmic_gallery "--warhol 3 -fade_radial 50,70"
+  -_gmic_gallery "--warhol 4 -fade_radial 50,70"
+  -_gmic_gallery "--warhol 5 -fade_radial 50,70"
+  -_gmic_gallery "--warhol 6 -fade_radial 50,70"
+
+  -_gmic_gallery "--sketchbw , -rv -blend overlay"
+  -_gmic_gallery "--sketchbw , -rv -blend overlay"
+  -_gmic_gallery "--mirror x -a x -map_sphere ,"
+  -_gmic_gallery "--mirror x -a x -map_sphere ,"
+  -_gmic_gallery "-gimp_painting 2,1.5,2"
+
+  -_gmic_gallery "-f3d 800 -rm 512,512,1,3 -chessboard 64,64,0,0,15,1,@{-RGB},@{-RGB} --imagecube3d -*3d[-1] 230 -r3d[-1] 1,1,0.5,50 -m3d 3 -object3d[-2] [-1],50%,50%,0 -rm[-1] -gimp_painting 1,1.5,2 -equalize[-1] 256"
+  -_gmic_gallery "--histogram 256 -display_graph[-1] @{0,w},@{0,h},3 -to_rgba[-1] -*[-1] 0.5 -blend alpha"
+  -_gmic_gallery "100%,100%,1,1,'X=(x-w/2)/30;Y=(y-h/2)/30;5*cos(X*Y)*sqrt(X^2+Y^2)' -elevation3d[0] [1] -k[0] -r3d 1,1,0,60 -snapshot3d 500,2"
+  -_gmic_gallery "-kuwahara 10 -noise 30 -smooth 100,0,1,3,3 -sharpen 400 -n 0,255 -equalize 256"
+  -_gmic_gallery "-frame 4,4,0 -array_mirror 1,3"
+
+  _nb_coms={$_nb_coms+1}
+
+  # Generate gallery HTML header.
+  ({'"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n\
+      \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\
+<!--#include file=\"header.html\" -->\n
+<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">\n
+<div id=\"bloc_option\"><div id=\"top_bleu\"><div id=\"text_top\">Image Gallery</div></div>\n
+<div id=\"center\"><div id=\"text_centre_intro\">\n
+  All the images below have been processed by the command line version <b><a href=\"documentation.shtml\">gmic</a></b>\n
+  of <b><font color=\"#000066\">G\'MIC</font></b>, from a set of initial 2D color images (displayed on the first row).<br/>\n
+  Click on an image to zoom-in. The corresponding <b><font color=\"#000066\">G\'MIC</font></b> command used to generate the image appears as a caption.\n
+  This gallery is intended to show the flexibility and the genericity of the <b><font color=\"#000066\">G\'MIC</font></b> language.\n
+  Remember, you can easily define your own image filters and effects by writting\n
+  your custom <b><font color=\"#000066\">G\'MIC</font></b> <a href=\"http://cimg.cvs.sourceforge.net/*checkout*/cimg/CImg/examples/gmic_def.gmic\">command file</a>,\n
+  and eventually put them directly in <a href=\"http://www.gimp.org\">GIMP</a> afterwards.\n\n
+  <ul>\n
+  <li>See also the <a href=\"gimp.shtml\">GIMP plug-in page</a> to see various screenshots of what <b><font color=\"#000066\">G\'MIC</font></b> can do.</li>\n
+  <li>See also the <a href=\"reference.shtml\">G\'MIC reference page</a> to have processing examples of almost all <b><font color=\"#000066\">G\'MIC</font></b> commands\n
+    (scroll down there to view example images).</li>\n
+  <li>See also the <a href=\"http://www.flickr.com/groups/gmic/pool/show/\">Flickr slideshow</a>, showing uses of the <a href=\"gimp.shtml\">G\'MIC plug-in</a>\n
+  by various artists.</li>\n
+  </ul>\n
+  <b>Copyrights : </b> All pictures have been shot by <a href=\"http://tschumperle.users.greyc.fr/\">David Tschumperl&eacute;</a>.<br/><br/>\n"'})
+
+  # Generate main gallery table.
+  ({'"<center><table cellpadding=\"1\" border=\"1\" cellspacing=\"0\">"\n'})
+  row=0
+  -repeat $_nb_coms
+
+    ind={$>%$nb_imgs}
+    out_img=@{"-filename "img/gallery.jpg,$>}
+    out_thumb=@{"-filename "img/gallery_thumb.jpg,$>}
+
+    -if {!$ind}
+       -if {$row%2} bgcolor=#FFFFFF -else bgcolor=#DDDDDD -endif
+       ({'"<tr bgcolor=\""$bgcolor"\">\n"'})
+    -endif  # Start new row.
+
+    com=${_com$>}
+
+    -v + -e[] " - Image "{$>+1}/$_nb_coms" : $ "$com -v -
+
+    displayed_com$ind=$com
+    -if {!narg($com)} com="-skip ," -endif
+    --__gmic_gallery[$ind] $com
+
+    iind={$ind%5}
+
+    width=@{$iind,w} height=@{$iind,h}
+    -o[-1] $out_img,75
+    -r2dy[-1] $1 -if {w>${width$ind}} -r[-1] ${width$ind},100%,100%,100%,2 -endif
+    -o[-1] $out_thumb,50 -rm[-1]
+
+    ({'"<td width=\""${width$>}"\"><center><div>\
+        <a href=\""$out_img"\" class=\"highslide\" onclick=\"return hs.expand(this)\">\
+	<img src=\""$out_thumb"\"/></a>\
+        <div class=\"highslide-caption\">gmic "@{$ind,b}.@{$ind,x}" "${displayed_com$ind}"</div>\
+        </div></center></td>\n"'})
+
+    -if {$ind==$nb_imgs-1" || "$>==$_nb_coms-1} # End row.
+      ({'"</tr>\n<tr bgcolor=\""$bgcolor"\">"\n'})
+      -repeat {$ind+1}
+        ({'"<td width=\""${width$>}"\"><center><font size=\"1\">gmic "@{$>,b}.@{$>,x}" "${displayed_com$>}"</font></center></td>\n"'})
+      -done
+      ({'"</tr>\n"'})
+      row={$row+1}
+    -endif
+
+  -done
+  ({'"</table></center>\n"'})
+
+  # Generate gallery footer.
+  ({'"</div></div><div id=\"footer\"><img src=\"images/footer.jpg\" /></div></div>\n\
+      <!--#include file=\"copyright.html\" -->\n\
+      <!--#include file=\"footer.html\" -->\n"'})
+
+  # Save html page and exit properly.
+  -rm[0-{$nb_imgs-1}] -a x
+  -type uchar -o gallery.raw -type float -x "mv gallery.raw gallery.shtml" -rm
+  -v + -e[^-1] "All done !"
+
+_gmic_gallery :
+  _nb_coms={$_nb_coms+1} _com$_nb_coms="$1"
+
+__gmic_gallery :
+  ${1--1}
+
+# Local Variables:
+# mode: sh
+# End:
+#
+# (End of G'MIC custom commands)

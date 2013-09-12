@@ -1,0 +1,8 @@
+#!/bin/bash
+cd ../
+cvs update
+cd ../CImg
+cvs update
+cd ../gmic/src
+rm -f CImg.h
+ln -s ../../CImg/CImg.h .

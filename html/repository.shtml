@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--#include file="header.html" -->
+<link href="style.css" rel="stylesheet" type="text/css">
+
+  <div id="bloc_option"><div id="top_bleu"><div id="text_top">Debian / Ubuntu</div></div>
+    <div id="center"><div id="text_centre_intro">
+
+        <table><tr>
+            <td>
+              <div><a href="img/roddy_large.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/roddy_small.jpg"/></a>
+                <div class="highslide-caption"><i><b>Roddy</b>, the mascot of the 'Rodilius' filter in G'MIC, by <a href="http://www.mahvin.com/">Mahvin</a>.</i></div></div><br/>
+              <center><font size="-2"><i><b>Roddy</b>, the mascot of the 'Rodilius' filter in G'MIC<br/>
+                    (by <a href="http://www.mahvin.com/">Mahvin</a>)</i></font><br/>
+
+                <a href="http://sourceforge.net/donate/index.php?group_id=234931"><img src="img/donate.png" border="0" alt="Support the G'MIC Project" /></a>
+                <br/><font size="-2">to help develop the project !</font>
+                <hr noshade="noshade" size="1" width="90%"></hr>
+
+              </center>
+            </td>
+            <td>
+              <ul>
+                <li><b><font color="black">Up-to-date packages:</font></b>
+                  To be sure to get up-to-date packages of <b><font color="#000066">G'MIC</font></b>, please check the latest released source archive
+                  on the official <a href="http://sourceforge.net/projects/gmic/files/">download page</a> first.
+                </li><br/>
+                <li><b><font color="black">PPA for Ubuntu:</font></b>
+                  On Ubuntu (Linux), there is a frequently updated PPA (Personal Package Archives), maintained by
+                  <a href="https://plus.google.com/u/0/117581776478455814502/posts">Thorsten "otto" Stettin</a>
+                  which can be used to ease the installation of <b><font color="#000066">G'MIC</font></b>, and to get quick updates as well.
+                  Ubuntu users are invited to use this PPA, by typing the commands:
+                  <pre style="font-family:monospace;">
+                    sudo add-apt-repository ppa:otto-kesselgulasch/gimp<br/>
+                    sudo apt-get update<br/>
+                    sudo apt-get install gmic gimp-gmic
+                  </pre>
+                  </li>
+                <li><b><font color="black">Alternate repository:</font></b>
+                  A repository of <b><font color="#000066">G'MIC</font></b> packages for <b>Debian or Ubuntu Linux</b> is available,
+                  and can be added to your <tt>/etc/apt/sources.list</tt> file:<br/><br/>
+                  <tt style="font-family:monospace;">
+                    deb http://download.tuxfamily.org/ekdforum/ekd/gmic/gmic_apt xxxx contrib
+                  </tt><br/><br/>
+                  where <tt>xxxx</tt> can be replaced by <tt>etch</tt>, <tt>lenny</tt>, <tt>squeeze</tt>, <tt>sid</tt>, <tt>dapper</tt>, <tt>edgy</tt>, <tt>feisty</tt>,
+                  <tt>gutsy</tt>, <tt>hardy</tt>, <tt>intrepid</tt>, <tt>jaunty</tt>, <tt>karmic</tt>, <tt>lucid</tt>, <tt>maverick</tt>, <tt>natty</tt>, <tt>oneiric</tt>
+                  or <tt>precise-pangolin</tt>,
+                  depending on your distribution version.
+                  <br/><br/>Then, type:
+                  <pre style="font-family:monospace;">
+                    apt-get update
+                    apt-get install gmic
+                  </pre>
+                </li>
+              </ul>
+            </td>
+        </tr></table>
+    </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
+  <div id="bloc_option"><div id="top_bleu"><div id="text_top">Fedora</div></div>
+    <div id="center"><div id="text_centre_intro">
+        Josef Radinger has set up binary packages for Fedora users.
+        Check out his repository to get them :
+        <ul>
+          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/16/i386/repoview/">Fedora 16, i386.</a></li>
+          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/17/i386/repoview/">Fedora 17, i386.</a></li>
+          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/18/i386/repoview/">Fedora 18, i386.</a></li>
+          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/16/x86_64/repoview/">Fedora 16, x86_64.</a></li>
+          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/17/x86_64/repoview/">Fedora 17, x86_64.</a></li>
+          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/18/x86_64/repoview/">Fedora 18, x86_64.</a></li>
+        </ul>
+    </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
+  <div id="bloc_option"><div id="top_bleu"><div id="text_top">CVS repository</div></div>
+    <div id="center"><div id="text_centre_intro">
+        The source code of <b><font color="#000066">G'MIC</font></b> is hosted on a CVS repository with public access.
+        Accessing it via CVS ensures you get the latest code available, and will ease the
+        updates as well (knowing the tool <i>cvs</i> is needed indeed). To do this, just
+        type the commands:
+        <pre style="font-family:monospace;">
+          export CVS_RSH=ssh<br/>
+          cvs -d:pserver:anonymous@gmic.cvs.sourceforge.net:/cvsroot/gmic co gmic
+        </pre>
+        in your favorite console. Nevertheless, you have to know that some code in the CVS version
+        may be experimental, so always test the latest stable archive before complaining !
+    </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
+<!--#include file="copyright.html" -->
+<!--#include file="footer.html" -->
