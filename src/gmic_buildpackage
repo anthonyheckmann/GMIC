@@ -145,10 +145,15 @@ gmic \\- Perform generic image processing operations, through the G'MIC language
 rm -f gmic.1.gz
 gzip gmic.1
 
+cd ../src
+rm -f CImg.h
+cp ../../CImg/CImg.h .
+cd ..
 git commit -a -m "-"
 git push
-
-cd ..
+cd src
+rm -f CImg.h
+ln -s ../../CImg/CImg.h .
 
 # Create bash autocompletion script.
 #-----------------------------------

@@ -1,5 +1,6 @@
 #!/bin/bash
-rm -f CImg.h && cp ../../CImg/CImg.h .
+rm -f CImg.h
+cp ../../CImg/CImg.h .
 cd ../
 git commit -a -m "- $1"
 git push
@@ -7,4 +8,5 @@ cd ../CImg
 git commit -a -m "- $1"
 git push
 cd ../gmic/src
-rm -f CImg.h && ln -s ../../CImg/CImg.h
+rm -f CImg.h
+ln -s ../../CImg/CImg.h .
