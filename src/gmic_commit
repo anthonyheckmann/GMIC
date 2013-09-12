@@ -1,5 +1,10 @@
 #!/bin/bash
+rm -f CImg.h && cp ../../CImg/CImg.h .
 cd ../
-cvs commit -m "$1"
+git commit -a -m "- $1"
+git push
 cd ../CImg
-cvs commit -m "$1"
+git commit -a -m "- $1"
+git push
+cd ../gmic/src
+rm -f CImg.h && ln -s ../../CImg/CImg.h

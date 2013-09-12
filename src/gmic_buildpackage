@@ -144,7 +144,10 @@ gmic \\- Perform generic image processing operations, through the G'MIC language
     sed "s/'/\\\'/g" >> gmic.1
 rm -f gmic.1.gz
 gzip gmic.1
-cvs commit -m ""
+
+git commit -a -m "-"
+git push
+
 cd ..
 
 # Create bash autocompletion script.
@@ -236,6 +239,7 @@ rm -f `find . -name ".?*"`
 rm -f `find . -name "*~"`
 rm -r `find . -name "\#*"`
 rm -r `find . -name "CVS"`
+rm -r `find . -name ".git"`
 
 # Upload web page.
 #-----------------
