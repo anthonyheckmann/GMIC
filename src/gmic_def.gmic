@@ -621,6 +621,7 @@ _help_usage :
   -_help_paragraph "  - G'MIC items containing '@', '$' or '{}' may be substituted before being interpreted. Use
 \n     the substituting expressions below to access data from the interpreter environment:
 \n    . '@#' is substituted by the current number of images in the list.
+\n    . '@*' is substituted by the number of available cpus.
 \n    . '@.' is substituted by the current version number of the G'MIC interpreter
 \n    . '@^' is substituted by the current verbosity level.
 \n    . '@%' is substituted by the pid of the current process.

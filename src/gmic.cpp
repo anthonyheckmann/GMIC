@@ -2719,7 +2719,13 @@ CImg<char> gmic::substitute_item(const char *const source,
         cimg_snprintf(substr,substr.width(),"%u",images.size());
         CImg<char>(substr.data(),std::strlen(substr)).move_to(substituted_items);
 
-      // Substitute '@#' -> number of images in the list.
+      // Substitute '@*' -> number of available cpus.
+      } else if (*nsource=='@' && nsource[1]=='*') {
+        nsource+=2;
+        cimg_snprintf(substr,substr.width(),"%u",cimg::nb_cpus());
+        CImg<char>(substr.data(),std::strlen(substr)).move_to(substituted_items);
+
+      // Substitute '@^' -> current level of verbosity.
       } else if (*nsource=='@' && nsource[1]=='^') {
         nsource+=2;
         cimg_snprintf(substr,substr.width(),"%d",verbosity);
