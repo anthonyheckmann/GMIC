@@ -14908,13 +14908,10 @@ gimp_poster_edges_preview :
 #@gimp : Smoothness = int(0,0,5)
 #@gimp : Color mode = choice(1,"Darker","Lighter")
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
-#@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Rod/GimpChat</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/03/05</i>.</small>")
-gimp_rodilius : -skip ${9=0},${10=0}
-  -apply_channels "-gimp_apply_parallel$9 $10,\"-rodilius ${1-5,7} -repeat $6 -smooth 10,0,1,1,1,0.8,45 -sharpen 30 -done -c 0,255\"",$8,0
+gimp_rodilius :
+  -apply_channels "-rodilius ${1-5,7} -repeat $6 -smooth 10,0,1,1,1,0.8,45 -sharpen 30 -done -c 0,255",$8,0
 
 gimp_rodilius_preview :
   -gimp_split_preview "-gimp_rodilius $*",$-1
@@ -20645,9 +20642,6 @@ gmicol_logo_en :
 #@gmicol : Smoothness = int(0,0,5)
 #@gmicol : Color mode = choice(1,"Darker","Lighter")
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
-#@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Authors: <i>Rod/GimpChat, David Tschumperl&#233;</i>.      Latest update: <i>2011/09/28</i>.</small>")
 
