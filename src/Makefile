@@ -186,9 +186,9 @@ EXR_LDFLAGS = -lIlmImf -lHalf
 # This requires the presence of the FFTW3 include and library files.
 # (package 'libfftw3-dev' on Debian).
 FFTW_CFLAGS = -Dcimg_use_fftw3
-FFTW_LDFLAGS = -lfftw3
+FFTW_LDFLAGS = -lfftw3 -lfftw3_threads
 ifeq ($(OSTYPE),msys)
-FFTW_LDFLAGS = -lfftw3-3
+FFTW_LDFLAGS = -lfftw3-3 -lfftw3-3_threads
 endif
 
 # Flags to enable the use of the BOARD library.
