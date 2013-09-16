@@ -186,7 +186,7 @@ EXR_LDFLAGS = -lIlmImf -lHalf
 # This requires the presence of the FFTW3 include and library files.
 # (package 'libfftw3-dev' on Debian).
 FFTW_CFLAGS = -Dcimg_use_fftw3
-FFTW_LDFLAGS = -lfftw3
+FFTW_LDFLAGS = -lfftw3 -lfftw3_threads
 ifeq ($(OSTYPE),msys)
 FFTW_LDFLAGS = -lfftw3-3
 endif
@@ -220,7 +220,7 @@ STATIC_UNIX_LDFLAGS = $(PARALLEL_LDFLAGS) \
 	              /usr/lib/libjpeg.a \
                       /usr/lib/libtiff.a \
                       /usr/lib/libz.a \
-                      /usr/lib/libfftw3.a
+                      /usr/lib/libfftw3.a /usr/lib/libfftw3_threads.a
 
 # Unix : Custom build.
 CUST_UNIX_CFLAGS = $(MANDATORY_CFLAGS) $(PARALLEL_CFLAGS) $(DEBUG_CFLAGS) $(X11_CFLAGS) $(XSHM_CFLAGS) $(PNG_CFLAGS) \
@@ -259,7 +259,7 @@ STD_LIB_LDFLAGS = $(MANDATORY_LDFLAGS) $(PARALLEL_LDFLAGS) $(FFTW_LDFLAGS)
 
 # GMICol : Standard build.
 GMICOL_UNIX_CFLAGS = $(MANDATORY_CFLAGS) $(PARALLEL_CFLAGS) $(PNG_CFLAGS) $(JPEG_CFLAGS) $(ZLIB_CFLAGS) $(FFTW_CFLAGS) -Dcimg_display=0
-GMICOL_UNIX_LDFLAGS = $(MANDATORY_LDFLAGS) $(PARALLEL_LDFLAGS) $(PNG_LDFLAGS) $(JPEG_LDFLAGS) $(ZLIB_LDFLAGS) /usr/lib/libfftw3.a
+GMICOL_UNIX_LDFLAGS = $(MANDATORY_LDFLAGS) $(PARALLEL_LDFLAGS) $(PNG_LDFLAGS) $(JPEG_LDFLAGS) $(ZLIB_LDFLAGS) /usr/lib/libfftw3.a /usr/lib/libfftw3_threads.a
 
 #--------------------------
 # Define Makefile entries.
