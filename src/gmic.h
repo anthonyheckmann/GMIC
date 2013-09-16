@@ -231,7 +231,7 @@ struct gmic {
   template<typename T>
   gmic_image<char> substitute_item(const char *const source,
                                    gmic_list<T>& images, gmic_list<char>& images_names,
-				   const unsigned int (&variables_sizes)[256]);
+				   unsigned int (&variables_sizes)[256]);
 
   gmic& print(const char *format, ...);
   template<typename T>
@@ -296,7 +296,7 @@ struct gmic {
   template<typename T>
   gmic& parse(const gmic_list<char>& commands_line,
 	      gmic_list<T> &images, gmic_list<char> &images_names) {
-    const unsigned int variables_sizes[256] = { 0 };
+    unsigned int variables_sizes[256] = { 0 };
     unsigned int position = 0;
     std::setlocale(LC_NUMERIC,"C");
     scope.assign(1U);
@@ -317,34 +317,34 @@ struct gmic {
   template<typename T>
   gmic& _parse(const gmic_list<char>& commands_line, unsigned int& position,
                gmic_list<T> &images, gmic_list<char> &images_names,
-               const unsigned int (&variables_sizes)[256]);
+               unsigned int (&variables_sizes)[256]);
   gmic& _parse_bool(const gmic_list<char>& commands_line, unsigned int& position,
                     gmic_list<bool>& images, gmic_list<char> &images_names,
-                    const unsigned int (&variables_sizes)[256]);
+                    unsigned int (&variables_sizes)[256]);
   gmic& _parse_uchar(const gmic_list<char>& commands_line, unsigned int& position,
                      gmic_list<unsigned char>& images, gmic_list<char> &images_names,
-                     const unsigned int (&variables_sizes)[256]);
+                     unsigned int (&variables_sizes)[256]);
   gmic& _parse_char(const gmic_list<char>& commands_line, unsigned int& position,
                     gmic_list<char>& images, gmic_list<char> &images_names,
-                    const unsigned int (&variables_sizes)[256]);
+                    unsigned int (&variables_sizes)[256]);
   gmic& _parse_ushort(const gmic_list<char>& commands_line, unsigned int& position,
                       gmic_list<unsigned short>& images, gmic_list<char> &images_names,
-                      const unsigned int (&variables_sizes)[256]);
+                      unsigned int (&variables_sizes)[256]);
   gmic& _parse_short(const gmic_list<char>& commands_line, unsigned int& position,
                      gmic_list<short>& images, gmic_list<char> &images_names,
-                     const unsigned int (&variables_sizes)[256]);
+                     unsigned int (&variables_sizes)[256]);
   gmic& _parse_uint(const gmic_list<char>& commands_line, unsigned int& position,
                     gmic_list<unsigned int>& images, gmic_list<char> &images_names,
-                    const unsigned int (&variables_sizes)[256]);
+                    unsigned int (&variables_sizes)[256]);
   gmic& _parse_int(const gmic_list<char>& commands_line, unsigned int& position,
                    gmic_list<int>& images, gmic_list<char> &images_names,
-                   const unsigned int (&variables_sizes)[256]);
+                   unsigned int (&variables_sizes)[256]);
   gmic& _parse_float(const gmic_list<char>& commands_line, unsigned int& position,
                      gmic_list<float>& images, gmic_list<char> &images_names,
-                     const unsigned int (&variables_sizes)[256]);
+                     unsigned int (&variables_sizes)[256]);
   gmic& _parse_double(const gmic_list<char>& commands_line, unsigned int& position,
                       gmic_list<double>& images, gmic_list<char> &images_names,
-                      const unsigned int (&variables_sizes)[256]);
+                      unsigned int (&variables_sizes)[256]);
 
   // Internal environment variables.
 #if cimg_display!=0

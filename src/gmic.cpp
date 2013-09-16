@@ -2564,7 +2564,7 @@ template<typename T>
 CImg<char> gmic::substitute_item(const char *const source,
                                  CImgList<T>& images,
                                  CImgList<char>& images_names,
-                                 const unsigned int (&variables_sizes)[256]) {
+                                 unsigned int (&variables_sizes)[256]) {
   if (!source) return CImg<char>();
   CImgList<char> substituted_items;
   CImg<char> inbraces;
@@ -3294,7 +3294,7 @@ CImg<char> gmic::substitute_item(const char *const source,
 template<typename T>
 gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                    CImgList<T> &images, CImgList<char> &images_names,
-                   const unsigned int (&variables_sizes)[256]) {
+                   unsigned int (&variables_sizes)[256]) {
   const unsigned int initial_scope_size = scope.size();
   bool is_endlocal = false;
   char end;
@@ -7479,6 +7479,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               is_released&=thread_data[l].gmic_instance.is_released;
             }
 
+            // Get back global variables modified by first thread.
+            thread_data[0].gmic_instance.variables[255].move_to(variables[255]);
+            thread_data[0].gmic_instance.variables_names[255].move_to(variables_names[255]);
+            variables_sizes[255] = thread_data[0].variables_sizes[255];
+
             // Check for possible exceptions thrown by threads.
             cimglist_for(args,l) if (thread_data[l].exception._message)
               throw thread_data[l].exception;
@@ -11630,7 +11635,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #if !defined(gmic_float_only) && (defined(gmic_bool) || !defined(gmic_split_compilation))
 gmic& gmic::_parse_bool(const CImgList<char>& commands_line, unsigned int& position,
                         CImgList<bool>& images, CImgList<char>& images_names,
-                        const unsigned int (&variables_sizes)[256]) {
+                        unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<bool>&, CImgList<char>&,
@@ -11643,7 +11648,7 @@ template gmic::gmic(const char *const, CImgList<bool>&, CImgList<char>&,
 #if !defined(gmic_float_only) && (defined(gmic_uchar) || !defined(gmic_split_compilation))
 gmic& gmic::_parse_uchar(const CImgList<char>& commands_line, unsigned int& position,
                         CImgList<unsigned char>& images, CImgList<char>& images_names,
-			const unsigned int (&variables_sizes)[256]) {
+			unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<unsigned char>&, CImgList<char>&,
@@ -11656,7 +11661,7 @@ template gmic::gmic(const char *const, CImgList<unsigned char>&, CImgList<char>&
 #if !defined(gmic_float_only) && (defined(gmic_char) || !defined(gmic_split_compilation))
 gmic& gmic::_parse_char(const CImgList<char>& commands_line, unsigned int& position,
                         CImgList<char>& images, CImgList<char>& images_names,
-                        const unsigned int (&variables_sizes)[256]) {
+                        unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<char>&, CImgList<char>&,
@@ -11669,7 +11674,7 @@ template gmic::gmic(const char *const, CImgList<char>&, CImgList<char>&,
 #if !defined(gmic_float_only) && (defined(gmic_ushort) || !defined(gmic_split_compilation))
 gmic& gmic::_parse_ushort(const CImgList<char>& commands_line, unsigned int& position,
                           CImgList<unsigned short>& images, CImgList<char>& images_names,
-                          const unsigned int (&variables_sizes)[256]) {
+                          unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<unsigned short>&, CImgList<char>&,
@@ -11682,7 +11687,7 @@ template gmic::gmic(const char *const, CImgList<unsigned short>&, CImgList<char>
 #if !defined(gmic_float_only) && (defined(gmic_short) || !defined(gmic_split_compilation))
 gmic& gmic::_parse_short(const CImgList<char>& commands_line, unsigned int& position,
                          CImgList<short>& images, CImgList<char>& images_names,
-                         const unsigned int (&variables_sizes)[256]) {
+                         unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<short>&, CImgList<char>&,
@@ -11695,7 +11700,7 @@ template gmic::gmic(const char *const, CImgList<short>&, CImgList<char>&,
 #if !defined(gmic_float_only) && (defined(gmic_uint) || !defined(gmic_split_compilation))
 gmic& gmic::_parse_uint(const CImgList<char>& commands_line, unsigned int& position,
                         CImgList<unsigned int>& images, CImgList<char>& images_names,
-                        const unsigned int (&variables_sizes)[256]) {
+                        unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<unsigned int>&, CImgList<char>&,
@@ -11708,7 +11713,7 @@ template gmic::gmic(const char *const, CImgList<unsigned int>&, CImgList<char>&,
 #if !defined(gmic_float_only) && (defined(gmic_int) || !defined(gmic_split_compilation))
 gmic& gmic::_parse_int(const CImgList<char>& commands_line, unsigned int& position,
                        CImgList<int>& images, CImgList<char>& images_names,
-                       const unsigned int (&variables_sizes)[256]) {
+                       unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<int>&, CImgList<char>&,
@@ -11721,7 +11726,7 @@ template gmic::gmic(const char *const, CImgList<int>&, CImgList<char>&,
 #if defined(gmic_float) || !defined(gmic_split_compilation)
 gmic& gmic::_parse_float(const CImgList<char>& commands_line, unsigned int& position,
                          CImgList<float>& images, CImgList<char>& images_names,
-                         const unsigned int (&variables_sizes)[256]) {
+                         unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<float>&, CImgList<char>&,
@@ -11734,7 +11739,7 @@ template gmic::gmic(const char *const, CImgList<float>&, CImgList<char>&,
 #if !defined(gmic_float_only) && (defined(gmic_double) || !defined(gmic_split_compilation))
 gmic& gmic::_parse_double(const CImgList<char>& commands_line, unsigned int& position,
                           CImgList<double>& images, CImgList<char>& images_names,
-                          const unsigned int (&variables_sizes)[256]) {
+                          unsigned int (&variables_sizes)[256]) {
   return _parse(commands_line,position,images,images_names,variables_sizes);
 }
 template gmic::gmic(const int, const char *const *const, CImgList<double>&, CImgList<char>&,
