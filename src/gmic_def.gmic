@@ -13785,7 +13785,7 @@ gimp_filter_sources :
 
 # Function to manage options for parallel processing.
 gimp_apply_parallel0 :                                 # Auto.
-  -if {@.>1570}   # Support '@*' expression.
+  -if {@.>1570}   # Support '@*' expression (need at least 1.5.7.1).
     -if {@*<2}   ${2--1}
     -elif {@*<4} -gimp_apply_parallel2 $1,"${2--1}"
     -elif {@*<8} -gimp_apply_parallel3 $1,"${2--1}"
