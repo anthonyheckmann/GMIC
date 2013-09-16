@@ -188,7 +188,7 @@ EXR_LDFLAGS = -lIlmImf -lHalf
 FFTW_CFLAGS = -Dcimg_use_fftw3
 FFTW_LDFLAGS = -lfftw3 -lfftw3_threads
 ifeq ($(OSTYPE),msys)
-FFTW_LDFLAGS = -lfftw3-3 -lfftw3-3_threads
+FFTW_LDFLAGS = -lfftw3-3
 endif
 
 # Flags to enable the use of the BOARD library.
