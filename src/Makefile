@@ -220,7 +220,7 @@ STATIC_UNIX_LDFLAGS = $(PARALLEL_LDFLAGS) \
 	              /usr/lib/libjpeg.a \
                       /usr/lib/libtiff.a \
                       /usr/lib/libz.a \
-                      /usr/lib/libfftw3.a /usr/libfftw3_threads.a
+                      /usr/lib/libfftw3.a /usr/lib/libfftw3_threads.a
 
 # Unix : Custom build.
 CUST_UNIX_CFLAGS = $(MANDATORY_CFLAGS) $(PARALLEL_CFLAGS) $(DEBUG_CFLAGS) $(X11_CFLAGS) $(XSHM_CFLAGS) $(PNG_CFLAGS) \
