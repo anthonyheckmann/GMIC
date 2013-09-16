@@ -38,13 +38,13 @@ exists( /usr/include/opencv2 ) {
 }
 
 system(pkg-config opencv --libs > /dev/null 2>&1) {
-# LIBS += -lX11 ../src/libgmic.a `pkg-config opencv --libs` -lfftw3
+# LIBS += -lX11 ../src/libgmic.a `pkg-config opencv --libs` -lfftw3 -lfftw3_threads
  OPENCVLIBS = $$system(pkg-config opencv --libs)
  OPENCVLIBS = $$replace( OPENCVLIBS, -lcvaux, )
- LIBS += -lX11 ../src/libgmic.a $$OPENCVLIBS -lfftw3
+ LIBS += -lX11 ../src/libgmic.a $$OPENCVLIBS -lfftw3 -lfftw3_threads
 } else {
-  LIBS += -lX11 ../src/libgmic.a -lopencv_core -lopencv_highgui -lfftw3 -lopencv_imgproc -lopencv_objdetect
-# LIBS += -lX11 ../src/libgmic.a -lcxcore -lcv -lml -lhighgui -lfftw3
+  LIBS += -lX11 ../src/libgmic.a -lopencv_core -lopencv_highgui -lfftw3 -lfftw3_threads -lopencv_imgproc -lopencv_objdetect
+# LIBS += -lX11 ../src/libgmic.a -lcxcore -lcv -lml -lhighgui -lfftw3 -lfftw3_threads
 }
 
 PRE_TARGETDEPS +=
