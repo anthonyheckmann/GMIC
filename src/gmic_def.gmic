@@ -8141,7 +8141,7 @@ apply_parallel :
 #@gmic : 'nb_threads' must be a power of 2.
 #@gmic : Default values: 'overlap=0','nb_threads=0'.
 #@gmic : $ image.jpg --apply_parallel_overlap "-smooth 500,0,1",16
-apply_parallel_overlap : -check "${2=0}>=0 && isint($3) && ${3=0}>=0"
+apply_parallel_overlap : -check "${2=0}>=0 && isint(${3=0}) && $3>=0"
   -v - -if {@.>1570} N={if($3,max(1,round($3)),@*)} -else N={if($3,max(1,round($3)),4)} -endif N={2^int(log2(min(16,$N)))} -v +
   -e[^-1] "Apply parallelized command '$1' on image$?, with overlap $2 and "$N" threads."
   -v - -repeat @# -l[$>]

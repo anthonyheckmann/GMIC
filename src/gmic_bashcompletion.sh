@@ -577,9 +577,7 @@ _gmic_def()
 	      -volume3d --volume3d\
 	      -weird3d --weird3d\
 	      -apply_parallel --apply_parallel\
-	      -apply_parallel2 --apply_parallel2\
-	      -apply_parallel4 --apply_parallel4\
-	      -apply_parallel8 --apply_parallel8\
+	      -apply_parallel_overlap --apply_parallel_overlap\
 	      -check --check\
 	      -continue --continue\
 	      -break --break\
@@ -1384,9 +1382,7 @@ _gmic_def()
 	      volume3d\
 	      weird3d\
 	      apply_parallel\
-	      apply_parallel2\
-	      apply_parallel4\
-	      apply_parallel8\
+	      apply_parallel_overlap\
 	      check\
 	      continue\
 	      break\
@@ -2904,16 +2900,8 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W ""command" >") )
 		return 0
 		;;
-		"-apply_parallel2" | "--apply_parallel2")
-		COMPREPLY=( $(compgen -W "overlap[%],"command" >") )
-		return 0
-		;;
-		"-apply_parallel4" | "--apply_parallel4")
-		COMPREPLY=( $(compgen -W "overlap[%],"command" >") )
-		return 0
-		;;
-		"-apply_parallel8" | "--apply_parallel8")
-		COMPREPLY=( $(compgen -W "overlap[%],"command" >") )
+		"-apply_parallel_overlap" | "--apply_parallel_overlap")
+		COMPREPLY=( $(compgen -W ""command",overlap[%],nb_threads={0=auto|1|2|4|8|16} >") )
 		return 0
 		;;
 		"-check" | "--check")

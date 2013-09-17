@@ -154,6 +154,7 @@ git push
 cd src
 rm -f CImg.h
 ln -s ../../CImg/CImg.h .
+cd ..
 
 # Create bash autocompletion script.
 #-----------------------------------
