@@ -48,8 +48,14 @@
 #----------------------------------
 OS := $(shell uname)
 CC = g++
+ifeq ($(OS),Linux)
+OS = Unix
+endif
 ifeq ($(OS),GNU/kFreeBSD)
-OS = Linux
+OS = Unix
+endif
+ifeq ($(OS),GNU)
+OS = Unix
 endif
 ifeq ($(OS),Darwin)
 PLUGINDIR = ~/Library/Application\ Support/Gimp/plug-ins
@@ -267,9 +273,9 @@ GMICOL_UNIX_LDFLAGS = $(MANDATORY_LDFLAGS) $(PARALLEL_LDFLAGS) $(PNG_LDFLAGS) $(
 
 # Main entries
 all:
-ifeq ($(OS),Linux)
+ifeq ($(OS),Unix)
 	@echo "**"
-	@echo "** Linux configuration"
+	@echo "** Generic unix configuration."
 	@echo "**"
 	$(MAKE) linux
 	$(MAKE) gimp
@@ -278,14 +284,14 @@ ifeq ($(OS),Linux)
 else
 ifeq ($(OS),Darwin)
 	@echo "**"
-	@echo "** MacOSX configuration"
+	@echo "** MacOSX configuration."
 	@echo "**"
 	$(MAKE) macosx
 	$(MAKE) gimp
 	$(MAKE) zart
 else
 	@echo "**"
-	@echo "** Windows configuration"
+	@echo "** Windows configuration."
 	@echo "**"
 	$(MAKE) windows
 	$(MAKE) gimp
