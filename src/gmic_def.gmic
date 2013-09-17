@@ -8121,24 +8121,28 @@ weird3d : -skip ${1=32}
 #-------------------------------
 
 #@gmic apply_parallel : "command" : (*)
-#@gmic : Apply specified command on each of the selected images, by parallelizing it for each image of the list.
+#@gmic : Apply specified command on each of the selected images, by parallelizing it for all image of the list.
 #@gmic : $ image.jpg --mirror x --mirror y -apply_parallel "-blur 3"
 apply_parallel :
-  -e[^-1] "Execute command '$*' for each image$?, in parallel."
-  -v - -m "_apply_parallel : $*" N=@# -l[]
-    -repeat $N ({'-_apply_parallel[$>]'}) -done
-    -if {$N>1} -i[1--2] ({','}) -endif
-    -a x arg=@{-1,t} -rm
+  -v - -if {@.>1570} M=@* -else M=8 -endif -v +
+  -e[^-1] "Execute command '$*' on all image$? in parallel, using "$M" threads."
+  -v - -m "_apply_parallel : $*" N=@#
+  -l[]
+    -repeat $M ({'-_apply_parallel[$>]'}) -done -if {@#>1} -i[1--2] ({','}) -endif -a x arg0=@{-1,t} -rm
+    -if {$N%$M} -repeat {$N%$M} ({'-_apply_parallel[$>]'}) -done -if {@#>1} -i[1--2] ({','}) -endif -a x arg1=@{-1,t} -rm -endif
   -endl
-  -parallel $arg -uncommand _apply_parallel -v +
+  -repeat {round(@#/$M,1,1)} -l[{$M*$>}-{min($M*$>+$M-1,@#-1)}]
+    -parallel ${arg{@#!=$M}}
+  -endl -done
+  -uncommand _apply_parallel -v +
 
 #@gmic apply_parallel_overlap : "command",overlap[%],nb_threads={ 0=auto | 1 | 2 | 4 | 8 | 16 }
-#@gmic : Apply specified command on each of the selected images, by parallelizing it on 'nb_threads' sub-images.
+#@gmic : Apply specified command on each of the selected images, by parallelizing it on 'nb_threads' overlapped sub-images.
 #@gmic : 'nb_threads' must be a power of 2.
-#@gmic : Default values: 'overlap=0','nb_threads=0 (auto)'
+#@gmic : Default values: 'overlap=0','nb_threads=0'.
 #@gmic : $ image.jpg --apply_parallel_overlap "-smooth 500,0,1",16
-apply_parallel_overlap : -check "${2=0}>=0 && ${3=0}>=0"
-  -v - -if {@.>1570} N={if($3,max(1,round($3)),@*)} -else N={if($3,max(1,round($3)),1)} -endif N={2^int(log2(min(16,$N)))} -v +
+apply_parallel_overlap : -check "${2=0}>=0 && isint($3) && ${3=0}>=0"
+  -v - -if {@.>1570} N={if($3,max(1,round($3)),@*)} -else N={if($3,max(1,round($3)),4)} -endif N={2^int(log2(min(16,$N)))} -v +
   -e[^-1] "Apply parallelized command '$1' on image$?, with overlap $2 and "$N" threads."
   -v - -repeat @# -l[$>]
     -_apply_parallel_overlap$N "$1",$2
