@@ -57,7 +57,7 @@
 <a name="section0"><h2><font color="brown"><u>Version</u></font></h2></a> 
 <pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing. 
  
-       Version 1.5.7.0, Copyright (C) 2008-2013, David Tschumperle 
+       Version 1.5.7.1 (beta), Copyright (C) 2008-2013, David Tschumperle 
        (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>) 
 </pre> 
 <a name="section1"><h2><font color="brown"><u>Usage</u></font></h2></a>
@@ -254,6 +254,7 @@
 <pre>  - G'MIC items containing '@', '$' or '{}' may be substituted before being interpreted. Use 
      the substituting expressions below to access data from the interpreter environment: 
     . '@#' is substituted by the current number of images in the list. 
+    . '@*' is substituted by the number of available cpus. 
     . '@.' is substituted by the current version number of the G'MIC interpreter 
     . '@^' is substituted by the current verbosity level. 
     . '@%' is substituted by the pid of the current process. 
@@ -4097,7 +4098,7 @@ _resolution>0
 overlap[%],"command"
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Apply specified command on each of the selected images, by parallelizing it on two sub-image (2 cores used).
+<p style="margin-left:100px"><tt>Apply specified command on each of the selected images, by parallelizing it on two sub-image (2 threads used).
 <br/>Defaut values: 'overlap=0','split_axis=x'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def474.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --apply_parallel2 16,"-smooth 500,0,1"</div></div></td><td><tt>image.jpg --apply_parallel2 16,"-smooth 500,0,1"</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-apply_parallel4</b>:</font>
@@ -4105,7 +4106,7 @@ overlap[%],"command"
 overlap[%],"command"
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Apply specified command on each of the selected images, by parallelizing it on the four image quarters (4 cores used).
+<p style="margin-left:100px"><tt>Apply specified command on each of the selected images, by parallelizing it on the four image quarters (4 threads used).
 <br/>Defaut values: 'overlap=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def475.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --apply_parallel4 16,"-smooth 500,0,1"</div></div></td><td><tt>image.jpg --apply_parallel4 16,"-smooth 500,0,1"</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-apply_parallel8</b>:</font>
@@ -4113,7 +4114,7 @@ overlap[%],"command"
 overlap[%],"command"
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Apply specified command on each of the selected images, by parallelizing it on the four image quarters (8 cores used).
+<p style="margin-left:100px"><tt>Apply specified command on each of the selected images, by parallelizing it on the four image quarters (8 threads used).
 <br/>Defaut values: 'overlap=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def476.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --apply_parallel8 16,"-smooth 500,0,1"</div></div></td><td><tt>image.jpg --apply_parallel8 16,"-smooth 500,0,1"</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-check (*)</b>:</font>

@@ -10,7 +10,7 @@
 \setlength{\hoffset}{-0.8cm} 
 \setcounter{tocdepth}{1} 
 \sloppy{} 
-\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.7.0}\\\vspace*{1cm}}\end{center}}}} 
+\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.7.1 (beta)}\\\vspace*{1cm}}\end{center}}}} 
 \author{\Large \bf David Tschumperl\'e} 
 \renewcommand\indexname{Index of commands} 
 \makeindex 
@@ -48,7 +48,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
  
  gmic: GREYC's Magic for Image Computing. 
  
-        Version 1.5.7.0, Copyright (C) 2008-2013, David Tschumperl\'e 
+        Version 1.5.7.1 (beta), Copyright (C) 2008-2013, David Tschumperl\'e 
         (http://gmic.sourceforge.net) 
 \chapter{Usage} 
 \small
@@ -274,6 +274,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
   - G'MIC items containing '@', '$' or '{}' may be substituted before being interpreted. Use 
      the substituting expressions below to access data from the interpreter environment: 
     . '@#' is substituted by the current number of images in the list. 
+    . '@*' is substituted by the number of available cpus. 
     . '@.' is substituted by the current version number of the G'MIC interpreter 
     . '@^' is substituted by the current verbosity level. 
     . '@%' is substituted by the pid of the current process. 
@@ -4774,7 +4775,7 @@ Apply specified command on each of the selected images, by parallelizing it for 
 \subsection{\emph{-apply\_parallel2\index{-apply\_parallel2}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{overlap[\%],"command"}}\\~\\
-Apply specified command on each of the selected images, by parallelizing it on two sub-image (2 cores used).
+Apply specified command on each of the selected images, by parallelizing it on two sub-image (2 threads used).
 ~\\Defaut values: 'overlap=0','split\_axis=x'.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def474.jpg}\\
 {\footnotesize \textbf{Example 474~:} \texttt{image.jpg --apply\_parallel2 16,"-smooth 500,0,1"}}
@@ -4783,7 +4784,7 @@ Apply specified command on each of the selected images, by parallelizing it on t
 \subsection{\emph{-apply\_parallel4\index{-apply\_parallel4}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{overlap[\%],"command"}}\\~\\
-Apply specified command on each of the selected images, by parallelizing it on the four image quarters (4 cores used).
+Apply specified command on each of the selected images, by parallelizing it on the four image quarters (4 threads used).
 ~\\Defaut values: 'overlap=0'.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def475.jpg}\\
 {\footnotesize \textbf{Example 475~:} \texttt{image.jpg --apply\_parallel4 16,"-smooth 500,0,1"}}
@@ -4792,7 +4793,7 @@ Apply specified command on each of the selected images, by parallelizing it on t
 \subsection{\emph{-apply\_parallel8\index{-apply\_parallel8}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{overlap[\%],"command"}}\\~\\
-Apply specified command on each of the selected images, by parallelizing it on the four image quarters (8 cores used).
+Apply specified command on each of the selected images, by parallelizing it on the four image quarters (8 threads used).
 ~\\Defaut values: 'overlap=0'.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def476.jpg}\\
 {\footnotesize \textbf{Example 476~:} \texttt{image.jpg --apply\_parallel8 16,"-smooth 500,0,1"}}

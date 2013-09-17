@@ -8135,7 +8135,7 @@ apply_parallel :
 apply_parallel1 : ${2--1}
 
 #@gmic apply_parallel2 : overlap[%],"command"
-#@gmic : Apply specified command on each of the selected images, by parallelizing it on two sub-image (2 cores used).
+#@gmic : Apply specified command on each of the selected images, by parallelizing it on two sub-image (2 threads used).
 #@gmic : Defaut values: 'overlap=0','split_axis=x'.
 #@gmic : $ image.jpg --apply_parallel2 16,"-smooth 500,0,1"
 apply_parallel2 : -check "${1=0}>=0"
@@ -8157,7 +8157,7 @@ apply_parallel2 : -check "${1=0}>=0"
   -endl -done -v +
 
 #@gmic apply_parallel4 : overlap[%],"command"
-#@gmic : Apply specified command on each of the selected images, by parallelizing it on the four image quarters (4 cores used).
+#@gmic : Apply specified command on each of the selected images, by parallelizing it on the four image quarters (4 threads used).
 #@gmic : Defaut values: 'overlap=0'.
 #@gmic : $ image.jpg --apply_parallel4 16,"-smooth 500,0,1"
 apply_parallel4 : -check "${1=0}>=0"
@@ -8180,7 +8180,7 @@ apply_parallel4 : -check "${1=0}>=0"
   -endl -done -v +
 
 #@gmic apply_parallel8 : overlap[%],"command"
-#@gmic : Apply specified command on each of the selected images, by parallelizing it on the four image quarters (8 cores used).
+#@gmic : Apply specified command on each of the selected images, by parallelizing it on the four image quarters (8 threads used).
 #@gmic : Defaut values: 'overlap=0'.
 #@gmic : $ image.jpg --apply_parallel8 16,"-smooth 500,0,1"
 apply_parallel8 : -check "${1=0}>=0"
@@ -13783,6 +13783,22 @@ gimp_filter_sources :
   ({'gmic'})
   ({'http://gmic.sourceforge.net/update@..gmic'},1) # Override default filters.
 
+# Function to manage options for parallel processing.
+gimp_apply_parallel0 :                                 # Auto.
+  -if {@.>1570}   # Support '@*' expression (need at least 1.5.7.1).
+    -if {@*<2}   ${2--1}
+    -elif {@*<4} -gimp_apply_parallel2 $1,"${2--1}"
+    -elif {@*<8} -gimp_apply_parallel3 $1,"${2--1}"
+    -else        -gimp_apply_parallel4 $1,"${2--1}"
+    -endif
+  -else -gimp_apply_parallel3 $1,"${2--1}"
+  -endif
+
+gimp_apply_parallel1 : -apply_parallel1 $1,"${2--1}"   # One thread.
+gimp_apply_parallel2 : -apply_parallel2 $1,"${2--1}"   # Two threads.
+gimp_apply_parallel3 : -apply_parallel4 $1,"${2--1}"   # Four threads.
+gimp_apply_parallel4 : -apply_parallel8 $1,"${2--1}"   # Eight threads.
+
 # Function that updates filters definitions on the G'MIC web server.
 # It sorts and merges filters from all available sources, and save
 # a single update file on the G'MIC server. It also print on the standart
@@ -14282,8 +14298,9 @@ gimp_logo_ca :
 #@gimp : - <b>2013/03/08</b> : version <i>1.5.5.0</i>.\n
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <span foreground="purple"><b>2013/09/09</b> : version <i>1.5.7.0</i> (Current stable).</span>\n
+#@gimp : - <b>2013/09/16</b> : version <i>1.5.7.1</i> (Current beta).\n
 #@gimp : "}
-#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157634579430119/")
+#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157635509461123/")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/09/09</i>.</small>")
 
 #@gimp Contributors : _none_, _none_
@@ -14891,13 +14908,10 @@ gimp_poster_edges_preview :
 #@gimp : Smoothness = int(0,0,5)
 #@gimp : Color mode = choice(1,"Darker","Lighter")
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
-#@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Rod/GimpChat</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/03/05</i>.</small>")
-gimp_rodilius : -skip ${9=0},${10=0}
-  -apply_channels "-apply_parallel"{2^$9}" $10,\"-rodilius ${1-5,7} -repeat $6 -smooth 10,0,1,1,1,0.8,45 -sharpen 30 -done -c 0,255\"",$8,0
+gimp_rodilius :
+  -apply_channels "-rodilius ${1-5,7} -repeat $6 -smooth 10,0,1,1,1,0.8,45 -sharpen 30 -done -c 0,255",$8,0
 
 gimp_rodilius_preview :
   -gimp_split_preview "-gimp_rodilius $*",$-1
@@ -16360,7 +16374,7 @@ gimp_mix_hsv_preview :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_mix_lab :
   -repeat @# -l[$>] -split_opacity -to_rgb[0]
-    -apply_parallel8[0] {3*max($3,$6,$9)},"-_gimp_mix_lab $*"
+    -gimp_apply_parallel0[0] {3*max($3,$6,$9)},"-_gimp_mix_lab $*"
     -a c
   -endl -mv[$>] 0 -done
 
@@ -17267,7 +17281,7 @@ gimp_watermark_visible :
 #@gimp : Iterations = int(1,1,4)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i> and <i>Patrick David</i>.      Latest update: <i>2013/02/27</i>.</small>")
@@ -17283,7 +17297,7 @@ _gimp_freaky_details :
   -endl -done -n 0,255
 
 gimp_freaky_details :
-  -apply_channels "-apply_parallel"{2^$5}" $6,\"-_gimp_freaky_details ${1-3}\"",$4,0
+  -apply_channels "-gimp_apply_parallel$5 $6,\"-_gimp_freaky_details ${1-3}\"",$4,0
 
 gimp_freaky_details_preview :
   -gimp_split_preview "-gimp_freaky_details $*",$-1
@@ -17311,12 +17325,12 @@ gimp_normalize_local_preview :
 #@gimp : Regularization = choice(1,"Tikhonov","Mean curvature","Total variation")
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_deblur :
-  -apply_channels "-apply_parallel"{2^$7}" $8,\"-deblur ${1-5} -c 0,255\"",$6,0
+  -apply_channels "-gimp_apply_parallel$7 $8,\"-deblur ${1-5} -c 0,255\"",$6,0
 
 gimp_deblur_preview :
   -gimp_split_preview "-gimp_deblur $*",$-1
@@ -17328,12 +17342,12 @@ gimp_deblur_preview :
 #@gimp : Blur = choice(1,"Exponential","Gaussian")
 #@gimp : Cut = bool(true)
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gimp : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2013/03/29</i>.</small>")
 gimp_unsharp_goldmeinel:
-  -apply_parallel{2^$6} $7,"-deblur_goldmeinel $* -if $5 -c 0,255 -else -n 0,255 -endif"
+  -gimp_apply_parallel$6 $7,"-deblur_goldmeinel $* -if $5 -c 0,255 -else -n 0,255 -endif"
 
 gimp_unsharp_goldmeinel_preview:
   -gimp_split_preview "-gimp_unsharp_goldmeinel $*",$-1
@@ -17343,12 +17357,12 @@ gimp_unsharp_goldmeinel_preview:
 #@gimp : Iterations = int(2,1,10)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_sharpen_inversediff :
-  -apply_channels "-apply_parallel"{2^$4}" $5,\"-repeat $2 -sharpen $1 -c 0,255 -done\"",$3,0
+  -apply_channels "-gimp_apply_parallel$4 $5,\"-repeat $2 -sharpen $1 -c 0,255 -done\"",$3,0
 
 gimp_sharpen_inversediff_preview :
   -gimp_split_preview "-gimp_sharpen_inversediff $*",$-1
@@ -17360,12 +17374,12 @@ gimp_sharpen_inversediff_preview :
 #@gimp : Threshold = float(0,0,255)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_unsharp_octave :
-  -apply_channels "-apply_parallel"{2^$6}" $7,\"-unsharp_octave $1,$2,$3,$4\"",$5,0
+  -apply_channels "-gimp_apply_parallel$6 $7,\"-unsharp_octave $1,$2,$3,$4\"",$5,0
 
 gimp_unsharp_octave_preview :
   -gimp_split_preview "-gimp_unsharp_octave $*",$-1
@@ -17376,12 +17390,12 @@ gimp_unsharp_octave_preview :
 #@gimp : Blur = choice(1,"Exponential","Gaussian")
 #@gimp : Cut = bool(true)
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gimp : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2013/03/29</i>.</small>")
 gimp_unsharp_richardsonlucy :
-  -apply_parallel{2^$5} $6,"-deblur_richardsonlucy $* -if $4 -c 0,255 -else -n 0,255 -endif"
+  -gimp_apply_parallel$5 $6,"-deblur_richardsonlucy $* -if $4 -c 0,255 -else -n 0,255 -endif"
 
 gimp_unsharp_richardsonlucy_preview :
   -gimp_split_preview "-gimp_unsharp_richardsonlucy $*",$-1
@@ -17394,12 +17408,12 @@ gimp_unsharp_richardsonlucy_preview :
 #@gimp : Iterations = int(1,1,10)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_sharpen_shock :
-  -apply_channels "-apply_parallel"{2^$7}" $8,\"-repeat $5 -sharpen $1,$2,$3,$4 -c 0,255 -done\"",$6,0
+  -apply_channels "-gimp_apply_parallel$7 $8,\"-repeat $5 -sharpen $1,$2,$3,$4 -c 0,255 -done\"",$6,0
 
 gimp_sharpen_shock_preview :
   -gimp_split_preview "-gimp_sharpen_shock $*",$-1
@@ -18769,13 +18783,13 @@ gimp_remove_hotpixels_preview :
 #@gimp : Iterations = int(1,1,10)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
 gimp_anisotropic_smoothing : -skip ${13=0},${14=0}
   -repeat @# -l[$>]
-    -apply_channels "-apply_parallel"{2^$13}" $14,\"-repeat $11 -smooth $1,$2,$3,$4,$5,$6,$7,$8,$9,$10 -done\"",$12,0
+    -apply_channels "-gimp_apply_parallel$13 $14,\"-repeat $11 -smooth $1,$2,$3,$4,$5,$6,$7,$8,$9,$10 -done\"",$12,0
   -endl -done -c 0,255
 
 gimp_anisotropic_smoothing_preview :
@@ -18787,12 +18801,12 @@ gimp_anisotropic_smoothing_preview :
 #@gimp : Iterations = int(2,1,10)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
 gimp_bilateral : -skip ${5=0},${6=0}
-  -apply_channels "-apply_parallel"{2^$5}" $6,\"-repeat $3 -bilateral $1,$2 -done\"",$4,0
+  -apply_channels "-gimp_apply_parallel$5 $6,\"-repeat $3 -bilateral $1,$2 -done\"",$4,0
 
 gimp_bilateral_preview :
   -gimp_split_preview "-gimp_bilateral $*",$-1
@@ -18806,12 +18820,12 @@ gimp_bilateral_preview :
 #@gimp : Iterations = int(8,1,100)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
 gimp_diffusion_smoothing :
-  -apply_channels "-apply_parallel"{2^$8}" $9,\"-smooth $6,$1,$2,$3,$4,$5,0 -c 0,255\"",$7,0
+  -apply_channels "-gimp_apply_parallel$8 $9,\"-smooth $6,$1,$2,$3,$4,$5,0 -c 0,255\"",$7,0
 
 gimp_diffusion_smoothing_preview :
   -gimp_split_preview "-gimp_diffusion_smoothing $*",$-1
@@ -18822,12 +18836,12 @@ gimp_diffusion_smoothing_preview :
 #@gimp : Keep iterations as different layers = bool(false)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
 gimp_meancurvature_smoothing :
-  -apply_channels "-apply_parallel"{2^$5}" $6,\"-meancurvature_flow $2,$1,$3 -c 0,255\"",$4,0
+  -apply_channels "-gimp_apply_parallel$5 $6,\"-meancurvature_flow $2,$1,$3 -c 0,255\"",$4,0
 
 gimp_meancurvature_smoothing_preview :
   -gimp_split_preview "-gimp_meancurvature_smoothing $*",$-1
@@ -18853,12 +18867,12 @@ gimp_median_preview :
 #@gimp : Iterations = int(1,1,10)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
 gimp_patch_smoothing :
-  -apply_channels "-apply_parallel"{2^$9}" $10,\"-repeat $7 -denoise $1,$2,$3,$4,$5,$6 -done -c 0,255\"",$8,0
+  -apply_channels "-gimp_apply_parallel$9 $10,\"-repeat $7 -denoise $1,$2,$3,$4,$5,$6 -done -c 0,255\"",$8,0
 
 gimp_patch_smoothing_preview :
   -gimp_split_preview "-gimp_patch_smoothing $*",$-1
@@ -18870,12 +18884,12 @@ gimp_patch_smoothing_preview :
 #@gimp : Iterations = int(1,1,10)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
 gimp_selective_smoothing :
-  -apply_channels "-apply_parallel"{2^$6}" $7,\"-repeat $4 -blur_selective $1,$2,$3 -done -c 0,255\"",$5,0
+  -apply_channels "-gimp_apply_parallel$6 $7,\"-repeat $4 -blur_selective $1,$2,$3 -done -c 0,255\"",$5,0
 
 gimp_selective_smoothing_preview :
   -gimp_split_preview "-gimp_selective_smoothing $*",$-1
@@ -18894,7 +18908,7 @@ gimp_selective_smoothing_preview :
 #@gimp : Iterations = int(1,1,10)
 #@gimp : Channel(s) = choice("RGB","Luminance","Blue & Red chrominances","Blue chrominance","Red chrominance")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : note = note{"\n<small><b>Note: </b>This set of anisotropic smoothing parameters has been suggested by PhotoComiX.</small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>PhotoComiX</i>.      Latest update: <i>2010/12/26</i>.</small>")
@@ -18905,12 +18919,12 @@ gimp_selective_smoothing_preview :
 #@gimp : Keep iterations as different layers = bool(false)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
 gimp_tv_smoothing :
-  -apply_channels "-apply_parallel"{2^$5}" $6,\"-tv_flow $2,$1,$3 -c 0,255\"",$4,0
+  -apply_channels "-gimp_apply_parallel$5 $6,\"-tv_flow $2,$1,$3 -c 0,255\"",$4,0
 
 gimp_tv_smoothing_preview :
   -gimp_split_preview "-gimp_tv_smoothing $*",$-1
@@ -18921,12 +18935,12 @@ gimp_tv_smoothing_preview :
 #@gimp : Scales = int(10,2,10)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator()
-#@gimp : Parallel processing = choice(2,"One core","Two cores","Four cores","Eight cores")
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger and David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
 gimp_haar_smoothing :
-  -apply_channels "-apply_parallel"{2^$5}" $6,\"-denoise_haar $1,$3,$2 -c 0,255\"",$4,0
+  -apply_channels "-gimp_apply_parallel$5 $6,\"-denoise_haar $1,$3,$2 -c 0,255\"",$4,0
 
 gimp_haar_smoothing_preview :
   -gimp_split_preview "-gimp_haar_smoothing $*",$-1
@@ -20628,9 +20642,6 @@ gmicol_logo_en :
 #@gmicol : Smoothness = int(0,0,5)
 #@gmicol : Color mode = choice(1,"Darker","Lighter")
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
-#@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Authors: <i>Rod/GimpChat, David Tschumperl&#233;</i>.      Latest update: <i>2011/09/28</i>.</small>")
 
@@ -21935,7 +21946,7 @@ cmyk_tone :
 #@gmicol : Iterations = int(1,1,4)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i> and <i>Patrick David</i>.      Latest update: <i>2013/02/27</i>.</small>")
@@ -21960,7 +21971,7 @@ cmyk_tone :
 #@gmicol : Regularization = choice(1,"Tikhonov","Mean curvature","Total variation")
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -21972,7 +21983,7 @@ cmyk_tone :
 #@gmicol : Blur = choice(1,"Exponential","Gaussian")
 #@gmicol : Cut = bool(true)
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gmicol : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2013/03/29</i>.</small>")
@@ -21982,7 +21993,7 @@ cmyk_tone :
 #@gmicol : Iterations = int(2,1,10)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -21994,7 +22005,7 @@ cmyk_tone :
 #@gmicol : Threshold = float(0,0,255)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22005,7 +22016,7 @@ cmyk_tone :
 #@gmicol : Blur = choice(1,"Exponential","Gaussian")
 #@gmicol : Cut = bool(true)
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gmicol : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2013/03/29</i>.</small>")
@@ -22018,7 +22029,7 @@ cmyk_tone :
 #@gmicol : Iterations = int(1,1,10)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22823,7 +22834,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol : Iterations = int(1,1,10)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22834,7 +22845,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol : Iterations = int(2,1,10)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22848,7 +22859,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol : Iterations = int(8,1,20)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22858,7 +22869,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol : Iterations = int(4,1,20)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22884,7 +22895,7 @@ gmicol_meancurvature_smoothing_preview :
 #@gmicol : Iterations = int(1,1,10)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22896,7 +22907,7 @@ gmicol_meancurvature_smoothing_preview :
 #@gmicol : Iterations = int(1,1,10)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22915,7 +22926,7 @@ gmicol_meancurvature_smoothing_preview :
 #@gmicol : Iterations = int(1,1,10)
 #@gmicol : Channel(s) = choice("RGB","Luminance","Blue & Red chrominances","Blue chrominance","Red chrominance")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : note = note{"\n<small><b>Note: </b>This set of anisotropic smoothing parameters has been suggested by PhotoComiX.</small>"}
 #@gmicol : sep = separator(), note = note("<small>Author: <i>PhotoComiX</i>.      Latest update: <i>2010/12/26</i>.</small>")
@@ -22925,7 +22936,7 @@ gmicol_meancurvature_smoothing_preview :
 #@gmicol : Iterations = int(10,1,30)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
@@ -22941,7 +22952,7 @@ gmicol_tv_smoothing_preview :
 #@gmicol : Scales = int(10,2,10)
 #@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator()
-#@gmicol : Parallel processing = choice(3,"One core","Two cores","Four cores","Eight cores")
+#@gmicol : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads")
 #@gmicol : Spatial overlap = int(32,0,256)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger, David Tschumperl&#233;</i>.      Latest update: <i>2012/08/17</i>.</small>")
