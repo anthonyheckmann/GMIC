@@ -219,7 +219,7 @@
   - Be aware that usual file formats may be sometimes not adapted to store all the available 
      image data, since G'MIC uses float-valued coding of image pixels. For instance, saving 
      an image that was initially loaded as a 16bits/channel image, as a .jpg file will result 
-     in loss of informations. Use the .cimg file extension (or .cimgz, its compressed 
+     in loss of information. Use the .cimg file extension (or .cimgz, its compressed 
      version) to ensure that all data precision will be preserved when saving images. 
   - File options can/must be set for these specific file formats: 
     . Video files: Only sub-frames of an image sequence may be loaded, using the input 
@@ -489,7 +489,7 @@
      an empty double quoted string just after the '$' (as in '$""1'). 
   - Specifying arguments may be skipped when invoking a custom command, by replacing them by 
      commas ',' as in expression '-flower ,,3'. Omitted arguments are set to their default 
-     values, which must be thus explicitely defined in the code of the corresponding custom 
+     values, which must be thus explicitly defined in the code of the corresponding custom 
      command (using default argument expressions as '${1=default}'). 
   - If one numbered argument requested in a custom command has no value, an error is thrown 
      by the interpreter.</pre>
@@ -548,7 +548,7 @@ http[s]://URL |<br/>
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Import G'MIC custom commands from specified file, URL or string.
 <br/><i><font color="blue">(eq. to '-m').</font></i>
-<br/>Imported commands are available directly after the '-command' invokation.
+<br/>Imported commands are available directly after the '-command' invocation.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def1.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -command "foo : -mirror y -deform $""1" --foo[0] 5 --foo[0] 15</div></div></td><td><tt>image.jpg -command "foo : -mirror y -deform $""1" --foo[0] 5 --foo[0] 15</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-display (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -736,7 +736,7 @@ _plot_type,_vertex_type,_xmin,_xmax,_ymin,_ymax |<br/>
 <br/><br/><b>Default values</b>: 'plot_type=1', 'vertex_type=1' and 'xmin=xmax=ymin=ymax=0 (auto)'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-print (*)</b>:</font>
 
-<p style="margin-left:100px"><tt>Output informations on selected images, on the standard error (stderr).
+<p style="margin-left:100px"><tt>Output information on selected images, on the standard error (stderr).
 <br/><i><font color="blue">(eq. to '-p').</font></i>
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-rainbow_lut</b>:</font>
 

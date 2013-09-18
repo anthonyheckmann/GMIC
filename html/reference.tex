@@ -235,7 +235,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
   - Be aware that usual file formats may be sometimes not adapted to store all the available 
      image data, since G'MIC uses float-valued coding of image pixels. For instance, saving 
      an image that was initially loaded as a 16bits/channel image, as a .jpg file will result 
-     in loss of informations. Use the .cimg file extension (or .cimgz, its compressed 
+     in loss of information. Use the .cimg file extension (or .cimgz, its compressed 
      version) to ensure that all data precision will be preserved when saving images. 
   - File options can/must be set for these specific file formats: 
     . Video files: Only sub-frames of an image sequence may be loaded, using the input 
@@ -521,7 +521,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
      an empty double quoted string just after the '$' (as in '$""1'). 
   - Specifying arguments may be skipped when invoking a custom command, by replacing them by 
      commas ',' as in expression '-flower ,,3'. Omitted arguments are set to their default 
-     values, which must be thus explicitely defined in the code of the corresponding custom 
+     values, which must be thus explicitly defined in the code of the corresponding custom 
      command (using default argument expressions as '${1=default}'). 
   - If one numbered argument requested in a custom command has no value, an error is thrown 
      by the interpreter.
@@ -592,7 +592,7 @@ Insert one or several frames from specified camera, with custom delay between fr
 \hspace*{2.2cm}{\small \texttt{"string"}}\\~\\
 Import G'MIC custom commands from specified file, URL or string.
 ~\\(\emph{eq. to} {\small \texttt{'-m'}}).
-~\\Imported commands are available directly after the '-command' invokation.
+~\\Imported commands are available directly after the '-command' invocation.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def1.jpg}\\
 {\footnotesize \textbf{Example 1~:} \texttt{image.jpg -command "foo : -mirror y -deform \$""1" --foo[0] 5 --foo[0] 15}}
 \end{center}
@@ -802,7 +802,7 @@ Display selected image or formula in an interactive viewer (use the instant wind
 
 
 \subsection{\emph{-print\index{-print}} (*)}\vspace*{-0.5em}
-Output informations on selected images, on the standard error (stderr).
+Output information on selected images, on the standard error (stderr).
 ~\\(\emph{eq. to} {\small \texttt{'-p'}}).
 
 
