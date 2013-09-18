@@ -84,7 +84,7 @@
     <li>It provides small but efficient <b>visualization modules</b> dedicated to the exploration/viewing of
       2d/3d multi-spectral images, 3d vector objects (elevation map, isocurves, isosurfaces,...), or 1d graph plots.</li><br/>
     <li>It is <b>highly extensible</b> through the importation of
-      <b><a href="http://gmic.cvs.sourceforge.net/viewvc/gmic/gmic/src/gmic_def.gmic">custom command files</a></b>
+      <b><a href="https://sourceforge.net/p/gmic/source/ci/master/tree/src/gmic_def.gmic">custom command files</a></b>
       which add new commands that become understood by the language interpreter.</li><br/>
     <li>It proposes commands to handle custom <b>interactive windows</b> where events can be managed easily by the user.</li><br/>
     <li>It is based on the latest development versions of the <a href="http://cimg.sourceforge.net"><b>CImg Library</b></a>,
