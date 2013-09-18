@@ -204,6 +204,7 @@ cd ..
 cp -Lrf debian html $DIR
 
 cd zart
+qmake
 make clean
 mkdir $DIR/zart
 cp -Lrf images include src ui *.xml *.html Makefile README zart.pro zart.qrc $DIR/zart
