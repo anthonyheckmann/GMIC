@@ -3,32 +3,32 @@
  * @author Sebastien Fourey
  * @date   July 2010
  * @brief  Declaration of the class MainWindow
- * 
+ *
  * This file is part of the ZArt software's source code.
- * 
- * Copyright Sebastien Fourey / GREYC Ensicaen (2010-...) 
- * 
+ *
+ * Copyright Sebastien Fourey / GREYC Ensicaen (2010-...)
+ *
  *                    https://foureys.users.greyc.fr/
- * 
+ *
  * This software is a computer program whose purpose is to demonstrate
  * the possibilities of the GMIC image processing language by offering the
  * choice of several manipulations on a video stream aquired from a webcam. In
  * other words, ZArt is a GUI for G'MIC real-time manipulations on the output
  * of a webcam.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
- * abiding by the rules of distribution of free software.  You can  use, 
+ * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info". See also the directory "Licence" which comes
- * with this source code for the full text of the CeCILL licence. 
- * 
+ * with this source code for the full text of the CeCILL licence.
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
- * liability. 
- * 
+ * liability.
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -36,12 +36,12 @@
  * therefore means  that it is reserved for developers  and  experienced
  * professionals having in-depth computer knowledge. Users are therefore
  * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systems and/or 
- * data to be ensured and,  more generally, to use and operate it in the 
- * same conditions as regards security. 
- * 
+ * requirements in conditions enabling the security of their systems and/or
+ * data to be ensured and,  more generally, to use and operate it in the
+ * same conditions as regards security.
+ *
  * The fact that you are presently reading this means that you have had
- * knowledge of the CeCILL license and that you accept its terms. 
+ * knowledge of the CeCILL license and that you accept its terms.
  */
 #include <iostream>
 
@@ -174,11 +174,11 @@ MainWindow::MainWindow( QWidget * parent )
 	    this, SLOT(onRightPanel(bool)));
    menu->addAction(action);
    menu->addSeparator();
-   
+
 
    // Presets
    QString presetsConfig = settings.value("Presets",QString("Built-in")).toString();
-  
+
    QActionGroup * group = new QActionGroup(menu);
    group->setExclusive(true);
 
@@ -190,7 +190,7 @@ MainWindow::MainWindow( QWidget * parent )
    group->addAction( _builtInPresetsAction );
    menu->addAction( _builtInPresetsAction );
    _builtInPresetsAction->setChecked(true); // Default to Built-in presets
-   
+
    // Online
    _onlinePresetsAction = new QAction( "&Online presets", menu );
    _onlinePresetsAction->setCheckable( true );
@@ -202,20 +202,20 @@ MainWindow::MainWindow( QWidget * parent )
       _onlinePresetsAction->setChecked(true);
    }
 
-   // File  
+   // File
    action = new QAction( "&Presets file...", menu );
    action->setCheckable( true );
    group->addAction( action );
    menu->addAction( action );
    QString filename = settings.value("PresetsFile",QString()).toString();
-   if ( presetsConfig == "File" && 
+   if ( presetsConfig == "File" &&
 	!filename.isEmpty() ) {
       setPresetsFile(filename);
       action->setChecked(true);
    }
    connect( action, SIGNAL( triggered() ),
 	   this, SLOT( setPresetsFile() ) );
-    
+
    // Help menu
    menu = menuBar()->addMenu( "&Help" );
 
@@ -309,12 +309,12 @@ MainWindow::MainWindow( QWidget * parent )
 
    _filterThread = 0;
 
-   if ( ! settings.value("showRightPanel",true).toBool() ) 
+   if ( ! settings.value("showRightPanel",true).toBool() )
       _rightPanel->hide();
 }
 
 MainWindow::~MainWindow()
-{ 
+{
    if ( _filterThread ) {
       _filterThread->stop();
       _filterThread->wait();
@@ -408,7 +408,7 @@ MainWindow::play()
 
 void
 MainWindow::stop()
-{ 
+{
    if ( _filterThread ) {
       _filterThread->stop();
       _filterThread->wait();
@@ -524,7 +524,7 @@ MainWindow::onWebcamSelected( QAction * action )
    }
 }
 
-void 
+void
 MainWindow::onUseOnlinePresets( bool on )
 {
    if ( on ) {
@@ -539,7 +539,7 @@ MainWindow::networkReplyFinished( QNetworkReply* reply )
    if ( reply->error() != QNetworkReply::NoError ) {
       QMessageBox::critical( this,
                             "Network Error",
-                            "Could not retreive the preset file from"
+                            "Could not retrieve the preset file from"
                             " the Web. Maybe a problem with your network"
    			     " connection." );
       _builtInPresetsAction->setChecked( true );
@@ -561,7 +561,7 @@ MainWindow::setPresetsFile( const QString & file )
       QSettings settings;
       QString s = settings.value("PresetsFile").toString();
       QString dir = ".";
-      if ( QFileInfo(s).exists() ) 
+      if ( QFileInfo(s).exists() )
 	 dir = QFileInfo(s).absolutePath();
       filename = QFileDialog::getOpenFileName( this,
 					       "Open a presets file",
@@ -586,7 +586,7 @@ MainWindow::setPresetsFile( const QString & file )
    }
 }
 
-void 
+void
 MainWindow::onUseBuiltinPresets(bool on)
 {
    if ( on ) {
@@ -640,5 +640,3 @@ MainWindow::onRightPanel( bool on )
       return;
    }
 }
-
-   

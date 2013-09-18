@@ -161,7 +161,6 @@ cd ..
 echo " - Create bash autocompletion script."
 cd src/
 \gmic -v - gmic_def.gmic raw:gmic_def.gmic,uchar -document_gmic bash >& gmic_bashcompletion.sh
-chmod a+rx gmic_bashcompletion.sh
 cd ..
 
 # Create HTML reference and gallery pages.
