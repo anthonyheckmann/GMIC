@@ -124,7 +124,9 @@ fi
 # Create man page.
 #-----------------
 echo " - Create man page."
-cd ../man
+cd ../
+mkdir man
+cd man
 rm -f man/gmic.1.gz
 echo -e "\
 .TH G'MIC 1 \"`date`\"\n\
