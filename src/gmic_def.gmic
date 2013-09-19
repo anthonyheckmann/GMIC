@@ -13224,13 +13224,14 @@ strver :
 #@gmic : Use it in conjunction with '-toc'.
 tic :
   -e[^-1] "Initialize timer."
-  -v - __tic=@| -v +
+  -v - -if {!narg($__ticpos)} __ticpos=0 -endif __tic$__ticpos=@| __ticpos={$__ticpos+1} -v +
 
 #@gmic toc
 #@gmic : Display elapsed time of the tic-toc timer since the last call to '-tic'.
 #@gmic : Use it in conjunction with '-tic'.
 toc :
-  -e[^-1] "Elapsed time : "{_@|-$__tic}" s".
+  -v - __ticpos={$__ticpos-1} -v +
+  -e[^-1] "Elapsed time : "{_@|-${__tic$__ticpos}}" s".
 
 #@gmic variance_noise
 #@gmic : Return the estimated noise variance of the last selected image.
