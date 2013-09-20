@@ -14328,6 +14328,7 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Gentlemanbeggar</i> <small>(filters)</small>
 #@gimp : <b> -</b> <i>Claes Holmerson</i> <small>(tutorials)</small>
 #@gimp : <b> -</b> <i>Arto Huotari</i> <small>(filters)</small>
+#@gimp : <b> -</b> <i>Dan Leinir Turthra Jensen</i> <small>(debugging)</small>
 #@gimp : <b> -</b> <i>Tom Keil</i> <small>(testing, filters &amp; tutorials)</small>
 #@gimp : <b> -</b> <i>Andy Kelday</i> <small>(testing &amp; filters)</small>
 #@gimp : <b> -</b> <i>Angelo Lama</i> <small>(testing &amp; EKD integration)</small>

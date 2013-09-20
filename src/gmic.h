@@ -74,6 +74,12 @@
 #include <cerrno>
 #endif // #if cimg_OS==2
 
+#if defined(_WIN32) || defined(_WIN64)
+#define gmic_setlocale setlocale
+#else
+#define gmic_setlocale std::setlocale
+#endif
+
 // Define some special character codes used for replacement in double quoted strings.
 const char _dollar = 23, _lbrace = 24, _rbrace = 25, _comma = 26, _dquote = 28, _arobace = 29,
   _newline = 30;
@@ -298,7 +304,7 @@ struct gmic {
 	      gmic_list<T> &images, gmic_list<char> &images_names) {
     unsigned int variables_sizes[256] = { 0 };
     unsigned int position = 0;
-    std::setlocale(LC_NUMERIC,"C");
+    gmic_setlocale(LC_NUMERIC,"C");
     scope.assign(1U);
     scope._data[0].assign(2,1,1,1);
     scope._data[0]._data[0] = '.';

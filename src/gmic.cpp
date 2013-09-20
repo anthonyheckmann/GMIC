@@ -2261,7 +2261,7 @@ void gmic::_gmic(const char *const commands_line, CImgList<T>& images, CImgList<
                  float *const p_progress, int *const p_cancel) {
 
   // Initialize class variables and default G'MIC environment.
-  std::setlocale(LC_NUMERIC,"C");
+  gmic_setlocale(LC_NUMERIC,"C");
   cimg::srand();
   verbosity = 0;
   nb_carriages = 0;
@@ -11313,7 +11313,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   gmic_selection);
 
 #define gmic_load_raw(value_type,svalue_type) \
-            if (!strcasecmp(stype,svalue_type)) \
+            if (!cimg::strcasecmp(stype,svalue_type)) \
               CImg<value_type>::get_load_raw(filename,(unsigned int)dx,(unsigned int)dy,\
                                              (unsigned int)dz,(unsigned int)dc).\
                 move_to(input_images);
