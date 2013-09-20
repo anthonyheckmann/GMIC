@@ -5747,6 +5747,21 @@ fftpolar :
 #@gmic : Default values: 'value0=0%' and 'value1=100%'.
 #@gmic : $ image.jpg --histogram 64 -display_graph[-1] 400,300,3
 
+#@gmic histogram3 : nb_levels>0[%],_value0[%],_value1[%]
+#@gmic : Compute the 1d,2d or 3d histogram of selected multi-channels images (having 1,2 or 3 channels).
+#@gmic : If value range is set, the histogram is estimated only for pixels in the specified
+#@gmic : value range.
+#@gmic : Default values: 'value0=0%' and 'value1=100%'.
+histogram3 : -check $1>0 -skip ${2=0%},${3=100%}
+  -e[^-1] "Compute histogram of multi-channels image$?, using $1 levels in range [$1,$2]."
+  -v - -repeat @# -l[$>]
+    -r {w*h*d},{min(3,s)},1,1,-1 -round[-1] 1
+    vmin={if(@{-is_percent\ $2},$2*im,$2)} vmax={if(@{-is_percent\ $3},$3*iM,$3)}
+    -- $vmin -* {($1-1)/($vmax-$vmin)}
+    nb_levels={if(@{-is_percent\ $1},$1*($vmax-$vmin)+1,$1)}
+    -pointcloud 1,$nb_levels,$nb_levels,$nb_levels
+  -endl -done -v +
+
 #@gmic histogram_cumul : _nb_levels>0,_is_normalized={ 0 | 1 },_val0[%],_val1[%]
 #@gmic : Compute cumulative histogram of selected images.
 #@gmic : Default values: 'nb_levels=256', 'is_normalized=0' and 'val0=val1=0'.
@@ -5904,22 +5919,29 @@ plot2value :
     -a c
   -endl -done -v +
 
-#@gmic pointcloud : _type = { -X=-X-opacity | 0=binary | 1=cumulative | 2=label }
+#@gmic pointcloud : _type = { -X=-X-opacity | 0=binary | 1=cumulative | 2=label },_width,_height>0,_depth>0
 #@gmic : Convert a Nx1, Nx2, Nx3 or NxM image as a point cloud in a 1d/2d or 3d binary image.
 #@gmic : If 'M'>3, the 3-to-M lines sets the (M-3)-dimensional color at each point.
-#@gmic : Default value: 'type=0'.
+#@gmic : Parameters 'width','height' and 'depth' are related to the size of the final image :
+#@gmic :   - If set to 0, the size is automatically set along the specified axis.
+#@gmic :   - If set to N>0, the size along the specified axis is N.
+#@gmic :   - If set to N<0, the size along the specified axis is at most N.
+#@gmic : Points with coordinates that are negative or higher than specified ('width','height','depth')
+#@gmic : are not plotted.
+#@gmic : Default values: 'type=0' and 'max_width=max_height=max_depth=0'.
 #@gmic : $ 3000,2 -rand 0,400 --pointcloud 0 -dilate[-1] 3
 #@gmic : $ 3000,2 -rand 0,400 {w} {w},3 -rand[-1] 0,255 -append y --pointcloud 0 -dilate[-1] 3
-pointcloud : -check "${1=0}<3"
-  -e[^-1] "Convert image$? to point clouds, in "@{-arg\ 2+($1>=0)*$1-($1<0),{-$1}-opacity,binary,cumulative,labeling}" mode."
+pointcloud : -check "${1=0}<3" -skip ${2=0},${3=0},${4=0}
+  -e[^-1] "Convert image$? to point clouds, in "@{-arg\ 2+($1>=0)*$1-($1<0),{-$1}-opacity,binary,cumulative,labeling}" mode,"\
+          "with ($2,$3,$4) as maximal dimensions."
   -v - -repeat @# -l[$>] nm=@{0,n}
     -if {"d>1 || s>1"} -error "Invalid input image "{w}x{h}x{d}x{s}". Should be NxMx1x1." -endif
 
     # Retrieve coordinates and color infos.
     -rows 0,{max(2,h-1)}
-    -sh[-1] 0,0,0,0 -round[-1] dx={iM+1}
-    -sh[-2] 1,1,0,0 -round[-1] dy={iM+1}
-    -sh[-3] 2,2,0,0 -round[-1] dz={iM+1}
+    -sh[-1] 0,0,0,0 -round[-1] dx={round(if($2==0,iM+1,if($2<0,min(iM+1,-$2),$2)))}
+    -sh[-2] 1,1,0,0 -round[-1] dy={round(if($3==0,iM+1,if($3<0,min(iM+1,-$3),$3)))}
+    -sh[-3] 2,2,0,0 -round[-1] dz={round(if($4==0,iM+1,if($4<0,min(iM+1,-$4),$4)))}
     -*[-1] $dy -+[-2] [-1] -f[-1] 0 -rm[-3--1]
 
     # Create corresponding 3d object (manage large point clouds).
@@ -7239,9 +7261,9 @@ gyroid3d : -check ${1=32}>0 -skip ${2=5}
 #@gmic : $ image.jpg -histogram3d -colorcube3d -primitives3d[-1] 1 -add3d
 histogram3d :
   -e[^-1] "Get 3d color histogram of image$?."
-  -v - -to_rgb -repeat @#
-    -r[-1] {w*h},3,1,1,-1 -pointcloud[-1] 1 -n[-1] 0,255 -map[-1] 3 -pointcloud3d[-1] -nm[-1] "[3d histogram]"
-  -mv[-1] 0 -done -v +
+  -v - -to_rgb -repeat @# -l[$>]
+    -r {w*h},3,1,1,-1 -pointcloud 1 -n 0,255 -map 3 -pointcloud3d -nm "[3d histogram]"
+  -endl -done -v +
 
 #@gmic image6cube3d
 #@gmic : Generate 3d mapped cubes from 6-sets of selected images.
