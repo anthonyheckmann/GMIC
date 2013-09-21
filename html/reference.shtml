@@ -57,7 +57,7 @@
 <a name="section0"><h2><font color="brown"><u>Version</u></font></h2></a> 
 <pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing. 
  
-       Version 1.5.7.1, Copyright (C) 2008-2013, David Tschumperle 
+       Version 1.5.7.2 (beta), Copyright (C) 2008-2013, David Tschumperle 
        (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>) 
 </pre> 
 <a name="section1"><h2><font color="brown"><u>Usage</u></font></h2></a>
@@ -2971,7 +2971,16 @@ nb_levels>0[%],_value0[%],_value1[%]
 <br/>&nbsp;value range. Argument 'value1' must be specified if 'value0' is set.
 <br/><br/><b>Default values</b>: 'value0=0%' and 'value1=100%'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def329.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --histogram 64 -display_graph[-1] 400,300,3</div></div></td><td><tt>image.jpg --histogram 64 -display_graph[-1] 400,300,3</tt></td></tr>
-</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-histogram_cumul</b>:</font>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-histogram3</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+nb_levels>0[%],_value0[%],_value1[%]
+
+</font></i></tt></p>
+<p style="margin-left:100px"><tt>Compute the 1d,2d or 3d histogram of selected multi-channels images (having 1,2 or 3 channels).
+<br/>If value range is set, the histogram is estimated only for pixels in the specified
+<br/>&nbsp;value range.
+<br/><br/><b>Default values</b>: 'value0=0%' and 'value1=100%'.
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-histogram_cumul</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _nb_levels>0,_is_normalized={ 0 | 1 },_val0[%],_val1[%]
 
@@ -3064,12 +3073,18 @@ patch_width>0,patch_height>0,patch_depth>0,x0,y0,z0,_x1,_y1,_z1,...,_xN,_yN,_zN
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def340.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,300,1,1,'if(y>300*abs(cos(x/10+2*?)),1,0)' --plot2value --display_graph[-1] 400,300</div></div></td><td><tt>400,300,1,1,'if(y>300*abs(cos(x/10+2*?)),1,0)' --plot2value --display_graph[-1] 400,300</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pointcloud</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_type = { -X=-X-opacity | 0=binary | 1=cumulative | 2=label }
+_type = { -X=-X-opacity | 0=binary | 1=cumulative | 2=label },_width,_height>0,_depth>0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Convert a Nx1, Nx2, Nx3 or NxM image as a point cloud in a 1d/2d or 3d binary image.
 <br/>If 'M'>3, the 3-to-M lines sets the (M-3)-dimensional color at each point.
-<br/><br/><b>Default value</b>: 'type=0'.
+<br/>Parameters 'width','height' and 'depth' are related to the size of the final image :
+<br/>&nbsp;- If set to 0, the size is automatically set along the specified axis.
+<br/>&nbsp;- If set to N>0, the size along the specified axis is N.
+<br/>&nbsp;- If set to N<0, the size along the specified axis is at most N.
+<br/>Points with coordinates that are negative or higher than specified ('width','height','depth')
+<br/>&nbsp;are not plotted.
+<br/><br/><b>Default values</b>: 'type=0' and 'max_width=max_height=max_depth=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def341.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">3000,2 -rand 0,400 --pointcloud 0 -dilate[-1] 3</div></div></td><td><tt>3000,2 -rand 0,400 --pointcloud 0 -dilate[-1] 3</tt></td></tr>
 <tr><td width="40"><div><a href="img/gmic_def342.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">3000,2 -rand 0,400 {w} {w},3 -rand[-1] 0,255 -append y --pointcloud 0 -dilate[-1] 3</div></div></td><td><tt>3000,2 -rand 0,400 {w} {w},3 -rand[-1] 0,255 -append y --pointcloud 0 -dilate[-1] 3</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-psnr (+)</b>:</font>
@@ -5798,7 +5813,7 @@ _scorefile,_number_of_sessions>=0
 <font color="green"><b>&nbsp;&nbsp;-frame </b>:</font>
 <font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
 </p>
-<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 802 ]</b></font>
+<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 803 ]</b></font>
 <a name="section13"><h2><font color="brown"><u>Examples of use</u></font></h2></a>
 <pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
  The few examples below illustrate possible uses of this tool: 

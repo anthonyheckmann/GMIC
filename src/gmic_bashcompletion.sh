@@ -411,6 +411,7 @@ _gmic_def()
 	      -fft82float --fft82float\
 	      -fftpolar --fftpolar\
 	      -histogram --histogram\
+	      -histogram3 --histogram3\
 	      -histogram_cumul --histogram_cumul\
 	      -histogram_pointwise --histogram_pointwise\
 	      -hough --hough\
@@ -1216,6 +1217,7 @@ _gmic_def()
 	      fft82float\
 	      fftpolar\
 	      histogram\
+	      histogram3\
 	      histogram_cumul\
 	      histogram_pointwise\
 	      hough\
@@ -2440,6 +2442,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "nb_levels>0[%],_value0[%],_value1[%] >") )
 		return 0
 		;;
+		"-histogram3" | "--histogram3")
+		COMPREPLY=( $(compgen -W "nb_levels>0[%],_value0[%],_value1[%] >") )
+		return 0
+		;;
 		"-histogram_cumul" | "--histogram_cumul")
 		COMPREPLY=( $(compgen -W "_nb_levels>0,_is_normalized={0|1},_val0[%],_val1[%] >") )
 		return 0
@@ -2481,7 +2487,7 @@ _gmic_def()
 		return 0
 		;;
 		"-pointcloud" | "--pointcloud")
-		COMPREPLY=( $(compgen -W "_type={-X=-X-opacity|0=binary|1=cumulative|2=label} >") )
+		COMPREPLY=( $(compgen -W "_type={-X=-X-opacity|0=binary|1=cumulative|2=label},_width,_height>0,_depth>0 >") )
 		return 0
 		;;
 		"-psnr" | "--psnr")

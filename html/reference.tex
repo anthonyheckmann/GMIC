@@ -10,7 +10,7 @@
 \setlength{\hoffset}{-0.8cm} 
 \setcounter{tocdepth}{1} 
 \sloppy{} 
-\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.7.1}\\\vspace*{1cm}}\end{center}}}} 
+\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.7.2 (beta)}\\\vspace*{1cm}}\end{center}}}} 
 \author{\Large \bf David Tschumperl\'e} 
 \renewcommand\indexname{Index of commands} 
 \makeindex 
@@ -48,7 +48,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
  
  gmic: GREYC's Magic for Image Computing. 
  
-        Version 1.5.7.1, Copyright (C) 2008-2013, David Tschumperl\'e 
+        Version 1.5.7.2 (beta), Copyright (C) 2008-2013, David Tschumperl\'e 
         (http://gmic.sourceforge.net) 
 \chapter{Usage} 
 \small
@@ -3476,6 +3476,15 @@ value range. Argument 'value1' must be specified if 'value0' is set.
 {\footnotesize \textbf{Example 329~:} \texttt{image.jpg --histogram 64 -display\_graph[-1] 400,300,3}}
 \end{center}
 
+\subsection{\emph{-histogram3\index{-histogram3}} }\vspace*{-0.5em}
+~\\\textbf{Arguments: } 
+{\small \texttt{nb\_levels$>$0[\%],\_value0[\%],\_value1[\%]}}\\~\\
+Compute the 1d,2d or 3d histogram of selected multi-channels images (having 1,2 or 3 channels).
+~\\If value range is set, the histogram is estimated only for pixels in the specified
+value range.
+~\\~\\\textbf{Default values}: {\small \texttt{'value0=0\%'} and \texttt{'value1=100\%'.}}
+
+
 \subsection{\emph{-histogram\_cumul\index{-histogram\_cumul}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_nb\_levels$>$0,\_is\_normalized=\{ 0 ~$|$~ 1 \},\_val0[\%],\_val1[\%]}}\\~\\
@@ -3583,10 +3592,16 @@ Retrieve values from selected 2d graph plots.
 
 \subsection{\emph{-pointcloud\index{-pointcloud}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_type = \{ -X=-X-opacity ~$|$~ 0=binary ~$|$~ 1=cumulative ~$|$~ 2=label \}}}\\~\\
+{\small \texttt{\_type = \{ -X=-X-opacity ~$|$~ 0=binary ~$|$~ 1=cumulative ~$|$~ 2=label \},\_width,\_height$>$0,\_depth$>$0}}\\~\\
 Convert a Nx1, Nx2, Nx3 or NxM image as a point cloud in a 1d/2d or 3d binary image.
 ~\\If 'M'$>$3, the 3-to-M lines sets the (M-3)-dimensional color at each point.
-~\\~\\\textbf{Default value}: {\small \texttt{'type=0'.}}
+~\\Parameters 'width','height' and 'depth' are related to the size of the final image :
+- If set to 0, the size is automatically set along the specified axis.
+- If set to N$>$0, the size along the specified axis is N.
+- If set to N$<$0, the size along the specified axis is at most N.
+~\\Points with coordinates that are negative or higher than specified ('width','height','depth')
+are not plotted.
+~\\~\\\textbf{Default values}: {\small \texttt{'type=0'} and \texttt{'max\_width=max\_height=max\_depth=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def341.jpg}\\
 {\footnotesize \textbf{Example 341~:} \texttt{3000,2 -rand 0,400 --pointcloud 0 -dilate[-1] 3}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def342.jpg}\\
