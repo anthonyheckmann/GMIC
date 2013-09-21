@@ -66,6 +66,12 @@
 #define cimg_include_file "./CImg.h"
 #endif // #if defined(cimg_build)
 
+#if defined(_WIN32) || defined(_WIN64)
+#define gmic_setlocale setlocale
+#else
+#define gmic_setlocale std::setlocale
+#endif
+
 #ifdef cimg_include_file
 #include cimg_include_file
 #if cimg_OS==2
@@ -73,12 +79,6 @@
 #elif cimg_OS==1
 #include <cerrno>
 #endif // #if cimg_OS==2
-
-#if defined(_WIN32) || defined(_WIN64)
-#define gmic_setlocale setlocale
-#else
-#define gmic_setlocale std::setlocale
-#endif
 
 // Define some special character codes used for replacement in double quoted strings.
 const char _dollar = 23, _lbrace = 24, _rbrace = 25, _comma = 26, _dquote = 28, _arobace = 29,
