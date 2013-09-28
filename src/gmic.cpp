@@ -4683,6 +4683,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if (!std::strcmp("-distance",command)) {
             gmic_substitute_args();
             char sepx = 0, sepy = 0, sepz = 0, sep1 = 0, sep2 = 0;
+            unsigned int is_high_connectivity = false;
             float x = 0, y = 0, z = 0;
             CImg<unsigned int> ind;
             double value = 0;
@@ -4730,8 +4731,10 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 }
                 gmic_apply(img,distance((T)nvalue,custom_metric));
               }
-            } else if (std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
-                                   argx,argy,argz,&end)==3 &&
+            } else if ((std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
+                                    argx,argy,argz,&end)==3 ||
+                        std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-],%u%c",
+                                    argx,argy,argz,&is_high_connectivity,&end)==4) &&
                        (std::sscanf(argx,"%f%c",&x,&end)==1 ||
                         (std::sscanf(argx,"%f%c%c",&x,&sepx,&end)==2 && sepx=='%')) &&
                        (std::sscanf(argy,"%f%c",&y,&end)==1 ||
@@ -4739,18 +4742,19 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                        (std::sscanf(argz,"%f%c",&z,&end)==1 ||
                         (std::sscanf(argz,"%f%c%c",&z,&sepz,&end)==2 && sepz=='%')) &&
                        x>=0 && y>=0 && z>=0) {
-              print(images,"Compute distance map to point (%g%s,%g%s,%g%s) for potential map%s.",
+              print(images,"Compute distance map to point (%g%s,%g%s,%g%s) for potential map%s, with %s connectivity.",
                     x,sepx=='%'?"%":"",
                     y,sepy=='%'?"%":"",
                     z,sepz=='%'?"%":"",
-                    gmic_selection);
+                    gmic_selection,
+                    is_high_connectivity?"high":"low");
               cimg_forY(selection,l) {
                 CImg<T> &img = images[selection[l]];
                 const int
                   nx = (int)cimg::round(sepx=='%'?x*(img.width()-1)/100:x),
                   ny = (int)cimg::round(sepy=='%'?y*(img.height()-1)/100:y),
                   nz = (int)cimg::round(sepz=='%'?z*(img.depth()-1)/100:z);
-                gmic_apply(img,distance_dijkstra(nx,ny,nz));
+                gmic_apply(img,distance_dijkstra(nx,ny,nz,(bool)is_high_connectivity));
               }
             } else arg_error("distance");
             is_released = false; ++position; continue;
