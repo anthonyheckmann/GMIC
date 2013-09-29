@@ -4683,7 +4683,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if (!std::strcmp("-distance",command)) {
             gmic_substitute_args();
             char sepx = 0, sepy = 0, sepz = 0, sep1 = 0, sep2 = 0;
-            unsigned int is_high_connectivity = false;
+            unsigned int is_high_connectivity = 0;
             float x = 0, y = 0, z = 0;
             CImg<unsigned int> ind;
             double value = 0;
