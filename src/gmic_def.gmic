@@ -14303,6 +14303,7 @@ gimp_logo_ca :
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
 #@gimp : - <span foreground="purple"><b>2013/09/17</b> : version <i>1.5.7.1</i> (Current stable).</span>\n
+#@gimp : - <b>2013/09/09</b> : version <i>1.5.7.2</i> (Current beta).\n
 #@gimp : "}
 #@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157635509461123/")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/09/17</i>.</small>")
