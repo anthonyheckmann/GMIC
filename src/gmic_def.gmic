@@ -5704,16 +5704,16 @@ barycenter :
 #@gmic : Default values: 'smoothness=0.1', 'precision=5', 'nb_scales=0', 'iteration_max=10000' and 'is_backward=1'.
 #@gmic : $ image.jpg --rotate 3,1,0,50%,50%,0.9 --displacement[-1] [-2] -quiver[-1] [-1],15,-20,1,1,{1.5*iM}
 
-#@gmic distance : isovalue[%],_metric : isovalue[%],[custom_metric] : x[%]>=0,y[%]>=0,z[%]>=0 : (+)
+#@gmic distance : isovalue[%],_metric : isovalue[%],[custom_metric] : x[%]>=0,y[%]>=0,z[%]>=0,_is_high_connectivity={ 0 | 1 } : (+)
 #@gmic : Compute the unsigned distance function to specified isovalue or coordinates.
 #@gmic : 'metric' can be { 0=chebyshev | 1=manhattan | 2=euclidean | 3=squared-euclidean }.
 #@gmic : A custom metric for chamfer distances can be specified as a 2d or 3d image.
 #@gmic : If arguments 'x','y','z' are provided, the image stands for a potential map used to
 #@gmic : determine the distance map to specified point (x,y,z).
-#@gmic : Default value: 'metric=2'.
+#@gmic : Default value: 'metric=2' and 'is_high_connectivity=0'.
 #@gmic : $ image.jpg -threshold 20% -distance 0 -pow 0.3
 #@gmic : $ 400,400 -set 1,50%,50% --distance[0] 1,2 --distance[0] 1,1 -distance[0] 1,0 -mod 32 -threshold 16 -append c
-#@gmic : $ image.jpg -luminance -distance 50%,50%,50%
+#@gmic : $ image.jpg -luminance -distance 50%,50%,50%,1
 
 #@gmic float2fft8
 #@gmic : Convert selected float-valued images to 8bits fourier representations.
@@ -5865,25 +5865,28 @@ min_patch : -check "isint(${1=16}) && $1>=1"
   -e[^-1] "Return locations of minimal values in local patch neighborhood of size $1, in image$?."
   -v - -repeat @# --erode[$>] $1 -==[$>,-1] -done -v +
 
-#@gmic minimal_path : x0[%]>=0,y0[%]>=0,z0[%]>=0,x1[%]>=0,y1[%]>=0,z1[%]>=0
+#@gmic minimal_path : x0[%]>=0,y0[%]>=0,z0[%]>=0,x1[%]>=0,y1[%]>=0,z1[%]>=0,_is_high_connectivity={ 0 | 1 }
 #@gmic : Compute minimal path between two points on selected potential maps.
+#@gmic : Default value: 'is_high_connectivity=0'.
 #@gmic : $ image.jpg --gradient_norm -f[-1] 1/(1+i) -minimal_path[-1] 0,0,0,100%,100%,0 -pointcloud[-1] 0 -*[-1] 280 -to_rgb[-1] -resize[-1] [-2],0 -or
-minimal_path : -check "$1>=0 && $2>=0 && $3>=0"
-  -e[^-1] "Compute minimal path between points ($1,$2,$3) and ($4,$5,$6) for potential map$?."
+minimal_path : -check "$1>=0 && $2>=0 && $3>=0" -skip ${7=0}
+  -e[^-1] "Compute minimal path between points ($1,$2,$3) and ($4,$5,$6) for potential map$?, with "@{-arg\ 1+$7,low,high}" connectivity."
   -v - -repeat @# -l[$>] nm=@{0,n}
-    -distance ${4-6}
+    -distance ${4-6},$7
     x={round(if(@{-is_percent\ $1},$1*(w-1),$1))}
     y={round(if(@{-is_percent\ $2},$2*(h-1),$2))}
     z={round(if(@{-is_percent\ $3},$3*(d-1),$3))}
     ($x;$y;$z)
     -do
       p=@{0,($x,$y,$z,1)}
-      -if {$p==1}   x={$x-1}
-      -elif {$p==2} x={$x+1}
-      -elif {$p==3} y={$y-1}
-      -elif {$p==4} y={$y+1}
-      -elif {$p==5} z={$z-1}
-      -elif {$p==6} z={$z+1}
+      -if {$p&1}   x={$x+1}
+      -elif {$p&2} x={$x-1}
+      -endif
+      -if {$p&4} y={$y+1}
+      -elif {$p&8} y={$y-1}
+      -endif
+      -if {$p&16} z={$z+1}
+      -elif {$p&32} z={$z-1}
       -endif
       ($x;$y;$z)
     -while $p
@@ -11143,7 +11146,7 @@ x_minimal_path :
           -rm[-1]
           -if {min($P1)>=0}
             --text_outline[0] "Processing...",5,5,13,1,1,255,255,255 -w[-1] -rm[-1]
-            --minimal_path[1] $P0,$P1
+            --minimal_path[1] $P0,$P1,1
             -pointcloud[-1] 0 -*[-1] 255 -r[-1] 100%,100%,1,[0],0,0,0,0,0,0.5 -r[-1] [0],0 -or[0,-1]
             P0=$P1 p={$p+1}
           -endif
@@ -11217,7 +11220,7 @@ x_pacman :
 
       # Precompute valid directions on each map point, and shortest path to the ghost's home.
       --shift[map] -1,0 --shift[map] 0,-1 --shift[map] 1,0 --shift[map] 0,1 -a[-4--1] z -!=[-1] 1 -nm[-1] can_go
-      --==[map] 1 -distance[-1] $mw2,$mh2,0 -channels[-1] 1 -f[-1] 'if(i==2,0,if(i==4,1,if(i==1,2,i)))' -nm[-1] path
+      --==[map] 1 -distance[-1] $mw2,$mh2,0 -channels[-1] 1 -f[-1] 'if(i==1,0,if(i==4,1,if(i==2,2,if(i==8,3,i))))' -nm[-1] path
       --==[map] 2 pacdots=@{-1,+} -rm[-1]
       level={-$level}
     -endif
