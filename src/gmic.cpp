@@ -4722,10 +4722,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                          algorithm<=4)) &&
                        (ind=selection2cimg(indices,images.size(),images_names,"-distance",true,
                                            false,CImg<char>::empty())).height()==1) {
-              print(images,"Compute distance map to isovalue %g%s in image%s, according to metric [%u], using %s algorithm.",
+              print(images,"Compute distance map%s to isovalue %g%s in image%s, using %s algorithm, with metric [%u].",
+                    selection.height()>1?(algorithm>=3?"s and return paths":"s"):(algorithm>=3?"and return path":""),
                     value,sep1=='%'?"%":"",
-                    gmic_selection,*ind,
-                    algorithm==0?"fast-marching":algorithm==1?"dijkstra-low":algorithm==2?"dijkstra-high":algorithm==3?"dijkstra-low+path":"dijkstra-high+path");
+                    gmic_selection,
+                    algorithm==0?"fast-marching":algorithm==1||algorithm==3?"low-connectivity dijkstra":"high-connectivity dijkstra",
+                    *ind);
               const CImg<T> custom_metric = gmic_image_arg(*ind);
               if (algorithm<3) cimg_forY(selection,l) {
                   CImg<T> &img = gmic_check(images[selection[l]]);

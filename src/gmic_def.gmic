@@ -5701,7 +5701,7 @@ barycenter :
 #@gmic distance : isovalue[%],_metric : isovalue[%],[metric],_method : (+)
 #@gmic : Compute the unsigned distance function to specified isovalue, opt. according to a custom metric.
 #@gmic : 'metric' can be { 0=chebyshev | 1=manhattan | 2=euclidean | 3=squared-euclidean }.
-#@gmic : 'method' can be { 0=fast-marching | 1=dijkstra-low | 2=dijkstra-high | 3=dijkstra-low + path | 4=dijkstra-high + path }.
+#@gmic : 'method' can be { 0=fast-marching | 1=low-connectivity dijkstra | 2=high-connectivity dijkstra | 3=1+return path | 4=2+return path }.
 #@gmic : Default value: 'metric=2' and 'method=0'.
 #@gmic : $ image.jpg -threshold 20% -distance 0 -pow 0.3
 #@gmic : $ 400,400 -set 1,50%,50% --distance[0] 1,2 --distance[0] 1,1 -distance[0] 1,0 -mod 32 -threshold 16 -append c
