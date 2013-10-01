@@ -4682,9 +4682,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Distance function.
           if (!std::strcmp("-distance",command)) {
             gmic_substitute_args();
-            char sepx = 0, sepy = 0, sepz = 0, sep1 = 0, sep2 = 0;
-            unsigned int is_high_connectivity = 0;
-            float x = 0, y = 0, z = 0;
+            unsigned int algorithm = 0, off = 0;
+            char sep1 = 0, sep2 = 0;
             CImg<unsigned int> ind;
             double value = 0;
             int metric = 2;
@@ -4697,7 +4696,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                  (std::sscanf(argument,"%lf%c,%d%c",
                               &value,&sep1,&metric,&end)==3 && sep1=='%')) &&
                 metric>=0 && metric<=3) {
-              print(images,"Compute distance map to isovalue %g%s in image%s, with %s metric.",
+              print(images,"Compute Euclidean distance to isovalue %g%s in image%s, with %s metric.",
                     value,sep1=='%'?"%":"",
                     gmic_selection,
                     metric==0?"chebyshev":metric==1?"manhattan":metric==2?"euclidean":
@@ -4711,51 +4710,54 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 }
                 gmic_apply(img,distance((T)nvalue,metric));
               }
-            } else if ((std::sscanf(argument,"%lf,[%255[a-zA-Z0-9_.%+-]%c%c",
-                                    &value,indices,&sep2,&end)==3 ||
-                        (std::sscanf(argument,"%lf%c,[%255[a-zA-Z0-9_.%+-]%c%c",
-                                     &value,&sep1,indices,&sep2,&end)==4 && sep1=='%')) &&
-                       sep2==']' &&
+            } else if ((((std::sscanf(argument,"%lf,[%255[a-zA-Z0-9_.%+-]%c%c",
+                                      &value,indices,&sep2,&end)==3 ||
+                          (std::sscanf(argument,"%lf%c,[%255[a-zA-Z0-9_.%+-]%c%c",
+                                       &value,&sep1,indices,&sep2,&end)==4 && sep1=='%')) &&
+                         sep2==']') ||
+                        ((std::sscanf(argument,"%lf,[%255[a-zA-Z0-9_.%+-]],%u%c",
+                                     &value,indices,&algorithm,&end)==3 ||
+                          (std::sscanf(argument,"%lf%c,[%255[a-zA-Z0-9_.%+-]],%u%c",
+                                       &value,&sep1,indices,&algorithm,&end)==4 && sep1=='%')) &&
+                         algorithm<=4)) &&
                        (ind=selection2cimg(indices,images.size(),images_names,"-distance",true,
                                            false,CImg<char>::empty())).height()==1) {
-              print(images,"Compute distance map to isovalue %g%s in image%s, with metric [%u].",
+              print(images,"Compute distance map to isovalue %g%s in image%s, according to metric [%u], using %s algorithm.",
                     value,sep1=='%'?"%":"",
-                    gmic_selection,*ind);
+                    gmic_selection,*ind,
+                    algorithm==0?"fast-marching":algorithm==1?"dijkstra-low":algorithm==2?"dijkstra-high":algorithm==3?"dijkstra-low+path":"dijkstra-high+path");
               const CImg<T> custom_metric = gmic_image_arg(*ind);
-              cimg_forY(selection,l) {
-                CImg<T> &img = gmic_check(images[selection[l]]);
-                double nvalue = value;
-                if (sep1=='%' && img) {
-                  double vmin, vmax = (double)img.max_min(vmin);
-                  nvalue = vmin + value*(vmax-vmin)/100;
+              if (algorithm<3) cimg_forY(selection,l) {
+                  CImg<T> &img = gmic_check(images[selection[l]]);
+                  double nvalue = value;
+                  if (sep1=='%' && img) {
+                    double vmin, vmax = (double)img.max_min(vmin);
+                    nvalue = vmin + value*(vmax-vmin)/100;
+                  }
+                  if (!algorithm) { gmic_apply(img,distance_eikonal((T)nvalue,custom_metric)); }
+                  else { gmic_apply(img,distance_dijkstra((T)nvalue,custom_metric,algorithm==2)); }
+                } else cimg_forY(selection,l) {
+                  const unsigned int ind = selection[l] + off;
+                  CImg<T>& img = gmic_check(images[ind]);
+                  double nvalue = value;
+                  if (sep1=='%' && img) {
+                    double vmin, vmax = (double)img.max_min(vmin);
+                    nvalue = vmin + value*(vmax-vmin)/100;
+                  }
+                  CImg<char> name = images_names[ind].get_mark();
+                  CImg<T> path(1), dist = img.get_distance_dijkstra((T)nvalue,custom_metric,algorithm==4,path);
+                  if (is_get_version) {
+                    images_names.insert(2,name.copymark());
+                    dist.move_to(images,~0U);
+                    path.move_to(images,~0U);
+                  } else {
+                    off+=1;
+                    dist.move_to(images[ind].assign());
+                    path.move_to(images,ind+1);
+                    images_names[ind] = name;
+                    images_names.insert(name.copymark(),ind+1);
+                  }
                 }
-                gmic_apply(img,distance((T)nvalue,custom_metric));
-              }
-            } else if ((std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
-                                    argx,argy,argz,&end)==3 ||
-                        std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-],%u%c",
-                                    argx,argy,argz,&is_high_connectivity,&end)==4) &&
-                       (std::sscanf(argx,"%f%c",&x,&end)==1 ||
-                        (std::sscanf(argx,"%f%c%c",&x,&sepx,&end)==2 && sepx=='%')) &&
-                       (std::sscanf(argy,"%f%c",&y,&end)==1 ||
-                        (std::sscanf(argy,"%f%c%c",&y,&sepy,&end)==2 && sepy=='%')) &&
-                       (std::sscanf(argz,"%f%c",&z,&end)==1 ||
-                        (std::sscanf(argz,"%f%c%c",&z,&sepz,&end)==2 && sepz=='%')) &&
-                       x>=0 && y>=0 && z>=0) {
-              print(images,"Compute distance map to point (%g%s,%g%s,%g%s) for potential map%s, with %s connectivity.",
-                    x,sepx=='%'?"%":"",
-                    y,sepy=='%'?"%":"",
-                    z,sepz=='%'?"%":"",
-                    gmic_selection,
-                    is_high_connectivity?"high":"low");
-              cimg_forY(selection,l) {
-                CImg<T> &img = images[selection[l]];
-                const int
-                  nx = (int)cimg::round(sepx=='%'?x*(img.width()-1)/100:x),
-                  ny = (int)cimg::round(sepy=='%'?y*(img.height()-1)/100:y),
-                  nz = (int)cimg::round(sepz=='%'?z*(img.depth()-1)/100:z);
-                gmic_apply(img,distance_dijkstra(nx,ny,nz,(bool)is_high_connectivity));
-              }
             } else arg_error("distance");
             is_released = false; ++position; continue;
           }
@@ -5366,27 +5368,6 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               }
             }
             is_released = false; continue;
-          }
-
-          // Apply Eikonal PDE.
-          if (!std::strcmp("-eikonal",command)) {
-            gmic_substitute_args();
-            float band_size = 0, nb_iter = 0;
-            if ((std::sscanf(argument,"%f%c",
-                             &nb_iter,&end)==1 ||
-                 std::sscanf(argument,"%f,%f%c",
-                             &nb_iter,&band_size,&end)==2) &&
-                nb_iter>=0 && band_size>=0) {
-              nb_iter = cimg::round(nb_iter);
-              print(images,
-                    "Apply %g iterations of eikonal equation on image%s, with band size %g.",
-                    nb_iter,
-                    gmic_selection,
-                    band_size);
-              cimg_forY(selection,l)
-                gmic_apply(images[selection[l]],distance_eikonal((unsigned int)nb_iter,band_size));
-            } else arg_error("eikonal");
-            is_released = false; ++position; continue;
           }
 
 #endif // #ifdef gmic_float
