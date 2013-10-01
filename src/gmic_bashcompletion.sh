@@ -356,7 +356,6 @@ _gmic_def()
 	      -dog --dog\
 	      -diffusiontensors --diffusiontensors\
 	      -edges --edges\
-	      -eikonal --eikonal\
 	      -erode --erode\
 	      -erode_circ --erode_circ\
 	      -erode_oct --erode_oct\
@@ -1162,7 +1161,6 @@ _gmic_def()
 	      dog\
 	      diffusiontensors\
 	      edges\
-	      eikonal\
 	      erode\
 	      erode_circ\
 	      erode_oct\
@@ -2278,10 +2276,6 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "_threshold[%]>=0 >") )
 		return 0
 		;;
-		"-eikonal" | "--eikonal")
-		COMPREPLY=( $(compgen -W "nb_iterations>=0,_band_size>=0 >") )
-		return 0
-		;;
 		"-erode" | "--erode")
 		COMPREPLY=( $(compgen -W "size>=0 size_x>=0,size_y>=0,_size_z>=0 [mask],_boundary,_is_normalized={0|1}") )
 		return 0
@@ -2435,7 +2429,7 @@ _gmic_def()
 		return 0
 		;;
 		"-distance" | "--distance")
-		COMPREPLY=( $(compgen -W "isovalue[%],_metric isovalue[%],[custom_metric] x[%]>=0,y[%]>=0,z[%]>=0") )
+		COMPREPLY=( $(compgen -W "isovalue[%],_metric isovalue[%],[metric],_method") )
 		return 0
 		;;
 		"-histogram" | "--histogram")
@@ -2479,7 +2473,7 @@ _gmic_def()
 		return 0
 		;;
 		"-minimal_path" | "--minimal_path")
-		COMPREPLY=( $(compgen -W "x0[%]>=0,y0[%]>=0,z0[%]>=0,x1[%]>=0,y1[%]>=0,z1[%]>=0 >") )
+		COMPREPLY=( $(compgen -W "x0[%]>=0,y0[%]>=0,z0[%]>=0,x1[%]>=0,y1[%]>=0,z1[%]>=0,_is_high_connectivity={0|1} >") )
 		return 0
 		;;
 		"-patches" | "--patches")
