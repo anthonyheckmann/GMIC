@@ -281,8 +281,8 @@ scp ${HOME}/work/src/${TARFILE}.gz $FORGE
 # Create debian packages for debian/ubuntu 32 and 64 bits.
 #---------------------------------------------------------
 echo " - Create debian packages."
-scp ${HOME}/work/src/deb_${TARFILE}.gz lynx.greyc.ensicaen.fr:/tmp/ &&
-ssh -f lynx.greyc.ensicaen.fr "\
+scp ${HOME}/work/src/deb_${TARFILE}.gz lynx.ensicaen.fr:/tmp/ &&
+ssh -f lynx.ensicaen.fr "\
 cd /tmp/ && \
 PAK=gmic_${VERSION}${SUFFIX}_i386.deb && \
 PLU=gmic_gimp_${VERSION}${SUFFIX}_linux32.zip && \
