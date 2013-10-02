@@ -2934,7 +2934,7 @@ isovalue[%],[metric],_method
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Compute the unsigned distance function to specified isovalue, opt. according to a custom metric.
 <br/>'metric' can be { 0=chebyshev | 1=manhattan | 2=euclidean | 3=squared-euclidean }.
-<br/>'method' can be { 0=fast-marching | 1=dijkstra-low | 2=dijkstra-high | 3=dijkstra-low + path | 4=dijkstra-high + path }.
+<br/>'method' can be { 0=fast-marching | 1=low-connectivity dijkstra | 2=high-connectivity dijkstra | 3=1+return path | 4=2+return path }.
 <br/><br/><b>Default value</b>: 'metric=2' and 'method=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def324.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 20% -distance 0 -pow 0.3</div></div></td><td><tt>image.jpg -threshold 20% -distance 0 -pow 0.3</tt></td></tr>
 <tr><td width="40"><div><a href="img/gmic_def325.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400 -set 1,50%,50% --distance[0] 1,2 --distance[0] 1,1 -distance[0] 1,0 -mod 32 -threshold 16 -append c</div></div></td><td><tt>400,400 -set 1,50%,50% --distance[0] 1,2 --distance[0] 1,1 -distance[0] 1,0 -mod 32 -threshold 16 -append c</tt></td></tr>

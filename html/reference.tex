@@ -3428,7 +3428,7 @@ Estimate displacement field between specified source and selected images.
 \hspace*{2.2cm}{\small \texttt{isovalue[\%],[metric],\_method}}\\~\\
 Compute the unsigned distance function to specified isovalue, opt. according to a custom metric.
 ~\\'metric' can be \{ 0=chebyshev ~$|$~ 1=manhattan ~$|$~ 2=euclidean ~$|$~ 3=squared-euclidean \}.
-~\\'method' can be \{ 0=fast-marching ~$|$~ 1=dijkstra-low ~$|$~ 2=dijkstra-high ~$|$~ 3=dijkstra-low + path ~$|$~ 4=dijkstra-high + path \}.
+~\\'method' can be \{ 0=fast-marching ~$|$~ 1=low-connectivity dijkstra ~$|$~ 2=high-connectivity dijkstra ~$|$~ 3=1+return path ~$|$~ 4=2+return path \}.
 ~\\~\\\textbf{Default value}: {\small \texttt{'metric=2'} and \texttt{'method=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def324.jpg}\\
 {\footnotesize \textbf{Example 324~:} \texttt{image.jpg -threshold 20\% -distance 0 -pow 0.3}}
