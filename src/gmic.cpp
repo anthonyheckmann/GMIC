@@ -11583,6 +11583,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     if (!is_released && scope.size()==1 && images) {
       CImgList<unsigned int> lselection, lselection3d;
       bool is_first3d = false;
+      instant_window[0].assign();
       cimglist_for(images,l) {
         const bool is_3d = images[l].is_CImg3d(true);
         if (!l) is_first3d = is_3d;
