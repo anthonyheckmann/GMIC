@@ -4696,7 +4696,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                  (std::sscanf(argument,"%lf%c,%d%c",
                               &value,&sep1,&metric,&end)==3 && sep1=='%')) &&
                 metric>=0 && metric<=3) {
-              print(images,"Compute Euclidean distance to isovalue %g%s in image%s, with %s metric.",
+              print(images,"Compute Euclidean distance map to isovalue %g%s in image%s, with %s metric.",
                     value,sep1=='%'?"%":"",
                     gmic_selection,
                     metric==0?"chebyshev":metric==1?"manhattan":metric==2?"euclidean":
@@ -4723,7 +4723,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                        (ind=selection2cimg(indices,images.size(),images_names,"-distance",true,
                                            false,CImg<char>::empty())).height()==1) {
               print(images,"Compute distance map%s to isovalue %g%s in image%s, using %s algorithm, with metric [%u].",
-                    selection.height()>1?(algorithm>=3?"s and return paths":"s"):(algorithm>=3?"and return path":""),
+                    selection.height()>1?(algorithm>=3?"s and return paths":"s"):(algorithm>=3?" and return path":""),
                     value,sep1=='%'?"%":"",
                     gmic_selection,
                     algorithm==0?"fast-marching":algorithm==1||algorithm==3?"low-connectivity dijkstra":"high-connectivity dijkstra",
