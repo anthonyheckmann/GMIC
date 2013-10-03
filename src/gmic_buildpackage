@@ -188,6 +188,7 @@ pdflatex reference.tex
 gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=gmic_reference.pdf reference.pdf
 rm -f reference.aux reference.idx reference.ind reference.out reference.ilg reference.log reference.pdf
 cd ..
+./gmic_commit >& /dev/null
 
 # Construct a clean version of G'MIC directory.
 #----------------------------------------------
