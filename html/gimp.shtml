@@ -32,7 +32,7 @@
     The <b><font color="#000066">G'MIC</font></b> plug-in should be then available from the <b>Filters/G'MIC..</b> menu entry.
     <ul>
       <li><b>On Unix</b>, the plug-in directory is usually located at <b>$HOME/.gimp-2.x/plug-ins/</b>.<br/>
-        The plug-in requires these libraries installed on your system: <b>libfftw, libpng, zlib</b>.
+        The plug-in requires these libraries installed on your system: <b>libfftw, libfftw_threads, libpng, zlib</b>.
         Use your package manager to fit these dependancies.<br/><br/></li>
       <li><b>On Windows</b>, an installer is provided and installs all the required files automatically.</b><br/></li>
     </ul>
