@@ -294,7 +294,7 @@ touch deb_${TARFILE}.gz && \
 tar zxvf deb_${TARFILE}.gz && \
 find gmic-${VERSION} -exec touch {} \; && \
 cd \$DIR && \
-dpkg-buildpackage -j -rfakeroot; \
+dpkg-buildpackage -d -j -rfakeroot; \
 mv ../gmic_${VERSION}_i386.deb ../\$PAK; \
 zip -j -r -9 ../\$PLU src/gmic_gimp README && \
 cd src && make clean && make static && mv gmic ../ && \
@@ -315,7 +315,7 @@ touch deb_${TARFILE}.gz && \
 tar zxvf deb_${TARFILE}.gz && \
 find gmic-${VERSION} -exec touch {} \; && \
 cd \$DIR && \
-dpkg-buildpackage -j -rfakeroot; \
+dpkg-buildpackage -d -j -rfakeroot; \
 mv ../gmic_${VERSION}_amd64.deb ../\$PAK; \
 zip -j -r -9 ../\$PLU src/gmic_gimp README && \
 cd src && make clean && make static && mv gmic ../ && \

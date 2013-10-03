@@ -19303,6 +19303,106 @@ gimp_corner_gradient :
     ($1,$5;$9,$13^$2,$6;$10,$14^$3,$7;$11,$15^$4,$8;$12,$16) -r[-1] @-2,1,4,3 -rm[-2]
   -mv[-1] 0 -done
 
+#@gimp Gradient [custom shape] : gimp_custom_gradient, gimp_custom_gradient_preview(1)
+#@gimp : note = note("<small><b>Shape selection:</b></small>")
+#@gimp : Select by = choice("Auto","Dark pixels","Bright pixels","Opaque pixels")
+#@gimp : Smoothness = float(0,0,10)
+#@gimp : Threshold = float(0,0,100)
+#@gimp : Preview shape = bool(1)
+#@gimp : note = note("<small><b>Note:</b> Shapes with small strokes may lead to incorrect previews.</small>")
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Gradient parameters:</b></small>")
+#@gimp : Number of colors = int(4,2,10)
+#@gimp : Cycles = float(1,1,16)
+#@gimp : Offset = float(0,0,100)
+#@gimp : Shading = float(128,1,256)
+#@gimp : Inner length = float(100,0,100)
+#@gimp : Outer length = float(100,0,100)
+#@gimp : Spatial metric = choice(2,"Chebyshev","Manhattan","Euclidean")
+#@gimp : Color metric = choice("RGB","HSV","Lab")
+#@gimp : Shade back to first color = bool(1)
+#@gimp : Preview gradient = bool(0)
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Color definitions:</b></small>")
+#@gimp : Colormap type = choice(1,"Pre-defined","User-defined")
+#@gimp : Pre-defined colormap = int(0,0,65535)
+#@gimp : 1st color = color(0,0,0,255)
+#@gimp : 2nd color = color(255,0,0,255)
+#@gimp : 3rd color = color(255,255,0,255)
+#@gimp : 4th color = color(255,255,255,255)
+#@gimp : 5th color = color(0,255,255,255)
+#@gimp : 6th color = color(0,255,0,255)
+#@gimp : 7th color = color(0,0,255,255)
+#@gimp : 8th color = color(128,128,128,255)
+#@gimp : 9th color = color(255,0,255,255)
+#@gimp : 10th color = color(0,0,0,0)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/03</i>.</small>")
+gimp_custom_gradient_preview :
+  -repeat @# -l[$>]
+    -if $4
+      --_gimp_custom_gradient1 $* --erode[-1] 3 --[-2,-1] --dilate[-1] 5 -a[-2,-1] c -n[-1] 0,255
+      -gimp_custom_gradient[0] $* -blend alpha
+    -else -gimp_custom_gradient $*
+    -endif
+    -if $14
+      --_gimp_custom_gradient0 $* -r[-1] {@{0,w}-16},16,1,4 -frame[-1] 1,1,0 -j[0] [-1],8,@{0,h-25}
+    -endif
+  -endl -done
+
+gimp_custom_gradient :
+  -_gimp_custom_gradient0 $* -i[-2] (0^0^0^0) -a[-2,-1] x
+  -repeat {@#-1} -l[$>,-1]
+    -_gimp_custom_gradient1[0] $*
+    --distance[0] 1,$11 --distance[0] 0,$11 -*[-1] -1 -+[0] 1 -+[0,-2,-1]  # Signed distance function.
+    m={$9%*@{0,im}} M={$10%*@{0,iM}}
+    --[0] $m -*[0] {@{1,w-2}/($M-$m)} -+[0] 1
+    -round[0] -map[0] [-1]
+  -endl -done
+  -rm[-1]
+
+# Create colormap.
+_gimp_custom_gradient0 :
+  -if $15 4,8,1,1,${17-55} -permute[-1] yzcx
+  -else 8,1,1,3 -srand $16 -rand[-1] 0,255 -to_rgba[-1]
+  -endif
+  -z[-1] 0,{$5-1}
+  -if $13
+    -r[-1] {200*$6}%,1,1,4,0,2
+    -__gimp_custom_gradient0[-1] $12,$8
+    -shift[-1] {-$7/2}%,0,0,0,2 -z[-1] 0,{w/2-1}
+  -else
+    -__gimp_custom_gradient0[-1] $12,$8
+    -r[-1] {100*$6}%,1,1,4,0,2 -shift[-1] -$7%,0,0,0,2
+  -endif
+
+__gimp_custom_gradient0 :
+  -if {$1==1} -sh[-1] 0,2 -rgb2hsv[-1] -rm[-1]
+  -elif {$1==2} -sh[-1] 0,2 -srgb2rgb[-1] -rgb2lab[-1] -rm[-1]
+  -endif
+  -r[-1] {$2*w},1,1,4,3
+  -if {$1==1} -sh[-1] 0,2 -hsv2rgb[-1] -rm[-1]
+  -elif {$1==2} -sh[-1] 0,2 -lab2rgb[-1] -rgb2srgb[-1] -rm[-1]
+  -endif
+
+# Extract shape from image.
+_gimp_custom_gradient1 :
+  -b $2%
+  -if {$1==0} # Auto-mode.
+    -to_a -split_opacity
+    -if {iM>im+32}
+      -rm[-2] -ge[0] {100-$3}%
+    -else
+      -rm[-1] -norm -n 0,1
+      -if {ia>0.5} -le[0] $3% -else -ge[0] {100-$3}% -endif
+    -endif
+  -elif {$1==1} # Dark pixels.
+    -remove_opacity -norm -le $3%
+  -elif {$1==2} # Bright pixels.
+    -remove_opacity -norm -ge {100-$3}%
+  -else # Opaque pixels.
+    -to_a -channels 100% -ge {100-$3}%
+  -endif
+
 #@gimp Gradient [linear] : gimp_linear_gradient, gimp_linear_gradient
 #@gimp : Starting color = color(0,0,0,255)
 #@gimp : Ending color = color(255,255,255,255)
