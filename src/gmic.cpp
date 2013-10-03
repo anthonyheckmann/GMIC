@@ -2364,8 +2364,9 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
   print(images,"Display image%s",gmic_selection);
   if (verbosity>=0 || is_debug) {
     if (XYZ) std::fprintf(cimg::output(),", from point (%u,%u,%u)",XYZ[0],XYZ[1],XYZ[2]);
-    std::fprintf(cimg::output()," (skipped, no display support).");
+    std::fprintf(cimg::output()," (console output only, no display support).\n");
     std::fflush(cimg::output());
+    print_images(images,images_names,selection,false);
   }
 #else // #if cimg_display==0
   bool is_available_display = false;
@@ -2375,8 +2376,9 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
     print(images,"Display image%s",gmic_selection);
     if (verbosity>=0 || is_debug) {
       if (XYZ) std::fprintf(cimg::output(),", from point (%u,%u,%u)",XYZ[0],XYZ[1],XYZ[2]);
-      std::fprintf(cimg::output()," (skipped, no display available).");
+      std::fprintf(cimg::output()," (console output only, no display available).\n");
       std::fflush(cimg::output());
+      print_images(images,images_names,selection,false);
     }
   }
   if (!is_available_display) return *this;
@@ -2447,14 +2449,16 @@ gmic& gmic::display_plots(const CImgList<T>& images, const CImgList<char>& image
                           const double ymin, const double ymax) {
   if (!images || !images_names || !selection) { print(images,"Plot image []."); return *this; }
 #if cimg_display==0
-  print(images,"Plot image%s (skipped, no display support).",gmic_selection);
+  print(images,"Plot image%s (console output only, no display support).\n",gmic_selection);
+  print_images(images,images_names,selection,false);
   cimg::unused(plot_type,vertex_type,xmin,xmax,ymin,ymax);
 #else // #if cimg_display==0
   bool is_available_display = false;
   try {
     is_available_display = (bool)CImgDisplay::screen_width();
   } catch (CImgDisplayException&) {
-    print(images,"Plot image%s (skipped, no display available).",gmic_selection);
+    print(images,"Plot image%s (console output only, no display available).",gmic_selection);
+    print_images(images,images_names,selection,false);
   }
   if (!is_available_display) return *this;
 
@@ -11577,13 +11581,15 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     // Post-check validity of shared images.
     cimglist_for(images,l) gmic_check(images[l]);
 
-    // Display result, if not 'released' before.
-#if defined(gmic_float) && cimg_display!=0
+    // Display or print result, if not 'released' before.
+#if defined(gmic_float)
 
     if (!is_released && scope.size()==1 && images) {
       CImgList<unsigned int> lselection, lselection3d;
       bool is_first3d = false;
+#if cimg_display!=0
       instant_window[0].assign();
+#endif
       cimglist_for(images,l) {
         const bool is_3d = images[l].is_CImg3d(true);
         if (!l) is_first3d = is_3d;
@@ -11599,7 +11605,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       is_released = true;
     }
 
-#endif // #if defined(gmic_float) && cimg_display!=0
+#endif // #if defined(gmic_float)
 
     if (is_debug) debug(images,"%sEnd G'MIC parser in scope '%s/' [%s].%s\n",
                         cimg::t_bold,scope.back().data(),CImg<T>::pixel_type(),cimg::t_normal);
