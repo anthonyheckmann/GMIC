@@ -297,7 +297,7 @@ cd \$DIR && \
 dpkg-buildpackage -d -j -rfakeroot; \
 mv ../gmic_${VERSION}_i386.deb ../\$PAK; \
 zip -j -r -9 ../\$PLU src/gmic_gimp README && \
-cd src && make clean && make static && mv gmic ../ && \
+cd src && make clean && make STATIC_PATH=/usr/lib/i386-linux-gnu static && mv gmic ../ && \
 cd .. && rm -rf man src zart debian && cd .. && \
 zip -j -r -9 \$STA \$DIR && \
 cp \$PLU \$PAK \$STA \$HOME/work/src/ && \
@@ -318,7 +318,7 @@ cd \$DIR && \
 dpkg-buildpackage -d -j -rfakeroot; \
 mv ../gmic_${VERSION}_amd64.deb ../\$PAK; \
 zip -j -r -9 ../\$PLU src/gmic_gimp README && \
-cd src && make clean && make static && mv gmic ../ && \
+cd src && make clean && make STATIC_PATH=/usr/lib static && mv gmic ../ && \
 cd .. && rm -rf man src zart debian && cd .. && \
 zip -j -r -9 \$STA \$DIR && \
 cp \$PLU \$PAK \$STA \$HOME/work/src/ && \
