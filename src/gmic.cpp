@@ -1408,6 +1408,7 @@ inline bool gmic_command_has_arguments(const char *const command) {
         c=='=' ||
         (c>'0' && c<='9') ||
         (c=='-' && *(s+1)>'0' && *(s+1)<='9') ||
+        (c=='\"' && *(s+1)=='*' && *(s+2)=='\"') ||
         (c=='{' && (*(s+1)=='^' ||
                     (*(s+1)>'0' && *(s+1)<='9') ||
                     (*(s+1)=='-' && *(s+2)>'0' && *(s+2)<='9')))) return true;
@@ -10683,18 +10684,33 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                       CImg<char>(substr.data(),std::strlen(substr)).move_to(substituted_items);
                       has_arguments = true;
 
-                      // Substitute $* -> verbatim copy of the specified arguments string.
+                      // Substitute $* -> copy of the specified arguments string.
                     } else if (nsource[1]=='*') {
                       nsource+=2;
                       CImg<char>(argument,std::strlen(argument)).move_to(substituted_items);
                       has_arguments = true;
 
-                      // Substitute $= -> transfer arguments to named variables.
+                      // Substitute $"*" -> copy of the specified "quoted" arguments string.
+                    } else if (nsource[1]=='\"' && nsource[2]=='*' && nsource[3]=='\"') {
+
+                      std::fprintf(stderr,"\n\nDEBUG !\n\n");
+
+                      nsource+=4;
+                      for (unsigned int i = 1; i<=nb_arguments; ++i) {
+                        CImg<char>(1,1,1,1,'\"').move_to(substituted_items);
+                        CImg<char>(arguments[i].data(),arguments[i].width()-1).
+                          move_to(substituted_items);
+                        if (i==nb_arguments) CImg<char>(1,1,1,1,'\"').move_to(substituted_items);
+                        else CImg<char>(2,1,1,1,'\"',',').move_to(substituted_items);
+                      }
+                      has_arguments = true;
+
+                      // Substitute $= -> transfer (quoted) arguments to named variables.
                     } else if (nsource[1]=='=' &&
                                std::sscanf(nsource+2,"%255[a-zA-Z0-9_]",title)==1 &&
                                (*title<'0' || *title>'9')) {
                       nsource+=2+std::strlen(title);
-                      for (unsigned int i=0; i<=nb_arguments; ++i) {
+                      for (unsigned int i = 0; i<=nb_arguments; ++i) {
                         cimg_snprintf(substr,substr.width()," %s%u=\"",title,i);
                         CImg<char>(substr.data(),std::strlen(substr)).move_to(substituted_items);
                         CImg<char>(arguments[i].data(),arguments[i].width()-1).

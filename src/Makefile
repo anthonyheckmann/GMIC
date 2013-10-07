@@ -221,13 +221,14 @@ MINIMAL_UNIX_LDFLAGS = $(MANDATORY_LDFLAGS) $(PARALLEL_LDFLAGS) $(DEBUG_LDFLAGS)
 
 # Unix : Static build.
 STATIC_PATH = /usr/lib/
+STATIC_EXTRA =
 STATIC_UNIX_CFLAGS = $(MANDATORY_CFLAGS) $(PARALLEL_CFLAGS) $(PNG_CFLAGS) $(JPEG_CFLAGS) $(TIFF_CFLAGS) $(ZLIB_CFLAGS) $(FFTW_CFLAGS) -Dcimg_display=0
 STATIC_UNIX_LDFLAGS = $(PARALLEL_LDFLAGS) \
 	              $(STATIC_PATH)/libpng.a \
 	              $(STATIC_PATH)/libjpeg.a \
-                      $(STATIC_PATH)/libtiff.a $(STATIC_PATH)/libjbig.a \
+                      $(STATIC_PATH)/libtiff.a \
                       $(STATIC_PATH)/libz.a \
-                      $(STATIC_PATH)/libfftw3.a $(STATIC_PATH)/libfftw3_threads.a
+                      $(STATIC_PATH)/libfftw3.a $(STATIC_PATH)/libfftw3_threads.a $(STATIC_EXTRA)
 
 # Unix : Custom build.
 CUST_UNIX_CFLAGS = $(MANDATORY_CFLAGS) $(PARALLEL_CFLAGS) $(DEBUG_CFLAGS) $(X11_CFLAGS) $(XSHM_CFLAGS) $(PNG_CFLAGS) \

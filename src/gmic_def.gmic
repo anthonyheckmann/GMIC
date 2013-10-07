@@ -838,7 +838,8 @@ _help_usage :
 \n  - Any ' \# comment' expression found in a custom commands file is discarded by the G'MIC
 \n     interpreter, wherever it is located in a line.
 \n  - In custom commands, the following $-expressions are substituted:
-\n    . '$""*' is substituted by a verbatim copy of the specified arguments string.
+\n    . '$""*' is substituted by a copy of the specified string of arguments.
+\n    . '$\"*\"' is substituted by a copy of the specified string of arguments, each being around double quotes.
 \n    . '$""#' is substituted by the maximum indice of known arguments (either specified by the
 \n       user or set to a default value in the custom command).
 \n    . '$""?' is substituted by a string telling about the command subset restriction (only
@@ -2034,7 +2035,7 @@ echo_file : -skip ${2='\n'}
 #@gmic : Output specified message, on the standard output (stdout).
 #@gmic : (similar to '-echo' for output on standard output instead of standard error).
 echo_stdout :
-  -v - ({"'$*\n'"}) -o[-1] -.raw,uchar -rm[-1] -v +
+  -v - ({'"$*"\n'}) -o[-1] -.raw,uchar -rm[-1] -v +
 
 #@gmic function1d : 0<=smoothness<=1,x0>=0,y0,x1>=0,y1,...,xn>=0,yn
 #@gmic : Input continuous 1d function from specified list of keypoints (xk,yk)
@@ -3370,7 +3371,7 @@ apply_channels : -skip ${3=0}
   -v +
 
 _apply_channels :
-  $* -k[0]
+  ${1--1} -k[0]
 
 #@gmic autoindex : nb_colors>0,0<=_dithering<=1,_method={ 0=median-cut | 1=k-means }
 #@gmic : Index selected vector-valued images by adapted colormaps.
@@ -23437,4 +23438,3 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
