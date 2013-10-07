@@ -225,7 +225,7 @@ STATIC_UNIX_CFLAGS = $(MANDATORY_CFLAGS) $(PARALLEL_CFLAGS) $(PNG_CFLAGS) $(JPEG
 STATIC_UNIX_LDFLAGS = $(PARALLEL_LDFLAGS) \
 	              $(STATIC_PATH)/libpng.a \
 	              $(STATIC_PATH)/libjpeg.a \
-                      $(STATIC_PATH)/libtiff.a \
+                      $(STATIC_PATH)/libtiff.a $(STATIC_PATH)/libjbig.a \
                       $(STATIC_PATH)/libz.a \
                       $(STATIC_PATH)/libfftw3.a $(STATIC_PATH)/libfftw3_threads.a
 
