@@ -732,7 +732,7 @@ CImg<T>& color_CImg3d(const float R, const float G, const float B, const float o
       ptrd+=w*h*s;
     } else if (set_RGB) { *(ptrd++) = (T)R; *(ptrd++) = (T)G; *(ptrd++) = (T)B; } else ptrd+=3;
   if (set_opacity)
-    for (unsigned int o = 0; o<nbp; ++o)
+    for (unsigned int o = 0; o<nbp; ++o) {
       if (*ptrd==(T)-128) {
         ++ptrd;
         const unsigned int
@@ -741,6 +741,7 @@ CImg<T>& color_CImg3d(const float R, const float G, const float B, const float o
           s = (unsigned int)*(ptrd++);
         ptrd+=w*h*s;
       } else *(ptrd++) = (T)opacity;
+    }
   return *this;
 }
 
