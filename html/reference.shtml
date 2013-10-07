@@ -465,7 +465,8 @@
   - Any ' # comment' expression found in a custom commands file is discarded by the G'MIC 
      interpreter, wherever it is located in a line. 
   - In custom commands, the following $-expressions are substituted: 
-    . '$*' is substituted by a verbatim copy of the specified arguments string. 
+    . '$*' is substituted by a copy of the specified string of arguments. 
+    . '$"*"' is substituted by a copy of the specified string of arguments, each being around double quotes. 
     . '$#' is substituted by the maximum indice of known arguments (either specified by the 
        user or set to a default value in the custom command). 
     . '$?' is substituted by a string telling about the command subset restriction (only 
@@ -704,6 +705,13 @@ message
 <p style="margin-left:100px"><tt>Output selected images as one or several numbered file(s).
 <br/><i><font color="blue">(eq. to '-o').</font></i>
 <br/><br/><b>Default value</b>: 'format_options'=(undefined).
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-output_ggr</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+filename,_gradient_name
+
+</font></i></tt></p>
+<p style="margin-left:100px"><tt>Output selected images as GIMP gradient files.
+<br/>If no gradient name is specified, it is deduced from the filename.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-outputn</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 filename
@@ -5492,6 +5500,12 @@ string
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-min_whds</b>:</font>
 
 <p style="margin-left:100px"><tt>Return the minimal wxhxdxs size of selected images.
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-normalize_filename</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+filename
+
+</font></i></tt></p>
+<p style="margin-left:100px"><tt>Return a "normalized" version of the specified filename, without spaces and capital letters.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-oct</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 octal_int1,...
@@ -5510,6 +5524,9 @@ number,_size>0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Return a integer with 'size' digits (eventually left-padded with '0').
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-path_gimp</b>:</font>
+
+<p style="margin-left:100px"><tt>Return a path to store GIMP configuration files for one user (whose value is OD-dependent).
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-path_tmp</b>:</font>
 
 <p style="margin-left:100px"><tt>Return a path to store temporary files (whose value is OS-dependent).
@@ -5801,7 +5818,7 @@ _scorefile,_number_of_sessions>=0
 <font color="green"><b>&nbsp;&nbsp;-frame </b>:</font>
 <font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
 </p>
-<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 802 ]</b></font>
+<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 805 ]</b></font>
 <a name="section13"><h2><font color="brown"><u>Examples of use</u></font></h2></a>
 <pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
  The few examples below illustrate possible uses of this tool: 

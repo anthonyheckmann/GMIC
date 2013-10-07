@@ -56,6 +56,7 @@ _gmic_def()
 	      -input --input\
 	      -o --o\
 	      -output --output\
+	      -output_ggr --output_ggr\
 	      -on --on\
 	      -outputn --outputn\
 	      -op --op\
@@ -793,9 +794,11 @@ _gmic_def()
 	      -min_wh --min_wh\
 	      -min_whd --min_whd\
 	      -min_whds --min_whds\
+	      -normalize_filename --normalize_filename\
 	      -oct --oct\
 	      -oct2dec --oct2dec\
 	      -padint --padint\
+	      -path_gimp --path_gimp\
 	      -path_tmp --path_tmp\
 	      -path_user --path_user\
 	      -quote --quote\
@@ -861,6 +864,7 @@ _gmic_def()
 	      input\
 	      o\
 	      output\
+	      output_ggr\
 	      on\
 	      outputn\
 	      op\
@@ -1598,9 +1602,11 @@ _gmic_def()
 	      min_wh\
 	      min_whd\
 	      min_whds\
+	      normalize_filename\
 	      oct\
 	      oct2dec\
 	      padint\
+	      path_gimp\
 	      path_tmp\
 	      path_user\
 	      quote\
@@ -1682,6 +1688,10 @@ _gmic_def()
 		;;
 		"-function1d" | "--function1d")
 		COMPREPLY=( $(compgen -W "0<=smoothness<=1,x0>=0,y0,x1>=0,y1,...,xn>=0,yn >") )
+		return 0
+		;;
+		"-output_ggr" | "--output_ggr")
+		COMPREPLY=( $(compgen -W "filename,_gradient_name >") )
 		return 0
 		;;
 		"-outputn" | "--outputn")
@@ -3498,6 +3508,10 @@ _gmic_def()
 		;;
 		"-is_percent" | "--is_percent")
 		COMPREPLY=( $(compgen -W "string >") )
+		return 0
+		;;
+		"-normalize_filename" | "--normalize_filename")
+		COMPREPLY=( $(compgen -W "filename >") )
 		return 0
 		;;
 		"-oct" | "--oct")

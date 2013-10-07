@@ -497,7 +497,8 @@ G'MIC has been designed with portability in mind and runs on different platforms
   - Any ' # comment' expression found in a custom commands file is discarded by the G'MIC 
      interpreter, wherever it is located in a line. 
   - In custom commands, the following $-expressions are substituted: 
-    . '$*' is substituted by a verbatim copy of the specified arguments string. 
+    . '$*' is substituted by a copy of the specified string of arguments. 
+    . '$"*"' is substituted by a copy of the specified string of arguments, each being around double quotes. 
     . '$#' is substituted by the maximum indice of known arguments (either specified by the 
        user or set to a default value in the custom command). 
     . '$?' is substituted by a string telling about the command subset restriction (only 
@@ -768,6 +769,13 @@ or insert new image with specified dimensions and values. Single quotes may be o
 Output selected images as one or several numbered file(s).
 ~\\(\emph{eq. to} {\small \texttt{'-o'}}).
 ~\\~\\\textbf{Default value}: {\small \texttt{'format\_options'=(undefined).}}
+
+
+\subsection{\emph{-output\_ggr\index{-output\_ggr}} }\vspace*{-0.5em}
+~\\\textbf{Arguments: } 
+{\small \texttt{filename,\_gradient\_name}}\\~\\
+Output selected images as GIMP gradient files.
+~\\If no gradient name is specified, it is deduced from the filename.
 
 
 \subsection{\emph{-outputn\index{-outputn}} }\vspace*{-0.5em}
@@ -6369,6 +6377,12 @@ Return the minimal wxhxd size of selected images.
 Return the minimal wxhxdxs size of selected images.
 
 
+\subsection{\emph{-normalize\_filename\index{-normalize\_filename}} }\vspace*{-0.5em}
+~\\\textbf{Arguments: } 
+{\small \texttt{filename}}\\~\\
+Return a "normalized" version of the specified filename, without spaces and capital letters.
+
+
 \subsection{\emph{-oct\index{-oct}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{octal\_int1,...}}\\~\\
@@ -6385,6 +6399,10 @@ Convert specified octal integers into their decimal representations.
 ~\\\textbf{Arguments: } 
 {\small \texttt{number,\_size$>$0}}\\~\\
 Return a integer with 'size' digits (eventually left-padded with '0').
+
+
+\subsection{\emph{-path\_gimp\index{-path\_gimp}} }\vspace*{-0.5em}
+Return a path to store GIMP configuration files for one user (whose value is OD-dependent).
 
 
 \subsection{\emph{-path\_tmp\index{-path\_tmp}} }\vspace*{-0.5em}
