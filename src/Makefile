@@ -67,9 +67,6 @@ endif
 ifeq ($(OSTYPE),msys)
 EXE = .exe
 endif
-ifeq ($(CC),g++)
-IS_GCC = yes
-endif
 
 #------------------------------------------------
 # Set compilation flags for build customization.
@@ -81,7 +78,7 @@ IS_BETA_CFLAGS = -Dgmic_is_beta=1
 # Flags that are mandatory to compile 'gmic'.
 MANDATORY_CFLAGS += -Dgmic_build -I$(USR)/include
 MANDATORY_LDFLAGS += -L$(USR)/lib
-ifeq ($(IS_GCC),yes)
+ifeq ($(CC),g++)
 MANDATORY_CFLAGS += -Wall -W
 MANDATORY_LDFLAGS += -lm
 endif
@@ -91,8 +88,11 @@ MANDATORY_CFLAGS+=$(IS_BETA_CFLAGS)
 DEBUG_CFLAGS = -Dcimg_use_vt100 -Dcimg_verbosity=3 -g
 
 # Flags to enable optimizations.
-ifeq ($(IS_GCC),yes)
+ifeq ($(CC),g++)
 OPT_CFLAGS = -O3 -mtune=generic # -fno-tree-pre # -ffast-math
+endif
+ifeq ($(CC),clang++)
+OPT_CFLAGS = -O3
 endif
 ifeq ($(CC),icc)
 OPT_CFLAGS = -O3 -ipo -no-prec-div -override-limits
