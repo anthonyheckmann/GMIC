@@ -1247,7 +1247,7 @@ bool gmic_check_filename(const char *const filename) {
   bool res = false;
 #if cimg_OS==2
   const unsigned int attr = (unsigned int)GetFileAttributesA(filename);
-  if (attr!=INVALID_FILE_ATTRIBUTES) res = true;
+  res = (attr!=~0U);
 #else
   try {
     std::FILE *file = cimg::fopen(filename,"r");
