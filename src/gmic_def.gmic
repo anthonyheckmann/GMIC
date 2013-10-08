@@ -13153,13 +13153,12 @@ padint : -skip ${2=4}
 #@gmic path_gimp
 #@gmic : Return a path to store GIMP configuration files for one user (whose value is OD-dependent).
 path_gimp :
-  -v -
   -if {narg({'${USERPROFILE}'})} -u ${USERPROFILE}
   -elif {narg({'${HOME}'})} -u ${HOME}
   -else -u ""
   -endif
-  -if @{}/.gimp-2.8 -u @{}/.gimp-2.8
-  -elif @{}/.gimp-2.6 -u @{}/.gimp-2.6
+  -if @{}/.gimp-2.8/pluginrc -u @{}/.gimp-2.8
+  -elif @{}/.gimp-2.6/pluginrc -u @{}/.gimp-2.6
   -else -u @{-path_tmp}
   -endif -v +
 
@@ -19397,8 +19396,8 @@ gimp_custom_gradient : -skip "${15=}"
   -_gimp_custom_gradient0 ${1-14},"$15",${16--1}
   -if {$-1>=0&&narg("$15")}
     dir_ggr=@{-path_gimp}/gradients
-    -if $dir_ggr 0 -nm[-1] @{"-normalize_filename \"$15\""} name_ggr=@{-1,b} -rm[-1] -output_ggr[-1] $dir_ggr/$name_ggr.ggr,"$15"
-  -endif -endif
+    0 -nm[-1] @{"-normalize_filename \"$15\""} name_ggr=@{-1,b} -rm[-1] -output_ggr[-1] $dir_ggr/$name_ggr.ggr,"$15"
+  -endif
   -i[-2] (0^0^0^0) -a[-2,-1] x
   -repeat {@#-1} -l[$>,-1]
     -_gimp_custom_gradient1[0] ${1-14},"$15",${16--1}

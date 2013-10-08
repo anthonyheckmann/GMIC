@@ -1242,6 +1242,21 @@ inline bool _gmic_image_arg(const unsigned int ind, const CImg<unsigned int>& se
 #define gmic_image_arg(ind) gmic_check(_gmic_image_arg(ind,selection)?images[ind]:\
                                        images[ind].get_shared())
 
+// Return true if specified filename corresponds to an existing file or directory.
+bool gmic_check_filename(const char *const filename) {
+  bool res = false;
+#if cimg_OS==2
+  const unsigned int attr = (unsigned int)GetFileAttributesA(filename);
+  if (attr!=INVALID_FILE_ATTRIBUTES) res = true;
+#else
+  try {
+    std::FILE *file = cimg::fopen(filename,"r");
+    if (file) { res = true; cimg::fclose(file); }
+  } catch (CImgException&) {}
+#endif
+  return res;
+}
+
 // Code for managing argument substitutions from a command.
 inline const char *gmic_ellipsize_arg(const char *const argument, CImg<char>& argument_text) {
   if (argument_text) return argument_text;
@@ -3960,26 +3975,23 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             const CImg<T> &img = images.size()?images.back():CImg<T>::empty();
             try { if (img.eval(arg_check)) is_cond = true; }
             catch (CImgException&) {
-              is_filename = true; is_cond = false;
-              try {
-                std::FILE *file = cimg::fopen(arg_check,"r");
-                if (file) { is_cond = true; cimg::fclose(file); }
-              } catch (CImgException&) {}
+              is_filename = true;
+              is_cond = gmic_check_filename(arg_check);
             }
             if (verbosity>0 || is_debug) {
               print(images,"Check %s '%s' -> %s.",
-                    is_filename?"filename":"expression",
+                    is_filename?"file":"expression",
                     argument_text,
                     is_filename?(is_cond?"found":"not found"):(is_cond?"true":"false"));
             }
             if (!is_cond) {
               if (scope.size()>1 && scope.back()[0]!='*')
                 error(scope.back().data(),images,"Command '-check': %s '%s' %s.",
-                      is_filename?"filename":"expression",
+                      is_filename?"file":"expression",
                       argument_text,
                       is_filename?"does not exist":"is false");
               else error(images,"Command '-check': %s '%s' %s.",
-                         is_filename?"filename":"expression",
+                         is_filename?"file":"expression",
                          argument_text,
                          is_filename?"does not exist":"is false");
             }
@@ -10016,15 +10028,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               is_filename = true;
               CImg<char> arg_while(argument,std::strlen(argument)+1);
               gmic_strreplace(arg_while);
-              _is_cond = 0;
-              try {
-                std::FILE *file = cimg::fopen(arg_while,"r");
-                if (file) { _is_cond = 1; cimg::fclose(file); }
-              } catch (CImgException&) {}
+              _is_cond = (float)gmic_check_filename(arg_while);
             }
             const bool is_cond = (bool)_is_cond;
             if (verbosity>0 || is_debug) print(images,"Reach '-while' command -> %s '%s' %s.",
-                                               is_filename?"filename":"boolean",
+                                               is_filename?"file":"boolean",
                                                argument_text,
                                                is_filename?(is_cond?"exists":
                                                             "does not exist"):
@@ -10368,22 +10376,18 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             is_filename = true;
             CImg<char> arg_if(argument,std::strlen(argument)+1);
             gmic_strreplace(arg_if);
-            _is_cond = 0;
-            try {
-              std::FILE *file = cimg::fopen(arg_if,"r");
-              if (file) { _is_cond = 1; cimg::fclose(file); }
-            } catch (CImgException&) {}
+            _is_cond = (float)gmic_check_filename(arg_if);
           }
           const bool is_cond = (bool)_is_cond;
           if (item[1]=='i') {
             CImg<char>::string("*if").move_to(scope);
             if (verbosity>0 || is_debug) print(images,"Start '-if..-endif' block -> %s '%s' %s.",
-                                               is_filename?"filename":"boolean",
+                                               is_filename?"file":"boolean",
                                                argument_text,
                                                is_filename?(is_cond?"exists":"does not exist"):
                                                (is_cond?"is true":"is false"));
           } else if (verbosity>0 || is_debug) print(images,"Reach '-elif' block -> %s '%s' %s.",
-                                                    is_filename?"filename":"boolean",
+                                                    is_filename?"file":"boolean",
                                                     argument_text,
                                                     is_filename?(is_cond?"exists":
 								 "does not exist"):
