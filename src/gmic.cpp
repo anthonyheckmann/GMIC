@@ -1243,7 +1243,7 @@ inline bool _gmic_image_arg(const unsigned int ind, const CImg<unsigned int>& se
                                        images[ind].get_shared())
 
 // Return true if specified filename corresponds to an existing file or directory.
-bool gmic_check_filename(const char *const filename) {
+inline bool gmic_check_filename(const char *const filename) {
   bool res = false;
 #if cimg_OS==2
   const unsigned int attr = (unsigned int)GetFileAttributesA(filename);
