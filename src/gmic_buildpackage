@@ -226,8 +226,6 @@ if [ "$1" == "final" ]; then
     sed "s/IS_BETA_CFLAGS = -Dgmic_is_beta=1/IS_BETA_CFLAGS = /" Makefile > /tmp/Makefile
     mv /tmp/Makefile Makefile
 fi
-sed "s/IS_BETA_CFLAGS = /IS_BETA_CFLAGS = -Dcimg_use_vt100 /" Makefile > /tmp/Makefile
-mv /tmp/Makefile Makefile
 sed s\/_gmic_version\/$VERSION\/g Makefile > /tmp/Makefile
 mv /tmp/Makefile Makefile
 sed s\/_gmic_versio3\/$RELEASE1.$RELEASE2.$RELEASE3\/g Makefile > /tmp/Makefile

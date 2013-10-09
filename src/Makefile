@@ -83,9 +83,12 @@ MANDATORY_CFLAGS += -Wall -W
 MANDATORY_LDFLAGS += -lm
 endif
 MANDATORY_CFLAGS+=$(IS_BETA_CFLAGS)
+ifeq ($(OS),Unix)
+MANDATORY_CFLAGS+= -Dcimg_use_vt100
+endif
 
 # Flags to enable debugging.
-DEBUG_CFLAGS = -Dcimg_use_vt100 -Dcimg_verbosity=3 -g
+DEBUG_CFLAGS = -Dcimg_verbosity=3 -g
 
 # Flags to enable optimizations.
 ifeq ($(CC),g++)

@@ -5701,6 +5701,23 @@ area_fg : -check "$1>=0" -skip ${2=0}
     -repeat @# -label_fg[$>] $1,$2 nb=@{$>,1+iM} --histogram[$>] $nb,0,{$nb-1} -=[-1] 0 -map[$>] [-1] -rm[-1] -done
   -a c -endl -done -v +
 
+#@gmic at_line : x0[%],y0[%],z0[%],x1[%],y1[%],z1[%]
+#@gmic : Retrieve pixels of the selected images belonging to the specified line (x0,y0,z0)-(x1,y1,z1).
+#@gmic : $ image.jpg --at_line 0,0,0,100%,100%,0
+at_line :
+  -e[^-1] "Retrieve pixels of image$?, belonging to line ($1,$2,$3)-($4,$5,$6)."
+  -v - -repeat @# -l[$>]
+    x0={if(@{-is_percent\ $1},(w-1)*$1,$1)}
+    y0={if(@{-is_percent\ $2},(h-1)*$2,$2)}
+    z0={if(@{-is_percent\ $3},(d-1)*$3,$3)}
+    x1={if(@{-is_percent\ $4},(w-1)*$4,$4)}
+    y1={if(@{-is_percent\ $5},(h-1)*$5,$5)}
+    z1={if(@{-is_percent\ $6},(d-1)*$6,$6)}
+    ($x0,$x1^$y0,$y1^$z0,$z1)
+    -r[-1] {1+max(abs($x1-$x0),abs($y1-$y0),abs($z1-$z0))},1,1,3,3
+    -round[-1] 1 -warp[0] [-1],0,0,0 -rm[-1]
+  -endl -done -v +
+
 #@gmic barycenter
 #@gmic : Compute the barycenter vector of pixel values.
 #@gmic : $ 256,256 -ellipse 50%,50%,20%,20%,0,1,1 -deform 20 --barycenter --ellipse[-2] @{-1,0,1},5,5,0,10
@@ -19451,6 +19468,40 @@ _gimp_custom_gradient1 :
   -else # Opaque pixels.
     -to_a -channels 100% -ge {100-$3}%
   -endif
+
+#@gimp Gradient [from line] : gimp_line_gradient, gimp_line_gradient_preview(1)
+#@gimp : note = note("<small><b><span foreground="red">Starting point:</span></b></small>")
+#@gimp : X0 = float(0,0,100)
+#@gimp : Y0 = float(0,0,100)
+#@gimp : note = note("<small><b><span foreground="blue">Ending point:</span></b></small>")
+#@gimp : X1 = float(100,0,100)
+#@gimp : Y1 = float(100,0,100)
+#@gimp : sep = separator()
+#@gimp : Preview gradient = bool(1)
+#@gimp : Save gradient as = _text("")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/09</i>.</small>")
+gimp_line_gradient : -skip "${6=}"
+  -at_line $1%,$2%,0,$3%,$4%,0
+  -if {narg("$6")}
+    dir_ggr=@{-path_gimp}/gradients
+    0 -nm[-1] @{"-normalize_filename \"$6\""} name_ggr=@{-1,b} -rm[-1] -output_ggr[-1] $dir_ggr/$name_ggr.ggr,"$6"
+  -endif
+  -r[-1] 100%,{w},1,100%
+
+gimp_line_gradient_preview :
+  -repeat @# -l[$>]
+    -to_rgba
+    -if $5 --at_line $1%,$2%,0,$3%,$4%,0 -endif
+    -l[0]
+      -line $1%,$2%,$3%,$4%,1,0xF0F0F0F0,255,255,255,255
+      -line $1%,$2%,$3%,$4%,1,0x0F0F0F0F,0,0,0,255
+      -circle $1%,$2%,4,1,255,0,0,255
+      -circle $3%,$4%,4,1,0,0,255,255
+      -circle $1%,$2%,4,1,0xFFFFFFFF,0,0,0,255
+      -circle $3%,$4%,4,1,0xFFFFFFFF,0,0,0,255
+    -endl
+    -if {@#>1} -r[-1] {@{0,w}-32},32,1,4,1 -frame[-1] 1,1,0,0,0,255 -j[0] [1],16,{@{0,h}-48} -rm[-1] -endif
+  -endl -done
 
 #@gimp Gradient [linear] : gimp_linear_gradient, gimp_linear_gradient
 #@gimp : Starting color = color(0,0,0,255)
