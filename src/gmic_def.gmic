@@ -13153,6 +13153,7 @@ padint : -skip ${2=4}
 #@gmic path_gimp
 #@gmic : Return a path to store GIMP configuration files for one user (whose value is OD-dependent).
 path_gimp :
+  -if {narg({'${GIMP2_DIRECTORY}'})} -u ${GIMP2_DIRECTORY} -return -endif
   -if {narg({'${USERPROFILE}'})} -u ${USERPROFILE}
   -elif {narg({'${HOME}'})} -u ${HOME}
   -else -u ""
