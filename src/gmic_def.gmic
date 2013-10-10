@@ -7138,7 +7138,7 @@ cubes3d : -check ${1=1}>=0
       -z 1,1 -* 8 -r 4,100% -i[0] 1,100%,1,1,4 -a x [-1]x5 -a x
       -+ '"0,0,2,3,1, 0,4,5,7,6, 0,0,1,5,4, 0,2,6,7,3, 0,0,4,6,2, 0,1,3,7,5"'
       -endl
-      -l[4] -r 3,{h/3},1,1,-1 -r 18,100% -endl -r[5] 6,100% # Colors & opacities.
+      -l[4] -r 3,{h/3},1,1,-1 -r 18,100%,1,1,0,2 -endl -r[5] 6,100% # Colors & opacities.
       -y y -a y
     -endif
   -endl -done -v +
@@ -23522,5 +23522,3 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
-
