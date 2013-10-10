@@ -404,6 +404,7 @@ _gmic_def()
 	      -watershed --watershed\
 	      -area --area\
 	      -area_fg --area_fg\
+	      -at_line --at_line\
 	      -barycenter --barycenter\
 	      -displacement --displacement\
 	      -distance --distance\
@@ -1212,6 +1213,7 @@ _gmic_def()
 	      watershed\
 	      area\
 	      area_fg\
+	      at_line\
 	      barycenter\
 	      displacement\
 	      distance\
@@ -2432,6 +2434,10 @@ _gmic_def()
 		;;
 		"-area_fg" | "--area_fg")
 		COMPREPLY=( $(compgen -W "tolerance>=0,is_high_connectivity={0|1} >") )
+		return 0
+		;;
+		"-at_line" | "--at_line")
+		COMPREPLY=( $(compgen -W "x0[%],y0[%],z0[%],x1[%],y1[%],z1[%] >") )
 		return 0
 		;;
 		"-displacement" | "--displacement")

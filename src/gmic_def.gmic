@@ -7036,6 +7036,7 @@ circle3d : -skip ${1=0},${2=0},${3=0},${4=1}
 
 #@gmic circles3d : _radius>=0
 #@gmic : Convert specified 3d objects to sets of 3d circles with specified radius.
+#@gmic : Default value: 'radius=1'.
 #@gmic : $ image.jpg -luminance -resize2dy 40 -threshold 50% -* 255 -pointcloud3d -color3d[-1] 255,255,255 -circles3d 0.7
 circles3d : -check ${1=1}>=0
   -e[^-1] "Convert 3d object$? to sets of 3d circles with radius $1."
@@ -7115,6 +7116,32 @@ cone3d : -check ${3=24}>0 -skip ${1=1},${2=1}
   1,{h},1,1,1
   -y[-4--2] y -a[-6--1] y -nm[-1] [3d\ cone]
   -v +
+
+#@gmic cubes3d : _size>=0
+#@gmic : Convert specified 3d objects to sets of 3d cubes with specified size.
+#@gmic : Default value: 'size=1'.
+#@gmic : $ image.jpg -luminance -resize2dy 40 -threshold 50% -* 255 -pointcloud3d -color3d[-1] 255,255,255 -cubes3d 1
+cubes3d : -check ${1=1}>=0
+  -e[^-1] "Convert 3d object$? to sets of 3d cubes with size $1."
+  -v - -p3d 0 -repeat @# -l[$>]
+    nbv=@{-1,6} nbp=@{-1,7}
+    -if {$nbv&&$nbp}
+      -s3d
+      -l[1] -= {8*i(0,0)} -= {6*i(0,1)},0,1 -endl  # Header.
+      -l[2] -r 3,{h/3},1,1,-1                      # Vertices.
+      half={$1/2}
+      -- '$half,0,0' --+ '$1,0,0' -a x
+      -- '0,$half,0' --+ '0,$1,0' -a x
+      -- '0,0,$half' --+ '0,0,$1' -a x
+      -endl
+      -l[3] -r 2,{h/2},1,1,-1                      # Primitives.
+      -z 1,1 -* 8 -r 4,100% -i[0] 1,100%,1,1,4 -a x [-1]x5 -a x
+      -+ '"0,0,2,3,1, 0,4,5,7,6, 0,0,1,5,4, 0,2,6,7,3, 0,0,4,6,2, 0,1,3,7,5"'
+      -endl
+      -l[4] -r 3,{h/3},1,1,-1 -r 18,100% -endl -r[5] 6,100% # Colors & opacities.
+      -y y -a y
+    -endif
+  -endl -done -v +
 
 #@gmic cup3d : _resolution>0
 #@gmic : Input 3d cup object.
@@ -23495,3 +23522,5 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
+
+
