@@ -19506,22 +19506,23 @@ _gimp_custom_gradient1 :
 #@gimp : sep = separator()
 #@gimp : Sampling = float(100,0,100)
 #@gimp : Intra-shades = int(1,1,64)
+#@gimp : Sorting = choice("None","By increasing lightness","By decreasing lightness")
 #@gimp : sep = separator()
 #@gimp : Preview gradient = bool(1)
 #@gimp : Save gradient as = _text("")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/09</i>.</small>")
 gimp_line_gradient : -skip "${8=}"
-  -at_line $1%,$2%,0,$3%,$4%,0 -r {max(0.1,$5)}%,1,1,100%,1 -r[-1] {$6*w},1,1,100%,3
-  -if {narg("$8")}
+  -_gimp_line_gradient $*
+  -if {narg("$9")}
     dir_ggr=@{-path_gimp}/gradients
-    0 -nm[-1] @{"-normalize_filename \"$8\""} name_ggr=@{-1,b} -rm[-1] -output_ggr[-1] $dir_ggr/$name_ggr.ggr,"$8"
+    0 -nm[-1] @{"-normalize_filename \"$9\""} name_ggr=@{-1,b} -rm[-1] -output_ggr[-1] $dir_ggr/$name_ggr.ggr,"$9"
   -endif
-  -r[-1] 100%,{w},1,100%
+  -repeat @# -r[$>] 100%,@{$>,w},1,100% -done
 
 gimp_line_gradient_preview :
   -repeat @# -l[$>]
     -to_rgba
-    -if $7 --at_line $1%,$2%,0,$3%,$4%,0 -r[-1] {max(0.1,$5)}%,1,1,100%,1 -r[-1] {$6*w},1,1,100%,3 -endif
+    -if $8 --_gimp_line_gradient $* -endif
     -l[0]
       -line $1%,$2%,$3%,$4%,1,0xF0F0F0F0,255,255,255,255
       -line $1%,$2%,$3%,$4%,1,0x0F0F0F0F,0,0,0,255
@@ -19532,6 +19533,12 @@ gimp_line_gradient_preview :
     -endl
     -if {@#>1} -r[-1] {@{0,w}-32},32,1,4,1 -frame[-1] 1,1,0,0,0,255 -j[0] [1],16,{@{0,h}-48} -rm[-1] -endif
   -endl -done
+
+_gimp_line_gradient :
+  -at_line $1%,$2%,0,$3%,$4%,0 -r {max(0.1,$5)}%,1,1,100%,1
+  s1=+ s2=-
+  -if $7 -repeat @# -l[$>] --luminance -rv -a y -sort ${s$7},x -rows 1 -endl -done -endif
+  -r {$6*100}%,1,1,100%,3
 
 #@gimp Gradient [linear] : gimp_linear_gradient, gimp_linear_gradient
 #@gimp : Starting color = color(0,0,0,255)
