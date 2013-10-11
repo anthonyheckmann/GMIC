@@ -353,7 +353,8 @@ _help_header_html :
 _help_section_html :
   _section={$_section+1}
   -v +
-  -e[] "<a name=\"section"$_section"\"><h2><font color=\"brown\"><u>$1</u></font></h2></a>"
+  -e[] "<h2><a name=\"section"$_section"\"><font color=\"brown\"><u>$1</u></font></a>"\
+       "&nbsp;&nbsp;<a href=\"#top\"><img src=\"img/back_top.png\"></img></a></h2>"
   -v -
 
 _help_paragraph_html :
@@ -1507,7 +1508,8 @@ _document_gmic_ex_off_html :
 
 _document_gmic_subsection_html :
   -v +
-  -e[] @{-eoff}@{-doff}"<br/><a name=\"subsection"$_subsection"\"><h3><font color=\"purple\">** <u>"@{0,t}"</u></font></h3></a>"
+  -e[] @{-eoff}@{-doff}"<br/><h3><a name=\"subsection"$_subsection"\"><font color=\"purple\">** <u>"@{0,t}"</u></font></a>"\
+       "&nbsp;&nbsp;<a href=\"#top\"><img src=\"img/back_top.png\"></img></a></h3>"
   -v -
 
 _document_gmic_declaration_html :
