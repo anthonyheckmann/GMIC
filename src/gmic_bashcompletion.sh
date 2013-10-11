@@ -496,6 +496,7 @@ _gmic_def()
 	      -color3d --color3d\
 	      -colorcube3d --colorcube3d\
 	      -cone3d --cone3d\
+	      -cubes3d --cubes3d\
 	      -cup3d --cup3d\
 	      -cylinder3d --cylinder3d\
 	      -distribution3d --distribution3d\
@@ -1305,6 +1306,7 @@ _gmic_def()
 	      color3d\
 	      colorcube3d\
 	      cone3d\
+	      cubes3d\
 	      cup3d\
 	      cylinder3d\
 	      distribution3d\
@@ -2710,6 +2712,10 @@ _gmic_def()
 		;;
 		"-cone3d" | "--cone3d")
 		COMPREPLY=( $(compgen -W "_radius,_height,_nb_subdivisions>0 >") )
+		return 0
+		;;
+		"-cubes3d" | "--cubes3d")
+		COMPREPLY=( $(compgen -W "_size>=0 >") )
 		return 0
 		;;
 		"-cup3d" | "--cup3d")
