@@ -11341,7 +11341,6 @@ x_pacman :
       -endif
       -if {$oscore>0} -j[-1] [score$nscore],$xscore,$yscore,0,0,$oscore,[scorem$nscore],255 oscore={$oscore-0.04} yscore={$yscore-1} -endif
       -j[-1] [gate],158,223,0,0,0.6
-      -w[-1] -rm[-1]
 
       # Manage ghosts displacements and collisions.
       -repeat 4
@@ -11417,6 +11416,7 @@ x_pacman :
 
       -endif
       -if {!@!" || "@{!,Q}" || "@{!,ESC}} is_quit=1 -endif
+
     -while {!$is_quit" && "$pacdots}
 
     -if $is_quit -break         # Player asked to quit.
@@ -22844,7 +22844,6 @@ gmicol_frame_pattern_preview :
 #@gmicol : Reverse gradient = bool(0)
 #@gmicol : sep = separator()
 #@gmicol : Preview gradient = bool(1)
-#@gmicol : Save gradient as = _text("")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/09</i>.</small>")
 
 #@gmicol Gradient [linear] : gimp_linear_gradient, gimp_linear_gradient
