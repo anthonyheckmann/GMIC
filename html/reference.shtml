@@ -1,512 +1,512 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!--#include file="header.html" -->
-<link href="style.css" rel="stylesheet" type="text/css">
-<div id="bloc_option">
-<div id="top_rouge"><div id="text_top">Reference</div></div>
-<div id="center"><div id="text_centre_intro">
-<h2><font color="brown"><u>Preamble</u></font></h2>
-<ul>
-<li>This document is distributed under the <a href="http://www.gnu.org/licenses/fdl-1.3.txt">GNU Free Documentation License</a>, version 1.3.</li>
-<li>A <a href="gmic_reference.pdf">.pdf version</a> of this document is available.</li>
-</ul>
-<h2><font color="brown"><u>Table of contents</u></font></h2>
-<ul>
-<li><a href="#section0">Version</a></li>
-<li><a href="#section1">Usage</a></li>
-<ul>
-<li><a href="#section2">Overall context</a></li>
-<li><a href="#section3">Image definition and terminology</a></li>
-<li><a href="#section4">Items of a processing pipeline</a></li>
-<li><a href="#section5">Input data items</a></li>
-<li><a href="#section6">Command items and selections</a></li>
-<li><a href="#section7">Input/output properties</a></li>
-<li><a href="#section8">Substitution rules</a></li>
-<li><a href="#section9">Mathematical expressions</a></li>
-<li><a href="#section10">Image and data viewers</a></li>
-<li><a href="#section11">Adding custom commands</a></li>
-</ul>
-<li><a href="#section12">List of commands</a></li>
-<ul>
-<li><a href="#subsection1">Global options</a></li>
-<li><a href="#subsection2">Inputs/outputs</a></li>
-<li><a href="#subsection3">List manipulation</a></li>
-<li><a href="#subsection4">Mathematical operators</a></li>
-<li><a href="#subsection5">Values manipulation</a></li>
-<li><a href="#subsection6">Colors manipulation</a></li>
-<li><a href="#subsection7">Geometry manipulation</a></li>
-<li><a href="#subsection8">Filtering</a></li>
-<li><a href="#subsection9">Features extraction</a></li>
-<li><a href="#subsection10">Image drawing</a></li>
-<li><a href="#subsection11">Matrix computation</a></li>
-<li><a href="#subsection12">3d rendering</a></li>
-<li><a href="#subsection13">Program controls</a></li>
-<li><a href="#subsection14">Arrays,tiles and frames</a></li>
-<li><a href="#subsection15">Artistic</a></li>
-<li><a href="#subsection16">Warpings</a></li>
-<li><a href="#subsection17">Degradations</a></li>
-<li><a href="#subsection18">Blending and fading</a></li>
-<li><a href="#subsection19">Image sequences</a></li>
-<li><a href="#subsection20">Interactive demos</a></li>
-<li><a href="#subsection21">PINK-library operators</a></li>
-<li><a href="#subsection22">Convenience functions</a></li>
-<li><a href="#subsection23">Others</a></li>
-<li><a href="#subsection24">Commands shortcuts</a></li>
-</ul>
-<li><a href="#section13">Examples of use</a></li>
-</ul>
-<a name="section0"><h2><font color="brown"><u>Version</u></font></h2></a>
-<pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing.
-
-       Version 1.5.7.2 (beta), Copyright (C) 2008-2013, David Tschumperle
-       (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>)
-</pre>
-<a name="section1"><h2><font color="brown"><u>Usage</u></font></h2></a>
-<pre> gmic [command1 [arg1_1,arg1_2,..]] .. [commandN [argN_1,argN_2,..]]
-
- 'gmic' is an open-source interpreter of the G'MIC language, a script-based programming
-  language dedicated to design image processing pipelines. It can be used to convert,
-  manipulate, filter and visualize datasets made of one or several 1d/2d or 3d multi-
-  spectral images.
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!--#include file="header.html" --> 
+<link href="style.css" rel="stylesheet" type="text/css"> 
+<div id="bloc_option"> 
+<div id="top_rouge"><div id="text_top">Reference</div></div> 
+<div id="center"><div id="text_centre_intro"> 
+<h2><font color="brown"><u>Preamble</u></font></h2> 
+<ul> 
+<li>This document is distributed under the <a href="http://www.gnu.org/licenses/fdl-1.3.txt">GNU Free Documentation License</a>, version 1.3.</li> 
+<li>A <a href="gmic_reference.pdf">.pdf version</a> of this document is available.</li> 
+</ul> 
+<h2><font color="brown"><u>Table of contents</u></font></h2> 
+<ul> 
+<li><a href="#section0">Version</a></li> 
+<li><a href="#section1">Usage</a></li> 
+<ul> 
+<li><a href="#section2">Overall context</a></li> 
+<li><a href="#section3">Image definition and terminology</a></li> 
+<li><a href="#section4">Items of a processing pipeline</a></li> 
+<li><a href="#section5">Input data items</a></li> 
+<li><a href="#section6">Command items and selections</a></li> 
+<li><a href="#section7">Input/output properties</a></li> 
+<li><a href="#section8">Substitution rules</a></li> 
+<li><a href="#section9">Mathematical expressions</a></li> 
+<li><a href="#section10">Image and data viewers</a></li> 
+<li><a href="#section11">Adding custom commands</a></li> 
+</ul> 
+<li><a href="#section12">List of commands</a></li> 
+<ul> 
+<li><a href="#subsection1">Global options</a></li> 
+<li><a href="#subsection2">Inputs/outputs</a></li> 
+<li><a href="#subsection3">List manipulation</a></li> 
+<li><a href="#subsection4">Mathematical operators</a></li> 
+<li><a href="#subsection5">Values manipulation</a></li> 
+<li><a href="#subsection6">Colors manipulation</a></li> 
+<li><a href="#subsection7">Geometry manipulation</a></li> 
+<li><a href="#subsection8">Filtering</a></li> 
+<li><a href="#subsection9">Features extraction</a></li> 
+<li><a href="#subsection10">Image drawing</a></li> 
+<li><a href="#subsection11">Matrix computation</a></li> 
+<li><a href="#subsection12">3d rendering</a></li> 
+<li><a href="#subsection13">Program controls</a></li> 
+<li><a href="#subsection14">Arrays,tiles and frames</a></li> 
+<li><a href="#subsection15">Artistic</a></li> 
+<li><a href="#subsection16">Warpings</a></li> 
+<li><a href="#subsection17">Degradations</a></li> 
+<li><a href="#subsection18">Blending and fading</a></li> 
+<li><a href="#subsection19">Image sequences</a></li> 
+<li><a href="#subsection20">Interactive demos</a></li> 
+<li><a href="#subsection21">PINK-library operators</a></li> 
+<li><a href="#subsection22">Convenience functions</a></li> 
+<li><a href="#subsection23">Others</a></li> 
+<li><a href="#subsection24">Commands shortcuts</a></li> 
+</ul> 
+<li><a href="#section13">Examples of use</a></li> 
+</ul> 
+<a name="section0"><h2><font color="brown"><u>Version</u></font></h2></a> 
+<pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing. 
+ 
+       Version 1.5.7.2 (beta), Copyright (C) 2008-2013, David Tschumperle 
+       (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>) 
+</pre> 
+<h2><a name="section1"><font color="brown"><u>Usage</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre> gmic [command1 [arg1_1,arg1_2,..]] .. [commandN [argN_1,argN_2,..]] 
+ 
+ 'gmic' is an open-source interpreter of the G'MIC language, a script-based programming 
+  language dedicated to design image processing pipelines. It can be used to convert, 
+  manipulate, filter and visualize datasets made of one or several 1d/2d or 3d multi- 
+  spectral images. 
+ 
  This documentation proposes a complete description of the G'MIC language basics and rules.</pre>
-<a name="section2"><h2><font color="brown"><u>Overall context</u></font></h2></a>
-<pre>  - At any time, G'MIC manages one list of numbered (and optionally named) pixel-based
-     images, entirely stored in computer memory.
-  - The first image of the list has indice '0' and is denoted by '[0]'. The second image of
-     the list is denoted by '[1]', the third by '[2]' and so on.
-  - Negative indices are treated in a cyclic way: '[-1]' refers to the last image of the
-     list, '[-2]' to the penultimate one, etc. Thus, if the list has 4 images, '[1]' and '[-3]'
-     both designate the second image of the list.
-  - A named image may be denoted by '[name]' if 'name' uses characters set [a-zA-Z0-9_] and
-     does not start with a number. Image names can be set or reassigned at any moment during
-     the processing pipeline (see commands '-name' and '-input').
-  - G'MIC defines a set of various commands and substitution mechanisms to allow the design
-     of complex pipelines managing this list of images, in a very flexible way:
-     You can insert or remove images in the list, rearrange image indices, process images
-     (individually or as a group), merge image data together and output image files.
-  - Such a pipeline can be written itself as a custom G'MIC command storable in a custom
+<h2><a name="section2"><font color="brown"><u>Overall context</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - At any time, G'MIC manages one list of numbered (and optionally named) pixel-based 
+     images, entirely stored in computer memory. 
+  - The first image of the list has indice '0' and is denoted by '[0]'. The second image of 
+     the list is denoted by '[1]', the third by '[2]' and so on. 
+  - Negative indices are treated in a cyclic way: '[-1]' refers to the last image of the 
+     list, '[-2]' to the penultimate one, etc. Thus, if the list has 4 images, '[1]' and '[-3]' 
+     both designate the second image of the list. 
+  - A named image may be denoted by '[name]' if 'name' uses characters set [a-zA-Z0-9_] and 
+     does not start with a number. Image names can be set or reassigned at any moment during 
+     the processing pipeline (see commands '-name' and '-input'). 
+  - G'MIC defines a set of various commands and substitution mechanisms to allow the design 
+     of complex pipelines managing this list of images, in a very flexible way: 
+     You can insert or remove images in the list, rearrange image indices, process images 
+     (individually or as a group), merge image data together and output image files. 
+  - Such a pipeline can be written itself as a custom G'MIC command storable in a custom 
      commands file, which can be re-used afterwards in another bigger pipeline if necessary.</pre>
-<a name="section3"><h2><font color="brown"><u>Image definition and terminology</u></font></h2></a>
-<pre>  - In G'MIC, an image is modeled as a 1d, 2d, 3d or 4d array of scalar values, uniformly
-     discretized on a rectangular/parallelepipedic domain.
-  - The four dimensions of these arrays are respectively denoted by:
-    . 'width', the number of image columns (size along the 'x'-axis).
-    . 'height', the number of image rows (size along the 'y'-axis).
-    . 'depth', the number of image slices (size along the 'z'-axis).
-        The depth is equal to 1 for usual 2d color or grayscale images.
-    . 'spectrum', the number of image channels (size along the 'c'-axis).
-        The spectrum is respectively equal to 3 and 4 for usual RGB and RGBA color images.
-  - There are no size limitations on each image dimensions. Particularly, the number of image
-     slices or channels can be of arbitrary size within the limits of available memory.
-  - The width, height and depth of an image are considered as 'spatial' dimensions, while the
-     spectrum has a 'multi-spectral' meaning. Thus, a 4d image in G'MIC should be most often
-     regarded as a 3d dataset of multi-spectral voxels. Most of the G'MIC commands will stick
-     with this idea (e.g. command '-blur' will blur images only along the 'xyz' axes).
-  - All pixel values of all images of the list have the same datatype. It can be one among:
-    . 'bool': Stands for 'boolean'. Value range is { 0=false | 1=true }.
-    . 'uchar': Stands for 'unsigned char'. Value range is [0,255] (8bits).
-        This type of pixel coding is commonly used to store 8bits/channels RGB[A] images.
-    . 'char': Value range is [-128,127] (8bits).
-    . 'ushort': Stands for 'unsigned short'. Value range is [0,65535] (16bits).
-        This type of pixel coding is commonly used to store 16bits/channels RGB[A] images.
-    . 'short': Value range is [-32768,32767] (16bits).
-    . 'uint': Stands for 'unsigned int'. Value range is [0,2^32-1] (32bits).
-    . 'int': Value range is [-2^31,2^31-1] (32 bits).
-    . 'float': Value range is [-3.4E38,+3.4E38] (32bits).
-        This type of coding is able to store pixels as 32 bits float-valued numbers. This is
-        the default datatype used by G'MIC image processing operations.
-    . 'double': Value range is [-1.7E308,1.7E308] (64bits).
-        This type of coding is able to store pixels as 64 bits float-valued numbers.
-  - Considering pixel datatypes different than 'float' is generally useless, except to force
-     the input/output of image data to a prescribed binary format. Hence, most G'MIC image
-     image processing commands are available only for the default 'float' pixel datatype
+<h2><a name="section3"><font color="brown"><u>Image definition and terminology</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - In G'MIC, an image is modeled as a 1d, 2d, 3d or 4d array of scalar values, uniformly 
+     discretized on a rectangular/parallelepipedic domain. 
+  - The four dimensions of these arrays are respectively denoted by: 
+    . 'width', the number of image columns (size along the 'x'-axis). 
+    . 'height', the number of image rows (size along the 'y'-axis). 
+    . 'depth', the number of image slices (size along the 'z'-axis). 
+        The depth is equal to 1 for usual 2d color or grayscale images. 
+    . 'spectrum', the number of image channels (size along the 'c'-axis). 
+        The spectrum is respectively equal to 3 and 4 for usual RGB and RGBA color images. 
+  - There are no size limitations on each image dimensions. Particularly, the number of image 
+     slices or channels can be of arbitrary size within the limits of available memory. 
+  - The width, height and depth of an image are considered as 'spatial' dimensions, while the 
+     spectrum has a 'multi-spectral' meaning. Thus, a 4d image in G'MIC should be most often 
+     regarded as a 3d dataset of multi-spectral voxels. Most of the G'MIC commands will stick 
+     with this idea (e.g. command '-blur' will blur images only along the 'xyz' axes). 
+  - All pixel values of all images of the list have the same datatype. It can be one among: 
+    . 'bool': Stands for 'boolean'. Value range is { 0=false | 1=true }. 
+    . 'uchar': Stands for 'unsigned char'. Value range is [0,255] (8bits). 
+        This type of pixel coding is commonly used to store 8bits/channels RGB[A] images. 
+    . 'char': Value range is [-128,127] (8bits). 
+    . 'ushort': Stands for 'unsigned short'. Value range is [0,65535] (16bits). 
+        This type of pixel coding is commonly used to store 16bits/channels RGB[A] images. 
+    . 'short': Value range is [-32768,32767] (16bits). 
+    . 'uint': Stands for 'unsigned int'. Value range is [0,2^32-1] (32bits). 
+    . 'int': Value range is [-2^31,2^31-1] (32 bits). 
+    . 'float': Value range is [-3.4E38,+3.4E38] (32bits). 
+        This type of coding is able to store pixels as 32 bits float-valued numbers. This is 
+        the default datatype used by G'MIC image processing operations. 
+    . 'double': Value range is [-1.7E308,1.7E308] (64bits). 
+        This type of coding is able to store pixels as 64 bits float-valued numbers. 
+  - Considering pixel datatypes different than 'float' is generally useless, except to force 
+     the input/output of image data to a prescribed binary format. Hence, most G'MIC image 
+     image processing commands are available only for the default 'float' pixel datatype 
      (see command '-type' if you need to switch to another pixel datatype).</pre>
-<a name="section4"><h2><font color="brown"><u>Items of a processing pipeline</u></font></h2></a>
-<pre>  - In G'MIC, an image processing pipeline is described as a sequence of items separated by
-     the space character ' '. Such items are interpreted and executed from the left to the
-     right. For instance, the expression:
-       'input.jpg -blur 3,0 -sharpen 10 -resize 200%,200% -output output.jpg'
-     defines a valid pipeline composed of nine G'MIC items.
-  - A G'MIC item is a string which represents either a command, a set of command arguments,
-     a filename, or a special input string.
-  - Escape characters '\' and double quotes '"' can be used (as usual) to define items
-     containing spaces, or any other character sequences. For instance, the strings
+<h2><a name="section4"><font color="brown"><u>Items of a processing pipeline</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - In G'MIC, an image processing pipeline is described as a sequence of items separated by 
+     the space character ' '. Such items are interpreted and executed from the left to the 
+     right. For instance, the expression: 
+       'input.jpg -blur 3,0 -sharpen 10 -resize 200%,200% -output output.jpg' 
+     defines a valid pipeline composed of nine G'MIC items. 
+  - A G'MIC item is a string which represents either a command, a set of command arguments, 
+     a filename, or a special input string. 
+  - Escape characters '\' and double quotes '"' can be used (as usual) to define items 
+     containing spaces, or any other character sequences. For instance, the strings 
      'single\ item' and '"single item"' define the same string item, with a space in it.</pre>
-<a name="section5"><h2><font color="brown"><u>Input data items</u></font></h2></a>
-<pre>  - If a specified G'MIC item appears to be an existing filename, the corresponding image
-     data are loaded and inserted at the end of the image list.
-  - Special filenames '-' and '-.ext' stand for the standard input/output streams, optionally
-     forced to be in a specific 'ext' file format (e.g. '-.jpg' or '-.png').
-  - The following special input strings may be used as G'MIC items to create and insert new
-     images with prescribed values, at the end of the image list:
-    . '[selection]' or '[selection]xN': Insert 1 or N copies of selected existing images.
-       'selection' may contain one or several images (see next section for details).
-    . 'width[%],_height[%],_depth[%],_spectrum[%],_values': Insert a new image with
-       specified size and values (adding '%' to a dimension means 'percentage of the size
-       along the same axis, taken from the last image '[-1]''). Any specified dimension
-       can be also written as '[image]', and is then set to the size (along the same axis)
-       of the existing specified image [image]. 'values' can be either a sequence of numbers
-       separated by commas ',', or a mathematical expression, as e.g. in input item
-       '256,256,1,3,if(c==0,x,if(c==1,y,0))' which creates a 256x256 RGB color image with a
-       spatial shading on the red and green channels.
-    . '(v1,v2,..)': Insert a new image from specified prescribed values.
-       Value separator inside parentheses can be ',' (column separator.), ';' (row sep.),
-       '/' (slice sep.) or '^' (channel sep.). For instance, expression
-       '(1,2,3;4,5,6;7,8,9)' creates a 3x3 matrix (scalar image), with values from 1 to 9.
-    . '0': Insert a new 'empty' image, containing no pixel data. Empty images are used only
-       in rare occasions.
-  - Input item 'name=value' declares a new local or global variable 'name', or assign a new
-     value to an existing variable. Variable names use characters set [a-zA-Z0-9_] and cannot
-     start with a number. A variable definition is always local to the current command except
-     when it starts by the underscore character '_'. In that case, it becomes also accessible
+<h2><a name="section5"><font color="brown"><u>Input data items</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - If a specified G'MIC item appears to be an existing filename, the corresponding image 
+     data are loaded and inserted at the end of the image list. 
+  - Special filenames '-' and '-.ext' stand for the standard input/output streams, optionally 
+     forced to be in a specific 'ext' file format (e.g. '-.jpg' or '-.png'). 
+  - The following special input strings may be used as G'MIC items to create and insert new 
+     images with prescribed values, at the end of the image list: 
+    . '[selection]' or '[selection]xN': Insert 1 or N copies of selected existing images. 
+       'selection' may contain one or several images (see next section for details). 
+    . 'width[%],_height[%],_depth[%],_spectrum[%],_values': Insert a new image with 
+       specified size and values (adding '%' to a dimension means 'percentage of the size 
+       along the same axis, taken from the last image '[-1]''). Any specified dimension 
+       can be also written as '[image]', and is then set to the size (along the same axis) 
+       of the existing specified image [image]. 'values' can be either a sequence of numbers 
+       separated by commas ',', or a mathematical expression, as e.g. in input item 
+       '256,256,1,3,if(c==0,x,if(c==1,y,0))' which creates a 256x256 RGB color image with a 
+       spatial shading on the red and green channels. 
+    . '(v1,v2,..)': Insert a new image from specified prescribed values. 
+       Value separator inside parentheses can be ',' (column separator.), ';' (row sep.), 
+       '/' (slice sep.) or '^' (channel sep.). For instance, expression 
+       '(1,2,3;4,5,6;7,8,9)' creates a 3x3 matrix (scalar image), with values from 1 to 9. 
+    . '0': Insert a new 'empty' image, containing no pixel data. Empty images are used only 
+       in rare occasions. 
+  - Input item 'name=value' declares a new local or global variable 'name', or assign a new 
+     value to an existing variable. Variable names use characters set [a-zA-Z0-9_] and cannot 
+     start with a number. A variable definition is always local to the current command except 
+     when it starts by the underscore character '_'. In that case, it becomes also accessible 
      by any command invoked outside the current command scope.</pre>
-<a name="section6"><h2><font color="brown"><u>Command items and selections</u></font></h2></a>
-<pre>  - A G'MIC item starting by '-' designates a command, most of the time. Generally, commands
-     perform image processing operations on one or several available images of the list.
-  - Common commands have two equivalent names (regular and short). For instance, command
-     names '-resize' and '-r' refer to the same image resizing action.
-  - A G'MIC command may have mandatory or optional arguments. Command arguments must be
-     specified in the next item on the command line. Commas ',' are used to separate multiple
-     arguments, if any required.
-  - The execution of a G'MIC command may be restricted only to a subset of the image list, by
-     appending '[subset]' to the command name. Examples of valid syntaxes for 'subset' are:
-    . '-com[0,1,3]': Apply command only on images [0],[1] and [3].
-    . '-com[3-5]': Apply command only on images [3] to [5] (i.e, [3],[4] and [5]).
-    . '-com[50%-100%]': Apply command only on the second half of the image list.
-    . '-com[0,-4--1]': Apply command only on the first and the four latest images.
-    . '-com[0-9:3]': Apply command only on images [0] to [9], with a step of 3
-                      (i.e. on images [0], [3], [6] and [9]).
-    . '-com[0--1:2]': Apply command only on images of the list with even indices.
-    . '-com[0,2-4,50%--1]': Apply command on images [0],[2],[3],[4] and on the second half
-                             of the image list.
-    . '-com[^0,1]': Apply command on all images except the first two.
-    . '-com[name1,name2]': Apply command on named images 'name1' and 'name2'.
-  - Indices in selections are always sorted in increasing order, and duplicate indices are
-     discarded. For instance, selections '[3-1,1-3]' and '[1,1,1,3,2]' are both equivalent to
-     '[1-3]'. If you want to repeat a single command multiple times on an image, use a
-     '-repeat..-done' loop. Inverting the order of images in a selection can be achieved by
-     inverting first the order of the images in the list, with command '-reverse[selection]'.
-  - G'MIC commands invoked without '[subset]' are applied on all images of the list.
-  - A G'MIC command starting with '--' instead of '-' does not act 'in-place' but inserts its
-     result as one or several new images at the end of the image list.
-  - There are two different types of commands that can be run by the G'MIC interpreter:
-    . Native commands, are hard-coded functionalities in the interpreter core.
-       They are thus compiled as machine code and run quickly, most of the time.
-       Omitting an argument when invoking a native command is not permitted, except if all
-       following arguments are also omitted. For instance, call to '-plasma 10,,5' is invalid
-       but '-plasma 10' is correct.
-    . Custom commands, are defined as G'MIC pipelines of native or custom commands.
-       They are interpreted by the G'MIC interpreter, and run slower than native commands.
-       But omitting arguments when invoking a custom command is permitted. For instance,
-       expressions '-flower ,,,100,,2' or '-flower ,' are correct.
-  - A user may easily add its own custom commands to the G'MIC interpreter (see section
-     'Adding custom commands'). Native commands cannot be added unless you modify the G'MIC
+<h2><a name="section6"><font color="brown"><u>Command items and selections</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - A G'MIC item starting by '-' designates a command, most of the time. Generally, commands 
+     perform image processing operations on one or several available images of the list. 
+  - Common commands have two equivalent names (regular and short). For instance, command 
+     names '-resize' and '-r' refer to the same image resizing action. 
+  - A G'MIC command may have mandatory or optional arguments. Command arguments must be 
+     specified in the next item on the command line. Commas ',' are used to separate multiple 
+     arguments, if any required. 
+  - The execution of a G'MIC command may be restricted only to a subset of the image list, by 
+     appending '[subset]' to the command name. Examples of valid syntaxes for 'subset' are: 
+    . '-com[0,1,3]': Apply command only on images [0],[1] and [3]. 
+    . '-com[3-5]': Apply command only on images [3] to [5] (i.e, [3],[4] and [5]). 
+    . '-com[50%-100%]': Apply command only on the second half of the image list. 
+    . '-com[0,-4--1]': Apply command only on the first and the four latest images. 
+    . '-com[0-9:3]': Apply command only on images [0] to [9], with a step of 3 
+                      (i.e. on images [0], [3], [6] and [9]). 
+    . '-com[0--1:2]': Apply command only on images of the list with even indices. 
+    . '-com[0,2-4,50%--1]': Apply command on images [0],[2],[3],[4] and on the second half 
+                             of the image list. 
+    . '-com[^0,1]': Apply command on all images except the first two. 
+    . '-com[name1,name2]': Apply command on named images 'name1' and 'name2'. 
+  - Indices in selections are always sorted in increasing order, and duplicate indices are 
+     discarded. For instance, selections '[3-1,1-3]' and '[1,1,1,3,2]' are both equivalent to 
+     '[1-3]'. If you want to repeat a single command multiple times on an image, use a 
+     '-repeat..-done' loop. Inverting the order of images in a selection can be achieved by 
+     inverting first the order of the images in the list, with command '-reverse[selection]'. 
+  - G'MIC commands invoked without '[subset]' are applied on all images of the list. 
+  - A G'MIC command starting with '--' instead of '-' does not act 'in-place' but inserts its 
+     result as one or several new images at the end of the image list. 
+  - There are two different types of commands that can be run by the G'MIC interpreter: 
+    . Native commands, are hard-coded functionalities in the interpreter core. 
+       They are thus compiled as machine code and run quickly, most of the time. 
+       Omitting an argument when invoking a native command is not permitted, except if all 
+       following arguments are also omitted. For instance, call to '-plasma 10,,5' is invalid 
+       but '-plasma 10' is correct. 
+    . Custom commands, are defined as G'MIC pipelines of native or custom commands. 
+       They are interpreted by the G'MIC interpreter, and run slower than native commands. 
+       But omitting arguments when invoking a custom command is permitted. For instance, 
+       expressions '-flower ,,,100,,2' or '-flower ,' are correct. 
+  - A user may easily add its own custom commands to the G'MIC interpreter (see section 
+     'Adding custom commands'). Native commands cannot be added unless you modify the G'MIC 
      interpreter source code.</pre>
-<a name="section7"><h2><font color="brown"><u>Inputs / outputs properties</u></font></h2></a>
-<pre>  - G'MIC is able to read/write most of the classical image file formats, including:
-    . 2d grayscale/color files: .png, .jpeg, .gif, .pnm, .tif, .bmp, ..
-    . 3d volumetric files: .dcm, .hdr, .nii, .pan, .inr, .pnk, ..
-    . Image sequences: .mpeg, .avi, .mov, .ogg, .flv, ..
-    . Generic ascii or binary data files: .cimg, .cimgz, .dlm, .asc, .pfm, .raw, .txt, .h.
-    . 3d object files: .off.
-  - When dealing with color images, G'MIC generally reads, writes and displays data using the
-     usual RGB color space.
-  - G'MIC is able to manage 3d objects that may be read from files or generated by G'MIC
-     commands. They are stored as one-column scalar images containing the object data, in the
-     following order: { magic_number; sizes; vertices; primitives; colors; opacities }.
-     These 3d representations can be processed as regular float-valued images.
-     (see command '-split3d' for accessing each of these 3d object data separately).
-  - Be aware that usual file formats may be sometimes not adapted to store all the available
-     image data, since G'MIC uses float-valued coding of image pixels. For instance, saving
-     an image that was initially loaded as a 16bits/channel image, as a .jpg file will result
-     in loss of information. Use the .cimg file extension (or .cimgz, its compressed
-     version) to ensure that all data precision will be preserved when saving images.
-  - File options can/must be set for these specific file formats:
-    . Video files: Only sub-frames of an image sequence may be loaded, using the input
-       expression 'filename.ext,[first_frame[%][,last_frame[%][,step]]]'.
-       Output framerate and bitrate (in Kb/s) can be also set by using the output expression
-       'file.mpg,_fps,_bitrate'.
-    . .raw binary files: Image dimensions and input pixel type may be specified when loading
-       .raw files with input expresssion 'filename.raw[,type][,width][,height[,depth[,dim]]]]'.
-       If no dimensions are specified, the resulting image is a one-column vector with
-       maximum possible height. Pixel type can also be specified with the output
-       expression 'file.raw[,type]'.
-       'type' can be { bool | uchar | char | ushort | short | uint | int | float | double }.
-    . .yuv files: Image dimensions must be specified, and only sub-frames of an image
-       sequence may be loaded, using the input expression
-      'filename.yuv,width,height[,first_frame[,last_frame[,step]]]'.
-    . tiff files: Only sub-images of multi-pages tiff files can be loaded, using the input
-       expression 'filename.tif,[first_frame,[last_frame,[step]]]'.
-    . .gif files: Animated gif files can be saved, using the input expression
-      'filename.gif,fps,nb_loops'.
-      Specify 'nb_loops=0' to get an infinite number of animation loops.
-    . .jpeg files: The output quality may be specified (in %), using the output expression
-       'filename.jpg,30' (here, to get a 30% quality output).
-    . .mnc files: The output header can set from another file, using the output expression
-       'filename.mnc,header_template.mnc'.
-    . Filenames with extension '.gmic' are assumed to be G'MIC custom commands files. Loading
-       such a file will add the commands it defines to the interpreter.
-    . Inserting 'ext:' on the beginning of a filename (e.g. 'jpg:filename') forces G'MIC to
-       read/write the file as it would have been done if it had the specified extension.
-  - Some input/output formats and options may not be supported by your current version of
+<h2><a name="section7"><font color="brown"><u>Inputs / outputs properties</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - G'MIC is able to read/write most of the classical image file formats, including: 
+    . 2d grayscale/color files: .png, .jpeg, .gif, .pnm, .tif, .bmp, .. 
+    . 3d volumetric files: .dcm, .hdr, .nii, .pan, .inr, .pnk, .. 
+    . Image sequences: .mpeg, .avi, .mov, .ogg, .flv, .. 
+    . Generic ascii or binary data files: .cimg, .cimgz, .dlm, .asc, .pfm, .raw, .txt, .h. 
+    . 3d object files: .off. 
+  - When dealing with color images, G'MIC generally reads, writes and displays data using the 
+     usual RGB color space. 
+  - G'MIC is able to manage 3d objects that may be read from files or generated by G'MIC 
+     commands. They are stored as one-column scalar images containing the object data, in the 
+     following order: { magic_number; sizes; vertices; primitives; colors; opacities }. 
+     These 3d representations can be processed as regular float-valued images. 
+     (see command '-split3d' for accessing each of these 3d object data separately). 
+  - Be aware that usual file formats may be sometimes not adapted to store all the available 
+     image data, since G'MIC uses float-valued coding of image pixels. For instance, saving 
+     an image that was initially loaded as a 16bits/channel image, as a .jpg file will result 
+     in loss of information. Use the .cimg file extension (or .cimgz, its compressed 
+     version) to ensure that all data precision will be preserved when saving images. 
+  - File options can/must be set for these specific file formats: 
+    . Video files: Only sub-frames of an image sequence may be loaded, using the input 
+       expression 'filename.ext,[first_frame[%][,last_frame[%][,step]]]'. 
+       Output framerate and bitrate (in Kb/s) can be also set by using the output expression 
+       'file.mpg,_fps,_bitrate'. 
+    . .raw binary files: Image dimensions and input pixel type may be specified when loading 
+       .raw files with input expresssion 'filename.raw[,type][,width][,height[,depth[,dim]]]]'. 
+       If no dimensions are specified, the resulting image is a one-column vector with 
+       maximum possible height. Pixel type can also be specified with the output 
+       expression 'file.raw[,type]'. 
+       'type' can be { bool | uchar | char | ushort | short | uint | int | float | double }. 
+    . .yuv files: Image dimensions must be specified, and only sub-frames of an image 
+       sequence may be loaded, using the input expression 
+      'filename.yuv,width,height[,first_frame[,last_frame[,step]]]'. 
+    . tiff files: Only sub-images of multi-pages tiff files can be loaded, using the input 
+       expression 'filename.tif,[first_frame,[last_frame,[step]]]'. 
+    . .gif files: Animated gif files can be saved, using the input expression 
+      'filename.gif,fps,nb_loops'. 
+      Specify 'nb_loops=0' to get an infinite number of animation loops. 
+    . .jpeg files: The output quality may be specified (in %), using the output expression 
+       'filename.jpg,30' (here, to get a 30% quality output). 
+    . .mnc files: The output header can set from another file, using the output expression 
+       'filename.mnc,header_template.mnc'. 
+    . Filenames with extension '.gmic' are assumed to be G'MIC custom commands files. Loading 
+       such a file will add the commands it defines to the interpreter. 
+    . Inserting 'ext:' on the beginning of a filename (e.g. 'jpg:filename') forces G'MIC to 
+       read/write the file as it would have been done if it had the specified extension. 
+  - Some input/output formats and options may not be supported by your current version of 
      'gmic', depending on the configuration flags set for the build of the 'gmic' binaries.</pre>
-<a name="section8"><h2><font color="brown"><u>Substitution rules</u></font></h2></a>
-<pre>  - G'MIC items containing '@', '$' or '{}' may be substituted before being interpreted. Use
-     the substituting expressions below to access data from the interpreter environment:
-    . '@#' is substituted by the current number of images in the list.
-    . '@*' is substituted by the number of available cpus.
-    . '@.' is substituted by the current version number of the G'MIC interpreter
-    . '@^' is substituted by the current verbosity level.
-    . '@%' is substituted by the pid of the current process.
-    . '@|' is substituted by the current value (expressed in seconds) of a millisecond
-       precision timer.
-    . '@?' is substituted by the current data type of image pixels.
-    . '@/' is substituted by the current number of levels in the command scope.
-    . '@{/}' or '@{/,subset}' are substituted by the content of the global scope, or a
-       subset of it. If specified subset refers to multiple scope items, they are separated
-       by slashes '/'.
-    . '@>' and '@<' are equivalent. They are both substituted by the number of nested
-       'repeat-done' loops that are currently running.
-    . '@{>}' or '@{>,subset}' are substituted by the indice values (or a subset of them) of
-       the running 'repeat-done' loops, expressed in the ascending order, starting from 0.
-       If specified subset refers to multiple indices, they are separated by commas ','.
-    . '@{<}' or '@{<,subset}' do the same but in descending order.
-    . '@indice' or '@{indice,feature}' are substituted by the list of pixel values of the
-       image [indice] (separated by commas), or by a specific feature (or subset) of it.
-       'indice' can be an indice or an image name. Requested 'featured' can be one of:
-         . 'w': image width (number of image columns).
-         . 'h': image height (number of image rows).
-         . 'd': image depth (number of image slices).
-         . 's': image spectrum (number of image channels).
-         . 'wh': image width x image height.
-         . 'whd': image width x image height x image depth.
-         . 'whds': image width x image height x image depth x image spectrum.
-                   (i.e. number of values in the specified image, eq. to '#').
-         . 'r': image shared state (1, if the pixel buffer is shared, 0 otherwise).
-         . 'n': image name or filename (if the image has been read from a file).
-         . 'b': image basename (i.e. filename without the folder path nor extension).
-         . 'x': image extension (i.e last characters after the last '.' in the filename).
-         . 'f': image folder name.
-         . '#': number of image values (i.e. width x height x depth x spectrum).
-         . '+': sum of all pixel values.
-         . '-': difference of all pixel values.
-         . '*': product of all pixel values.
-         . '/': quotient of all pixel values.
-         . 'm': minimum pixel value.
-         . 'M': maximum pixel value.
-         . 'a': average pixel value.
-         . 'v': variance of pixel values.
-         . 't': text string built from the image values, regarded as ascii codes.
-         . 'c': (x,y,z,c) coordinates of the minimum value, separated by commas ','.
-         . 'C': (x,y,z,c) coordinates of the maximum value, separated by commas ','.
-         . '(x[%],_y[%],_z[%],_c[%],_boundary)': pixel value at (x[%],y[%],z[%],c[%]), with
-            specified boundary conditions { 0=dirichlet | 1=neumann | 2=cyclic }.
-         . Any other 'feature' is considered either as a specified subset of image values, or
-            as a mathematical expression to evaluate (associated to selected image).
-            For instance, '@{-1,0-50%}' is substituted by the sequence of numerical values
-            coming from the first half data of the last image, separated by commas ','.
-            Expression '@{0,w+h}' is substituted by the sum of the width and height of the
-            first image.
-    . '@!' is substituted by the visibility state of the instant display window [0]
-       (can be { 0=closed | 1=visible }).
-    . '@{!,feature}' or '@{!indice,feature}' is substituted by a specific feature of the
-       instant display window [0] (or [indice], if specified). Requested 'feature' can be:
-         . 'w': display width (i.e. width of the display area managed by the window).
-         . 'h': display height (i.e. height of the display area managed by the window).
-         . 'wh': display width x display height.
-         . 'd': window width (i.e. width of the window widget).
-         . 'e': window height (i.e. height of the window widget).
-         . 'de': window width x window height.
-         . 'u': screen width (actually independent on the window size).
-         .' v': screen height (actually independent on the window size).
-         . 'uv': screen width x screen height.
-         . 'x': X-coordinate of the mouse position (or -1, if outside the display area).
-         . 'y': Y-coordinate of the mouse position (or -1, if outside the display area).
-         . 'b': state of the mouse buttons { 1=left-but. | 2=right-but. | 4=middle-but. }.
-         . 'o': state of the mouse wheel.
-         . 'k': decimal code of the pressed key if any, 0 otherwise.
-         . 'n': current normalization type of the instant display.
-         . 'c': boolean (0 or 1) telling if the instant display has been closed recently.
-         . 'r': boolean telling if the instant display has been resized recently.
-         . 'm': boolean telling if the instant display has been moved recently.
-         . Any other 'feature' stands for a keycode name in capital letters, and is substi-
-            tuted by a boolean describing the current key state { 0=pressed | 1=released }.
-    . '@{"command line"}' is substituted by the status value set by the execution of the
-       specified command line (see command '-status').
-    . Expression '@{}' stands thus for the current status value.
-  - '$name' and '${name}' are both substituted by the value of the specified named variable
-     (set previously by item 'name=value'), or by the current positive indice of the named
-     image '[name]', or by the value of the named OS environment variable (in this order).
-  - '$>' and '$<' (resp. '${>}' and '${<}') are shortcuts respectively for '@{>,-1}' and
-     '@{<,-1}'. They refer to the increasing/decreasing indice of the latest (currently
-     running) 'repeat..done' loop.
-  - Any other expression inside braces (as in '{expression}') is considered as a mathematical
-     expression, and is evaluated, except for the three following cases:
-    . If expression starts and ends by single quotes, it is substituted by the sequence of
-       ascii codes that composes the specified string, separated by commas ','. For instance,
-       item '{'foo'}' is substituted by '102,111,111'.
-    . If expression starts and ends with backquotes '`', it is substituted by the string
-       whose ascii codes are given by the list of values in between the backquotes.
-       For instance, item '{`102,111,111`}' is substituted by 'foo'.
-    . If expression contains operator ''=='' or ''!='', it is substituted by 0 or 1, whether
-       the strings beside the operator are the same or not (case-sensitive). For instance,
-       both items '{foo'=='foo}' and '{foo'!='FOO}' are substituted by '1'.
-    . If expression starts with an underscore '_', it is substituted by the mathematical
-       evaluation of the expression, truncated to a readable format.
-  - Item substitution is never done in items between double quotes. One must break the quotes
-    to enable substitution if needed, as in "3+8 kg = "{3+8}" kg". Using double quotes
-    is then a convenient way to disable the substitutions mechanism in items, when necessary.
-  - One can also disable the substitution mechanism on items outside double quotes, by
+<h2><a name="section8"><font color="brown"><u>Substitution rules</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - G'MIC items containing '@', '$' or '{}' may be substituted before being interpreted. Use 
+     the substituting expressions below to access data from the interpreter environment: 
+    . '@#' is substituted by the current number of images in the list. 
+    . '@*' is substituted by the number of available cpus. 
+    . '@.' is substituted by the current version number of the G'MIC interpreter 
+    . '@^' is substituted by the current verbosity level. 
+    . '@%' is substituted by the pid of the current process. 
+    . '@|' is substituted by the current value (expressed in seconds) of a millisecond 
+       precision timer. 
+    . '@?' is substituted by the current data type of image pixels. 
+    . '@/' is substituted by the current number of levels in the command scope. 
+    . '@{/}' or '@{/,subset}' are substituted by the content of the global scope, or a 
+       subset of it. If specified subset refers to multiple scope items, they are separated 
+       by slashes '/'. 
+    . '@>' and '@<' are equivalent. They are both substituted by the number of nested 
+       'repeat-done' loops that are currently running. 
+    . '@{>}' or '@{>,subset}' are substituted by the indice values (or a subset of them) of 
+       the running 'repeat-done' loops, expressed in the ascending order, starting from 0. 
+       If specified subset refers to multiple indices, they are separated by commas ','. 
+    . '@{<}' or '@{<,subset}' do the same but in descending order. 
+    . '@indice' or '@{indice,feature}' are substituted by the list of pixel values of the 
+       image [indice] (separated by commas), or by a specific feature (or subset) of it. 
+       'indice' can be an indice or an image name. Requested 'featured' can be one of: 
+         . 'w': image width (number of image columns). 
+         . 'h': image height (number of image rows). 
+         . 'd': image depth (number of image slices). 
+         . 's': image spectrum (number of image channels). 
+         . 'wh': image width x image height. 
+         . 'whd': image width x image height x image depth. 
+         . 'whds': image width x image height x image depth x image spectrum. 
+                   (i.e. number of values in the specified image, eq. to '#'). 
+         . 'r': image shared state (1, if the pixel buffer is shared, 0 otherwise). 
+         . 'n': image name or filename (if the image has been read from a file). 
+         . 'b': image basename (i.e. filename without the folder path nor extension). 
+         . 'x': image extension (i.e last characters after the last '.' in the filename). 
+         . 'f': image folder name. 
+         . '#': number of image values (i.e. width x height x depth x spectrum). 
+         . '+': sum of all pixel values. 
+         . '-': difference of all pixel values. 
+         . '*': product of all pixel values. 
+         . '/': quotient of all pixel values. 
+         . 'm': minimum pixel value. 
+         . 'M': maximum pixel value. 
+         . 'a': average pixel value. 
+         . 'v': variance of pixel values. 
+         . 't': text string built from the image values, regarded as ascii codes. 
+         . 'c': (x,y,z,c) coordinates of the minimum value, separated by commas ','. 
+         . 'C': (x,y,z,c) coordinates of the maximum value, separated by commas ','. 
+         . '(x[%],_y[%],_z[%],_c[%],_boundary)': pixel value at (x[%],y[%],z[%],c[%]), with 
+            specified boundary conditions { 0=dirichlet | 1=neumann | 2=cyclic }. 
+         . Any other 'feature' is considered either as a specified subset of image values, or 
+            as a mathematical expression to evaluate (associated to selected image). 
+            For instance, '@{-1,0-50%}' is substituted by the sequence of numerical values 
+            coming from the first half data of the last image, separated by commas ','. 
+            Expression '@{0,w+h}' is substituted by the sum of the width and height of the 
+            first image. 
+    . '@!' is substituted by the visibility state of the instant display window [0] 
+       (can be { 0=closed | 1=visible }). 
+    . '@{!,feature}' or '@{!indice,feature}' is substituted by a specific feature of the 
+       instant display window [0] (or [indice], if specified). Requested 'feature' can be: 
+         . 'w': display width (i.e. width of the display area managed by the window). 
+         . 'h': display height (i.e. height of the display area managed by the window). 
+         . 'wh': display width x display height. 
+         . 'd': window width (i.e. width of the window widget). 
+         . 'e': window height (i.e. height of the window widget). 
+         . 'de': window width x window height. 
+         . 'u': screen width (actually independent on the window size). 
+         .' v': screen height (actually independent on the window size). 
+         . 'uv': screen width x screen height. 
+         . 'x': X-coordinate of the mouse position (or -1, if outside the display area). 
+         . 'y': Y-coordinate of the mouse position (or -1, if outside the display area). 
+         . 'b': state of the mouse buttons { 1=left-but. | 2=right-but. | 4=middle-but. }. 
+         . 'o': state of the mouse wheel. 
+         . 'k': decimal code of the pressed key if any, 0 otherwise. 
+         . 'n': current normalization type of the instant display. 
+         . 'c': boolean (0 or 1) telling if the instant display has been closed recently. 
+         . 'r': boolean telling if the instant display has been resized recently. 
+         . 'm': boolean telling if the instant display has been moved recently. 
+         . Any other 'feature' stands for a keycode name in capital letters, and is substi- 
+            tuted by a boolean describing the current key state { 0=pressed | 1=released }. 
+    . '@{"command line"}' is substituted by the status value set by the execution of the 
+       specified command line (see command '-status'). 
+    . Expression '@{}' stands thus for the current status value. 
+  - '$name' and '${name}' are both substituted by the value of the specified named variable 
+     (set previously by item 'name=value'), or by the current positive indice of the named 
+     image '[name]', or by the value of the named OS environment variable (in this order). 
+  - '$>' and '$<' (resp. '${>}' and '${<}') are shortcuts respectively for '@{>,-1}' and 
+     '@{<,-1}'. They refer to the increasing/decreasing indice of the latest (currently 
+     running) 'repeat..done' loop. 
+  - Any other expression inside braces (as in '{expression}') is considered as a mathematical 
+     expression, and is evaluated, except for the three following cases: 
+    . If expression starts and ends by single quotes, it is substituted by the sequence of 
+       ascii codes that composes the specified string, separated by commas ','. For instance, 
+       item '{'foo'}' is substituted by '102,111,111'. 
+    . If expression starts and ends with backquotes '`', it is substituted by the string 
+       whose ascii codes are given by the list of values in between the backquotes. 
+       For instance, item '{`102,111,111`}' is substituted by 'foo'. 
+    . If expression contains operator ''=='' or ''!='', it is substituted by 0 or 1, whether 
+       the strings beside the operator are the same or not (case-sensitive). For instance, 
+       both items '{foo'=='foo}' and '{foo'!='FOO}' are substituted by '1'. 
+    . If expression starts with an underscore '_', it is substituted by the mathematical 
+       evaluation of the expression, truncated to a readable format. 
+  - Item substitution is never done in items between double quotes. One must break the quotes 
+    to enable substitution if needed, as in "3+8 kg = "{3+8}" kg". Using double quotes 
+    is then a convenient way to disable the substitutions mechanism in items, when necessary. 
+  - One can also disable the substitution mechanism on items outside double quotes, by 
      escaping the '@','{','}' or '$' characters, as in '\{3+4\}\ doesn't\ evaluate'.</pre>
-<a name="section9"><h2><font color="brown"><u>Mathematical expressions</u></font></h2></a>
-<pre>  - G'MIC has an embedded mathematical parser. It is used to evaluate expressions inside
-     braces '{}', or formulas in commands that may take one as an argument (e.g. '-fill').
-  - When used in commands, a formula is evaluated for each pixel of the selected images.
-  - The math parser understands the following set of functions, operators and variables:
-    _ Usual operators: || (logical or), && (logical and), | (bitwise or), & (bitwise and),
-       !=, ==, <=, >=, <, >, << (left bitwise shift), >> (right bitwise shift), -, +, *, /,
-       % (modulo), ^ (power), ! (logical not), ~ (bitwise not).
-    _ Usual functions: sin(), cos(), tan(), asin(), acos(), atan(), sinh(), cosh(), tanh(),
-       log(), log2(), log10(), exp(), sign(), abs(), atan2(), round(), narg(), arg(),
-       isval(), isnan(), isinf(), isint(), isbool(), rol() (left bit rotation),
-       ror() (right bit rotation), min(), max(), sinc(), int().
-       Function 'atan2()' is the version of atan() with two arguments 'y,x' (as in C/C++).
-       Function 'narg()' returns the number of specified arguments.
-       Function 'arg(i,a_1,..,a_n)' returns the ith argument a_i.
-       Functions 'min()' and 'max()' can be called with an arbitrary number of arguments.
-       Functions 'isval()', 'isnan()', 'isinf()', 'isbool()' can be used to test the type of
-       a given number or expression.
-    _ The variable names below are pre-defined. They cannot be overloaded:
-         . 'w': width of the associated image, if any (0 otherwise).
-         . 'h': height of the associated image, if any (0 otherwise).
-         . 'd': depth of the associated image, if any (0 otherwise).
-         . 's': spectrum of the associated image, if any (0 otherwise).
-         . 'x': current processed column of the associated image, if any (0 otherwise).
-         . 'y': current processed row of the associated image, if any (0 otherwise).
-         . 'z': current processed slice of the associated image, if any (0 otherwise).
-         . 'c': current processed channel of the associated image, if any (0 otherwise).
-         . 'i': current processed pixel value (i.e. value located at (x,y,z,c)) of the
-            associated image, if any (0 otherwise).
-         . 'im','iM','ia','iv': Respectively the minimum, maximum, average values and
-            variance of the associated image, if any (0 otherwise).
-         . 'xm','ym','zm','cm': The pixel coordinates of the minimum value in the associated
-            image, if any (0 otherwise).
-         . 'xM','yM','zM','cM': The pixel coordinates of the maximum value in the
-            associated image, if any (0 otherwise).
-         . 'pi': value of pi, i.e. 3.1415926..
-         . 'e': value of e, i.e. 2.71828..
-         . '?' or 'u': a random value between [0,1], following a uniform distribution.
-         . 'g': a random value, following a gaussian distribution of variance 1
-            (roughly in [-5,5]).
-    _ These special operators can be used:
-         . ';': expression separator. The returned value is always the last encountered
-            expression. For instance expression '1;2;pi' is evaluated as 'pi'.
-         . '=': variable assignment. Variables in mathematical parser can only refer to.
-            numerical values. Variable names are case-sensitive. Use this operator in
-            conjunction with ';' to define complex evaluable expressions, such as
-             't=cos(x);3*t^2+2*t+1'.
-            These variables remain local to the mathematical parser and cannot be accessed
-            outside the evaluated expression.
-    _ The following specific functions are also defined:
-         . 'if(expr_cond,expr_then,expr_else)': return value of 'expr_then' or 'expr_else',
-            depending on the value of 'expr_cond' (0=false, other=true). For instance,
-            G'MIC command '-fill if(x%10==0,255,i)' will draw blank vertical lines on every
-            10th column of an image.
-         . '?(max)' or '?(min,max)': return a random value between [0,max] or [min,max],
-            following a uniform distribution. 'u(max)' and 'u(0,max)' mean the same.
-         . 'i(_a,_b,_c,_d,_interpolation,_boundary)': return the value of the pixel located
-            at position (a,b,c,d) in the associated image, if any (0 otherwise).
-            Interpolation parameter can be { 0=nearest neighbor | other=linear }.
-            Boundary conditions can be { 0=dirichlet | 1=neumann | 2=cyclic }.
-            Omitted coordinates are replaced by their default values which are respectively
-            x, y, z, c and 0.
-         . 'j(_dx,_dy,_dz,_dc,_interpolation,_boundary)': does the same for the pixel located
-            at position (x+dx,y+dy,z+dz,c+dc).
-            For instance command '-fill 0.5*(i(x+1)-i(x-1))' will estimate the X-derivative
-            of an image with a classical finite difference scheme.
-         . If specified formula starts with '>' or '<', the operators 'i(..)' and 'j(..)' will return
-            values of the image currently being modified, in forward ('>') or backward ('<') order.
-  - The last image of the list is always associated to the evaluations of '{expressions}',
+<h2><a name="section9"><font color="brown"><u>Mathematical expressions</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - G'MIC has an embedded mathematical parser. It is used to evaluate expressions inside 
+     braces '{}', or formulas in commands that may take one as an argument (e.g. '-fill'). 
+  - When used in commands, a formula is evaluated for each pixel of the selected images. 
+  - The math parser understands the following set of functions, operators and variables: 
+    _ Usual operators: || (logical or), && (logical and), | (bitwise or), & (bitwise and), 
+       !=, ==, <=, >=, <, >, << (left bitwise shift), >> (right bitwise shift), -, +, *, /, 
+       % (modulo), ^ (power), ! (logical not), ~ (bitwise not). 
+    _ Usual functions: sin(), cos(), tan(), asin(), acos(), atan(), sinh(), cosh(), tanh(), 
+       log(), log2(), log10(), exp(), sign(), abs(), atan2(), round(), narg(), arg(), 
+       isval(), isnan(), isinf(), isint(), isbool(), rol() (left bit rotation), 
+       ror() (right bit rotation), min(), max(), sinc(), int(). 
+       Function 'atan2()' is the version of atan() with two arguments 'y,x' (as in C/C++). 
+       Function 'narg()' returns the number of specified arguments. 
+       Function 'arg(i,a_1,..,a_n)' returns the ith argument a_i. 
+       Functions 'min()' and 'max()' can be called with an arbitrary number of arguments. 
+       Functions 'isval()', 'isnan()', 'isinf()', 'isbool()' can be used to test the type of 
+       a given number or expression. 
+    _ The variable names below are pre-defined. They cannot be overloaded: 
+         . 'w': width of the associated image, if any (0 otherwise). 
+         . 'h': height of the associated image, if any (0 otherwise). 
+         . 'd': depth of the associated image, if any (0 otherwise). 
+         . 's': spectrum of the associated image, if any (0 otherwise). 
+         . 'x': current processed column of the associated image, if any (0 otherwise). 
+         . 'y': current processed row of the associated image, if any (0 otherwise). 
+         . 'z': current processed slice of the associated image, if any (0 otherwise). 
+         . 'c': current processed channel of the associated image, if any (0 otherwise). 
+         . 'i': current processed pixel value (i.e. value located at (x,y,z,c)) of the 
+            associated image, if any (0 otherwise). 
+         . 'im','iM','ia','iv': Respectively the minimum, maximum, average values and 
+            variance of the associated image, if any (0 otherwise). 
+         . 'xm','ym','zm','cm': The pixel coordinates of the minimum value in the associated 
+            image, if any (0 otherwise). 
+         . 'xM','yM','zM','cM': The pixel coordinates of the maximum value in the 
+            associated image, if any (0 otherwise). 
+         . 'pi': value of pi, i.e. 3.1415926.. 
+         . 'e': value of e, i.e. 2.71828.. 
+         . '?' or 'u': a random value between [0,1], following a uniform distribution. 
+         . 'g': a random value, following a gaussian distribution of variance 1 
+            (roughly in [-5,5]). 
+    _ These special operators can be used: 
+         . ';': expression separator. The returned value is always the last encountered 
+            expression. For instance expression '1;2;pi' is evaluated as 'pi'. 
+         . '=': variable assignment. Variables in mathematical parser can only refer to. 
+            numerical values. Variable names are case-sensitive. Use this operator in 
+            conjunction with ';' to define complex evaluable expressions, such as 
+             't=cos(x);3*t^2+2*t+1'. 
+            These variables remain local to the mathematical parser and cannot be accessed 
+            outside the evaluated expression. 
+    _ The following specific functions are also defined: 
+         . 'if(expr_cond,expr_then,expr_else)': return value of 'expr_then' or 'expr_else', 
+            depending on the value of 'expr_cond' (0=false, other=true). For instance, 
+            G'MIC command '-fill if(x%10==0,255,i)' will draw blank vertical lines on every 
+            10th column of an image. 
+         . '?(max)' or '?(min,max)': return a random value between [0,max] or [min,max], 
+            following a uniform distribution. 'u(max)' and 'u(0,max)' mean the same. 
+         . 'i(_a,_b,_c,_d,_interpolation,_boundary)': return the value of the pixel located 
+            at position (a,b,c,d) in the associated image, if any (0 otherwise). 
+            Interpolation parameter can be { 0=nearest neighbor | other=linear }. 
+            Boundary conditions can be { 0=dirichlet | 1=neumann | 2=cyclic }. 
+            Omitted coordinates are replaced by their default values which are respectively 
+            x, y, z, c and 0. 
+         . 'j(_dx,_dy,_dz,_dc,_interpolation,_boundary)': does the same for the pixel located 
+            at position (x+dx,y+dy,z+dz,c+dc). 
+            For instance command '-fill 0.5*(i(x+1)-i(x-1))' will estimate the X-derivative 
+            of an image with a classical finite difference scheme. 
+         . If specified formula starts with '>' or '<', the operators 'i(..)' and 'j(..)' will return 
+            values of the image currently being modified, in forward ('>') or backward ('<') order. 
+  - The last image of the list is always associated to the evaluations of '{expressions}', 
      e.g. G'MIC sequence '256,128 -f {w}' will create a 256x128 image filled with value 256.</pre>
-<a name="section10"><h2><font color="brown"><u>Image and data viewers</u></font></h2></a>
-<pre>  - G'MIC has some very handy embedded visualization modules, for 1d signals
-     (command '-plot'), 1d/2d/3d images (command '-display') and 3d objects
-     (command '-display3d'). It enables an interactive view of the selected image data.
-  - The following keyboard shortcuts are available in the interactive viewers:
-    . CTRL+D: Increase window size.
-    . CTRL+C: Decrease window size.
-    . CTRL+R: Reset window size.
-    . CTRL+F: Toggle fullscreen mode.
-    . CTRL+S: Save current window snapshot as numbered file 'gmic_xxxx.bmp'.
-    . CTRL+O: Save current instance of the viewed data, as numbered file 'gmic_xxxx.cimgz'.
-  - Shortcuts specific to the 1d/2d/3d image viewer are:
-    . CTRL+P: Play z-stack of frames as a movie (for volumetric 3d images).
-    . CTRL+V: Enable/disable 3D view (for volumetric 3d images).
-    . CTRL+(mousewheel): Zoom in/out.
-    . SHIFT+(mousewheel): Go left/right.
-    . ALT+(mousewheel): Go up/down.
-    . Numeric PAD: Zoom in/out (+/-) and move through zoomed image (digits).
-    . BACKSPACE: Reset zoom scale.
-  - Shortcuts specific to the 3d object viewer are:
-    . (mouse)+(left mouse button): Rotate 3d object.
-    . (mouse)+(right mouse button): Zoom 3d object.
-    . (mouse)+(middle mouse button): Shift 3d object.
-    . (mousewheel): Zoom in/out.
-    . CTRL+F1 .. CTRL+F6: Switch between different 3d rendering modes.
-    . CTRL+Z: Enable/disable z-buffered rendering.
-    . CTRL+A: Show/hide 3d axes.
-    . CTRL+G: Save 3d object, as numbered file 'gmic_xxxx.off'.
+<h2><a name="section10"><font color="brown"><u>Image and data viewers</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - G'MIC has some very handy embedded visualization modules, for 1d signals 
+     (command '-plot'), 1d/2d/3d images (command '-display') and 3d objects 
+     (command '-display3d'). It enables an interactive view of the selected image data. 
+  - The following keyboard shortcuts are available in the interactive viewers: 
+    . CTRL+D: Increase window size. 
+    . CTRL+C: Decrease window size. 
+    . CTRL+R: Reset window size. 
+    . CTRL+F: Toggle fullscreen mode. 
+    . CTRL+S: Save current window snapshot as numbered file 'gmic_xxxx.bmp'. 
+    . CTRL+O: Save current instance of the viewed data, as numbered file 'gmic_xxxx.cimgz'. 
+  - Shortcuts specific to the 1d/2d/3d image viewer are: 
+    . CTRL+P: Play z-stack of frames as a movie (for volumetric 3d images). 
+    . CTRL+V: Enable/disable 3D view (for volumetric 3d images). 
+    . CTRL+(mousewheel): Zoom in/out. 
+    . SHIFT+(mousewheel): Go left/right. 
+    . ALT+(mousewheel): Go up/down. 
+    . Numeric PAD: Zoom in/out (+/-) and move through zoomed image (digits). 
+    . BACKSPACE: Reset zoom scale. 
+  - Shortcuts specific to the 3d object viewer are: 
+    . (mouse)+(left mouse button): Rotate 3d object. 
+    . (mouse)+(right mouse button): Zoom 3d object. 
+    . (mouse)+(middle mouse button): Shift 3d object. 
+    . (mousewheel): Zoom in/out. 
+    . CTRL+F1 .. CTRL+F6: Switch between different 3d rendering modes. 
+    . CTRL+Z: Enable/disable z-buffered rendering. 
+    . CTRL+A: Show/hide 3d axes. 
+    . CTRL+G: Save 3d object, as numbered file 'gmic_xxxx.off'. 
     . CTRL+T: Switch between single/double-sided 3d modes.</pre>
-<a name="section11"><h2><font color="brown"><u>Adding custom commands</u></font></h2></a>
-<pre>  - Custom commands can be defined by a user, through the use of G'MIC custom commands files.
-  - A command file is a simple ascii text file, where each line starts either by
-     'command_name: command_definition' or 'command_definition (continuation)'.
-  - Custom command names must use characters [a-zA-Z0-9_] and cannot start with a number.
-  - Any ' # comment' expression found in a custom commands file is discarded by the G'MIC
-     interpreter, wherever it is located in a line.
-  - In custom commands, the following $-expressions are substituted:
-    . '$*' is substituted by a copy of the specified string of arguments.
-    . '$"*"' is substituted by a copy of the specified string of arguments, each being around double quotes.
-    . '$#' is substituted by the maximum indice of known arguments (either specified by the
-       user or set to a default value in the custom command).
-    . '$?' is substituted by a string telling about the command subset restriction (only
-       useful when custom commands need to output descriptive messages).
-    . '$i' and '${i}' are both substituted by the i-th specified argument. Negative indices
-       such as '${-j}' are allowed and refer to the j^th latest argument. '$0' is substituted
-       by the custom command name.
-    . '${i=default}' is substituted by the value of $i (if defined) or by its new value set
-        to 'default' otherwise ('default' may be a $-expression as well).
-    . '${subset}' is substituted by the arguments values (separated by commas ',') of a
-       specified argument subset. For instance expression '${2--2}' is substitued by all
-       specified arguments except the first and the last one. Expression '${^0}' is then
-       substituted by all arguments of the invoked command (eq. to '$*' if all specified
-       arguments have indeed a value).
-    . '$=var' is substituted by the set of instructions that will assign each argument $i
-       to the named variable 'var$i' (for i in [0..$#]). This is particularly useful when a
-       custom command want to manage variable numbers of arguments. Variables names must
-       use characters [a-zA-Z0-9_] and cannot start with a number.
-  - These particular $-expressions are always substituted, even in double quoted items or
-     when the dollar sign '$' is escaped with a backslash '\'. To avoid substitution, place
-     an empty double quoted string just after the '$' (as in '$""1').
-  - Specifying arguments may be skipped when invoking a custom command, by replacing them by
-     commas ',' as in expression '-flower ,,3'. Omitted arguments are set to their default
-     values, which must be thus explicitly defined in the code of the corresponding custom
-     command (using default argument expressions as '${1=default}').
-  - If one numbered argument requested in a custom command has no value, an error is thrown
+<h2><a name="section11"><font color="brown"><u>Adding custom commands</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre>  - Custom commands can be defined by a user, through the use of G'MIC custom commands files. 
+  - A command file is a simple ascii text file, where each line starts either by 
+     'command_name: command_definition' or 'command_definition (continuation)'. 
+  - Custom command names must use characters [a-zA-Z0-9_] and cannot start with a number. 
+  - Any ' # comment' expression found in a custom commands file is discarded by the G'MIC 
+     interpreter, wherever it is located in a line. 
+  - In custom commands, the following $-expressions are substituted: 
+    . '$*' is substituted by a copy of the specified string of arguments. 
+    . '$"*"' is substituted by a copy of the specified string of arguments, each being around double quotes. 
+    . '$#' is substituted by the maximum indice of known arguments (either specified by the 
+       user or set to a default value in the custom command). 
+    . '$?' is substituted by a string telling about the command subset restriction (only 
+       useful when custom commands need to output descriptive messages). 
+    . '$i' and '${i}' are both substituted by the i-th specified argument. Negative indices 
+       such as '${-j}' are allowed and refer to the j^th latest argument. '$0' is substituted 
+       by the custom command name. 
+    . '${i=default}' is substituted by the value of $i (if defined) or by its new value set 
+        to 'default' otherwise ('default' may be a $-expression as well). 
+    . '${subset}' is substituted by the arguments values (separated by commas ',') of a 
+       specified argument subset. For instance expression '${2--2}' is substitued by all 
+       specified arguments except the first and the last one. Expression '${^0}' is then 
+       substituted by all arguments of the invoked command (eq. to '$*' if all specified 
+       arguments have indeed a value). 
+    . '$=var' is substituted by the set of instructions that will assign each argument $i 
+       to the named variable 'var$i' (for i in [0..$#]). This is particularly useful when a 
+       custom command want to manage variable numbers of arguments. Variables names must 
+       use characters [a-zA-Z0-9_] and cannot start with a number. 
+  - These particular $-expressions are always substituted, even in double quoted items or 
+     when the dollar sign '$' is escaped with a backslash '\'. To avoid substitution, place 
+     an empty double quoted string just after the '$' (as in '$""1'). 
+  - Specifying arguments may be skipped when invoking a custom command, by replacing them by 
+     commas ',' as in expression '-flower ,,3'. Omitted arguments are set to their default 
+     values, which must be thus explicitly defined in the code of the corresponding custom 
+     command (using default argument expressions as '${1=default}'). 
+  - If one numbered argument requested in a custom command has no value, an error is thrown 
      by the interpreter.</pre>
-<a name="section12"><h2><font color="brown"><u>List of commands</u></font></h2></a>
-<pre> All available G'MIC commands are listed below, classified by themes.
- When several choices of command arguments are possible, they appear separated by '|'.
- An argument specified inside '[]' or starting by '_' is optional except when standing for an
- existing image [image], where 'image' can be either an indice number or an image name.
- In this case, the '[]' characters are mandatory when writing the item. A command marked with
- '(*)' or '(+)' is a native command. '(*)' means the command is available for all pixel types,
- otherwise only for the default 'float' pixel type.
- Remember that native commands run faster than custom commands, so use then when possible.
- Note also that all images in this reference documentation are normalized in [0,255] before
- being displayed. You may need to do this manually (command '-normalize 0,255') if you want
+<h2><a name="section12"><font color="brown"><u>List of commands</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre> All available G'MIC commands are listed below, classified by themes. 
+ When several choices of command arguments are possible, they appear separated by '|'. 
+ An argument specified inside '[]' or starting by '_' is optional except when standing for an 
+ existing image [image], where 'image' can be either an indice number or an image name. 
+ In this case, the '[]' characters are mandatory when writing the item. A command marked with 
+ '(*)' or '(+)' is a native command. '(*)' means the command is available for all pixel types, 
+ otherwise only for the default 'float' pixel type. 
+ Remember that native commands run faster than custom commands, so use then when possible. 
+ Note also that all images in this reference documentation are normalized in [0,255] before 
+ being displayed. You may need to do this manually (command '-normalize 0,255') if you want 
  save image files having the same aspect than those displayed.</pre>
-<br/><a name="subsection1"><h3><font color="purple">** <u>Global options</u></font></h3></a>
+<br/><h3><a name="subsection1"><font color="purple">** <u>Global options</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-debug (*)</b>:</font>
 
 <p style="margin-left:100px"><tt>Activate debug mode.
@@ -524,7 +524,7 @@ _command |<br/>
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-version</b>:</font>
 
 <p style="margin-left:100px"><tt>Display current version number and exit.
-</tt></p><br/><a name="subsection2"><h3><font color="purple">** <u>Inputs / outputs</u></font></h3></a>
+</tt></p><br/><h3><a name="subsection2"><font color="purple">** <u>Inputs / outputs</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-apply_camera</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _command,_camera_index>=0,_skip_frames>=0,_output_filename
@@ -877,7 +877,7 @@ _width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_title
 <br/>You can manage up to 10 different instant windows by using the numbered variants
 <br/>'-w0' (default, eq. to '-w'),'-w1',..,'-w9' of the command '-w'.
 <br/><br/><b>Default values</b>: 'width=height=normalization=fullscreen=-1' and 'title=(undefined)'.
-</tt></p><br/><h3><a name="subsection3"><font color="purple">** <u>List manipulation</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></a></h3>
+</tt></p><br/><h3><a name="subsection3"><font color="purple">** <u>List manipulation</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-keep (*)</b>:</font>
 
 <p style="margin-left:100px"><tt>Keep only selected images.
@@ -926,7 +926,7 @@ _ordering={ + | - },_criterion
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-sort_str</b>:</font>
 
 <p style="margin-left:100px"><tt>Sort selected images (viewed as a list of strings) in lexicographic order.
-</tt></p><br/><a name="subsection4"><h3><font color="purple">** <u>Mathematical operators</u></font></h3></a>
+</tt></p><br/><h3><a name="subsection4"><font color="purple">** <u>Mathematical operators</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-abs (+)</b>:</font>
 
 <p style="margin-left:100px"><tt>Compute the pointwise absolute values of selected images.
@@ -1320,7 +1320,7 @@ value[%] |<br/>
 <br/>&nbsp;expression, or compute the pointwise sequential bitwise XOR of selected images.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def113.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -xor 128</div></div></td><td><tt>image.jpg -xor 128</tt></td></tr>
 <tr><td width="40"><div><a href="img/gmic_def114.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --mirror x -xor</div></div></td><td><tt>image.jpg --mirror x -xor</tt></td></tr>
-</table></tt></p><br/><a name="subsection5"><h3><font color="purple">** <u>Values manipulation</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection5"><font color="purple">** <u>Values manipulation</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-apply_curve</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 0<=smoothness<=1,x0,y0,x1,y1,x2,y2,...,xN,yN
@@ -1586,7 +1586,7 @@ min[%],max[%]
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-vector2tensor</b>:</font>
 
 <p style="margin-left:100px"><tt>Convert selected vector fields to corresponding diffusion tensor fields.
-</tt></p><br/><a name="subsection6"><h3><font color="purple">** <u>Colors manipulation</u></font></h3></a>
+</tt></p><br/><h3><a name="subsection6"><font color="purple">** <u>Colors manipulation</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-apply_channels</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 "command",_channels={ all=0 | rgba=1 | rgb=2 | y=3 | cbcr=4 | cb=5 | cr=6 | l=7 | ab=8 | a=9 | b=10 | h=11 | s=12 | v=13 | k=14 | cg=15 | ch=16 | c=17 | H=18 | r=19 | g=20 | b=21 | alpha==22 },_normalize={ 0=cut | 1=normalize }
@@ -1890,7 +1890,7 @@ _transfer_brightness={ 0 | 1 }
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-yuv82rgb</b>:</font>
 
 <p style="margin-left:100px"><tt>Convert selected images from YUV8 to RGB color bases.
-</tt></p><br/><a name="subsection7"><h3><font color="purple">** <u>Geometry manipulation</u></font></h3></a>
+</tt></p><br/><h3><a name="subsection7"><font color="purple">** <u>Geometry manipulation</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-append (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 [image],axis,_alignment |<br/>
@@ -2307,7 +2307,7 @@ width,_height,_depth,_smoothness>=0,_anisotropy=[0,1],sharpening>=0
 <br/>'boundary' can be { 0=dirichlet | 1=neumann | 2=cyclic }.
 <br/><br/><b>Default values</b>: 'is_relative=0', 'interpolation=1', 'boundary=1' and 'nb_frames=1'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def240.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg 100%,100%,1,2,'X=x/w-0.5;Y=y/h-0.5;R=(X*X+Y*Y)^0.5;A=atan2(Y,X);130*R*if(c==0,cos(4*A),sin(8*A))' -warp[-2] [-1],1,1,0 -quiver[-1] [-1],10,0.2,1,1,100</div></div></td><td><tt>image.jpg 100%,100%,1,2,'X=x/w-0.5;Y=y/h-0.5;R=(X*X+Y*Y)^0.5;A=atan2(Y,X);130*R*if(c==0,cos(4*A),sin(8*A))' -warp[-2] [-1],1,1,0 -quiver[-1] [-1],10,0.2,1,1,100</tt></td></tr>
-</table></tt></p><br/><a name="subsection8"><h3><font color="purple">** <u>Filtering</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection8"><font color="purple">** <u>Filtering</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-bandpass</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _min_freq[%],_max_freq[%]
@@ -2902,7 +2902,7 @@ text,_size>0
 <p style="margin-left:100px"><tt>Compute the watershed transform of selected images.
 <br/><br/><b>Default value</b>: 'fill_lines=1'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def319.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] 0 -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse</div></div></td><td><tt>400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] 0 -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse</tt></td></tr>
-</table></tt></p><br/><a name="subsection9"><h3><font color="purple">** <u>Features extraction</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection9"><font color="purple">** <u>Features extraction</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-area</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 tolerance>=0,is_high_connectivity={ 0 | 1 }
@@ -3143,7 +3143,7 @@ _nb_levels>0,_smoothness
 <p style="margin-left:100px"><tt>Render selected images as topographic maps.
 <br/><br/><b>Default values</b>: 'nb_levels=16' and 'smoothness=2'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def348.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --topographic_map 10</div></div></td><td><tt>image.jpg --topographic_map 10</tt></td></tr>
-</table></tt></p><br/><a name="subsection10"><h3><font color="purple">** <u>Image drawing</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection10"><font color="purple">** <u>Image drawing</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-axes (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 x0,x1,y0,y1,_font_height>=0,_opacity,_pattern,_color1,..
@@ -3470,7 +3470,7 @@ _radius>0,_octaves={1,2,3...,12},_alpha>0,_difference={-10,10},_mode={0,1,2,3}
 
 <p style="margin-left:100px"><tt>Draw a yin-yang symbol on selected images.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def388.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400 -yinyang</div></div></td><td><tt>400,400 -yinyang</tt></td></tr>
-</table></tt></p><br/><a name="subsection11"><h3><font color="purple">** <u>Matrix computation</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection11"><font color="purple">** <u>Matrix computation</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-dijkstra (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 starting_node>=0,ending_node>=0
@@ -3513,7 +3513,7 @@ starting_node>=0,ending_node>=0
 <br/>Tridiagonal matrix must be stored as a 3 column vector, where 2nd column contains the
 <br/>&nbsp;diagonal coefficients, while 1st and 3rd columns contain the left and right coefficients.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def395.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">(0,0,1;1,0,0;0,1,0) (1;2;3) --trisolve[-1] [-2]</div></div></td><td><tt>(0,0,1;1,0,0;0,1,0) (1;2;3) --trisolve[-1] [-2]</tt></td></tr>
-</table></tt></p><br/><a name="subsection12"><h3><font color="purple">** <u>3d rendering</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection12"><font color="purple">** <u>3d rendering</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-add3d (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 tx,_ty,_tz |<br/>
@@ -4112,7 +4112,7 @@ _resolution>0
 <p style="margin-left:100px"><tt>Input 3d weird object at (0,0,0), with specified resolution.
 <br/><br/><b>Default value</b>: 'resolution=32'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def472.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-weird3d 48 --primitives3d 1 -color3d[-2] @{-RGB}</div></div></td><td><tt>-weird3d 48 --primitives3d 1 -color3d[-2] @{-RGB}</tt></td></tr>
-</table></tt></p><br/><a name="subsection13"><h3><font color="purple">** <u>Program controls</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection13"><font color="purple">** <u>Program controls</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-apply_parallel (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 "command"
@@ -4269,7 +4269,7 @@ filename
 <p style="margin-left:100px"><tt>End a 'do..while' block and go back to associated '-do'
 <br/>&nbsp;if specified boolean is true or if specified filename exists.
 <br/>'boolean' can be a float number standing for { 0=false | other=true }.
-</tt></p><br/><a name="subsection14"><h3><font color="purple">** <u>Arrays, tiles and frames</u></font></h3></a>
+</tt></p><br/><h3><a name="subsection14"><font color="purple">** <u>Arrays, tiles and frames</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-array</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 M>0,_N>0,_expand_type={ 0=min | 1=max | 2=all }
@@ -4438,7 +4438,7 @@ _level>=0,_factor>0,_cx,_cy,_opacity,_angle
 <p style="margin-left:100px"><tt>Apply tunnel effect on selected images.
 <br/><br/><b>Default values</b>: 'level=9', 'factor=80%', 'cx=cy=0.5', 'opacity=1' and 'angle=0'
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def505.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --tunnel 20</div></div></td><td><tt>image.jpg --tunnel 20</tt></td></tr>
-</table></tt></p><br/><a name="subsection15"><h3><font color="purple">** <u>Artistic</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection15"><font color="purple">** <u>Artistic</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-boxfitting</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _min_box_size>=1,_max_box_size>=0,_initial_density>=0,_nb_attempts>=1
@@ -4712,7 +4712,7 @@ _texture>=0,_smoothness>=0,_darkness>=0,_lightness>=0
 <p style="margin-left:100px"><tt>Add random whirl texture to selected images.
 <br/><br/><b>Default values</b>: 'texture=3', 'smoothness=6', 'darkness=0.5' and 'lightness=1.8'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def539.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --whirls ,</div></div></td><td><tt>image.jpg --whirls ,</tt></td></tr>
-</table></tt></p><br/><a name="subsection16"><h3><font color="purple">** <u>Warpings</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection16"><font color="purple">** <u>Warpings</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-euclidean2polar</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _cx,_cy,_n>0,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
@@ -4857,7 +4857,7 @@ _factor,_cx,_cy,_cz,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
 <p style="margin-left:100px"><tt>Apply zoom factor to selected images.
 <br/><br/><b>Default values</b>: 'factor=1', 'cx=cy=cz=0.5' and 'boundary=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def557.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --zoom[0] 0.6 --zoom[0] 1.5</div></div></td><td><tt>image.jpg --zoom[0] 0.6 --zoom[0] 1.5</tt></td></tr>
-</table></tt></p><br/><a name="subsection17"><h3><font color="purple">** <u>Degradations</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection17"><font color="purple">** <u>Degradations</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-cracks</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _density>=0,_amplitude,_relief={ 0 | 1 }
@@ -4950,7 +4950,7 @@ _text,0<_opacity<1,_size>0,_angle,_mode={ 0=remove | 1=add },_smoothness>=0
 <p style="margin-left:100px"><tt>Add or remove a visible watermark on selected images (value range must be [0,255]).
 <br/><br/><b>Default values</b>: 'text=(C) G'MIC', 'opacity=0.3', 'size=57', 'angle=25', 'mode=1' and 'smoothness=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def569.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --watermark_visible ,0.7</div></div></td><td><tt>image.jpg --watermark_visible ,0.7</tt></td></tr>
-</table></tt></p><br/><a name="subsection18"><h3><font color="purple">** <u>Blending and fading</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection18"><font color="purple">** <u>Blending and fading</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-blend</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 blending_mode,0<=_opacity<=1,_revert_layer_order={ 0 | 1 }
@@ -5034,7 +5034,7 @@ _angle,0<=_start<=100,0<=_end<=100
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create transversal fading from selected images.
 <br/><br/><b>Default values</b>: 'start=30' and 'end=70'.
-</tt></p><br/><a name="subsection19"><h3><font color="purple">** <u>Image sequences</u></font></h3></a>
+</tt></p><br/><h3><a name="subsection19"><font color="purple">** <u>Image sequences</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-animate</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 filter_name,"param1_start,..,paramN_start","param1_end,..,paramN_end",nb_frames>=0,_output_frames={ 0 | 1 },_output_filename |<br/>
@@ -5086,7 +5086,7 @@ _nb_frames>=2,_nb_xtiles>0,_nb_ytiles>0,_axis_x,_axis_y,_axis_z,_is_antialias
 <br/>'axis_x', 'axis_y' and 'axis_z' can be set as mathematical expressions, depending on 'x' and 'y'.
 <br/><br/><b>Default values</b>: 'nb_frames=10', 'nb_xtiles=nb_ytiles=3', 'axis_x=1', 'axis_y=1', 'axis_z=0' and 'is_antialias=1'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def591.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 5 -transition3d 9 -drgba</div></div></td><td><tt>image.jpg --blur 5 -transition3d 9 -drgba</tt></td></tr>
-</table></tt></p><br/><a name="subsection20"><h3><font color="purple">** <u>Interactive demos</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection20"><font color="purple">** <u>Interactive demos</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_blobs</b>:</font>
 
 <p style="margin-left:100px"><tt>Launch the blobs editor.
@@ -5175,7 +5175,7 @@ _opacity>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Launch fractal whirl demo.
 <br/><br/><b>Default values</b>: 'opacity=0.2'.
-</tt></p><br/><a name="subsection21"><h3><font color="purple">** <u>PINK-library operators</u></font></h3></a>
+</tt></p><br/><h3><a name="subsection21"><font color="purple">** <u>PINK-library operators</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-output_pink3d</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 filename
@@ -5291,7 +5291,7 @@ _connectivity={ 4 | 8 | 6 | 26 },_inverse={ 0 | 1 },_height=0
 <br/>Watershed (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4', 'inverse=0' and 'height=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def605.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5</div></div></td><td><tt>image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5</tt></td></tr>
-</table></tt></p><br/><a name="subsection22"><h3><font color="purple">** <u>Convenience functions</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection22"><font color="purple">** <u>Convenience functions</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-alert</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _title,_message,_label_button1,_label_button2,...
@@ -5637,7 +5637,7 @@ string
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-variance_noise</b>:</font>
 
 <p style="margin-left:100px"><tt>Return the estimated noise variance of the last selected image.
-</tt></p><br/><a name="subsection23"><h3><font color="purple">** <u>Others</u></font></h3></a>
+</tt></p><br/><h3><a name="subsection23"><font color="purple">** <u>Others</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-gpt</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _scorefile,_number_of_sessions>=0
@@ -5645,7 +5645,7 @@ _scorefile,_number_of_sessions>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Generate score board for the GPT championship (GREYC Poker Tour).
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def607.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-gpt ,</div></div></td><td><tt>-gpt ,</tt></td></tr>
-</table></tt></p><br/><a name="subsection24"><h3><font color="purple">** <u>Commands shortcuts</u></font></h3></a>
+</table></tt></p><br/><h3><a name="subsection24"><font color="purple">** <u>Commands shortcuts</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px">
 <font color="green"><b>&nbsp;&nbsp;-h  (*)</b>:</font>
 <font color="blue"><i>eq. to '-help'</i></font><br/>
@@ -5835,68 +5835,68 @@ _scorefile,_number_of_sessions>=0
 <font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
 </p>
 <p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 807 ]</b></font>
-<a name="section13"><h2><font color="brown"><u>Examples of use</u></font></h2></a>
-<pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations.
- The few examples below illustrate possible uses of this tool:
-
-  - View a list of images:
-     gmic file1.bmp file2.jpeg
-
-  - Convert an image file:
-     gmic input.bmp -o output.jpg
-
-  - Create a volumetric image from a movie sequence:
-     gmic input.mpg -a z -o output.hdr
-
-  - Compute image gradient norm:
-     gmic input.bmp -gradient_norm
-
-  - Denoise a color image:
-     gmic image.jpg -denoise 30,10 -o denoised.jpg
-
-  - Compose two images using overlay layer blending:
-     gmic image1.jpg image2.jpg -blend overlay -o blended.jpg
-
-  - Evaluate a mathematical expression:
-     gmic -e "cos(pi/4)^2+sin(pi/4)^2={cos(pi/4)^2+sin(pi/4)^2}"
-
-  - Plot a 2d function:
-     gmic 1000,1,1,2 -f "X=3*(x-500)/500;X^2*sin(3*X^2)+if(c==0,u(0,-1),cos(X*10))" -plot
-
-  - Plot a 3d elevated function in random colors:
-     gmic 128,128,1,3,"?(0,255)" -plasma 10,3 -blur 4 -sharpen 10000 \
-      -elevation3d[-1] "'X=(x-64)/6;Y=(y-64)/6;100*exp(-(X^2+Y^2)/30)*abs(cos(X)*sin(Y))'"
-
-  - Plot the isosurface of a 3d volume:
-     gmic -m3d 5 -md3d 5 -db3d 0 -isosurface3d "'x^2+y^2+abs(z)^abs(4*cos(x*y*z*3))'",3
-
-  - Render a G'MIC 3d logo:
-     gmic 1 -text G\'MIC,0,0,57,1,1,1,1 -expand_xy 10,0 -blur 2 -n 0,100 --plasma 0.4 -+ \
-      -blur 1 -elevation3d -0.1 -md3d 4
-
-  - Generate a 3d ring of torii:
-     gmic -repeat 20 -torus3d 15,2 -col3d[-1] "{?(60,255)},{?(60,255)},{?(60,255)}" \
-      -*3d[-1] 0.5,1 -if "{$>%2}" -r3d[-1] 0,1,0,90 -endif -+3d[-1] 70 -+3d \
-      -r3d 0,0,1,18 -done -md3d 3 -m3d 5 -db3d 0
-
-  - Create a vase from a 3d isosurface:
-     gmic -md3d 4 -isosurface3d "'x^2+2*abs(y/2)*sin(2*y)^2+z^2-3',0" -sphere3d 1.5 \
-      --3d[-1] 0,5 -plane3d 15,15 -r3d[-1] 1,0,0,90 -c3d[-1] -+3d[-1] 0,3.2 \
-      -col3d[-1] 180,150,255 -col3d[-2] 128,255,0 -col3d[-3] 255,128,0 -+3d
-
-  - Display filtered webcam stream:
-     gmic -apply_camera \"--mirror x --mirror y -+ -/ 4\"
-
-  - Launch a set of G'MIC interactive demos:
-     gmic -x_fisheye -x_fire G\'MIC -x_tictactoe -rm -x_spline -x_mandelbrot 0 -x_light \
-          -x_whirl , -x_life -x_jawbreaker , -x_blobs -x_tetris
+<h2><a name="section13"><font color="brown"><u>Examples of use</u></font></a>&nbsp;&nbsp;<a href="#top"><img src="img/back_top.png"></img></a></h2>
+<pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
+ The few examples below illustrate possible uses of this tool: 
+ 
+  - View a list of images: 
+     gmic file1.bmp file2.jpeg 
+ 
+  - Convert an image file: 
+     gmic input.bmp -o output.jpg 
+ 
+  - Create a volumetric image from a movie sequence: 
+     gmic input.mpg -a z -o output.hdr 
+ 
+  - Compute image gradient norm: 
+     gmic input.bmp -gradient_norm 
+ 
+  - Denoise a color image: 
+     gmic image.jpg -denoise 30,10 -o denoised.jpg 
+ 
+  - Compose two images using overlay layer blending: 
+     gmic image1.jpg image2.jpg -blend overlay -o blended.jpg 
+ 
+  - Evaluate a mathematical expression: 
+     gmic -e "cos(pi/4)^2+sin(pi/4)^2={cos(pi/4)^2+sin(pi/4)^2}" 
+ 
+  - Plot a 2d function: 
+     gmic 1000,1,1,2 -f "X=3*(x-500)/500;X^2*sin(3*X^2)+if(c==0,u(0,-1),cos(X*10))" -plot 
+ 
+  - Plot a 3d elevated function in random colors: 
+     gmic 128,128,1,3,"?(0,255)" -plasma 10,3 -blur 4 -sharpen 10000 \ 
+      -elevation3d[-1] "'X=(x-64)/6;Y=(y-64)/6;100*exp(-(X^2+Y^2)/30)*abs(cos(X)*sin(Y))'" 
+ 
+  - Plot the isosurface of a 3d volume: 
+     gmic -m3d 5 -md3d 5 -db3d 0 -isosurface3d "'x^2+y^2+abs(z)^abs(4*cos(x*y*z*3))'",3 
+ 
+  - Render a G'MIC 3d logo: 
+     gmic 1 -text G\'MIC,0,0,57,1,1,1,1 -expand_xy 10,0 -blur 2 -n 0,100 --plasma 0.4 -+ \ 
+      -blur 1 -elevation3d -0.1 -md3d 4 
+ 
+  - Generate a 3d ring of torii: 
+     gmic -repeat 20 -torus3d 15,2 -col3d[-1] "{?(60,255)},{?(60,255)},{?(60,255)}" \ 
+      -*3d[-1] 0.5,1 -if "{$>%2}" -r3d[-1] 0,1,0,90 -endif -+3d[-1] 70 -+3d \ 
+      -r3d 0,0,1,18 -done -md3d 3 -m3d 5 -db3d 0 
+ 
+  - Create a vase from a 3d isosurface: 
+     gmic -md3d 4 -isosurface3d "'x^2+2*abs(y/2)*sin(2*y)^2+z^2-3',0" -sphere3d 1.5 \ 
+      --3d[-1] 0,5 -plane3d 15,15 -r3d[-1] 1,0,0,90 -c3d[-1] -+3d[-1] 0,3.2 \ 
+      -col3d[-1] 180,150,255 -col3d[-2] 128,255,0 -col3d[-3] 255,128,0 -+3d 
+ 
+  - Display filtered webcam stream: 
+     gmic -apply_camera \"--mirror x --mirror y -+ -/ 4\" 
+ 
+  - Launch a set of G'MIC interactive demos: 
+     gmic -x_fisheye -x_fire G\'MIC -x_tictactoe -rm -x_spline -x_mandelbrot 0 -x_light \ 
+          -x_whirl , -x_life -x_jawbreaker , -x_blobs -x_tetris 
 </pre>
-
-<br/><b><font color="brown">** G'MIC comes with ABSOLUTELY NO WARRANTY; for details visit <a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net **</a></font></b>
-</tt>
-</div>
-</div>
-<div id="footer"><img src="images/footer.jpg" /></div>
-</div>
-<!--#include file="copyright.html" -->
-<!--#include file="footer.html" -->
+ 
+<br/><b><font color="brown">** G'MIC comes with ABSOLUTELY NO WARRANTY; for details visit <a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net **</a></font></b> 
+</tt> 
+</div> 
+</div> 
+<div id="footer"><img src="images/footer.jpg" /></div> 
+</div> 
+<!--#include file="copyright.html" --> 
+<!--#include file="footer.html" --> 
