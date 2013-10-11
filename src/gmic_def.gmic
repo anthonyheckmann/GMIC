@@ -19511,7 +19511,7 @@ _gimp_custom_gradient1 :
 #@gimp : Preview gradient = bool(1)
 #@gimp : Save gradient as = _text("")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/09</i>.</small>")
-gimp_line_gradient : -skip "${8=}"
+gimp_line_gradient : -skip "${9=}"
   -_gimp_line_gradient $*
   -if {narg("$9")}
     dir_ggr=@{-path_gimp}/gradients
