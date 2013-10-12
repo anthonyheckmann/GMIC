@@ -344,10 +344,10 @@ cd $DIR
 scp README $FORGE
 cd ${HOME}/work/src/
 
-FILE=gmic_${VERSION}${SUFFIX}_quantal_i386.deb
-while [ ! -f ${FILE} ]; do sleep 10; done
-sleep 10
-scp ${FILE} $FORGE
+# FILE=gmic_${VERSION}${SUFFIX}_quantal_i386.deb
+# while [ ! -f ${FILE} ]; do sleep 10; done
+# sleep 10
+# scp ${FILE} $FORGE
 
 FILE=gmic_${VERSION}${SUFFIX}_i386.deb
 while [ ! -f ${FILE} ]; do sleep 10; done
