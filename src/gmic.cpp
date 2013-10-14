@@ -7424,6 +7424,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               gi.background3d.assign(background3d);
               gi.light3d.assign(light3d);
               gi.pose3d.assign(pose3d);
+              gi.status.assign(status);
               gi.focale3d = focale3d;
               gi.light3d_x = light3d_x;
               gi.light3d_y = light3d_y;
@@ -7484,10 +7485,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               is_released&=thread_data[l].gmic_instance.is_released;
             }
 
-            // Get back global variables modified by first thread.
+            // Get back global variables and status modified by first thread.
             thread_data[0].gmic_instance.variables[255].move_to(variables[255]);
             thread_data[0].gmic_instance.variables_names[255].move_to(variables_names[255]);
             variables_sizes[255] = thread_data[0].variables_sizes[255];
+            thread_data[0].gmic_instance.status.move_to(status);
 
             // Check for possible exceptions thrown by threads.
             cimglist_for(args,l) if (thread_data[l].exception._message)

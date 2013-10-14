@@ -23559,3 +23559,7 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
+
+
+foo :
+  -parallel "-d[0]","-d[1]"
