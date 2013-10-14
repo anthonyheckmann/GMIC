@@ -11341,6 +11341,7 @@ x_pacman :
       -endif
       -if {$oscore>0} -j[-1] [score$nscore],$xscore,$yscore,0,0,$oscore,[scorem$nscore],255 oscore={$oscore-0.04} yscore={$yscore-1} -endif
       -j[-1] [gate],158,223,0,0,0.6
+      -w[-1] -rm[-1]
 
       # Manage ghosts displacements and collisions.
       -repeat 4
