@@ -2506,7 +2506,7 @@ namespace cimg_library_suffixed {
 #if cimg_display==1
     struct X11_info {
       volatile unsigned int nb_wins;
-      pthread_t*       event_thread;
+      pthread_t*       events_thread;
       CImgDisplay*     wins[1024];
       Display*         display;
       unsigned int     nb_bits;
@@ -2519,8 +2519,9 @@ namespace cimg_library_suffixed {
       unsigned int curr_resolution;
       unsigned int nb_resolutions;
 #endif
-      X11_info():nb_wins(0),event_thread(0),display(0),
+      X11_info():nb_wins(0),events_thread(0),display(0),
                  nb_bits(0),is_blue_first(false),is_shm_enabled(false),byte_order(false) {
+        XInitThreads();
 #ifdef cimg_use_xrandr
         resolutions = 0;
         curr_rotation = 0;
@@ -7567,18 +7568,17 @@ namespace cimg_library_suffixed {
       Display *const dpy = cimg::X11_attr().display;
       if (!dpy) return;
 
-      bool stop_flag = false;
-      XEvent event;
-      /*      if (cimg::mutex(13,2)) { // Another thread is already waiting.
-        cimg::mutex(13);       // Wait for the other thread to finish.
+      if (cimg::mutex(13,2)) { // Another thread is already waiting.
+        cimg::mutex(13); // Wait for the other thread to release the mutex.
         cimg::mutex(13,0);
         return;
       }
-      */
 
+      bool stop_flag = false;
+      XEvent event;
       while (!stop_flag) {
         //        XLockDisplay(dpy);
-        XNextEvent(dpy,&event);
+        XNextEvent(dpy,&event); // Strange, but apparently, no need to be called inside X[Un]LockDisplay !
         //        XUnlockDisplay(dpy);
         for (unsigned int i = 0; i<cimg::X11_attr().nb_wins; ++i)
           if (!cimg::X11_attr().wins[i]->_is_closed && event.xany.window==cimg::X11_attr().wins[i]->_window) {
@@ -7588,7 +7588,8 @@ namespace cimg_library_suffixed {
             XUnlockDisplay(dpy);
           }
       }
-      //      cimg::mutex(13,0);
+
+      cimg::mutex(13,0);
     }
 
     void _handle_events(const XEvent *const pevent) {
@@ -7959,8 +7960,6 @@ namespace cimg_library_suffixed {
       // Open X11 display and retrieve graphical properties.
       Display* &dpy = cimg::X11_attr().display;
       if (!dpy) {
-        static const int xinit_status = XInitThreads();
-        cimg::unused(xinit_status);
         dpy = XOpenDisplay(0);
         if (!dpy)
           throw CImgDisplayException(_cimgdisplay_instance
@@ -7983,8 +7982,8 @@ namespace cimg_library_suffixed {
 	XFree(vinfo);
 
         XLockDisplay(dpy);
-        cimg::X11_attr().event_thread = new pthread_t;
-        pthread_create(cimg::X11_attr().event_thread,0,_events_thread,0);
+        cimg::X11_attr().events_thread = new pthread_t;
+        pthread_create(cimg::X11_attr().events_thread,0,_events_thread,0);
       } else XLockDisplay(dpy);
 
       // Set display variables.
@@ -8105,7 +8104,7 @@ namespace cimg_library_suffixed {
       _colormap = 0;
       XSync(dpy,0);
 
-      // Reset display variables
+      // Reset display variables.
       delete[] _title;
       _width = _height = _normalization = _window_width = _window_height = 0;
       _window_x = _window_y = 0;
@@ -8115,18 +8114,17 @@ namespace cimg_library_suffixed {
       _title = 0;
       flush();
 
-      // End event thread and close display if necessary
+      // End event thread and close display if necessary.
       XUnlockDisplay(dpy);
       if (!cimg::X11_attr().nb_wins) {
-        // Kill event thread
-        //pthread_cancel(*cimg::X11_attr().event_thread);
-        //XUnlockDisplay(cimg::X11_attr().display);
-        //pthread_join(*cimg::X11_attr().event_thread,0);
-        //delete cimg::X11_attr().event_thread;
-        //cimg::X11_attr().event_thread = 0;
-        // XUnlockDisplay(cimg::X11_attr().display); // <- This call make the library hang sometimes (fix required).
-        // XCloseDisplay(cimg::X11_attr().display); // <- This call make the library hang sometimes (fix required).
-        //cimg::X11_attr().display = 0;
+
+        // Kill event thread.
+        // pthread_cancel(*cimg::X11_attr().events_thread);
+        // pthread_join(*cimg::X11_attr().events_thread,0);
+        // delete cimg::X11_attr().events_thread;
+        // cimg::X11_attr().events_thread = 0;
+        // XCloseDisplay(cimg::X11_attr().display); // <- This call make the X11 library hang sometimes (fix required).
+        // cimg::X11_attr().display = 0;
       }
       return *this;
     }
@@ -8148,7 +8146,7 @@ namespace cimg_library_suffixed {
                         const bool fullscreen_flag=false, const bool closed_flag=false) {
       if (!img) return assign();
       CImg<T> tmp;
-      const CImg<T>& nimg = (img._depth==1)?img:(tmp=img.get_projections2d(img._width/2,img._height/2,img._depth/2));
+      const CImg<T>& nimg = (img._depth==1)?img:(tmp=img.get_projections2d((img._width-1)/2,(img._height-1)/2,(img._depth-1)/2));
       _assign(nimg._width,nimg._height,title,normalization_type,fullscreen_flag,closed_flag);
       if (_normalization==2) _min = (float)nimg.min_max(_max);
       return render(nimg).paint();
@@ -8160,7 +8158,7 @@ namespace cimg_library_suffixed {
                         const bool fullscreen_flag=false, const bool closed_flag=false) {
       if (!list) return assign();
       CImg<T> tmp;
-      const CImg<T> img = list>'x', &nimg = (img._depth==1)?img:(tmp=img.get_projections2d(img._width/2,img._height/2,img._depth/2));
+      const CImg<T> img = list>'x', &nimg = (img._depth==1)?img:(tmp=img.get_projections2d((img._width-1)/2,(img._height-1)/2,(img._depth-1)/2));
       _assign(nimg._width,nimg._height,title,normalization_type,fullscreen_flag,closed_flag);
       if (_normalization==2) _min = (float)nimg.min_max(_max);
       return render(nimg).paint();
@@ -8337,7 +8335,7 @@ namespace cimg_library_suffixed {
                                     "render(): Empty specified image.",
                                     cimgdisplay_instance);
       if (is_empty()) return *this;
-      if (img._depth!=1) return render(img.get_projections2d(img._width/2,img._height/2,img._depth/2));
+      if (img._depth!=1) return render(img.get_projections2d((img._width-1)/2,(img._height-1)/2,(img._depth-1)/2));
       if (cimg::X11_attr().nb_bits==8 && (img._width!=_width || img._height!=_height)) return render(img.get_resize(_width,_height,1,-100,1));
       if (cimg::X11_attr().nb_bits==8 && !flag8 && img._spectrum==3) {
         static const CImg<typename CImg<T>::ucharT> default_colormap = CImg<typename CImg<T>::ucharT>::default_LUT256();
@@ -9029,7 +9027,7 @@ namespace cimg_library_suffixed {
                         const bool fullscreen_flag=false, const bool closed_flag=false) {
       if (!img) return assign();
       CImg<T> tmp;
-      const CImg<T>& nimg = (img._depth==1)?img:(tmp=img.get_projections2d(img._width/2,img._height/2,img._depth/2));
+      const CImg<T>& nimg = (img._depth==1)?img:(tmp=img.get_projections2d((img._width-1)/2,(img._height-1)/2,(img._depth-1)/2));
       _assign(nimg._width,nimg._height,title,normalization_type,fullscreen_flag,closed_flag);
       if (_normalization==2) _min = (float)nimg.min_max(_max);
       return display(nimg);
@@ -9041,7 +9039,7 @@ namespace cimg_library_suffixed {
                         const bool fullscreen_flag=false, const bool closed_flag=false) {
       if (!list) return assign();
       CImg<T> tmp;
-      const CImg<T> img = list>'x', &nimg = (img._depth==1)?img:(tmp=img.get_projections2d(img._width/2,img._height/2,img._depth/2));
+      const CImg<T> img = list>'x', &nimg = (img._depth==1)?img:(tmp=img.get_projections2d((img._width-1)/2,(img._height-1)/2,(img._depth-1)/2));
       _assign(nimg._width,nimg._height,title,normalization_type,fullscreen_flag,closed_flag);
       if (_normalization==2) _min = (float)nimg.min_max(_max);
       return display(nimg);
@@ -9196,7 +9194,7 @@ namespace cimg_library_suffixed {
                                     cimgdisplay_instance);
 
       if (is_empty()) return *this;
-      if (img._depth!=1) return render(img.get_projections2d(img._width/2,img._height/2,img._depth/2));
+      if (img._depth!=1) return render(img.get_projections2d((img._width-1)/2,(img._height-1)/2,(img._depth-1)/2));
 
       const T
         *data1 = img._data,
@@ -33682,8 +33680,8 @@ namespace cimg_library_suffixed {
               dly = lighty - Y,
               dlz = lightz - Z,
               nl = (float)std::sqrt(dlx*dlx + dly*dly + dlz*dlz),
-              nlx = default_light_texture._width/2*(1 + dlx/nl),
-              nly = default_light_texture._height/2*(1 + dly/nl),
+              nlx = (default_light_texture._width - 1)/2*(1 + dlx/nl),
+              nly = (default_light_texture._height - 1)/2*(1 + dly/nl),
               white[] = { 1 };
             default_light_texture.draw_gaussian(nlx,nly,default_light_texture._width/3.0f,white);
             cimg_forXY(default_light_texture,x,y) {
@@ -34728,7 +34726,9 @@ namespace cimg_library_suffixed {
       unsigned char foreground_color[] = { 255,255,255 }, background_color[] = { 0,0,0 };
 
       int area = 0, starting_area = 0, clicked_area = 0, phase = 0,
-        X0 = (int)((XYZ?XYZ[0]:_width/2)%_width), Y0 = (int)((XYZ?XYZ[1]:_height/2)%_height), Z0 = (int)((XYZ?XYZ[2]:_depth/2)%_depth),
+        X0 = (int)((XYZ?XYZ[0]:(_width-1)/2)%_width),
+        Y0 = (int)((XYZ?XYZ[1]:(_height-1)/2)%_height),
+        Z0 = (int)((XYZ?XYZ[2]:(_depth-1)/2)%_depth),
         X1 =-1, Y1 = -1, Z1 = -1,
         X = -1, Y = -1, Z = -1, X3d = -1, Y3d = -1,
         oX = X, oY = Y, oZ = Z, oX3d = X3d, oY3d = -1;
@@ -37883,12 +37883,12 @@ namespace cimg_library_suffixed {
       // Read primitive data
       primitives.assign();
       colors.assign();
-      bool stopflag = false;
-      while (!stopflag) {
+      bool stop_flag = false;
+      while (!stop_flag) {
         float c0 = 0.7f, c1 = 0.7f, c2 = 0.7f;
         unsigned int prim = 0, i0 = 0, i1 = 0, i2 = 0, i3 = 0, i4 = 0, i5 = 0, i6 = 0, i7 = 0;
         *line = 0;
-        if ((err = std::fscanf(nfile,"%u",&prim))!=1) stopflag=true;
+        if ((err = std::fscanf(nfile,"%u",&prim))!=1) stop_flag = true;
         else {
           ++nb_read;
           switch (prim) {
@@ -43902,7 +43902,7 @@ namespace cimg_library_suffixed {
                 onexone(1,1,1,1,0),
                 &src = _data[ind]?_data[ind]:onexone;
               CImg<ucharT> res;
-              src.__get_select(disp,old_normalization,src._width/2,src._height/2,src._depth/2).move_to(res);
+              src.__get_select(disp,old_normalization,(src._width-1)/2,(src._height-1)/2,(src._depth-1)/2).move_to(res);
               const unsigned int h = CImgDisplay::_fitscreen(res._width,res._height,1,128,-85,true);
               res.resize(x - x0,cimg::max(32U,h*disp._height/max_height),1,res._spectrum==1?3:-100);
               positions(ind,0) = positions(ind,2) = (int)x0;
@@ -43916,7 +43916,7 @@ namespace cimg_library_suffixed {
               while (y<visu0._height && indices[++y]==ind) {}
               const CImg<T>
                 &src = _data[ind],
-                _img2d = src._depth>1?src.get_projections2d(src._width/2,src._height/2,src._depth/2):CImg<T>(),
+                _img2d = src._depth>1?src.get_projections2d((src._width-1)/2,(src._height-1)/2,(src._depth-1)/2):CImg<T>(),
                 &img2d = _img2d?_img2d:src;
               CImg<ucharT> res = old_normalization==1 || (old_normalization==3 && cimg::type<T>::string()!=cimg::type<unsigned char>::string())?
                 CImg<ucharT>(img2d.get_normalize(0,255)):
@@ -44629,7 +44629,7 @@ namespace cimg_library_suffixed {
 
       CImg<ucharT> tmp(size_x,size_y,1,3), UV(size_x/2,size_y/2,1,2);
       std::FILE *const nfile = file?file:cimg::fopen(filename,"rb");
-      bool stopflag = false;
+      bool stop_flag = false;
       int err;
       if (nfirst_frame) {
         err = std::fseek(nfile,nfirst_frame*(size_x*size_y + size_x*size_y/2),SEEK_CUR);
@@ -44642,12 +44642,12 @@ namespace cimg_library_suffixed {
         }
       }
       unsigned int frame;
-      for (frame = nfirst_frame; !stopflag && frame<=nlast_frame; frame+=nstep_frame) {
+      for (frame = nfirst_frame; !stop_flag && frame<=nlast_frame; frame+=nstep_frame) {
         tmp.fill(0);
         // *TRY* to read the luminance part, do not replace by cimg::fread!
         err = (int)std::fread((void*)(tmp._data),1,(unsigned long)tmp._width*tmp._height,nfile);
         if (err!=(int)(tmp._width*tmp._height)) {
-          stopflag = true;
+          stop_flag = true;
           if (err>0)
             cimg::warn(_cimglist_instance
                        "load_yuv(): File '%s' contains incomplete data or given image dimensions (%u,%u) are incorrect.",
@@ -44658,7 +44658,7 @@ namespace cimg_library_suffixed {
           // *TRY* to read the luminance part, do not replace by cimg::fread!
           err = (int)std::fread((void*)(UV._data),1,(size_t)(UV.size()),nfile);
           if (err!=(int)(UV.size())) {
-            stopflag = true;
+            stop_flag = true;
             if (err>0)
               cimg::warn(_cimglist_instance
                          "load_yuv(): File '%s' contains incomplete data or given image dimensions (%u,%u) are incorrect.",
@@ -44676,7 +44676,7 @@ namespace cimg_library_suffixed {
           }
         }
       }
-      if (stopflag && nlast_frame!=~0U && frame!=nlast_frame)
+      if (stop_flag && nlast_frame!=~0U && frame!=nlast_frame)
         cimg::warn(_cimglist_instance
                    "load_yuv(): Frame %d not reached since only %u frames were found in file '%s'.",
                    cimglist_instance,
@@ -44883,11 +44883,11 @@ namespace cimg_library_suffixed {
       cimg::exception_mode() = 0;
       assign();
       unsigned int i = 1;
-      for (bool stopflag = false; !stopflag; ++i) {
+      for (bool stop_flag = false; !stop_flag; ++i) {
         cimg_snprintf(filetmp2,sizeof(filetmp2),"%s_%.6u.ppm",filetmp,i);
         CImg<T> img;
         try { img.load_pnm(filetmp2); }
-        catch (CImgException&) { stopflag = true; }
+        catch (CImgException&) { stop_flag = true; }
         if (img) { img.move_to(*this); std::remove(filetmp2); }
       }
       cimg::exception_mode() = omode;
@@ -44966,12 +44966,12 @@ namespace cimg_library_suffixed {
       if (img) { img.move_to(*this); std::remove(filetmp2); }
       else { // Try to read animated gif.
         unsigned int i = 0;
-        for (bool stopflag = false; !stopflag; ++i) {
+        for (bool stop_flag = false; !stop_flag; ++i) {
           if (use_graphicsmagick) cimg_snprintf(filetmp2,sizeof(filetmp2),"%s.png.%u",filetmp,i);
           else cimg_snprintf(filetmp2,sizeof(filetmp2),"%s-%u.png",filetmp,i);
           CImg<T> img;
           try { img.load_png(filetmp2); }
-          catch (CImgException&) { stopflag = true; }
+          catch (CImgException&) { stop_flag = true; }
           if (img) { img.move_to(*this); std::remove(filetmp2); }
         }
       }
@@ -46518,9 +46518,9 @@ namespace cimg {
     CImgDisplay disp(canvas,title?title:" ",0,false,is_centered?true:false);
     if (is_centered) disp.move((CImgDisplay::screen_width() - disp.width())/2,
                              (CImgDisplay::screen_height() - disp.height())/2);
-    bool stopflag = false, refresh = false;
+    bool stop_flag = false, refresh = false;
     int oselected = -1, oclicked = -1, selected = -1, clicked = -1;
-    while (!disp.is_closed() && !stopflag) {
+    while (!disp.is_closed() && !stop_flag) {
       if (refresh) {
         if (clicked>=0) CImg<unsigned char>(canvas).draw_image(xbuttons[clicked],by,cbuttons[clicked]).display(disp);
         else {
@@ -46542,13 +46542,13 @@ namespace cimg {
             refresh = true;
           }
         if (clicked!=oclicked) refresh = true;
-      } else if (clicked>=0) stopflag = true;
+      } else if (clicked>=0) stop_flag = true;
 
       if (disp.key()) {
         oselected = selected;
         switch (disp.key()) {
-        case cimg::keyESC : selected=-1; stopflag=true; break;
-        case cimg::keyENTER : if (selected<0) selected = 0; stopflag = true; break;
+        case cimg::keyESC : selected=-1; stop_flag = true; break;
+        case cimg::keyENTER : if (selected<0) selected = 0; stop_flag = true; break;
         case cimg::keyTAB :
         case cimg::keyARROWRIGHT :
         case cimg::keyARROWDOWN : selected = (selected+1)%buttons._width; break;
