@@ -11067,6 +11067,38 @@ _x_mandelbrot_coords :
 _x_mandelbrot_palette :
   6,1,1,3 -rand[-1] 20,255 -r[-1] 32,1,1,3,3 -r[-1] 1024,1,1,3,0,2 -=[-1] 0,0,0,0,0 -=[-1] 0,0,0,0,1 -=[-1] 0,0,0,0,2
 
+#@gmic x_metaballs
+#@gmic : Launch the 3d metaballs demo.
+x_metaballs :
+  -e[] "\n
+------ 3d metaballs demo ------------------------\n
+----\n
+---- Keys 'ESC' or 'Q' to exit.\n
+----\n
+-------------------------------------------------"
+  -v - -l[]
+  100,100 -noise[-1] 100,1 -plasma[-1] 1,0,10 -r[-1] 512,320,1,3 -n[-1] 0,1 -b[-1] 4,0 -n[-1] 0,255
+  -mix_channels[-1] (0.7,0,0;0,0.9,0;0,0,1.2) -c[-1] 0,255
+  30,30,30,1,'X=x-w/2;Y=y-h/2;Z=z-d/2;exp(-(X*X+Y*Y+Z*Z)/100)'
+  64,64,64
+  -repeat 4 fx$>={?*0.2} fy$>={?*0.2} fz$>={?*0.2} -done
+  -w @{0,w},@{0,h},0,0,"[G'MIC] 3d metaballs"
+  t=0
+  -do
+    -repeat 4
+      x$>={w/2+0.5*(w-@{1,w}-4)*cos(${fx$>}*$t)}
+      y$>={h/2+0.5*(h-@{1,h}-4)*sin(${fy$>}*$t)}
+      z$>={d/2+0.5*(d-@{1,d}-4)*sin(${fz$>}*$t)}
+    -done
+    -f[2] 0 -repeat 4 -j[2] [1],{${x$>}-@{1,w/2}},{${y$>}-@{1,h/2}},{${z$>}-@{1,d/2}},0,-1 -done
+    --r[2] 24,24,24,1,2 -isosurface3d[-1] 0.3 --3d[-1] 12,12,12 -*3d[-1] 15 -r3d[-1] 2,0,1,{$t*8} -rv3d[-1]
+    N={i(0,7)} (255,255,150;50,150,230) -r[-1] 3,$N,1,1,3 -y[-1] y -j[-2] [-1],0,{@{-2,h}-4*$N} # Do some color tweaks.
+    --object3d[0] [-2],50%,50%,0,1,5,0,0,300,0,0,-500,0.1,1.5
+    -w[-1] -rm[-3--1] -wait 20
+    t={$t+1}
+  -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
+  -rm -w 0 -endl -v +
+
 #@gmic x_minesweeper : 8<=_width=<20,8<=_height<=20
 #@gmic : Launch the Minesweeper game.
 x_minesweeper : -check "${1=20}>=8 && $1<=30 && ${2=$1}>=8 && $2<=30"
@@ -23559,7 +23591,3 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
-
-foo :
-  -parallel "-d[0]","-d[1]"
