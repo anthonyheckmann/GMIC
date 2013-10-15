@@ -11082,7 +11082,7 @@ x_metaballs3d :
   30,30,30,1,'X=x-w/2;Y=y-h/2;Z=z-d/2;exp(-(X*X+Y*Y+Z*Z)/100)'
   80,80,80 M=8
   -repeat $M fx$>={g*2} fy$>={g*2} fz$>={g*2} -done
-  -w[] @{0,w},@{0,h},0,0,"[G'MIC] 3d metaballs"
+  -w[] @{0,1.5*w},@{0,1.5*h},0,0,"[G'MIC] 3d metaballs"
   -do
     -repeat $M
       x$>={w/2+0.5*(w-@{1,w}-4)*cos(${fx$>}*@|)}
