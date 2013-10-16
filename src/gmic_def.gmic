@@ -11103,7 +11103,7 @@ x_metaballs3d :
     -endif
     --object3d[1] [-2],50%,50%,0,1,{if(!$mode,3,$mode)},0,0,300,0,0,-500,0.1,1.5
     -w[-1] -rm[-3--1] -wait 20
-    -if {@{!,b}||@{!,SPACE}} mode={($mode+1)%6} -wait -1 -rm[1] -i[1] 0 -endif
+    -if {@{!,b}||@{!,SPACE}} mode={($mode+if(@{!,b}&2,-1,1))%6} -wait -1 -rm[1] -i[1] 0 -endif
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -rm -w 0 -endl -v +
 
