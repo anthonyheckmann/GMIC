@@ -646,7 +646,7 @@
 \contentsline {subsection}{\numberline {2.20.9}\emph {-x\_life} }{363}{subsection.2.20.9}
 \contentsline {subsection}{\numberline {2.20.10}\emph {-x\_light} }{363}{subsection.2.20.10}
 \contentsline {subsection}{\numberline {2.20.11}\emph {-x\_mandelbrot} }{363}{subsection.2.20.11}
-\contentsline {subsection}{\numberline {2.20.12}\emph {-x\_metaballs} }{363}{subsection.2.20.12}
+\contentsline {subsection}{\numberline {2.20.12}\emph {-x\_metaballs3d} }{363}{subsection.2.20.12}
 \contentsline {subsection}{\numberline {2.20.13}\emph {-x\_minesweeper} }{363}{subsection.2.20.13}
 \contentsline {subsection}{\numberline {2.20.14}\emph {-x\_minimal\_path} }{363}{subsection.2.20.14}
 \contentsline {subsection}{\numberline {2.20.15}\emph {-x\_pacman} }{363}{subsection.2.20.15}

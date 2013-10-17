@@ -5126,7 +5126,7 @@ _julia={ 0 | 1 },_c0r,_c0i
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Launch Mandelbrot/Julia explorer.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_metaballs</b>:</font>
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_metaballs3d</b>:</font>
 
 <p style="margin-left:100px"><tt>Launch the 3d metaballs demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_minesweeper</b>:</font>

@@ -722,7 +722,7 @@ _gmic_def()
 	      -x_life --x_life\
 	      -x_light --x_light\
 	      -x_mandelbrot --x_mandelbrot\
-	      -x_metaballs --x_metaballs\
+	      -x_metaballs3d --x_metaballs3d\
 	      -x_minesweeper --x_minesweeper\
 	      -x_minimal_path --x_minimal_path\
 	      -x_pacman --x_pacman\
@@ -1533,7 +1533,7 @@ _gmic_def()
 	      x_life\
 	      x_light\
 	      x_mandelbrot\
-	      x_metaballs\
+	      x_metaballs3d\
 	      x_minesweeper\
 	      x_minimal_path\
 	      x_pacman\
