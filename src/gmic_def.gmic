@@ -23599,3 +23599,74 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
+
+foo :
+  500,500,1,3
+  64,64,1,3 -ball[-1] 255,128,64
+  -w[0] -1,-1,0,0,"Bouncing ball"
+
+  x=250 y=250
+  vx=0 vy=0
+
+  -v -
+  -do
+
+    -if {$x>=0}
+      -f[0] 0
+
+      [1]
+
+      dx={@{1,w}/2-$x}
+      -if {$dx>0} -r[-1] {w-1.5*$dx},100%,1,4,2 x=@{-1,w/2} -endif
+
+      dx={$x+@{1,w}/2-@{0,w}}
+      -if {$dx>0} -r[-1] {w-1.5*$dx},100%,1,4,2 x={@{0,w}-@{-1,w}/2} -endif
+
+      dy={@{1,h}/2-$y}
+      -if {$dy>0}
+        w={w+1.1*$dy} h={h-1.5*$dy}
+        -r[-1] $w,$h,1,4,3 y=@{-1,h/2}
+        vy={0.9*$vy}
+        -if {h<@{1,h/2}} vy={min(1.5*$vy,200)} -endif
+      -endif
+
+      dy={min(20,$y+@{1,h}/2-@{0,h})}
+      -if {$dy>0}
+        -r[-1] {w+1.1*$dy},{h-1.5*$dy},1,4,3 y={@{0,h}-@{-1,h}/2}
+#        vy={0.4*$vy}
+        vy={$vy*0.7}
+
+#        -if {h<@{1,h/2}} vy={-min(1.5*$vy,120)} -endif
+      -endif
+
+
+      -j[0] [-1],{$x-@{-1,w/2}},{$y-@{-1,h/2}} -rm[-1]
+      -w[0]
+    -endif
+
+    x={$x+$vx}
+    y={$y+$vy}
+
+    vy={$vy+0.6}
+
+    -wait 20
+
+  -while @!
+
+
+toto :
+  -testimage2d 300 --mirror xc
+  -parallel -_toto[0],-_toto[1]
+
+_toto :
+  -v -
+  -w[0]
+  -v + -e "Window created "{i} -v -
+  -do
+     x=@{!,x} y=@{!,y}
+     -if {$x>=0}
+       --circle $x,$y,20,1,255,0,255 -w[-1] -rm[-1]
+     -endif
+     -wait
+  -while @!
+
