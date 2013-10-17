@@ -6116,18 +6116,12 @@ topographic_map : -check "isint(${1=16}) && $1>0" -skip ${2=2}
 #@gmic : Default values: 'R=255', 'G=R' and 'B=R'.
 #@gmic : $ 32,32 64,64 200,200 256,256 -ball 255,164,100
 ball : -skip ${1=255},${2=$1},${3=$2}
-  -e[^-1] "Draw ball sprite on image$?, with color ($1,$2,$3)."
-  -v - -to_rgba
-  -repeat @# -l[$>]
-    mwh={min(w,h)}
-    -sh 3,3 -f[-1] 0 -rm[-1]
-    -ellipse {0.5*$mwh},{0.5*$mwh},{0.5*$mwh-4},{0.5*$mwh-4},0,1,$1,$2,$3,1
-    -sh 0,2 -*[-1] '($mwh+y-x)/(2*w)' -rm[-1]
-    -ellipse {$mwh*0.7},{$mwh*0.3},{min(30,$mwh*$mwh/512)},{min(30,$mwh*$mwh/512)},0,{min($mwh/64,1)},255,255,255,1
-    -sh 0,2 -b[-1] {0.02*$mwh} -rm[-1]
-    -sh 3,3 -*[-2] [-1] -dilate[-1] 3 -rm[-1]
-    -sh 0,2 -+[-1] 'if(i&&(!j(-1)||!j(1)||!j(0,-1)||!j(0,1)),if(c==0,$1,if(c==1,$2,$3))/6,0)' -rm[-1]
-  -endl -done -v +
+  -sphere3d 120,4 -col3d[-1] ${1-3}
+  256,256,1,3,-1 -object3d[-1] [-2],50%,50%,0,1,5,0,0,800,400,-200,-800,0.1,1.5
+  -rm[-2] -to_rgba[-1] -replace_color[-1] 0,0,-1,-1,-1,255,0,0,0,0
+  -repeat {@#-1}
+    s=@{$>,min(w,h)} --r[-1] $s,$s,1,4,3 -nm[-1] @{$>,n} -rv[$>,-1] -rm[-1]
+  -done -rm[-1] -round
 
 #@gmic chessboard : size1>0,_size2>0,_offset1,_offset2,_angle,_opacity,_color1,..,_color2,..
 #@gmic : Draw chessboard on selected images.
@@ -10770,7 +10764,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
   # Init images and variables.
   -i[board] $1,$2 -rand[board] 1,$3 -round[board] 1
   -i[undo] [-1]
-  -i[balls] 32,32 -ball[-1] 255,255,255 -autocrop[-1] 0 -expand_xy[-1] 1,0 -*[-1] 1.5 -c[-1] 0,255 -r[-1] {@{board,w}*w},{@{board,h}*h},1,1,0,2 -/[-1] 255
+  -i[balls] 32,32,1,4 -_x_jawbreaker_ball[-1] -autocrop[-1] 0 -expand_xy[-1] 1,0 -*[-1] 1.5 -c[-1] 0,255 -r[-1] {@{board,w}*w},{@{board,h}*h},1,1,0,2 -/[-1] 255
   -i[back] {w},{h},1,3 -l[-1]
     -rand 0,255 -blur_xy 6,20 -equalize 100,0,255 -blur_xy 2,4
     -sh 0,0 -sh[-2] 1,1 -sh[-3] 2,2 -/[-3] 4 -/[-2] 8 -/[-1] 2 -rm[-3--1]
@@ -10878,6 +10872,16 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
   # End properly.
   -rm[board,undo,balls,back,visu]
   -w 0 -v +
+
+_x_jawbreaker_ball :
+  mwh={min(w,h)}
+  -sh 3,3 -f[-1] 0 -rm[-1]
+  -ellipse {0.5*$mwh},{0.5*$mwh},{0.5*$mwh-4},{0.5*$mwh-4},0,1,240,240,240,1
+  -sh 0,2 -*[-1] '($mwh+y-x)/(2*w)' -rm[-1]
+  -ellipse {$mwh*0.7},{$mwh*0.3},{min(30,$mwh*$mwh/512)},{min(30,$mwh*$mwh/512)},0,{min($mwh/64,1)},255,255,255,1
+  -sh 0,2 -b[-1] {0.02*$mwh} -rm[-1]
+  -sh 3,3 -*[-2] [-1] -dilate[-1] 3 -rm[-1]
+  -sh 0,2 -+[-1] 'if(i&&(!j(-1)||!j(1)||!j(0,-1)||!j(0,1)),240/6,0)' -rm[-1]
 
 #@gmic x_life
 #@gmic : Launch the game of life.
@@ -23601,72 +23605,48 @@ gmicol_gcd_etch_preview :
 # (End of G'MIC custom commands
 
 foo :
-  500,500,1,3
-  64,64,1,3 -ball[-1] 255,128,64
-  -w[0] -1,-1,0,0,"Bouncing ball"
-
-  x=250 y=250
-  vx=0 vy=0
 
   -v -
+
+  -l[]
+  420,256,1,3
+  60,60,1,3 -ball[-1] 255,128,64
+  -w[0] -1,-1,0,0,"[G'MIC] Bouncing ball"
+
+
+  cx=@{0,w/2}
+  t=0
+  vt=0.05
+  vx=2
+
   -do
+    xm=$cx
+    t={$t+$vt}
+    ym=@{0,h/2-70+(h/2+10)*(1-abs(cos($t)))}
 
-    -if {$x>=0}
-      -f[0] 0
+    r1=@{1,w} r2=@{1,h}
+    vt=0.05
 
-      [1]
+    -if {$xm+$r1>=@{0,w}} delta={$xm+$r1-@{0,w}} r1={$r1-$delta} r2={$r2+$delta} -endif
+    -if {$xm-$r1<0} delta={-($xm-$r1)} r1={$r1-$delta} r2={$r2+$delta} -endif
+    -if {$ym+$r2>=@{0,h}-40} delta={$ym+$r2-@{0,h}+30} r2={$r2-$delta} r1={$r1+$delta} vt={0.05-0.0015*(60-$r2)} -endif
 
-      dx={@{1,w}/2-$x}
-      -if {$dx>0} -r[-1] {w-1.5*$dx},100%,1,4,2 x=@{-1,w/2} -endif
+    --r[1] $r1,$r2,1,100%,3
+    -f[0] 0 -j[0] [-1],{$xm-$r1/2},{$ym-$r2/2}
 
-      dx={$x+@{1,w}/2-@{0,w}}
-      -if {$dx>0} -r[-1] {w-1.5*$dx},100%,1,4,2 x={@{0,w}-@{-1,w}/2} -endif
+    ys=@{0,h-50}
+    -line[0] 0,$ys,100%,$ys,1,255
 
-      dy={@{1,h}/2-$y}
-      -if {$dy>0}
-        w={w+1.1*$dy} h={h-1.5*$dy}
-        -r[-1] $w,$h,1,4,3 y=@{-1,h/2}
-        vy={0.9*$vy}
-        -if {h<@{1,h/2}} vy={min(1.5*$vy,200)} -endif
-      -endif
-
-      dy={min(20,$y+@{1,h}/2-@{0,h})}
-      -if {$dy>0}
-        -r[-1] {w+1.1*$dy},{h-1.5*$dy},1,4,3 y={@{0,h}-@{-1,h}/2}
-#        vy={0.4*$vy}
-        vy={$vy*0.7}
-
-#        -if {h<@{1,h/2}} vy={-min(1.5*$vy,120)} -endif
-      -endif
+    --rows[0] @{0,h-100},@{0,h-50} -mirror[-1] y -j[0] [-1],0,@{0,h-50},0,0,0.5 -rm[-1]
 
 
-      -j[0] [-1],{$x-@{-1,w/2}},{$y-@{-1,h/2}} -rm[-1]
-      -w[0]
-    -endif
+    -w[0] -rm[-1]
 
-    x={$x+$vx}
-    y={$y+$vy}
-
-    vy={$vy+0.6}
+    cx={$cx+20*$vt*$vx}
+    -if {$cx>=@{0,w}-20||$cx<20} vx={-$vx} -endif
 
     -wait 20
 
-  -while @!
 
-
-toto :
-  -testimage2d 300 --mirror xc
-  -parallel -_toto[0],-_toto[1]
-
-_toto :
-  -v -
-  -w[0]
-  -v + -e "Window created "{i} -v -
-  -do
-     x=@{!,x} y=@{!,y}
-     -if {$x>=0}
-       --circle $x,$y,20,1,255,0,255 -w[-1] -rm[-1]
-     -endif
-     -wait
-  -while @!
-
+  -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
+  -w 0 -endl -v +
