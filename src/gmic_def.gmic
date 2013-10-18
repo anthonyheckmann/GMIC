@@ -13159,6 +13159,11 @@ _max_whds :
 med :
   -v - --sort[-1] -u @{-1,{w*h*d*s/2}} -rm[-1] -v +
 
+#@gmic color_med
+#@gmic : Return the median color value of the last selected image.
+color_med :
+  -v - -u "" s="" -repeat {s} --channels[-1] $> -u @{}$s@{-med[-1]} s=, -rm[-1] -done -v +
+
 #@gmic min_w
 #@gmic : Return the minimal width between selected images.
 min_w :
@@ -23707,3 +23712,23 @@ toto :
 
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -w 0 -endl -v +
+
+
+
+align_color :
+
+  -to_rgb
+
+  -rgb2ycbcr
+
+  # Step 1 : find median colors.
+  -repeat @# col$>=@{-color_med[$>]} -done
+
+  # Step 2 : Linearly transform color to fit median0.
+  -repeat @# i=$> -repeat 3 -sh[$i] $>,$> -*[-1] {arg(1+$>,$col0)/arg(1+$>,${col$i})} -rm[-1] -done -done
+
+  -ycbcr2rgb
+  -c 0,255
+
+
+
