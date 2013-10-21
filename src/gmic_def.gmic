@@ -10344,6 +10344,60 @@ x_blobs :
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -rm -w 0 -v +
 
+#@gmic x_bouncing
+#@gmic : Launch the bouncing balls demo.
+x_bouncing :
+  -e[] "\n
+------ Bouncing balls demo -------------------------\n
+----\n
+---- Keys 'ESC' or 'Q' to exit.\n
+----\n
+-----------------------------------------------------"
+  -v - -l[]
+  500,320,1,3 -plasma 1,1,9 -n 0,220
+  N=12
+  -repeat $N
+    -if {$><$N/2} s={round(?(32,80))} $s,$s -ball[-1] @{-RGB}
+    -else --mirror[-{$N/2}] c -shift[-1] 0,0,0,-1,2 -endif
+    t$>={?(200)} x$>=@{0,?(10,w-10)} h$>={?(150,300)} vx$>={if(?<0.5,1,-1)*?(1,8)}
+  -done
+  -mv[0] @#
+  -w[-1] -1,-1,0,0,"[G'MIC] Bouncing balls"
+  (0;0.7;1) -r[-1] @{-2,w},70,1,1,3
+
+  -do
+    [$N]
+    -repeat $N
+      bw=@{$>,w} bh=@{$>,h}
+      y={${h$>}*abs(cos(${t$>}*pi/60))-$bh/2}
+
+      dt=1
+      -if {$y<0} d={-$y} y=0 bh={$bh-$d} bw={$bw+$d} dt={max(0.2,1-($d/$bh)^2)} -else dt=1 -endif
+
+      -if {${x$>}+$bw/2>w}
+        d={${x$>}+$bw/2-w} bw={$bw-$d} bh={$bh+0.5*$d}
+        -if {${x$>}+$bw/4>w} vx$>={-${vx$>}} -endif
+      -endif
+
+      -if {${x$>}-$bw/2<0}
+        d={$bw/2-${x$>}} bw={$bw-$d} bh={$bh+0.5*$d}
+        -if {${x$>}-$bw/4<0} vx$>={-${vx$>}} -endif
+      -endif
+
+      --r[$>] $bw,$bh,1,4,3 -s[-1] c,-3
+      -j[-3] [-2],{max(0,min(@{$N,w-$bw},${x$>}-$bw/2))},{@{$N,h}-@{-1,h}-$y-70},0,0,1,[-1],255 -rm[-2,-1]
+
+      t$>={${t$>}+$dt}
+      x$>={${x$>}+$dt*${vx$>}}
+    -done
+
+    --rows[-1] {h-2*70},{h-1-70} -mirror[-1] y -*[-1] [{$N+1}]
+    -j[-2] [-1],0,@{-2,h-71},0,0,0.5 -rm[-1]
+    -w[-1] -rm[-1] -wait 20
+
+  -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
+  -w 0 -endl -v +
+
 #@gmic x_fire
 #@gmic : Launch the fire demo.
 x_fire : -skip "${1=G'MIC}"
