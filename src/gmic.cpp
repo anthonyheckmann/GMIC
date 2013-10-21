@@ -1257,6 +1257,26 @@ inline bool gmic_check_filename(const char *const filename) {
   return res;
 }
 
+// Manage mutexes.
+struct _gmic_mutex {
+#if cimg_OS==2
+  HANDLE mutex[256];
+  _gmic_mutex() { for (unsigned int i = 0; i<256; ++i) mutex[i] = CreateMutex(0,FALSE,0); }
+  void lock(const unsigned int n) { WaitForSingleObject(mutex[n],INFINITE); }
+  void unlock(const unsigned int n) { ReleaseMutex(mutex[n]); }
+#elif defined(_PTHREAD_H)
+  pthread_mutex_t mutex[256];
+  _gmic_mutex() { for (unsigned int i = 0; i<256; ++i) pthread_mutex_init(&mutex[i],0); }
+  void lock(const unsigned int n) { pthread_mutex_lock(&mutex[n]); }
+  void unlock(const unsigned int n) { pthread_mutex_unlock(&mutex[n]); }
+#else
+  _gmic_mutex() {}
+  void lock(const unsigned int) {}
+  void unlock(const unsigned int) {}
+#endif
+};
+inline _gmic_mutex& gmic_mutex() { static _gmic_mutex val; return val; }
+
 // Code for managing argument substitutions from a command.
 inline const char *gmic_ellipsize_arg(const char *const argument, CImg<char>& argument_text) {
   if (argument_text) return argument_text;
@@ -6513,6 +6533,23 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               cimg_forY(selection,l) gmic_apply(images[selection[l]],mirror(argument));
             } else arg_error("mirror");
             is_released = false; ++position; continue;
+          }
+
+          // Manage mutexes.
+          if (!std::strcmp("-mutex",item)) {
+            gmic_substitute_args();
+            unsigned int number, is_lock = 1;
+            if ((std::sscanf(argument,"%u%c",
+                             &number,&end)==1 ||
+                 std::sscanf(argument,"%u,%u%c",
+                             &number,&is_lock,&end)==2) &&
+                number<256 && is_lock<=1) {
+              print(images,"%s mutex #%u.",
+                    is_lock?"Lock":"Unlock",number);
+              if (is_lock) gmic_mutex().lock(number);
+              else gmic_mutex().unlock(number);
+            } else arg_error("mutex");
+            ++position; continue;
           }
 
 #ifdef gmic_float
