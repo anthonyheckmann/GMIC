@@ -8324,6 +8324,11 @@ _apply_parallel_overlap16 :
 #@gmic : $ image.jpg -local[] 300,300,1,3 -rand[0] 0,255 -blur 4 -sharpen 1000 -endlocal
 #@gmic : $ image.jpg --local -repeat 3 -deform 20 -done -endlocal
 
+#@gmic mutex : number,_action={ 0=unlock | 1=lock } : (*)
+#@gmic : Lock or unlock specified mutex for multi-threaded programming.
+#@gmic : 'number' designates the mutex number, and must be in [0,255].
+#@gmic : Default value: 'action=1'.
+
 #@gmic onfail : (*)
 #@gmic : Execute following commands when an error is encountered in the body of the 'local..endlocal' block.
 #@gmic : The status value is set with the corresponding error message.
