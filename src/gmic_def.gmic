@@ -1879,8 +1879,8 @@ _document_gmic_declaration_ascii :
       s="                        "
       -y x
       -repeat {@#-1} ({'" |"'}) -a[$>,-1] x -done  # Insert ' |'.
-      -repeat @# -l[$>] -s x,-80
-        -repeat {@#-1} ({'\\\\\n$s"  "'}) -a[$>,-1] x -done # Split with '\\'.
+      -repeat @# -l[$>] -_document_gmic_split_ascii 80
+        -repeat {@#-1} ({'\n$s"  "'}) -a[$>,-1] x -done
         -a x -v + -e[] $s@{0,t} -v -
       -endl -done
     -endif
@@ -1889,8 +1889,8 @@ _document_gmic_declaration_ascii :
 
 _document_gmic_description_ascii :
   s="        "
-  -y x -s x,-96
-  -if {@#>1} -repeat {@#-1} ({'\\\\\n$s"  "'}) -a[$>,-1] x -done -a x -endif
+  -y x -_document_gmic_split_ascii 96
+  -repeat {@#-1} ({'\n$s"  "'}) -a[$>,-1] x -done -a x
   -v + -repeat @# -e[] $s@{$>,t} -v - -done
 
 _document_gmic_example_ascii :
@@ -1903,6 +1903,14 @@ _document_gmic_footer_ascii : -skip $1
     -done -v -
   -endif
   -v + -e[] "\n   [ Total number of commands: "$_command" ]" -v -
+
+_document_gmic_split_ascii :
+  -do -if {w>$1}
+    i={$1-1}
+    -repeat {$1/2} -if {C=i($1-1-$>);C==32||C==38||C==42||C==43||C==44||C==46||C==47||C==58||C==59||C==63||C==92||C==124} i={$1-1-$>} -break
+    -endif -done
+    --z[-1] {$i+1},100% -z[-2] 0,$i
+  -endif -while {w>$1}
 
 # Define document_gmic commands for bash auto-completion script output.
 _document_gmic_header_bash : -skip $1
@@ -23661,3 +23669,12 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
+
+foo :
+  -v -
+  ({'"Salut les amis, je me présente : je m appelle David Tschumperlé, et je suis heureux de faire votre connaissance ! "\
+     "J aimerais bien vous rencontrer dans votre travail pour voir un peu ce que vous faites, qu en dites-vous ?"'})
+
+  N=80
+
+
