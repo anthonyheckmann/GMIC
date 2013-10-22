@@ -2317,6 +2317,8 @@ text2img : -skip "${2= }"
 #@gmic type : datatype : (*)
 #@gmic : Set pixel datatype for all images of the list.
 #@gmic : 'datatype' can be { bool | uchar | char | ushort | short | uint | int | float | double }.
+#@gmic : Depending on how your G'MIC version has been compiled, some datatypes may be unavailable
+#@gmic : (typically datatypes different from 'float').
 
 #@gmic uncommand : command_name : * : (*)
 #@gmic : Discard last definition of specified custom command.
