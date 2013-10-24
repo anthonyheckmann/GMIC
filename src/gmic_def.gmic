@@ -23678,18 +23678,13 @@ foo :
 
   -repeat @# -l[$>]
 
-    --diffusiontensors 0.4
+    --diffusiontensors 0.1
     100%,100%
-    -repeat 10
+    -repeat 3
       a={$>*pi/10} u={cos($a)} v={sin($a)} --mix_channels[1] ($u,$v,0;0,$u,$v)
-      -d
-
-
-#      --f[-1] 'cos(sin($a/3)*x+cos($a/3)*y)'
-
-
-
-
+      -norm[-1] -ge[-1] 0.7
+      -f[-1] 'i*(1+cos(sin($a/3)*x+cos($a/3)*y))' -ge[-1] 0.3
+      -max[2,-1]
     -done
 
   -endl -done
