@@ -4896,6 +4896,15 @@ Start a 'local..[onfail]..endlocal' block, with selected images.
 {\footnotesize \textbf{Example 480~:} \texttt{image.jpg --local -repeat 3 -deform 20 -done -endlocal}}
 \end{center}
 
+\subsection{\emph{-mutex\index{-mutex}} (*)}\vspace*{-0.5em}
+~\\\textbf{Arguments: } 
+{\small \texttt{indice,\_action=\{ 0=unlock ~$|$~ 1=lock \}}}\\~\\
+Lock or unlock specified mutex for multi-threaded programming.
+~\\A locked mutex can be unlocked only by the same thread. All mutexes are unlocked by default.
+~\\'indice' designates the mutex indice, in [0,255].
+~\\~\\\textbf{Default value}: {\small \texttt{'action=1'.}}
+
+
 \subsection{\emph{-onfail\index{-onfail}} (*)}\vspace*{-0.5em}
 Execute following commands when an error is encountered in the body of the 'local..endlocal' block.
 ~\\The status value is set with the corresponding error message.
@@ -5910,6 +5919,10 @@ Create 3d transition sequence between selected consecutive images.
 Launch the blobs editor.
 
 
+\subsection{\emph{-x\_bouncing\index{-x\_bouncing}} }\vspace*{-0.5em}
+Launch the bouncing balls demo.
+
+
 \subsection{\emph{-x\_fire\index{-x\_fire}} }\vspace*{-0.5em}
 Launch the fire demo.
 
@@ -6369,6 +6382,10 @@ Return the maximal wxhxdxs size of selected images.
 
 \subsection{\emph{-med\index{-med}} }\vspace*{-0.5em}
 Return the median value of the last selected image.
+
+
+\subsection{\emph{-color\_med\index{-color\_med}} }\vspace*{-0.5em}
+Return the median color value of the last selected image.
 
 
 \subsection{\emph{-min\_w\index{-min\_w}} }\vspace*{-0.5em}

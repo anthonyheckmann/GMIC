@@ -23672,9 +23672,24 @@ gmicol_gcd_etch_preview :
 #
 # (End of G'MIC custom commands
 
-foo :
-  -v -
-  ({'"Salut les amis, je me présente : je m appelle David Tschumperlé, et je suis heureux de faire votre connaissance ! "\
-     "J aimerais bien vous rencontrer dans votre travail pour voir un peu ce que vous faites, qu en dites-vous ?"'})
 
-  N=80
+foo :
+# 32,32,10,1,'a=z/d*pi;cos(sin(a)*x+cos(a)*y)'
+
+  -repeat @# -l[$>]
+
+    --diffusiontensors 0.4
+    100%,100%
+    -repeat 10
+      a={$>*pi/10} u={cos($a)} v={sin($a)} --mix_channels[1] ($u,$v,0;0,$u,$v)
+      -d
+
+
+#      --f[-1] 'cos(sin($a/3)*x+cos($a/3)*y)'
+
+
+
+
+    -done
+
+  -endl -done

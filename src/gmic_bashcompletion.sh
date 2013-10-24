@@ -597,6 +597,7 @@ _gmic_def()
 	      -if --if\
 	      -l --l\
 	      -local --local\
+	      -mutex --mutex\
 	      -onfail --onfail\
 	      -parallel --parallel\
 	      -progress --progress\
@@ -712,6 +713,7 @@ _gmic_def()
 	      -transition_plasma --transition_plasma\
 	      -transition3d --transition3d\
 	      -x_blobs --x_blobs\
+	      -x_bouncing --x_bouncing\
 	      -x_fire --x_fire\
 	      -x_fireworks --x_fireworks\
 	      -x_fisheye --x_fisheye\
@@ -790,6 +792,7 @@ _gmic_def()
 	      -max_whd --max_whd\
 	      -max_whds --max_whds\
 	      -med --med\
+	      -color_med --color_med\
 	      -min_w --min_w\
 	      -min_h --min_h\
 	      -min_d --min_d\
@@ -1408,6 +1411,7 @@ _gmic_def()
 	      if\
 	      l\
 	      local\
+	      mutex\
 	      onfail\
 	      parallel\
 	      progress\
@@ -1523,6 +1527,7 @@ _gmic_def()
 	      transition_plasma\
 	      transition3d\
 	      x_blobs\
+	      x_bouncing\
 	      x_fire\
 	      x_fireworks\
 	      x_fisheye\
@@ -1601,6 +1606,7 @@ _gmic_def()
 	      max_whd\
 	      max_whds\
 	      med\
+	      color_med\
 	      min_w\
 	      min_h\
 	      min_d\
@@ -2946,6 +2952,10 @@ _gmic_def()
 		;;
 		"-if" | "--if")
 		COMPREPLY=( $(compgen -W "boolean filename") )
+		return 0
+		;;
+		"-mutex" | "--mutex")
+		COMPREPLY=( $(compgen -W "indice,_action={0=unlock|1=lock} >") )
 		return 0
 		;;
 		"-parallel" | "--parallel")
