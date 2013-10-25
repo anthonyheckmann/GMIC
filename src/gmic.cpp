@@ -2422,7 +2422,6 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
 
   CImgList<T> visu;
   CImg<bool> is_valid(1,selection.height(),1,1,true);
-  int max_height = 0;
   cimg_forY(selection,l) {
     const CImg<T>& img = images[selection[l]];
     int _verbosity = verbosity;
@@ -2430,17 +2429,13 @@ gmic& gmic::display_images(const CImgList<T>& images, const CImgList<char>& imag
     verbosity = -1; is_debug = false;
     try { gmic_check(img); } catch (gmic_exception&) { is_valid[l] = false; }
     verbosity = _verbosity; is_debug = _is_debug;
-    if (is_valid[l] && !img.is_CImg3d(false))
-      max_height = cimg::max(max_height,images[selection(l)].height());
   }
 
   cimg_forY(selection,l) {
     const unsigned int ind = selection[l];
     const CImg<T>& img = images[ind];
-    if (img && is_valid[l]) {
-      if (!max_height || img.height()<=max_height) visu.insert(img,~0U,true);
-      else img.get_rows(0,max_height-1).move_to(visu);
-    } else visu.insert(1);
+    if (img && is_valid[l]) visu.insert(img,~0U,true);
+    else visu.insert(1);
   }
   const CImg<char> _gmic_names = selection2string(selection,images_names,false);
   const char *const gmic_names = _gmic_names.data();

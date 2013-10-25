@@ -6946,6 +6946,31 @@ apply_pose3d :
   -else -error "Image ["{@#-$>-1}"] does not represent a 3d object."
   -endif -endl -done -v +
 
+#@gmic arrow3d : x0,y0,z0,x1,y1,z1,_radius[%]>=0,_head_length[%]>=0,_head_radius[%]>=0
+#@gmic : Input 3d arrow with specified starting and ending 3d points.
+#@gmic : Default values: 'radius=5%', 'head_length=25%' and 'head_radius=15%'.
+#@gmic : $ -repeat 12 a={$>*2*pi/12} -arrow3d 0,0,0,{cos($a)},{sin($a)},0 -done -+3d
+arrow3d : -check "${7=5%}>=0 && ${8=25%}>=0 && ${9=15%}>=0"
+  -e[^-1] "Input 3d arrow, from (${1-3}) to (${4-6}), with radius $7, head length $8 and head radius $9."
+  -v -
+
+  # Create 3d object.
+  L={sqrt(($4-$1)^2+($5-$2)^2+($6-$3)^2)}
+  R={if(@{-is_percent\ $7},$7*$L,$7)}
+  l={if(@{-is_percent\ $8},$8*$L,$8)}
+  r={if(@{-is_percent\ $9},$9*$L,$9)}
+  L={$L-$l} -cylinder3d $R,$L -cone3d $r,$l -+3d[-1] 0,0,$L -+3d[-2,-1]
+
+  # Compute rotation matrix for arrow orientation.
+  ({$4-$1}^{$5-$2}^{$6-$3}) (0.01^-0.02^0.03) -orientation[-2,-1]
+  -_cross3d @-2,@-1 -_cross3d @-1,@-3 -rm[-3] -y[-3--1] x -mv[-2,-1] -3
+  -a[-3--1] y #-invert[-1]
+
+  # Rotate and translate the arrow at specified coordinates.
+  -s3d[-2] -r[-5] 3,@{-5,h/3},1,1,-1 -**[-5,-1]
+  -y[-4] y -a[-6--1] y -+3d[-1] ${1-3}
+  -v +
+
 #@gmic axes3d : _size_x,_size_y,_size_z,_font_size>0,_label_x,_label_y,_label_z
 #@gmic : Input 3d axes with specified sizes along the x,y and z orientations.
 #@gmic : Default values: 'size_x=size_y=size_z=1', 'font_size=24', 'label_x=X', 'label_y=Y' and 'label_z=Z'.
@@ -8228,6 +8253,16 @@ apply_parallel :
   -endl -done
   -uncommand _apply_parallel -v +
 
+#@gmic apply_parallel_channels : "command"
+#@gmic : Apply specified command on each of the selected images, by parallelizing it for all channel of the images independently.
+#@gmic : $ image.jpg -apply_parallel_channels "-blur 3"
+apply_parallel_channels :
+  -v - -if {@.>1570} M=@* -else M=8 -endif -v +
+  -e[^-1] "Execute command '$*' on all channels of image$? in parallel, using "$M" threads."
+  -v - N=@# -repeat $N s$>=@{$>,s} -done -s c
+  -apply_parallel "$1"
+  -repeat $N -a[$>-{$>+${s$>}-1}] c -done -v +
+
 #@gmic apply_parallel_overlap : "command",overlap[%],nb_threads={ 0=auto | 1 | 2 | 4 | 8 | 16 }
 #@gmic : Apply specified command on each of the selected images, by parallelizing it on 'nb_threads' overlapped sub-images.
 #@gmic : 'nb_threads' must be a power of 2.
@@ -8257,14 +8292,18 @@ _apply_parallel_overlap2 :
   -endif
 
 _apply_parallel_overlap4 :
-  ovx={round(if(@{"-is_percent $2"},w*$2,$2))} w2={int(w/2)}
-  ovy={round(if(@{"-is_percent $2"},h*$2,$2))} h2={int(h/2)}
-  --z[0] {$w2-$ovx},0,100%,{$h2+$ovy-1} --z[0] 0,{$h2-$ovy},{$w2+$ovx-1},100%
-  --z[0] {$w2-$ovx},{$h2-$ovy},100%,100% -z[0] 0,0,{$w2+$ovx-1},{$h2+$ovy-1}
-  -parallel "-l[0] $1 -endl","-l[1] $1 -endl","-l[2] $1 -endl","-l[3] $1 -endl"
-  -z[0] 0,0,@{0,w-1-$ovx},@{0,h-1-$ovy} -z[1] $ovx,0,100%,@{1,h-1-$ovy}
-  -z[2] 0,$ovy,@{2,w-1-$ovx},100% -z[3] $ovx,$ovy,100%,100%
-  -a[0,1] x -a[1,2] x -a y
+  -if {max(w,h)/min(w,h)>=3}
+    -_apply_parallel_overlap2 "-_apply_parallel_overlap2 \"$1\",$2",$2
+  -else
+    ovx={round(if(@{"-is_percent $2"},w*$2,$2))} w2={int(w/2)}
+    ovy={round(if(@{"-is_percent $2"},h*$2,$2))} h2={int(h/2)}
+    --z[0] {$w2-$ovx},0,100%,{$h2+$ovy-1} --z[0] 0,{$h2-$ovy},{$w2+$ovx-1},100%
+    --z[0] {$w2-$ovx},{$h2-$ovy},100%,100% -z[0] 0,0,{$w2+$ovx-1},{$h2+$ovy-1}
+    -parallel "-l[0] $1 -endl","-l[1] $1 -endl","-l[2] $1 -endl","-l[3] $1 -endl"
+    -z[0] 0,0,@{0,w-1-$ovx},@{0,h-1-$ovy} -z[1] $ovx,0,100%,@{1,h-1-$ovy}
+    -z[2] 0,$ovy,@{2,w-1-$ovx},100% -z[3] $ovx,$ovy,100%,100%
+    -a[0,1] x -a[1,2] x -a y
+  -endif
 
 _apply_parallel_overlap8 :
   -_apply_parallel_overlap2 "-_apply_parallel_overlap4 \"$1\",$2",$2
@@ -23671,54 +23710,3 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
-run_min :
-  -min1d 12%
-  -min1d 3%
-
-min1d : -check ${1=3%}>=0
-  -v - -l[]
-  2048,1,1,1,'X=30*(x/w-0.5);1+sinc(X)-exp(-(X^2)/(10+2*sign(X)))' -b[-1] $1 -dg 600,480
-  24,24 -ball[-1] 255,0,255 -s[-1] c,-3 -w[0] -1,-1,0,0,"1D energy minimization"
-  -do
-    -if @{!,b}
-      x=@{!,x}
-      --z[0] {$x-1},{$x+1} -select_color[-1] 0,120,120,200 -s[-1] x
-      yp=@{-3,yM} y=@{-2,yM} yn=@{-2,yM} dy={-($yn-$yp)/2}
-      -rm[-3--1]
-
-      -if {$y>0}
-        [0]
-        -if {@{!,b}&2}
-          xe={$x+50*$dy}
-          -rectangle[-1] $x,{$y-2},$xe,{$y+2},1,200,64,0
-          -polygon[-1] 3,$xe,{$y-5},$xe,{$y+5},{$xe+sign($dy)*10},$y,1,200,64,0
-        -endif
-        -j[-1] [1],@{1,$x-w/2},@{1,$y-h/2},0,0,1,[2],255
-        -w[-1] -rm[-1]
-      -endif
-    -else -w[0]
-    -endif
-    -wait
-  -while {@!&&!@{!,Q}&&!@{!,ESC}}
-  -w 0 -rm -endl -v +
-
-min2d : -check ${1=5%}>=0
-  -v - -l[]
-  200,200,1,1,'X=10*(x/w-0.5);Y=20*(y/h-0.5);-(sinc(X)-exp(-X^2)/(1+0.5*sign(X)))*sinc(Y)' -min[-1] 0.2 -b $1,0 -n 0,130
-  --gradient xy -a[-2,-1] c
-  --elevation3d[0] -v + -d3d[-1] -q
-
-  -do
-    640,480,1,3
-
-
-
-
-  -while {@!&&!@{!,Q}&&!@{!,ESC}}
-
-
-  -w 0 -rm -endl -v +
-
-
-# -d -n 0,1 -elevation3d 300 -axes3d 100,100,100,24,a,b,"E(a;b)" -+3d
