@@ -66,12 +66,6 @@
 #define cimg_include_file "./CImg.h"
 #endif // #if defined(cimg_build)
 
-#if defined(_WIN32) || defined(_WIN64)
-#define gmic_setlocale setlocale
-#else
-#define gmic_setlocale std::setlocale
-#endif
-
 #ifdef cimg_include_file
 #include cimg_include_file
 #if cimg_OS==2
@@ -304,7 +298,7 @@ struct gmic {
 	      gmic_list<T> &images, gmic_list<char> &images_names) {
     unsigned int variables_sizes[256] = { 0 };
     unsigned int position = 0;
-    gmic_setlocale(LC_NUMERIC,"C");
+    setlocale(LC_NUMERIC,"C");
     scope.assign(1U);
     scope._data[0].assign(2,1,1,1);
     scope._data[0]._data[0] = '.';

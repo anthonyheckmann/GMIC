@@ -274,7 +274,7 @@ bool get_net_update() {
 // Set/get the current locale.
 void set_locale() {
   char locale[16] = { 0 };
-  const char *s_locale = gmic_setlocale(LC_CTYPE,0);
+  const char *s_locale = setlocale(LC_CTYPE,0);
   if (!s_locale || std::strlen(s_locale)<2 || !cimg::strncasecmp("lc",s_locale,2)) s_locale = getenv("LANG");
   if (!s_locale || std::strlen(s_locale)<2) s_locale = getenv("LANGUAGE");
   if (!s_locale || std::strlen(s_locale)<2) s_locale = getenv("LC_ALL");
@@ -2486,7 +2486,7 @@ void create_parameters_gui(const bool reset_params) {
           bool found_valid_argument = false;
           if (!found_valid_argument && !cimg::strcasecmp(argument_type,"float")) {
             float value = 0, min_value = 0, max_value = 100;
-            gmic_setlocale(LC_NUMERIC,"C");
+            setlocale(LC_NUMERIC,"C");
             std::sscanf(argument_arg,"%f%*c%f%*c%f",&value,&min_value,&max_value);
             if (is_fave) std::sscanf(argument_fave,"%f",&value);
             if (!reset_params) std::sscanf(argument_value,"%f",&value);
@@ -2509,7 +2509,7 @@ void create_parameters_gui(const bool reset_params) {
           // Check for an int-valued argument.
           if (!found_valid_argument && !cimg::strcasecmp(argument_type,"int")) {
             float value = 0, min_value = 0, max_value = 100;
-            gmic_setlocale(LC_NUMERIC,"C");
+            setlocale(LC_NUMERIC,"C");
             std::sscanf(argument_arg,"%f%*c%f%*c%f",&value,&min_value,&max_value);
             if (is_fave) std::sscanf(argument_fave,"%f",&value);
             if (!reset_params) std::sscanf(argument_value,"%f",&value);

@@ -23712,3 +23712,27 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
+
+foo :
+128,128,128,1,'X=x-w/2;Y=y-h/2;Z=z-d/2;sqrt(X^2+abs(Y)^2.3+abs(Z*cos(Z/10))^1.8)'
+  --gradient[-1] xyz -a[-3--1] c
+
+  -repeat 300
+    a={?(0,2*pi)}
+    b={?(0,2*pi)}
+    x={@{0,w/2}+60*cos($a)*sin($b)}
+    y={@{0,h/2}+60*sin($a)*sin($b)}
+    z={@{0,d/2}+60*cos($b)}
+
+#    x={round(?(@{0,w}))}
+#    y={round(?(@{0,h}))}
+#    z={round(?(@{0,d}))}
+    gx=@{1,i($x,$y,$z,0)}
+    gy=@{1,i($x,$y,$z,1)}
+    gz=@{1,i($x,$y,$z,2)}
+    l=5
+    -arrow3d $x,$y,$z,{$x+$l*$gx},{$y+$l*$gy},{$z+$l*$gz} -col3d[-1] @{-RGB}
+  -done
+  -rm[1]
+  -isosurface3d[0] 30%
+  -+3d

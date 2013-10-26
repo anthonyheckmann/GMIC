@@ -2298,7 +2298,7 @@ void gmic::_gmic(const char *const commands_line, CImgList<T>& images, CImgList<
                  float *const p_progress, int *const p_cancel) {
 
   // Initialize class variables and default G'MIC environment.
-  gmic_setlocale(LC_NUMERIC,"C");
+  setlocale(LC_NUMERIC,"C");
   cimg::srand();
   verbosity = 0;
   nb_carriages = 0;
