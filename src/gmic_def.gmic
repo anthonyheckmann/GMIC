@@ -6932,7 +6932,7 @@ apply_camera3d : -skip ${4=0},${5=0},${6=0},${7=0},${8=-1},${9=0}
   -v +
 
 _cross3d :
-  ({$2*$6-$3*$5};{$3*$4-$1*$6};{$1*$5-$2*$4})
+  ({$2*$6-$3*$5}^{$3*$4-$1*$6}^{$1*$5-$2*$4}) -orientation[-1] -y[-1] y
 
 #@gmic apply_pose3d : p1,..,p12
 #@gmic : Apply 3d pose matrix to selected 3d objects.
@@ -6949,7 +6949,7 @@ apply_pose3d :
 #@gmic arrow3d : x0,y0,z0,x1,y1,z1,_radius[%]>=0,_head_length[%]>=0,_head_radius[%]>=0
 #@gmic : Input 3d arrow with specified starting and ending 3d points.
 #@gmic : Default values: 'radius=5%', 'head_length=25%' and 'head_radius=15%'.
-#@gmic : $ -repeat 12 a={$>*2*pi/12} -arrow3d 0,0,0,{cos($a)},{sin($a)},0 -done -+3d
+#@gmic : $ -repeat 10 a={$>*2*pi/10} -arrow3d 0,0,0,{cos($a)},{sin($a)},-0.5 -done -+3d
 arrow3d : -check "${7=5%}>=0 && ${8=25%}>=0 && ${9=15%}>=0"
   -e[^-1] "Input 3d arrow, from (${1-3}) to (${4-6}), with radius $7, head length $8 and head radius $9."
   -v -
@@ -6964,7 +6964,7 @@ arrow3d : -check "${7=5%}>=0 && ${8=25%}>=0 && ${9=15%}>=0"
   # Compute rotation matrix for arrow orientation.
   ({$4-$1}^{$5-$2}^{$6-$3}) (0.01^-0.02^0.03) -orientation[-2,-1]
   -_cross3d @-2,@-1 -_cross3d @-1,@-3 -rm[-3] -y[-3--1] x -mv[-2,-1] -3
-  -a[-3--1] y #-invert[-1]
+  -a[-3--1] y
 
   # Rotate and translate the arrow at specified coordinates.
   -s3d[-2] -r[-5] 3,@{-5,h/3},1,1,-1 -**[-5,-1]
