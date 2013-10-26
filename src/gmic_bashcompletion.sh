@@ -484,6 +484,7 @@ _gmic_def()
 	      -animate3d --animate3d\
 	      -apply_camera3d --apply_camera3d\
 	      -apply_pose3d --apply_pose3d\
+	      -arrow3d --arrow3d\
 	      -axes3d --axes3d\
 	      -b3d --b3d\
 	      -background3d --background3d\
@@ -580,6 +581,7 @@ _gmic_def()
 	      -volume3d --volume3d\
 	      -weird3d --weird3d\
 	      -apply_parallel --apply_parallel\
+	      -apply_parallel_channels --apply_parallel_channels\
 	      -apply_parallel_overlap --apply_parallel_overlap\
 	      -check --check\
 	      -continue --continue\
@@ -1298,6 +1300,7 @@ _gmic_def()
 	      animate3d\
 	      apply_camera3d\
 	      apply_pose3d\
+	      arrow3d\
 	      axes3d\
 	      b3d\
 	      background3d\
@@ -1394,6 +1397,7 @@ _gmic_def()
 	      volume3d\
 	      weird3d\
 	      apply_parallel\
+	      apply_parallel_channels\
 	      apply_parallel_overlap\
 	      check\
 	      continue\
@@ -2694,6 +2698,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "p1,..,p12 >") )
 		return 0
 		;;
+		"-arrow3d" | "--arrow3d")
+		COMPREPLY=( $(compgen -W "x0,y0,z0,x1,y1,z1,_radius[%]>=0,_head_length[%]>=0,_head_radius[%]>=0 >") )
+		return 0
+		;;
 		"-axes3d" | "--axes3d")
 		COMPREPLY=( $(compgen -W "_size_x,_size_y,_size_z,_font_size>0,_label_x,_label_y,_label_z >") )
 		return 0
@@ -2927,6 +2935,10 @@ _gmic_def()
 		return 0
 		;;
 		"-apply_parallel" | "--apply_parallel")
+		COMPREPLY=( $(compgen -W ""command" >") )
+		return 0
+		;;
+		"-apply_parallel_channels" | "--apply_parallel_channels")
 		COMPREPLY=( $(compgen -W ""command" >") )
 		return 0
 		;;
