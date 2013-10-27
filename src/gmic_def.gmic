@@ -17935,8 +17935,8 @@ gimp_emulate_film_others_preview :
 
 _gimp_emulate_film :
   -if $1
-    -if @{-path_tmp}/gmic_$2.cimgz -i @{-path_tmp}/gmic_$2.cimgz
-    -else -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] @{-path_tmp}/gmic_$2.cimgz
+    -if @{-path_user}/.gmic_$2.cimgz -i @{-path_user}/.gmic_$2.cimgz
+    -else -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] @{-path_user}/.gmic_$2.cimgz
     -endif
     -map_clut
   -endif
