@@ -17937,7 +17937,7 @@ _gimp_emulate_film :
   -if $1
     dir=@{-path_user}
     -if @{-is_windows} dir=$dir/gmic_film_presets -else dir=$dir/.gmic_film_presets -endif
-    -if $dir -else -exec "mkdir "$dir
+    -if $dir -else -exec "mkdir "$dir -endif
     -if $dir/$2.cimgz -i $dir/$2.cimgz
     -else -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] $dir/$2.cimgz
     -endif
