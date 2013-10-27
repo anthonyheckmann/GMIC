@@ -17935,8 +17935,11 @@ gimp_emulate_film_others_preview :
 
 _gimp_emulate_film :
   -if $1
-    -if @{-path_user}/.gmic_$2.cimgz -i @{-path_user}/.gmic_$2.cimgz
-    -else -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] @{-path_user}/.gmic_$2.cimgz
+    dir=@{-path_user}
+    -if @{-is_windows} dir=$dir/gmic_film_presets -else dir=$dir/.gmic_film_presets -endif
+    -if $dir -else -exec "mkdir "$dir
+    -if $dir/$2.cimgz -i $dir/$2.cimgz
+    -else -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] $dir/$2.cimgz
     -endif
     -map_clut
   -endif
