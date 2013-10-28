@@ -3556,7 +3556,7 @@ x0,y0,z0,x1,y1,z1,_radius[%]>=0,_head_length[%]>=0,_head_radius[%]>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Input 3d arrow with specified starting and ending 3d points.
 <br/><br/><b>Default values</b>: 'radius=5%', 'head_length=25%' and 'head_radius=15%'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def399.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-repeat 12 a={$>*2*pi/12} -arrow3d 0,0,0,{cos($a)},{sin($a)},0 -done -+3d</div></div></td><td><tt>-repeat 12 a={$>*2*pi/12} -arrow3d 0,0,0,{cos($a)},{sin($a)},0 -done -+3d</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def399.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-repeat 10 a={$>*2*pi/10} -arrow3d 0,0,0,{cos($a)},{sin($a)},-0.5 -done -+3d</div></div></td><td><tt>-repeat 10 a={$>*2*pi/10} -arrow3d 0,0,0,{cos($a)},{sin($a)},-0.5 -done -+3d</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-axes3d</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _size_x,_size_y,_size_z,_font_size>0,_label_x,_label_y,_label_z
