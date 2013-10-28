@@ -14054,6 +14054,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   # Create substitution list to force filters having a particular location.
   -_update_gmic_gimp_move "/Enhancement/Local~contrast~enhancement","/Details"
   -_update_gmic_gimp_move "/Enhancement/YAG_effect","/Details"
+  -_update_gmic_gimp_move "/Testing/J&#233;J&#233;/Rays","/Patterns"
 
   # Define useful sub-commands.
   -m "parent : -l[] ({'$""1'}) -s -,{'/'} -if @# -rm[-1] -endif -i[0--1] (47) -a y -u @{0,t} -rm -endl" # Command to return parent of a path.
@@ -14541,8 +14542,7 @@ gimp_logo_ca :
 #@gimp : - <b>2013/03/08</b> : version <i>1.5.5.0</i>.\n
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
-#@gimp : - <span foreground="purple"><b>2013/09/17</b> : version <i>1.5.7.1</i> (Current stable).</span>\n
-#@gimp : - <b>2013/09/09</b> : version <i>1.5.7.2</i> (Current beta).\n
+#@gimp : - <span foreground="purple"><b>2013/10/28</b> : version <i>1.5.7.2</i> (Current stable).</span>\n
 #@gimp : "}
 #@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157636080337636/")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/09/17</i>.</small>")
@@ -17740,11 +17740,12 @@ gimp_map_tones_fast_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_bw :
-  preset=@{-arg\ $1,\
-         agfa_apx_100,agfa_apx_25,fuji_neopan_1600,fuji_neopan_acros_100,ilford_delta_100,ilford_delta_3200,ilford_delta_400,ilford_fp4_plus_125,\
-         ilford_hp5_plus_400,ilford_hps_800,ilford_pan_f_plus_50,ilford_xp2,kodak_bw_400_cn,kodak_hie_(hs_infra),kodak_t-max_100,kodak_t-max_3200,\
-         kodak_t-max_400,kodak_tri-x_400,polaroid_664,polaroid_667,polaroid_672,rollei_ir_400,rollei_ortho_25,rollei_retro_100_tonal,rollei_retro_80s}
-  -_gimp_emulate_film $1,$preset,${2--1}
+  -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
+
+_gimp_emulate_film_bw :
+  -u agfa_apx_100,agfa_apx_25,fuji_neopan_1600,fuji_neopan_acros_100,ilford_delta_100,ilford_delta_3200,ilford_delta_400,ilford_fp4_plus_125,\
+     ilford_hp5_plus_400,ilford_hps_800,ilford_pan_f_plus_50,ilford_xp2,kodak_bw_400_cn,kodak_hie_(hs_infra),kodak_t-max_100,kodak_t-max_3200,\
+     kodak_t-max_400,kodak_tri-x_400,polaroid_664,polaroid_667,polaroid_672,rollei_ir_400,rollei_ortho_25,rollei_retro_100_tonal,rollei_retro_80s
 
 gimp_emulate_film_bw_preview :
   -gimp_split_preview "-gimp_emulate_film_bw $*",$-1
@@ -17771,18 +17772,19 @@ gimp_emulate_film_bw_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_instant_consumer :
-  preset=@{-arg\ $1,\
-         polaroid_px-100uv+_cold_--,polaroid_px-100uv+_cold_-,polaroid_px-100uv+_cold,polaroid_px-100uv+_cold_+,polaroid_px-100uv+_cold_++,polaroid_px-100uv+_cold_+++,\
-         polaroid_px-100uv+_warm_--,polaroid_px-100uv+_warm_-,polaroid_px-100uv+_warm,polaroid_px-100uv+_warm_+,polaroid_px-100uv+_warm_++,polaroid_px-100uv+_warm_+++,\
-         polaroid_px-680_--,polaroid_px-680_-,polaroid_px-680,polaroid_px-680_+,polaroid_px-680_++,\
-         polaroid_px-680_cold_--,polaroid_px-680_cold_-,polaroid_px-680_cold,polaroid_px-680_cold_+,polaroid_px-680_cold_++,polaroid_px-680_cold_++_alt,\
-         polaroid_px-680_warm_--,polaroid_px-680_warm_-,polaroid_px-680_warm,polaroid_px-680_warm_+,polaroid_px-680_warm_++,\
-         polaroid_px-70_--,polaroid_px-70_-,polaroid_px-70,polaroid_px-70_+,polaroid_px-70_++,polaroid_px-70_+++,\
-         polaroid_px-70_cold_--,polaroid_px-70_cold_-,polaroid_px-70_cold,polaroid_px-70_cold_+,polaroid_px-70_cold_++,\
-         polaroid_px-70_warm_--,polaroid_px-70_warm_-,polaroid_px-70_warm,polaroid_px-70_warm_+,polaroid_px-70_warm_++,\
-         polaroid_time_zero_(expired)_---,polaroid_time_zero_(expired)_--,polaroid_time_zero_(expired)_-,polaroid_time_zero_(expired),polaroid_time_zero_(expired)_+,polaroid_time_zero_(expired)_++,\
-         polaroid_time_zero_(expired)_cold_---,polaroid_time_zero_(expired)_cold_--,polaroid_time_zero_(expired)_cold_-,polaroid_time_zero_(expired)_cold}
-  -_gimp_emulate_film $1,$preset,${2--1}
+  -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
+
+_gimp_emulate_film_instant_consumer :
+  -u polaroid_px-100uv+_cold_--,polaroid_px-100uv+_cold_-,polaroid_px-100uv+_cold,polaroid_px-100uv+_cold_+,polaroid_px-100uv+_cold_++,polaroid_px-100uv+_cold_+++,\
+     polaroid_px-100uv+_warm_--,polaroid_px-100uv+_warm_-,polaroid_px-100uv+_warm,polaroid_px-100uv+_warm_+,polaroid_px-100uv+_warm_++,polaroid_px-100uv+_warm_+++,\
+     polaroid_px-680_--,polaroid_px-680_-,polaroid_px-680,polaroid_px-680_+,polaroid_px-680_++,\
+     polaroid_px-680_cold_--,polaroid_px-680_cold_-,polaroid_px-680_cold,polaroid_px-680_cold_+,polaroid_px-680_cold_++,polaroid_px-680_cold_++_alt,\
+     polaroid_px-680_warm_--,polaroid_px-680_warm_-,polaroid_px-680_warm,polaroid_px-680_warm_+,polaroid_px-680_warm_++,\
+     polaroid_px-70_--,polaroid_px-70_-,polaroid_px-70,polaroid_px-70_+,polaroid_px-70_++,polaroid_px-70_+++,\
+     polaroid_px-70_cold_--,polaroid_px-70_cold_-,polaroid_px-70_cold,polaroid_px-70_cold_+,polaroid_px-70_cold_++,\
+     polaroid_px-70_warm_--,polaroid_px-70_warm_-,polaroid_px-70_warm,polaroid_px-70_warm_+,polaroid_px-70_warm_++,\
+     polaroid_time_zero_(expired)_---,polaroid_time_zero_(expired)_--,polaroid_time_zero_(expired)_-,polaroid_time_zero_(expired),polaroid_time_zero_(expired)_+,polaroid_time_zero_(expired)_++,\
+     polaroid_time_zero_(expired)_cold_---,polaroid_time_zero_(expired)_cold_--,polaroid_time_zero_(expired)_cold_-,polaroid_time_zero_(expired)_cold
 
 gimp_emulate_film_instant_consumer_preview :
   -gimp_split_preview "-gimp_emulate_film_instant_consumer $*",$-1
@@ -17814,20 +17816,21 @@ gimp_emulate_film_instant_consumer_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_instant_pro :
-  preset=@{-arg\ $1,\
-         fuji_fp-100c_--,fuji_fp-100c_-,fuji_fp-100c,fuji_fp-100c_+,fuji_fp-100c_++,fuji_fp-100c_++_alt,fuji_fp-100c_+++,\
-         fuji_fp-100c_cool_--,fuji_fp-100c_cool_-,fuji_fp-100c_cool,fuji_fp-100c_cool_+,fuji_fp-100c_cool_++,\
-         fuji_fp-100c_negative_--,fuji_fp-100c_negative_-,fuji_fp-100c_negative,fuji_fp-100c_negative_+,fuji_fp-100c_negative_++,fuji_fp-100c_negative_++_alt,fuji_fp-100c_negative_+++,\
-         fuji_fp-3000b_--,fuji_fp-3000b_-,fuji_fp-3000b,fuji_fp-3000b_+,fuji_fp-3000b_++,fuji_fp-3000b_+++,fuji_fp-3000b_hc,\
-         fuji_fp-3000b_negative_--,fuji_fp-3000b_negative_-,fuji_fp-3000b_negative,fuji_fp-3000b_negative_+,fuji_fp-3000b_negative_++,fuji_fp-3000b_negative_+++,fuji_fp-3000b_negative_early,\
-         polaroid_665_--,polaroid_665_-,polaroid_665,polaroid_665_+,polaroid_665_++,\
-         polaroid_665_negative_-,polaroid_665_negative,polaroid_665_negative_+,polaroid_665_negative_hc,\
-         polaroid_669_--,polaroid_669_-,polaroid_669,polaroid_669_+,polaroid_669_++,polaroid_669_+++,\
-         polaroid_669_cold_--,polaroid_669_cold_-,polaroid_669_cold,polaroid_669_cold_+,\
-         polaroid_690_--,polaroid_690_-,polaroid_690,polaroid_690_+,polaroid_690_++,\
-         polaroid_690_cold_--,polaroid_690_cold_-,polaroid_690_cold,polaroid_690_cold_+,polaroid_690_cold_++,\
-         polaroid_690_warm_--,polaroid_690_warm_-,polaroid_690_warm,polaroid_690_warm_+,polaroid_690_warm_++}
-  -_gimp_emulate_film $1,$preset,${2--1}
+  -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
+
+_gimp_emulate_film_instant_pro :
+  -u fuji_fp-100c_--,fuji_fp-100c_-,fuji_fp-100c,fuji_fp-100c_+,fuji_fp-100c_++,fuji_fp-100c_++_alt,fuji_fp-100c_+++,\
+     fuji_fp-100c_cool_--,fuji_fp-100c_cool_-,fuji_fp-100c_cool,fuji_fp-100c_cool_+,fuji_fp-100c_cool_++,\
+     fuji_fp-100c_negative_--,fuji_fp-100c_negative_-,fuji_fp-100c_negative,fuji_fp-100c_negative_+,fuji_fp-100c_negative_++,fuji_fp-100c_negative_++_alt,fuji_fp-100c_negative_+++,\
+     fuji_fp-3000b_--,fuji_fp-3000b_-,fuji_fp-3000b,fuji_fp-3000b_+,fuji_fp-3000b_++,fuji_fp-3000b_+++,fuji_fp-3000b_hc,\
+     fuji_fp-3000b_negative_--,fuji_fp-3000b_negative_-,fuji_fp-3000b_negative,fuji_fp-3000b_negative_+,fuji_fp-3000b_negative_++,fuji_fp-3000b_negative_+++,fuji_fp-3000b_negative_early,\
+     polaroid_665_--,polaroid_665_-,polaroid_665,polaroid_665_+,polaroid_665_++,\
+     polaroid_665_negative_-,polaroid_665_negative,polaroid_665_negative_+,polaroid_665_negative_hc,\
+     polaroid_669_--,polaroid_669_-,polaroid_669,polaroid_669_+,polaroid_669_++,polaroid_669_+++,\
+     polaroid_669_cold_--,polaroid_669_cold_-,polaroid_669_cold,polaroid_669_cold_+,\
+     polaroid_690_--,polaroid_690_-,polaroid_690,polaroid_690_+,polaroid_690_++,\
+     polaroid_690_cold_--,polaroid_690_cold_-,polaroid_690_cold,polaroid_690_cold_+,polaroid_690_cold_++,\
+     polaroid_690_warm_--,polaroid_690_warm_-,polaroid_690_warm,polaroid_690_warm_+,polaroid_690_warm_++
 
 gimp_emulate_film_instant_pro_preview :
   -gimp_split_preview "-gimp_emulate_film_instant_pro $*",$-1
@@ -17846,10 +17849,11 @@ gimp_emulate_film_instant_pro_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_negative_color :
-  preset=@{-arg\ $1,\
-         agfa_ultra_color_100,agfa_vista_200,fuji_superia_200,fuji_superia_hg_1600,fuji_superia_reala_100,fuji_superia_x-tra_800,\
-         kodak_elite_100_xpro,kodak_elite_color_200,kodak_elite_color_400,kodak_portra_160_nc,kodak_portra_160_vc,lomography_redscale_100}
-  -_gimp_emulate_film $1,$preset,${2--1}
+  -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
+
+_gimp_emulate_film_negative_color :
+  -u agfa_ultra_color_100,agfa_vista_200,fuji_superia_200,fuji_superia_hg_1600,fuji_superia_reala_100,fuji_superia_x-tra_800,\
+     kodak_elite_100_xpro,kodak_elite_color_200,kodak_elite_color_400,kodak_portra_160_nc,kodak_portra_160_vc,lomography_redscale_100
 
 gimp_emulate_film_negative_color_preview :
   -gimp_split_preview "-gimp_emulate_film_negative_color $*",$-1
@@ -17867,17 +17871,18 @@ gimp_emulate_film_negative_color_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_negative_new :
-  preset=@{-arg\ {max(1,4*$1+$2-3)},\
-         fuji_160c_-,fuji_160c,fuji_160c_+,fuji_160c_++,\
-         fuji_400h_-,fuji_400h,fuji_400h_+,fuji_400h_++,\
-         fuji_800z_-,fuji_800z,fuji_800z_+,fuji_800z_++,\
-         fuji_ilford_hp5_-,fuji_ilford_hp5,fuji_ilford_hp5_+,fuji_ilford_hp5_++,\
-         kodak_portra_160_-,kodak_portra_160,kodak_portra_160_+,kodak_portra_160_++,\
-         kodak_portra_400_-,kodak_portra_400,kodak_portra_400_+,kodak_portra_400_++,\
-         kodak_portra_800_-,kodak_portra_800,kodak_portra_800_+,kodak_portra_800_++,\
-         kodak_tmax_3200_-,kodak_tmax_3200,kodak_tmax_3200_+,kodak_tmax_3200_++,\
-         kodak_tri-x_400_-,kodak_tri-x_400,kodak_tri-x_400_+,kodak_tri-x_400_++}
-  -_gimp_emulate_film $1,$preset,${3--1}
+  -_gimp_emulate_film $1,@{-arg\ {max(1,4*$1+$2-3)},@{-_$0}},${3--1}
+
+_gimp_emulate_film_negative_new :
+  -u fuji_160c_-,fuji_160c,fuji_160c_+,fuji_160c_++,\
+     fuji_400h_-,fuji_400h,fuji_400h_+,fuji_400h_++,\
+     fuji_800z_-,fuji_800z,fuji_800z_+,fuji_800z_++,\
+     fuji_ilford_hp5_-,fuji_ilford_hp5,fuji_ilford_hp5_+,fuji_ilford_hp5_++,\
+     kodak_portra_160_-,kodak_portra_160,kodak_portra_160_+,kodak_portra_160_++,\
+     kodak_portra_400_-,kodak_portra_400,kodak_portra_400_+,kodak_portra_400_++,\
+     kodak_portra_800_-,kodak_portra_800,kodak_portra_800_+,kodak_portra_800_++,\
+     kodak_tmax_3200_-,kodak_tmax_3200,kodak_tmax_3200_+,kodak_tmax_3200_++,\
+     kodak_tri-x_400_-,kodak_tri-x_400,kodak_tri-x_400_+,kodak_tri-x_400_++
 
 gimp_emulate_film_negative_new_preview :
   -gimp_split_preview "-gimp_emulate_film_negative_new $*",$-1
@@ -17896,19 +17901,20 @@ gimp_emulate_film_negative_new_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_negative_old :
-  preset=@{-arg\ {max(1,4*$1+$2-3)},\
-         fuji_ilford_delta_3200_-,fuji_ilford_delta_3200,fuji_ilford_delta_3200_+,fuji_ilford_delta_3200_++,\
-         fuji_neopan_1600_-,fuji_neopan_1600,fuji_neopan_1600_+,fuji_neopan_1600_++,\
-         fuji_superia_100_-,fuji_superia_100,fuji_superia_100_+,fuji_superia_100_++,\
-         fuji_superia_400_-,fuji_superia_400,fuji_superia_400_+,fuji_superia_400_++,\
-         fuji_superia_800_-,fuji_superia_800,fuji_superia_800_+,fuji_superia_800_++,\
-         fuji_superia_1600_-,fuji_superia_1600,fuji_superia_1600_+,fuji_superia_1600_++,\
-         kodak_portra_160_nc_-,kodak_portra_160_nc,kodak_portra_160_nc_+,kodak_portra_160_nc_++,\
-         kodak_portra_160_vc_-,kodak_portra_160_vc,kodak_portra_160_vc_+,kodak_portra_160_vc_++,\
-         kodak_portra_400_nc_-,kodak_portra_400_nc,kodak_portra_400_nc_+,kodak_portra_400_nc_++,\
-         kodak_portra_400_uc_-,kodak_portra_400_uc,kodak_portra_400_uc_+,kodak_portra_400_uc_++,\
-         kodak_portra_400_vc_-,kodak_portra_400_vc,kodak_portra_400_vc_+,kodak_portra_400_vc_++}
-  -_gimp_emulate_film $1,$preset,${3--1}
+  -_gimp_emulate_film $1,@{-arg\ {max(1,4*$1+$2-3)},@{-_$0}},${3--1}
+
+_gimp_emulate_film_negative_old :
+  -u fuji_ilford_delta_3200_-,fuji_ilford_delta_3200,fuji_ilford_delta_3200_+,fuji_ilford_delta_3200_++,\
+     fuji_neopan_1600_-,fuji_neopan_1600,fuji_neopan_1600_+,fuji_neopan_1600_++,\
+     fuji_superia_100_-,fuji_superia_100,fuji_superia_100_+,fuji_superia_100_++,\
+     fuji_superia_400_-,fuji_superia_400,fuji_superia_400_+,fuji_superia_400_++,\
+     fuji_superia_800_-,fuji_superia_800,fuji_superia_800_+,fuji_superia_800_++,\
+     fuji_superia_1600_-,fuji_superia_1600,fuji_superia_1600_+,fuji_superia_1600_++,\
+     kodak_portra_160_nc_-,kodak_portra_160_nc,kodak_portra_160_nc_+,kodak_portra_160_nc_++,\
+     kodak_portra_160_vc_-,kodak_portra_160_vc,kodak_portra_160_vc_+,kodak_portra_160_vc_++,\
+     kodak_portra_400_nc_-,kodak_portra_400_nc,kodak_portra_400_nc_+,kodak_portra_400_nc_++,\
+     kodak_portra_400_uc_-,kodak_portra_400_uc,kodak_portra_400_uc_+,kodak_portra_400_uc_++,\
+     kodak_portra_400_vc_-,kodak_portra_400_vc,kodak_portra_400_vc_+,kodak_portra_400_vc_++
 
 gimp_emulate_film_negative_old_preview :
   -gimp_split_preview "-gimp_emulate_film_negative_old $*",$-1
@@ -17926,36 +17932,13 @@ gimp_emulate_film_negative_old_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_others :
-  preset=@{-arg\ $1,\
-         60s,60s_2,60s_3,hkfilm,lomo,nostalgic,retro,sutrofx,vintage,vintage_2,warm,warm_spring,warm_yellow}
-  -_gimp_emulate_film $1,$preset,${2--1}
+  -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
+
+_gimp_emulate_film_others :
+  -u 60s,60s_2,60s_3,hkfilm,lomo,nostalgic,retro,sutrofx,vintage,vintage_2,warm,warm_spring,warm_yellow
 
 gimp_emulate_film_others_preview :
   -gimp_split_preview "-gimp_emulate_film_others $*",$-1
-
-_gimp_emulate_film :
-  -if $1
-    dir=@{-path_user}
-    -if {!@{-is_windows}}
-      dir=$dir/.gmic_film_presets
-      -if $dir -else -exec "mkdir "$dir -endif
-    -endif
-    -if $dir/gmic_$2.cimgz -i $dir/gmic_$2.cimgz
-    -else -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] $dir/gmic_$2.cimgz
-    -endif
-    -map_clut
-  -endif
-  -repeat @# -l[$>] -split_opacity
-    -apply_gamma[0] $3                                 # Gamma correction
-    --[0] 128 -*[0] $4 -+[0] 128 -+[0] $5 -c[0] 0,255  # B&W contrast and brightness.
-    -if {$6||$7!=1||$8}
-      -rgb2hsv[0]
-      -sh[0] 0,0 -+[-1] $6 -%[-1] 360 -rm[-1]
-      -sh[0] 1,1 -*[-1] $7 -rm[-1]
-      -hsv2rgb[0]
-      -if $8 -n[0] 0,255 -endif
-    -endif
-  -a c -endl -done
 
 #@gimp Slide [color] : gimp_emulate_film_colorslide, gimp_emulate_film_colorslide_preview(1)
 #@gimp : Preset = choice{"None",
@@ -17974,16 +17957,188 @@ _gimp_emulate_film :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_colorslide :
-  preset=@{-arg\ $1,\
-         agfa_precisa_100,fuji_astia_100f,fuji_fp_100c,fuji_provia_100f,fuji_provia_400f,fuji_provia_400x,fuji_sensia_100,\
-         fuji_superia_200_xpro,fuji_velvia_50,generic_fuji_astia_100,generic_fuji_provia_100,generic_fuji_velvia_100,\
-         generic_kodachrome_64,generic_kodak_ektachrome_100_vs,kodak_e-100_gx_ektachrome_100,kodak_ektachrome_100_vs,kodak_elite_chrome_200,\
-         kodak_elite_chrome_400,kodak_elite_extracolor_100,kodak_kodachrome_200,kodak_kodachrome_25,kodak_kodachrome_64,lomography_x-pro_slide_200,\
-         polaroid_669,polaroid_690,polaroid_polachrome}
-  -_gimp_emulate_film $1,$preset,${2--1}
+  -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
+
+_gimp_emulate_film_colorslide :
+  -u agfa_precisa_100,fuji_astia_100f,fuji_fp_100c,fuji_provia_100f,fuji_provia_400f,fuji_provia_400x,fuji_sensia_100,\
+     fuji_superia_200_xpro,fuji_velvia_50,generic_fuji_astia_100,generic_fuji_provia_100,generic_fuji_velvia_100,\
+     generic_kodachrome_64,generic_kodak_ektachrome_100_vs,kodak_e-100_gx_ektachrome_100,kodak_ektachrome_100_vs,kodak_elite_chrome_200,\
+     kodak_elite_chrome_400,kodak_elite_extracolor_100,kodak_kodachrome_200,kodak_kodachrome_25,kodak_kodachrome_64,lomography_x-pro_slide_200,\
+     polaroid_669,polaroid_690,polaroid_polachrome
 
 gimp_emulate_film_colorslide_preview :
   -gimp_split_preview "-gimp_emulate_film_colorslide $*",$-1
+
+_gimp_emulate_film :
+  -if $1
+    dir=@{-path_user}
+    -if {!@{-is_windows}}
+      dir=$dir/.gmic_film_presets
+      -if $dir -else -exec "mkdir "$dir -endif
+    -endif
+    -if {narg($_force_redownload)}
+      -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] $dir/gmic_$2.cimgz
+    -else
+      -if $dir/gmic_$2.cimgz -i $dir/gmic_$2.cimgz
+      -else -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] $dir/gmic_$2.cimgz
+      -endif
+    -endif
+    -map_clut
+  -endif
+  -repeat @# -l[$>] -split_opacity
+    -apply_gamma[0] $3                                 # Gamma correction
+    --[0] 128 -*[0] $4 -+[0] 128 -+[0] $5 -c[0] 0,255  # B&W contrast and brightness.
+    -if {$6||$7!=1||$8}
+      -rgb2hsv[0]
+      -sh[0] 0,0 -+[-1] $6 -%[-1] 360 -rm[-1]
+      -sh[0] 1,1 -*[-1] $7 -rm[-1]
+      -hsv2rgb[0]
+      -if $8 -n[0] 0,255 -endif
+    -endif
+  -a c -endl -done
+
+#@gimp <i>[Collages]</i>
+#-----------------------
+
+#@gimp B&amp;W : gimp_emulate_film_collage_bw, gimp_no_preview
+#@gimp : Image size = float(256,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : sep = separator()
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>B&amp;W</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_collage_bw :
+  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_bw}
+
+#@gimp Instant [consumer] : gimp_emulate_film_collage_instant_consumer, gimp_no_preview
+#@gimp : Image size = float(256,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Instant [consumer]</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_collage_instant_consumer :
+  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_instant_consumer}
+
+#@gimp Instant [pro] : gimp_emulate_film_collage_instant_pro, gimp_no_preview
+#@gimp : Image size = float(256,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Instant [pro]</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_collage_instant_pro :
+  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_instant_pro}
+
+#@gimp Negative [color] : gimp_emulate_film_collage_negative_color, gimp_no_preview
+#@gimp : Image size = float(256,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Negative [color]</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_collage_negative_color :
+  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_color}
+
+#@gimp Negative [new] : gimp_emulate_film_collage_negative_new, gimp_no_preview
+#@gimp : Image size = float(256,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Negative [new]</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_collage_negative_new :
+  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_new}
+
+#@gimp Negative [old] : gimp_emulate_film_collage_negative_old, gimp_no_preview
+#@gimp : Image size = float(256,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Negative [old]</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_collage_negative_old :
+  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_old}
+
+#@gimp Others : gimp_emulate_film_collage_others, gimp_no_preview
+#@gimp : Image size = float(256,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Others</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_collage_others :
+  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_others}
+
+#@gimp Slide [color] : gimp_emulate_film_collage_colorslide, gimp_no_preview
+#@gimp : Image size = float(256,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Slide [color]</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_collage_colorslide :
+  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_colorslide}
+
+_gimp_emulate_film_collage :
+  $=arg -progress 0
+  -repeat $#
+    preset=${arg{$>+1}}
+    --l[0]
+      -_gimp_emulate_film[0] 1,$preset,1,1,0,0,1,0
+      ({'$preset'}) -replace[-1] {'_'},32 -f[-1] if(x==0&&i>={'a'}&&i<={'z'},i+{'A'}-{'a'},i) title=@{-1,t} -rm[-1]
+      -text_outline[-1] $title,2,2,13,2,1,255
+    -endl
+    -progress {(1+$>)*100/$#}
+  -done
+  -text_outline[0] "Original image",2,2,13,2,1,255
+  -frame 1,1,0 -frame 5,5,255 -- 255 -append_tiles {min($_nbc,@#)} -+ 255
+
+#@gimp _
+
+#@gimp [Download all presets] : gimp_emulate_film_download, gimp_no_preview(1)
+#@gimp : note = note{"This filter will download the color profiles for all film emulation presets available in <i>G'MIC</i>,
+#@gimp : and will store them as persistent data files on your hard drive. After this operation, you won't need a permanent
+#@gimp : internet connection anymore, in order to use the film emulation filters."}
+#@gimp : note = note()
+#@gimp : note = note{"<b><span color="red">Warning:</span></b> About <b>80 Mb</b> of data will be downloaded by this filter. This can take a long time !"}
+#@gimp : sep = separator()
+#@gimp : Force re-download = _bool(0)
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+gimp_emulate_film_download :
+  -_gimp_emulate_film_download @{-_gimp_emulate_film_bw},\
+                               @{-_gimp_emulate_film_instant_consumer},\
+                               @{-_gimp_emulate_film_instant_pro},\
+                               @{-_gimp_emulate_film_negative_color},\
+                               @{-_gimp_emulate_film_negative_new},\
+                               @{-_gimp_emulate_film_negative_old},\
+                               @{-_gimp_emulate_film_others},\
+                               @{-_gimp_emulate_film_colorslide}
+  -l[] 1 -progress 0
+  -if $1 _force_redownload=1 -endif
+  -repeat $_nb_presets -_gimp_emulate_film 1,${_preset{1+$>}},1,1,0,0,1,0 -progress {($>+1)*100/$_nb_presets} -done
+  -rm -endl
+
+_gimp_emulate_film_download :
+  _nb_presets=$#
+  $=_preset
 
 
 #@gimp _<b>Frames</b>
@@ -23717,27 +23872,3 @@ gmicol_gcd_etch_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
-foo :
-128,128,128,1,'X=x-w/2;Y=y-h/2;Z=z-d/2;sqrt(X^2+abs(Y)^2.3+abs(Z*cos(Z/10))^1.8)'
-  --gradient[-1] xyz -a[-3--1] c
-
-  -repeat 300
-    a={?(0,2*pi)}
-    b={?(0,2*pi)}
-    x={@{0,w/2}+60*cos($a)*sin($b)}
-    y={@{0,h/2}+60*sin($a)*sin($b)}
-    z={@{0,d/2}+60*cos($b)}
-
-#    x={round(?(@{0,w}))}
-#    y={round(?(@{0,h}))}
-#    z={round(?(@{0,d}))}
-    gx=@{1,i($x,$y,$z,0)}
-    gy=@{1,i($x,$y,$z,1)}
-    gz=@{1,i($x,$y,$z,2)}
-    l=5
-    -arrow3d $x,$y,$z,{$x+$l*$gx},{$y+$l*$gy},{$z+$l*$gz} -col3d[-1] @{-RGB}
-  -done
-  -rm[1]
-  -isosurface3d[0] 30%
-  -+3d
