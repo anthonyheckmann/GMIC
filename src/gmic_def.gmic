@@ -14113,9 +14113,6 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -load_gmic http://www.h-ps.demon.co.uk/GMIC/jayprich.gmic
   -load_gmic https://raw.github.com/jboulanger/jboulanger-gmic/master/jboulanger.gmic
 
-#  -i raw:gmic_def.gmic,uchar
-#  _nb_sources=1
-
   # Merge them together.
   -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y y -a y -discard 13
   -s +,{'"#@gimp"'}
@@ -14178,7 +14175,17 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
         -if $is_folder -rm[0,1] -i[0] (10) # Discard folder definition (will be recreated afterwards).
         -else -nm[0] $name -endif
 
-      -else -i[1] (32)
+      -else # Found possibly a filter argument.
+
+        -if {@#>=3} -l[1]
+          -s +,{'='}
+          -if {@#>=3} -if {@{1,0}=={'='}}
+            -rows[0] 1,100% -calibrate_name[0]
+            -i[0] ({':'};32) -i[2] (32)
+          -endif -endif
+        -endl -endif
+        -i[1] (32)
+
       -endif # -if {i!={':'}}
       -a y
 
@@ -14255,7 +14262,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -v + -e[] "> Save output .gmic file.\n" -v -
   --a y -if {h>1} -r[-1] 1,{h-1},1,1,0,0,0,1 -endif # Remove leading '\n'.
   -o[-1] raw:$HOME/.update$1.gmic,uchar
-#>>  -x "scp "$HOME/.update$1.gmic" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
+  -x "scp "$HOME/.update$1.gmic" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
   -rm[-1]
 
   # Display list of filters (sorted alphabetically) on stdout.
