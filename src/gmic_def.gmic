@@ -14122,7 +14122,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
 
       is_folder=0
       -s +,10
-      -if {@{0,6}=={'_'}} --rows[0] 10,100% -rows[0] 0,9 # Treat a localized filter as a regular filter.
+      -if {@{0,6}=={'_'}} --rows[0] 9,100% -rows[0] 0,8 # Treat a localized filter as a regular filter.
       -else --rows[0] 6,100% -rows[0] 0,5
       -endif
       -autocrop[-1] 32 -mv[-1] 1
