@@ -14076,7 +14076,19 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
      "  -onfail -v + -e[] \"      [error, not reachable!]\n\" -v -"\
      "  -endl -endl"
   -m "calibrate_name : "\
-     "  -f 'if(y==0,if(i>=97&&i<=122,i-32,i),if(i>=65&&i<=90,i+32,i))' -replace {'_'},32"
+     "-autocrop 32 "\
+     "-f 'if(i>=65&&i<=90,i+32,i)' "\
+     "-replace {'_'},32 -autocrop 32 "\
+     "-replace_seq \""{'rgb'}"\",\""{'RGB'}"\" "\
+     "-replace_seq \""{'lab'}"\",\""{'Lab'}"\" "\
+     "-replace_seq \""{'hsv'}"\",\""{'HSV'}"\" "\
+     "-replace_seq \""{'hsl'}"\",\""{'HSL'}"\" "\
+     "-replace_seq \""{'ycbcr'}"\",\""{'YCbCr'}"\" "\
+     "-replace_seq \""{'cmyk'}"\",\""{'CMYK'}"\" "\
+     "-replace_seq \""{'b&amp;w'}"\",\""{'B&amp;W'}"\" "\
+     "-replace_seq \""{'gimp'}"\",\""{'GIMP'}"\" "\
+     "-replace_seq \""{'g'},39,{'mic'}"\",\""{'G'},39,{'MIC'}"\" "\
+     "-f 'if(y==0&&i>=97&&i<=122,i-32,i)' "
 
   # Copy latest command definitions on sourceforge server if necessary.
   -if {$1==@.}
@@ -14163,7 +14175,17 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
         -if $is_folder -rm[0,1] -i[0] (10) # Discard folder definition (will be recreated afterwards).
         -else -nm[0] $name -endif
 
-      -else -i[1] (32)
+      -else # Found possibly a filter argument.
+
+        -if {@#>=3} -l[1]
+          -s +,{'='}
+          -if {@#>=3} -if {@{1,0}=={'='}}
+            -rows[0] 1,100% -calibrate_name[0]
+            -i[0] ({':'};32) -i[2] (32)
+          -endif -endif
+        -endl -endif
+        -i[1] (32)
+
       -endif # -if {i!={':'}}
       -a y
 
