@@ -14076,30 +14076,43 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
      "  -onfail -v + -e[] \"      [error, not reachable!]\n\" -v -"\
      "  -endl -endl"
   -m "calibrate_name : "\
-     "  -f 'if(y==0,if(i>=97&&i<=122,i-32,i),if(i>=65&&i<=90,i+32,i))' -replace {'_'},32"
+     "-autocrop 32 "\
+     "-f 'if(y==0,if(i>=97&&i<=122,i-32,i),if(i>=65&&i<=90,i+32,i))' "\
+     "-replace {'_'},32 -autocrop 32 "\
+     "-replace_seq \""{'rgb'}"\",\""{'RGB'}"\" "\
+     "-replace_seq \""{'lab'}"\",\""{'Lab'}"\" "\
+     "-replace_seq \""{'hsv'}"\",\""{'HSV'}"\" "\
+     "-replace_seq \""{'ycbcr'}"\",\""{'YCbCr'}"\" "\
+     "-replace_seq \""{'cmyk'}"\",\""{'CMYK'}"\" "\
+     "-replace_seq \""{'B&amp;w'}"\",\""{'B&amp;W'}"\" "\
+     "-replace_seq \""{'gimp'}"\",\""{'GIMP'}"\" "\
+     "-replace_seq \""{'G'},39,{'mic'}"\",\""{'G'},39,{'MIC'}"\" "
 
   # Copy latest command definitions on sourceforge server if necessary.
   -if {$1==@.}
     -v + -e[] "> Upload latest version of commands on Sourceforge server.\n" -v -
-    -x "scp "$HOME/work/src/gmic/src/gmic_def.gmic" ronounours,gmic@web.sourceforge.net:htdocs/gmic_def."$1
+#>>    -x "scp "$HOME/work/src/gmic/src/gmic_def.gmic" ronounours,gmic@web.sourceforge.net:htdocs/gmic_def."$1
   -endif
 
   # Get command source files and archive them.
   -v + -e[] "> Load and archive .gmic source files.\n" -v -
   _nb_sources=0
-  -load_gmic http://gmic.sourceforge.net/gmic_def.$1
-  -load_gmic http://gmic.sourceforge.net/compatibility.gmic
-  -load_gmic http://karo03.bplaced.net/gmic/karos.gmic
-  -load_gmic http://gmic.sourceforge.net/photocomix.gmic
-  -load_gmic http://gmic.sourceforge.net/ronounours.gmic
-  -load_gmic http://www.saunalahti.fi/naggobot/naggobot.gmic
-  -load_gmic http://www.iain.bplaced.net/iain_fergusson.gmic
-  -load_gmic http://s406833247.websitehome.co.uk/gmic/garagecoder.gmic
-  -load_gmic http://www.aljacom.com/~gmic/samj.gmic
-  -load_gmic http://docgmic.tuxfamily.org/zonderr.gmic
-  -load_gmic http://gmic.sourceforge.net/tomkeil.gmic
-  -load_gmic http://www.h-ps.demon.co.uk/GMIC/jayprich.gmic
-  -load_gmic https://raw.github.com/jboulanger/jboulanger-gmic/master/jboulanger.gmic
+#>>  -load_gmic http://gmic.sourceforge.net/gmic_def.$1
+#>>   -load_gmic http://gmic.sourceforge.net/compatibility.gmic
+#>>   -load_gmic http://karo03.bplaced.net/gmic/karos.gmic
+#>>   -load_gmic http://gmic.sourceforge.net/photocomix.gmic
+#>>   -load_gmic http://gmic.sourceforge.net/ronounours.gmic
+#>>   -load_gmic http://www.saunalahti.fi/naggobot/naggobot.gmic
+#>>   -load_gmic http://www.iain.bplaced.net/iain_fergusson.gmic
+#>>   -load_gmic http://s406833247.websitehome.co.uk/gmic/garagecoder.gmic
+#>>   -load_gmic http://www.aljacom.com/~gmic/samj.gmic
+#>>   -load_gmic http://docgmic.tuxfamily.org/zonderr.gmic
+#>>   -load_gmic http://gmic.sourceforge.net/tomkeil.gmic
+#>>   -load_gmic http://www.h-ps.demon.co.uk/GMIC/jayprich.gmic
+#>>   -load_gmic https://raw.github.com/jboulanger/jboulanger-gmic/master/jboulanger.gmic
+
+  -i raw:gmic_def.gmic,uchar
+  _nb_sources=1
 
   # Merge them together.
   -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y y -a y -discard 13
@@ -14240,7 +14253,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -v + -e[] "> Save output .gmic file.\n" -v -
   --a y -if {h>1} -r[-1] 1,{h-1},1,1,0,0,0,1 -endif # Remove leading '\n'.
   -o[-1] raw:$HOME/.update$1.gmic,uchar
-  -x "scp "$HOME/.update$1.gmic" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
+#>>  -x "scp "$HOME/.update$1.gmic" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
   -rm[-1]
 
   # Display list of filters (sorted alphabetically) on stdout.
