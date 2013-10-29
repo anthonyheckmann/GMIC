@@ -14055,6 +14055,12 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -_update_gmic_gimp_move "/Testing/J&#233;J&#233;/Rays","/Patterns"
   -_update_gmic_gimp_move "/Testing/Iain~fergusson/Halftone~shapes","/Patterns"
   -_update_gmic_gimp_move "/Testing/Iain~fergusson/Simple~local~contrast","/Details"
+  -_update_gmic_gimp_move "/Testing/Garagecoder/Aurora","/Artistic"
+  -_update_gmic_gimp_move "/Testing/Garagecoder/Despeckle","/Repair"
+  -_update_gmic_gimp_move "/Testing/Garagecoder/HSL~adjustment","/Colors"
+  -_update_gmic_gimp_move "/Testing/Garagecoder/HSV~select","/Colors"
+  -_update_gmic_gimp_move "/Testing/Garagecoder/Stereo~image","/Stereoscopic~3d"
+  -_update_gmic_gimp_move "/Testing/Garagecoder/Undo~anaglyph","/Stereoscopic~3d"
 
   # Define useful sub-commands.
   -m "parent : -l[] ({'$""1'}) -s -,{'/'} -if @# -rm[-1] -endif -i[0--1] (47) -a y -u @{0,t} -rm -endl" # Command to return parent of a path.
