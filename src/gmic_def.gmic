@@ -14618,7 +14618,7 @@ gimp_logo_ca :
 #@gimp : link = link(0,"[15] Lyle Kroll","http://www.artwanted.com/artist.cfm?artid=10918")
 #@gimp : sep = separator()
 #@gimp : note = note{"\n<span foreground="purple" underline="single">Postcard senders :</span>"}
-#@gimp : note = note{" <b>-</b> We've received <b>21/b> postcards from <b>G'MIC</b> enthusiasts so far.
+#@gimp : note = note{" <b>-</b> We've received <b>21</b> postcards from <b>G'MIC</b> enthusiasts so far.
 #@gimp :               You could be the 22th sender :)"}
 #@gimp : note = note{" <b>-</b> A big hug goes to these postcard senders (recently received first) :"}
 #@gimp : link = link(0,"[1] Akky [Gimpchat] - Australia","http://cimg.sourceforge.net/img/postcard47.jpg")
