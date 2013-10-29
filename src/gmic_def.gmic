@@ -14052,9 +14052,9 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -v -
 
   # Create substitution list to force filters having a particular location.
-  -_update_gmic_gimp_move "/Enhancement/Local~contrast~enhancement","/Details"
-  -_update_gmic_gimp_move "/Enhancement/YAG_effect","/Details"
   -_update_gmic_gimp_move "/Testing/J&#233;J&#233;/Rays","/Patterns"
+  -_update_gmic_gimp_move "/Testing/Iain~fergusson/Halftone~shapes","/Patterns"
+  -_update_gmic_gimp_move "/Testing/Iain~fergusson/Simple~local~contrast","/Details"
 
   # Define useful sub-commands.
   -m "parent : -l[] ({'$""1'}) -s -,{'/'} -if @# -rm[-1] -endif -i[0--1] (47) -a y -u @{0,t} -rm -endl" # Command to return parent of a path.
@@ -14075,6 +14075,8 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
      "  -i raw:$source,uchar -v + -e[] \"      [retrieved from archive '\"$source\"']\n\" -v - "\
      "  -onfail -v + -e[] \"      [error, not reachable!]\n\" -v -"\
      "  -endl -endl"
+  -m "calibrate_name : "\
+     "  -f 'if(y==0,if(i>=97&&i<=122,i-32,i),if(i>=65&&i<=90,i+32,i))' -replace {'_'},32"
 
   # Copy latest command definitions on sourceforge server if necessary.
   -if {$1==@.}
@@ -14088,7 +14090,6 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -load_gmic http://gmic.sourceforge.net/gmic_def.$1
   -load_gmic http://gmic.sourceforge.net/compatibility.gmic
   -load_gmic http://karo03.bplaced.net/gmic/karos.gmic
-#  -load_gmic http://s406833247.websitehome.co.uk/gmic/photocomix.gmic
   -load_gmic http://gmic.sourceforge.net/photocomix.gmic
   -load_gmic http://gmic.sourceforge.net/ronounours.gmic
   -load_gmic http://www.saunalahti.fi/naggobot/naggobot.gmic
@@ -14120,52 +14121,51 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
     -if {@{{$ind-1},-1}==10" && "{{`@{$ind,0-5}`}'=='"#@gimp"}" && "(@{$ind,6}==32" || "@{$ind,6}=={'_'})} -l[$ind] # Line starts by '#@gimp[_] '
 
       is_folder=0
-      -s +,10 --rows[0] 6,100%
-      -if {i=={'_'}} -rows[-1] 3,100% -endif # Treat a localized filter as a regular filter.
-      -autocrop[-1] 32
+      -s +,10
+      -if {@{0,6}=={'_'}} --rows[0] 10,100% -rows[0] 0,9 # Treat a localized filter as a regular filter.
+      -else --rows[0] 6,100% -rows[0] 0,5
+      -endif
+      -autocrop[-1] 32 -mv[-1] 1
 
-      -if {i!={':'}} # Found a new filter or folder definition.
-        -l[-1]
+      -if {@{1,0}!={':'}} # Found a new filter or folder definition.
+        -l[1]
 
           # Format string by removing special character sequences.
-          -replace_seq @{-quote\ {'<b>'}},32
-          -replace_seq @{-quote\ {'</b>'}},32
-          -replace_seq @{-quote\ {'<i>'}},32
-          -replace_seq @{-quote\ {'</i>'}},32
-          -replace {'/'},32
-          -replace {','},{';'}
-          -s -,{':'}
+          -s +,{':'}
+          -replace_seq[0] @{-quote\ {'<b>'}},32
+          -replace_seq[0] @{-quote\ {'</b>'}},32
+          -replace_seq[0] @{-quote\ {'<i>'}},32
+          -replace_seq[0] @{-quote\ {'</i>'}},32
+          -replace[0] {'/'},{'-'}
+          -replace[0] {','},{';'}
           -autocrop[0] 32
 
           -if {@#>1} # Found new filter.
-            -k[0] -replace 32,{'~'}
-            name=$path@{0,t}
+            -calibrate_name[0] --replace[0] 32,{'~'} name=$path@{-1,t} -rm[-1]
             merge_request=1
             nb_filters={$nb_filters+1}
+            -i[0,1] (32) -a y
             -v + -e[] "  "$nb_filters". "$name" ("{round($>*$progress_factor)}"%)." -v -
 
           -else # Found new folder (opt. parent(s)).
-
             -if {i=={'_'}} # Folder has parents before creating it.
               -do path=@{"-parent[] "$path} -shift 0,-1,0,0 -while {i=={'_'}}
               -autocrop 0 -autocrop 32
-              -if {w} -replace 32,{'~'} path=$path@{0,t}/ -endif  # Folder name specified after the underscore(s).
+              -if {w} -calibrate_name -replace 32,{'~'} path=$path@{0,t}/ -endif # Folder name specified after the underscore(s).
             -else # Folder name don't start with '_'.
-              -autocrop 32 -replace 32,{'~'}
-              path=$path@{0,t}/
+              -autocrop 32 -calibrate_name -replace 32,{'~'} path=$path@{0,t}/
             -endif
             is_folder=1
 
           -endif # -if {@#>1}
-
         -endl # -l[-1]
 
-        -if $is_folder -rm[0] -i[0] (10) # Discard folder definition (will be recreated afterwards).
+        -if $is_folder -rm[0,1] -i[0] (10) # Discard folder definition (will be recreated afterwards).
         -else -nm[0] $name -endif
 
+      -else -i[1] (32)
       -endif # -if {i!={':'}}
-
-      -rm[-1] -a y
+      -a y
 
     -endl -endif
 
