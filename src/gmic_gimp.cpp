@@ -3074,7 +3074,8 @@ bool create_dialog_gui() {
   GtkTreeViewColumn *const column = gtk_tree_view_column_new();
   gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view),column);
   flush_tree_view(tree_view);
-
+  GtkRequisition requisition; gtk_widget_size_request((GtkWidget*)tree_view,&requisition);
+  gtk_widget_set_size_request((GtkWidget*)tree_view,cimg::max(210,requisition.width),-1);
   g_signal_connect(tree_view,"cursor-changed",G_CALLBACK(on_filter_selected),0);
   g_signal_connect(tree_view,"row-activated",G_CALLBACK(on_filter_doubleclicked),0);
 
