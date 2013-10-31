@@ -6574,6 +6574,7 @@ piechart : -check $1>=0
 
 #@gmic plasma : alpha,_beta,_scale>=0 : (+)
 #@gmic : Draw a random colored plasma on selected images.
+#@gmic : This command implements the 'Diamond-Square' algorithm.
 #@gmic : Default values: 'beta=1' and 'scale=8'.
 #@gmic : $ 400,400,1,3 -plasma 1
 
@@ -14111,17 +14112,18 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   _nb_sources=0
   -load_gmic http://gmic.sourceforge.net/gmic_def.$1
   -load_gmic http://gmic.sourceforge.net/compatibility.gmic
-  -load_gmic http://karo03.bplaced.net/gmic/karos.gmic
-  -load_gmic http://gmic.sourceforge.net/photocomix.gmic
-  -load_gmic http://gmic.sourceforge.net/ronounours.gmic
-  -load_gmic http://www.saunalahti.fi/naggobot/naggobot.gmic
-  -load_gmic http://www.iain.bplaced.net/iain_fergusson.gmic
   -load_gmic http://s406833247.websitehome.co.uk/gmic/garagecoder.gmic
-  -load_gmic http://www.aljacom.com/~gmic/samj.gmic
-  -load_gmic http://docgmic.tuxfamily.org/zonderr.gmic
-  -load_gmic http://gmic.sourceforge.net/tomkeil.gmic
+  -load_gmic http://gentlemanbeggar.bplaced.net/gentlemanbeggar_gmic.gmic
+  -load_gmic http://www.iain.bplaced.net/iain_fergusson.gmic
   -load_gmic http://www.h-ps.demon.co.uk/GMIC/jayprich.gmic
   -load_gmic https://raw.github.com/jboulanger/jboulanger-gmic/master/jboulanger.gmic
+  -load_gmic http://karo03.bplaced.net/gmic/karos.gmic
+  -load_gmic http://www.saunalahti.fi/naggobot/naggobot.gmic
+  -load_gmic http://gmic.sourceforge.net/photocomix.gmic
+  -load_gmic http://gmic.sourceforge.net/ronounours.gmic
+  -load_gmic http://www.aljacom.com/~gmic/samj.gmic
+  -load_gmic http://gmic.sourceforge.net/tomkeil.gmic
+  -load_gmic http://docgmic.tuxfamily.org/zonderr.gmic
 
   # Merge them together.
   -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y y -a y -discard 13
