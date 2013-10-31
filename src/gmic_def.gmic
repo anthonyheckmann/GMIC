@@ -6573,8 +6573,8 @@ piechart : -check $1>=0
   -endl -done -v +
 
 #@gmic plasma : alpha,_beta,_scale>=0 : (+)
-#@gmic : Draw a random colored plasma on selected images.
-#@gmic : This command implements the 'Diamond-Square' algorithm.
+#@gmic : Draw a random colored plasma fractal on selected images.
+#@gmic : This command implements the so-called 'Diamond-Square' algorithm.
 #@gmic : Default values: 'beta=1' and 'scale=8'.
 #@gmic : $ 400,400,1,3 -plasma 1
 
@@ -6715,7 +6715,7 @@ spiralbw :
   -v +
 
 #@gmic spline : x0[%],y0[%],u0[%],v0[%],x1[%],y1[%],u1[%],v1[%],_nb_vertices>=2,_opacity,_color1,..
-#@gmic : Draw specified colored spline curve on selected images.
+#@gmic : Draw specified colored spline curve on selected images (cubic hermite spline).
 #@gmic : Default values: 'nb_vertices=256', 'opacity=1' and 'color1=0'.
 #@gmic : $ image.jpg -repeat 30 -spline {?(100)}%,{?(100)}%,{?(-600,600)},{?(-600,600)},{?(100)}%,{?(100)}%,{?(-600,600)},{?(-600,600)},256,0.3,255 -done
 spline : -skip ${9=256},${10=1},${11=0}
