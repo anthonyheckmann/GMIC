@@ -12590,8 +12590,8 @@ output_pink3d :
 #@gmic : Pink wrapper name,p1, .. ,pn (requires the PINK library to be installed).
 #@gmic : (http://pinkhq.com/)
 #@gmic : prepares input, calls external "name input p1 ... pn output" and reads output (/tmp)
-##@gmic : $ image.jpg --pink asfr,5 -pink[0] asf,5
-##@gmic : $ image.jpg --blur 2 -pink maxima,4
+#@gmic : $ image.jpg --pink asfr,5 -pink[0] asf,5
+#@gmic : $ image.jpg --blur 2 -pink maxima,4
 pink : -v -
   -if {$#>1} ({"'${2--1}'"}) -replace[-1] {','},{"' '"} p=@{-1,t} -rm[-1] -else p=" " -endif
   -v + -e[^-1] "Call pink package with cmd: \"$1$? "$p"$?\"." -v -
@@ -12601,7 +12601,7 @@ pink : -v -
 #@gmic : (http://pinkhq.com/grayskel_8c.html)
 #@gmic : Grayscale homotopic skeleton (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'lambda=0'.
-##@gmic : $ image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2
+#@gmic : $ image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2
 pink_grayskel : -skip ${1=4},${2=0}
   -check "${1=4}==4 || $1==8 || $1==6 || $1==26"
   -repeat @# -l[@{>,-1}] -_xpinks "grayskel","null $1 $2" -endl -done
@@ -12610,7 +12610,7 @@ pink_grayskel : -skip ${1=4},${2=0}
 #@gmic : (http://pinkhq.com/heightmaxima_8c.html)
 #@gmic : Heightmaxima filtering (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'height=1'.
-##@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]
+#@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]
 pink_heightmaxima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
   -e[^-1] "Filter by heightmaxima exec with connectivity $1 height $2."
   -v - -repeat @# -l[@{>,-1}]
@@ -12623,7 +12623,7 @@ pink_heightmaxima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
 #@gmic : (http://pinkhq.com/heightminima_8c.html)
 #@gmic : Heightminima filtering (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'height=1'.
-##@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]
+#@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]
 pink_heightminima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
   -e[^-1] "Apply filter by heightminima exec with connectivity $1 height $2."
   -v - -repeat @# -l[@{>,-1}]
@@ -12637,7 +12637,7 @@ pink_heightminima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
 #@gmic : (http://pinkhq.com/htkernu_8c.html)
 #@gmic : Grayscale ultimate homotopic thinning/thickening without condition (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'type=""'.
-##@gmic : $ image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -rm[0]
+#@gmic : $ image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -rm[0]
 pink_htkern : -skip ${1=4},${2=""}
   -repeat @# -l[@{>,-1}] -_xpinks htkern$2,"null $1" -endl -done
 
@@ -12646,7 +12646,7 @@ pink_htkern : -skip ${1=4},${2=""}
 #@gmic : (http://pinkhq.com/lvkernu_8c.html)
 #@gmic : Grayscale ultimate leveling thinning/thickening without condition (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'type=""'.
-##@gmic : $ image.jpg -pink_lvkern ,u
+#@gmic : $ image.jpg -pink_lvkern ,u
 pink_lvkern : -skip ${1=4},${2=""}
   -check "${1=4}==4 || $1==8 || $1==6 || $1==26"
   -repeat @# -l[@{>,-1}] -_xpinks lvkern${2},"null $1" -endl -done
@@ -12655,7 +12655,7 @@ pink_lvkern : -skip ${1=4},${2=""}
 #@gmic : (http://pinkhq.com/minima_8c.html)
 #@gmic : Regional minima (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4'.
-##@gmic : $ image.jpg --blur 2 -pink_reg_minima ,
+#@gmic : $ image.jpg --blur 2 -pink_reg_minima ,
 pink_reg_minima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26"
   -e[^-1] "Compute regional minima exec with connectivity $1."
   -v - -repeat @# -l[@{>,-1}]
@@ -12668,8 +12668,8 @@ pink_reg_minima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26"
 #@gmic : (http://pinkhq.com/skelcurv_8c.html)
 #@gmic : Curvilinear binary skeleton guided by a priority function or image (requires the PINK library to be installed).
 #@gmic : Default values: 'prio=0', 'connectivity=4' and 'inhibit=""'.
-##@gmic : $ image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"
-##@gmic : $ image.jpg -threshold 50% --pink_skelcurv , --pink_skelcurv[-2] ,8
+#@gmic : $ image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"
+#@gmic : $ image.jpg -threshold 50% --pink_skelcurv , --pink_skelcurv[-2] ,8
 pink_skelcurv : -skip ${1=0},${2=4},${3=""}
   -e[^-1] "Curvilinear binary skeleton guided by a priority function or image from image$?, prio=$1, connectivity=$2, inhibit=$3."
   -repeat @# -l[@{>,-1}] -_xpinks "skelcurv","$1 $2 $3" -endl -done
@@ -12678,7 +12678,7 @@ pink_skelcurv : -skip ${1=0},${2=4},${3=""}
 #@gmic : (http://pinkhq.com/skelend_8c.html)
 #@gmic : Homotopic skeleton of a 2d or 3d binary image with dynamic detection of end points (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'n=0'.
-##@gmic : $ image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1
+#@gmic : $ image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1
 pink_skelend : -skip ${1=4},${2=0}
   -repeat @# -l[@{>,-1}] -_xpinks "skelend","$1 $2" -endl -done
 
@@ -12686,7 +12686,7 @@ pink_skelend : -skip ${1=4},${2=0}
 #@gmic : (http://pinkhq.com/skeleton_8c.html)
 #@gmic : Ultimate binary skeleton guided by a priority image (requires the PINK library to be installed).
 #@gmic : Default values: 'prio=0', 'connectivity=4' and 'inhibit=""'.
-##@gmic : $ image.jpg -threshold 50% --pink_skeleton[-1] ,
+#@gmic : $ image.jpg -threshold 50% --pink_skeleton[-1] ,
  pink_skeleton : -skip ${1=0},${2=4},${3=""}
   -repeat @# -l[@{>,-1}] -_xpinks "skeleton","$1 $2 $3" -endl -done
 
@@ -12694,7 +12694,7 @@ pink_skelend : -skip ${1=4},${2=0}
 #@gmic : (http://pinkhq.com/skelpar_8c.html)
 #@gmic : Parallel binary skeleton (requires the PINK library to be installed).
 #@gmic : Default values: 'algorithm=4', 'nsteps=-1' and 'inhibit=""'.
-##@gmic : $ image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2
+#@gmic : $ image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2
 pink_skelpar : -skip ${1=4},${2=-1},${3=""}
   -repeat @# -l[@{>,-1}] -_xframe -_xpinks "skelpar","$1 $2 $3" -endl -done
 
@@ -12702,7 +12702,7 @@ pink_skelpar : -skip ${1=4},${2=-1},${3=""}
 #@gmic : (http://pinkhq.com/wshedtopo_8c.html)
 #@gmic : Watershed (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4', 'inverse=0' and 'height=0'.
-##@gmic : $ image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5
+#@gmic : $ image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5
 pink_wshed : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=0},${3=0}
   -e[^-1] "Compute wshedtopo exec with connectivity $1 inversion $2 height $3."
   -v - -repeat @# -l[@{>,-1}]
