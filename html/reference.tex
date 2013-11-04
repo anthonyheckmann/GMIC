@@ -6064,7 +6064,11 @@ Save selected images as P5-coded PPM files (PINK extension for 3d volumetric ima
 Pink wrapper name,p1, .. ,pn (requires the PINK library to be installed).
 ~\\(http://pinkhq.com/)
 prepares input, calls external "name input p1 ... pn output" and reads output (/tmp)
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def594.jpg}\\
+{\footnotesize \textbf{Example 594~:} \texttt{image.jpg --pink asfr,5 -pink[0] asf,5}}
+\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def595.jpg}\\
+{\footnotesize \textbf{Example 595~:} \texttt{image.jpg --blur 2 -pink maxima,4}}
+\end{center}
 
 \subsection{\emph{-pink\_grayskel\index{-pink\_grayskel}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6072,7 +6076,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/grayskel\_8c.html)
 ~\\Grayscale homotopic skeleton (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'lambda=0'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def596.jpg}\\
+{\footnotesize \textbf{Example 596~:} \texttt{image.jpg --pink\_grayskel , --pink\_grayskel[0] ,10 --pink\_grayskel[0] ,100 -append\_tiles 2}}
+\end{center}
 
 \subsection{\emph{-pink\_heightmaxima\index{-pink\_heightmaxima}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6080,7 +6086,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/heightmaxima\_8c.html)
 ~\\Heightmaxima filtering (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'height=1'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def597.jpg}\\
+{\footnotesize \textbf{Example 597~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]}}
+\end{center}
 
 \subsection{\emph{-pink\_heightminima\index{-pink\_heightminima}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6088,7 +6096,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/heightminima\_8c.html)
 ~\\Heightminima filtering (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'height=1'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def598.jpg}\\
+{\footnotesize \textbf{Example 598~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]}}
+\end{center}
 
 \subsection{\emph{-pink\_htkern\index{-pink\_htkern}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6097,7 +6107,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 ~\\(http://pinkhq.com/htkernu\_8c.html)
 ~\\Grayscale ultimate homotopic thinning/thickening without condition (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'type=""'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def599.jpg}\\
+{\footnotesize \textbf{Example 599~:} \texttt{image.jpg --pink\_htkern ,u --pink\_htkern[0] , ---[-1,-2] -rm[0]}}
+\end{center}
 
 \subsection{\emph{-pink\_lvkern\index{-pink\_lvkern}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6106,7 +6118,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 ~\\(http://pinkhq.com/lvkernu\_8c.html)
 ~\\Grayscale ultimate leveling thinning/thickening without condition (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'type=""'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def600.jpg}\\
+{\footnotesize \textbf{Example 600~:} \texttt{image.jpg -pink\_lvkern ,u}}
+\end{center}
 
 \subsection{\emph{-pink\_reg\_minima\index{-pink\_reg\_minima}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6114,7 +6128,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/minima\_8c.html)
 ~\\Regional minima (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def601.jpg}\\
+{\footnotesize \textbf{Example 601~:} \texttt{image.jpg --blur 2 -pink\_reg\_minima ,}}
+\end{center}
 
 \subsection{\emph{-pink\_skelcurv\index{-pink\_skelcurv}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6122,7 +6138,11 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/skelcurv\_8c.html)
 ~\\Curvilinear binary skeleton guided by a priority function or image (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'prio=0', 'connectivity=4'} and \texttt{'inhibit=""'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def602.jpg}\\
+{\footnotesize \textbf{Example 602~:} \texttt{image.jpg -threshold 50\% \{w\},\{h\} -fill[-1] 'if(x$>$w/2,255,0)' tp=@\{-path\_tmp\} -output[-1] \$\{tp\}/inhibit.pgm -remove[-1] --pink\_skelcurv[0] , --pink\_skelcurv[0] ,,\$\{tp\}/inhibit.pgm -exec "rm "\$\{tp\}"/inhibit.pgm"}}
+\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def603.jpg}\\
+{\footnotesize \textbf{Example 603~:} \texttt{image.jpg -threshold 50\% --pink\_skelcurv , --pink\_skelcurv[-2] ,8}}
+\end{center}
 
 \subsection{\emph{-pink\_skelend\index{-pink\_skelend}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6130,7 +6150,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/skelend\_8c.html)
 ~\\Homotopic skeleton of a 2d or 3d binary image with dynamic detection of end points (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'n=0'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def604.jpg}\\
+{\footnotesize \textbf{Example 604~:} \texttt{image.jpg -threshold 50\% --pink\_skelend , --pink\_skelend[-2] ,-1}}
+\end{center}
 
 \subsection{\emph{-pink\_skeleton\index{-pink\_skeleton}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6138,7 +6160,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/skeleton\_8c.html)
 ~\\Ultimate binary skeleton guided by a priority image (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'prio=0', 'connectivity=4'} and \texttt{'inhibit=""'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def605.jpg}\\
+{\footnotesize \textbf{Example 605~:} \texttt{image.jpg -threshold 50\% --pink\_skeleton[-1] ,}}
+\end{center}
 
 \subsection{\emph{-pink\_skelpar\index{-pink\_skelpar}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6146,7 +6170,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/skelpar\_8c.html)
 ~\\Parallel binary skeleton (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'algorithm=4', 'nsteps=-1'} and \texttt{'inhibit=""'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def606.jpg}\\
+{\footnotesize \textbf{Example 606~:} \texttt{image.jpg -threshold 50\% --pink\_skelpar[-1] 0 --pink\_skelpar[-1] 2}}
+\end{center}
 
 \subsection{\emph{-pink\_wshed\index{-pink\_wshed}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
@@ -6154,7 +6180,9 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/wshedtopo\_8c.html)
 ~\\Watershed (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4', 'inverse=0'} and \texttt{'height=0'.}}
-
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def607.jpg}\\
+{\footnotesize \textbf{Example 607~:} \texttt{image.jpg --pink\_wshed ,1,5 -pink\_wshed[0] ,,5}}
+\end{center}
 \section{Convenience functions}
 
 
@@ -6460,8 +6488,8 @@ Return feature for a specified region.
 ~\\Argument 'feature' is a string that corresponds to the way the feature would
 be asked for the entire image.
 ~\\~\\\textbf{Default value}: {\small \texttt{'default\_value=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def594.jpg}\\
-{\footnotesize \textbf{Example 594~:} \texttt{image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@\{"-region\_feature[0,1] 10,\textbackslash "\{ia\}\textbackslash ""\} sum=@\{"-region\_feature[0,1] 10,\textbackslash "@\{-1,+\}\textbackslash ""\}}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def608.jpg}\\
+{\footnotesize \textbf{Example 608~:} \texttt{image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@\{"-region\_feature[0,1] 10,\textbackslash "\{ia\}\textbackslash ""\} sum=@\{"-region\_feature[0,1] 10,\textbackslash "@\{-1,+\}\textbackslash ""\}}}
 \end{center}
 
 \subsection{\emph{-reset\index{-reset}} }\vspace*{-0.5em}
@@ -6548,8 +6576,8 @@ Return the estimated noise variance of the last selected image.
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_scorefile,\_number\_of\_sessions$>$=0}}\\~\\
 Generate score board for the GPT championship (GREYC Poker Tour).
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def595.jpg}\\
-{\footnotesize \textbf{Example 595~:} \texttt{-gpt ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def609.jpg}\\
+{\footnotesize \textbf{Example 609~:} \texttt{-gpt ,}}
 \end{center}
 \section{Commands shortcuts}
 $\bullet$~'\texttt{-h}' (*)~is equivalent to~~'\texttt{-help}'.\\

@@ -14100,6 +14100,9 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
      "-replace_seq \""{'cmyk'}"\",\""{'CMYK'}"\" "\
      "-replace_seq \""{'b&amp;w'}"\",\""{'B&amp;W'}"\" "\
      "-replace_seq \""{'gimp'}"\",\""{'GIMP'}"\" "\
+     "-replace_seq \""{'roddy'}"\",\""{'Roddy'}"\" "\
+     "-replace_seq \""{'crt'}"\",\""{'CRT'}"\" "\
+     "-replace_seq \""{'colorabstractionpaint'}"\",\""{'"Color abstraction paint"'}"\" "\
      "-replace_seq \""{'g'},39,{'mic'}"\",\""{'G'},39,{'MIC'}"\" "\
      "-f 'if(y==0&&i>=97&&i<=122,i-32,i)' "
 
@@ -14579,6 +14582,7 @@ gimp_logo_ca :
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
 #@gimp : - <span foreground="purple"><b>2013/10/28</b> : version <i>1.5.7.2</i> (Current stable).</span>\n
+#@gimp : - <b>2013/11/04</b> : version <i>1.5.7.2</i> (Current beta).\n
 #@gimp : "}
 #@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157636080337636/")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/09/17</i>.</small>")

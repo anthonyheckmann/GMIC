@@ -5222,7 +5222,9 @@ filename
 <p style="margin-left:100px"><tt>Pink wrapper name,p1, .. ,pn (requires the PINK library to be installed).
 <br/>(http://pinkhq.com/)
 <br/>&nbsp;prepares input, calls external "name input p1 ... pn output" and reads output (/tmp)
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_grayskel</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def594.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink asfr,5 -pink[0] asf,5</div></div></td><td><tt>image.jpg --pink asfr,5 -pink[0] asf,5</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def595.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 -pink maxima,4</div></div></td><td><tt>image.jpg --blur 2 -pink maxima,4</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_grayskel</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 }, _lambda=0
 
@@ -5230,7 +5232,8 @@ _connectivity={ 4 | 8 | 6 | 26 }, _lambda=0
 <p style="margin-left:100px"><tt>(http://pinkhq.com/grayskel_8c.html)
 <br/>Grayscale homotopic skeleton (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'lambda=0'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_heightmaxima</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def596.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2</div></div></td><td><tt>image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_heightmaxima</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 },_height=1
 
@@ -5238,7 +5241,8 @@ _connectivity={ 4 | 8 | 6 | 26 },_height=1
 <p style="margin-left:100px"><tt>(http://pinkhq.com/heightmaxima_8c.html)
 <br/>Heightmaxima filtering (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'height=1'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_heightminima</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def597.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]</div></div></td><td><tt>image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_heightminima</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 },_height=1
 
@@ -5246,7 +5250,8 @@ _connectivity={ 4 | 8 | 6 | 26 },_height=1
 <p style="margin-left:100px"><tt>(http://pinkhq.com/heightminima_8c.html)
 <br/>Heightminima filtering (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'height=1'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_htkern</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def598.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]</div></div></td><td><tt>image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_htkern</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
 
@@ -5255,7 +5260,8 @@ _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
 <br/>(http://pinkhq.com/htkernu_8c.html)
 <br/>Grayscale ultimate homotopic thinning/thickening without condition (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'type=""'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_lvkern</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def599.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -rm[0]</div></div></td><td><tt>image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -rm[0]</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_lvkern</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
 
@@ -5264,7 +5270,8 @@ _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
 <br/>(http://pinkhq.com/lvkernu_8c.html)
 <br/>Grayscale ultimate leveling thinning/thickening without condition (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'type=""'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_reg_minima</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def600.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -pink_lvkern ,u</div></div></td><td><tt>image.jpg -pink_lvkern ,u</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_reg_minima</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 }
 
@@ -5272,7 +5279,8 @@ _connectivity={ 4 | 8 | 6 | 26 }
 <p style="margin-left:100px"><tt>(http://pinkhq.com/minima_8c.html)
 <br/>Regional minima (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelcurv</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def601.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 -pink_reg_minima ,</div></div></td><td><tt>image.jpg --blur 2 -pink_reg_minima ,</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelcurv</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
 
@@ -5280,7 +5288,9 @@ _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
 <p style="margin-left:100px"><tt>(http://pinkhq.com/skelcurv_8c.html)
 <br/>Curvilinear binary skeleton guided by a priority function or image (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'prio=0', 'connectivity=4' and 'inhibit=""'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelend</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def602.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"</div></div></td><td><tt>image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def603.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelcurv , --pink_skelcurv[-2] ,8</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelcurv , --pink_skelcurv[-2] ,8</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelend</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 },_n=0
 
@@ -5288,7 +5298,8 @@ _connectivity={ 4 | 8 | 6 | 26 },_n=0
 <p style="margin-left:100px"><tt>(http://pinkhq.com/skelend_8c.html)
 <br/>Homotopic skeleton of a 2d or 3d binary image with dynamic detection of end points (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'n=0'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skeleton</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def604.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skeleton</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
 
@@ -5296,7 +5307,8 @@ _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
 <p style="margin-left:100px"><tt>(http://pinkhq.com/skeleton_8c.html)
 <br/>Ultimate binary skeleton guided by a priority image (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'prio=0', 'connectivity=4' and 'inhibit=""'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelpar</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def605.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skeleton[-1] ,</div></div></td><td><tt>image.jpg -threshold 50% --pink_skeleton[-1] ,</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelpar</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _algorithm={0..29},_nsteps=_1,_inhibit=""
 
@@ -5304,7 +5316,8 @@ _algorithm={0..29},_nsteps=_1,_inhibit=""
 <p style="margin-left:100px"><tt>(http://pinkhq.com/skelpar_8c.html)
 <br/>Parallel binary skeleton (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'algorithm=4', 'nsteps=-1' and 'inhibit=""'.
-</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_wshed</b>:</font>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def606.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_wshed</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 },_inverse={ 0 | 1 },_height=0
 
@@ -5312,7 +5325,8 @@ _connectivity={ 4 | 8 | 6 | 26 },_inverse={ 0 | 1 },_height=0
 <p style="margin-left:100px"><tt>(http://pinkhq.com/wshedtopo_8c.html)
 <br/>Watershed (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4', 'inverse=0' and 'height=0'.
-</tt></p><br/><h3><a id="subsection22"><font color="purple">** <u>Convenience functions</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def607.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5</div></div></td><td><tt>image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5</tt></td></tr>
+</table></tt></p><br/><h3><a id="subsection22"><font color="purple">** <u>Convenience functions</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-alert</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _title,_message,_label_button1,_label_button2,...
@@ -5589,7 +5603,7 @@ region_label,feature,_default_value
 <br/>Argument 'feature' is a string that corresponds to the way the feature would
 <br/>&nbsp;be asked for the entire image.
 <br/><br/><b>Default value</b>: 'default_value=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def594.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@{"-region_feature[0,1] 10,"{ia}""} sum=@{"-region_feature[0,1] 10,"@{-1,+}""}</div></div></td><td><tt>image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@{"-region_feature[0,1] 10,"{ia}""} sum=@{"-region_feature[0,1] 10,"@{-1,+}""}</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def608.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@{"-region_feature[0,1] 10,"{ia}""} sum=@{"-region_feature[0,1] 10,"@{-1,+}""}</div></div></td><td><tt>image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@{"-region_feature[0,1] 10,"{ia}""} sum=@{"-region_feature[0,1] 10,"@{-1,+}""}</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-reset</b>:</font>
 
 <p style="margin-left:100px"><tt>Reset global parameters of the interpreter environment.
@@ -5668,7 +5682,7 @@ _scorefile,_number_of_sessions>=0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Generate score board for the GPT championship (GREYC Poker Tour).
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def595.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-gpt ,</div></div></td><td><tt>-gpt ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def609.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-gpt ,</div></div></td><td><tt>-gpt ,</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection24"><font color="purple">** <u>Commands shortcuts</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px">
 <font color="green"><b>&nbsp;&nbsp;-h  (*)</b>:</font>
