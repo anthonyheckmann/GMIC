@@ -8274,9 +8274,13 @@ apply_parallel_channels :
 apply_parallel_overlap : -check "${2=0}>=0 && isint(${3=0}) && $3>=0"
   -v - -if {@.>1570} N={if($3,max(1,round($3)),@*)} -else N={if($3,max(1,round($3)),4)} -endif N={2^int(log2(min(16,$N)))} -v +
   -e[^-1] "Apply parallelized command '$1' on image$?, with overlap $2 and "$N" threads."
-  -v - -repeat @# -l[$>]
+  -v -
+  -m "_check1 : -if {@#!=1} -error[0--9] \"Specified command '$1' changes the size of the image stack.\" -endif"
+  -repeat @# -l[$>]
     -_apply_parallel_overlap$N "$1",$2
-  -endl -done -v +
+  -endl -done
+  -uncommand _check1
+  -v +
 
 _apply_parallel_overlap1 :
   $1
@@ -8285,12 +8289,12 @@ _apply_parallel_overlap2 :
   -if {w>=h}
     ovx={round(if(@{"-is_percent $2"},w*$2,$2))} w2={int(w/2)}
     --z[0] {$w2-$ovx},100% -z[0] 0,{$w2+$ovx-1}
-    -parallel "-l[0] $1 -endl","-l[1] $1 -endl"
+    -parallel "-l[0] $1 -_check1 -endl","-l[1] $1 -_check1 -endl"
     -z[0] 0,@{0,w-1-$ovx} -z[1] $ovx,100% -a x
   -else
     ovy={round(if(@{"-is_percent $2"},h*$2,$2))} h2={int(h/2)}
     --rows[0] {$h2-$ovy},100% -rows[0] 0,{$h2+$ovy-1}
-    -parallel "-l[0] $1 -endl","-l[1] $1 -endl"
+    -parallel "-l[0] $1 -_check1 -endl","-l[1] $1 -_check1 -endl"
     -rows[0] 0,@{0,h-1-$ovy} -rows[1] $ovy,100% -a y
   -endif
 
@@ -8302,7 +8306,7 @@ _apply_parallel_overlap4 :
     ovy={round(if(@{"-is_percent $2"},h*$2,$2))} h2={int(h/2)}
     --z[0] {$w2-$ovx},0,100%,{$h2+$ovy-1} --z[0] 0,{$h2-$ovy},{$w2+$ovx-1},100%
     --z[0] {$w2-$ovx},{$h2-$ovy},100%,100% -z[0] 0,0,{$w2+$ovx-1},{$h2+$ovy-1}
-    -parallel "-l[0] $1 -endl","-l[1] $1 -endl","-l[2] $1 -endl","-l[3] $1 -endl"
+    -parallel "-l[0] $1 -_check1 -endl","-l[1] $1 -_check1 -endl","-l[2] $1 -_check1 -endl","-l[3] $1 -_check1 -endl"
     -z[0] 0,0,@{0,w-1-$ovx},@{0,h-1-$ovy} -z[1] $ovx,0,100%,@{1,h-1-$ovy}
     -z[2] 0,$ovy,@{2,w-1-$ovx},100% -z[3] $ovx,$ovy,100%,100%
     -a[0,1] x -a[1,2] x -a y
