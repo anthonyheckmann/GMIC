@@ -5590,6 +5590,19 @@ solidify_linear : -check "${1=1.5}>=1 && ${2=1}>=1 && ${3=0.5}>=0 && $3<=1"
    -endif
  -endl -done -v +
 
+#@gmic solidify_watershed
+#@gmic : Replace transparent regions of RGBA image by color propagation.
+#@gmic : $ image.jpg --luminance -ge[-1] 120 -*[-1] 255 -append c --solidify_watershed , -display_rgba
+solidify_watershed :
+  -e[^-1] "Replace transparent regions of RGBA image$? by color propagation."
+  -v - -repeat @# -l[$>]
+    -split_opacity
+    -if {@#>1}
+      -+[0] 1 -ge[1] 50% -*[0] [1] -distance[1] 1 -*[1] -1
+      -watershed[0] [1] -rm[1]
+    -endif
+  -endl -done -v +
+
 #@gmic solve_poisson : "laplacian_command",_nb_iterations>=0,_time_step>0,_nb_scales>=0
 #@gmic : Solve Poisson equation so that applying '-laplacian[n]' is close to the result of '-laplacian_command[n]'.
 #@gmic : Solving is performed using a multi-scale gradient descent algorithm.
@@ -9254,6 +9267,7 @@ polaroid : -check "${1=10}>=0 && ${2=20}>=0"
 #@gmic : Default values: 'edge_threshold=40', 'edge_shade=5', 'edge_thickness=0.5', 'edge_antialiasing=10', 'posterization_level=12' and 'posterization_antialiasing=0'.
 #@gmic : $ image.jpg --poster_edges ,
 poster_edges : -check "${1=40}>=0 && $1<=100 && ${2=5}>=0 && $2<=100 && ${3=0.5}>=0 && ${4=10}>=0 && ${5=12}>=0 && $5<=15 && ${6=0}>=0"
+  -e[^-1] "Apply poster edge on image$?, with edge threshold $1, edge shade $2, edge thickness $3, edge antialiasing $4, $5 level of posterization and posterization antialiasing $6."
   -v - -repeat @# -l[$>] -split_opacity -l[0]
     --gradient xy,1 -a[-2,-1] c -norm[-1] -b[-1] $3 -n[-1] 0,255
     -apply_curve[-1] 1,0,1,{max(0,(100-($1%)^0.1*100)*255%)},0.99,{min(255,(101-($1%)^0.1*100+$2)*255%)},0.01,255,0 -c[-1] 0,1
@@ -9262,6 +9276,19 @@ poster_edges : -check "${1=40}>=0 && $1<=100 && ${2=5}>=0 && $2<=100 && ${3=0.5}
     -if $6 -smooth[0] {min(50,$6)},0,1,{$6/40},{$6/40},0.8,90 -endif
     -*
   -endl -a c -endl -done -v +
+
+#@gmic poster_obama : _smoothness>=0
+#@gmic : Apply Obama poster effect on selected images.
+#@gmic : Default value: 'smoothness=3'.
+#@gmic : $ image.jpg --poster_obama ,
+poster_obama : -check "${1=3}>=0"
+  -e[^-1] "Apply Obama poster effect on image$?, with smoothness $1."
+  -v - -repeat @# -l[$>] -to_rgb
+    -apply_parallel_channels "-smooth 200,0,1,$1,1"
+    -quantize 7,0 -f 'if(i!=5,i,i+1-2*(y%2))'
+    (0,32,47;0,32,47;209,1,23;209,1,23;90,141,145;-1,-1,-1;253,221,138) -permute[-1] yzcx
+    -map[0] [1] -rm[1]
+  -endl -done -v +
 
 #@gmic rodilius : 0<=_amplitude<=100,_0<=thickness<=100,_sharpness>=0,_nb_orientations>0,_offset,_color_mode={ 0=darker | 1=brighter }
 #@gmic : Apply rodilius (fractalius-like) filter on selected images.
@@ -9598,7 +9625,7 @@ raindrops : -check "${2=0.1}>=0 && ${3=1}>=0 && isint(${4=0}) && $4>=0" -skip ${
     100%,100% -noise[-1] $2,2 -distance[-1] 1 -f[-1] 'cos(i)/(1+i/$3)'
     -if $4
       -i[-2] (0,1,0;1,0,1;0,1,0) -/[-2] 2 [-1]
-      -repeat $4 --convolve[-1] [-3],1 --[-1] [-3] -rm[-3] -w[-1] -done -rm[-3,-2]
+      -repeat $4 --convolve[-1] [-3],1 --[-1] [-3] -rm[-3] -done -rm[-3,-2]
     -endif
     -gradient[-1] -a[-2,-1] c -*[-1] {$1/(1e-5+max(abs(im),abs(iM)))}
     -warp[-2] [-1],1 -rm[-1]
@@ -15187,6 +15214,13 @@ gimp_poster_edges :
 
 gimp_poster_edges_preview :
   -gimp_split_preview "-gimp_poster_edges $*",$-1
+
+#@gimp Poster obama : poster_obama, gimp_poster_obama_preview(0)
+#@gimp : Smoothness = float(3,0,20)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/07</i>.</small>")
+gimp_poster_obama_preview :
+  -gimp_split_preview "-poster_obama $*",$-1
 
 #@gimp Rodilius : gimp_rodilius, gimp_rodilius_preview(1)
 #@gimp : Amplitude = float(10,0,30)
@@ -21230,44 +21264,19 @@ gmicol_logo_en :
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
 
-#@gmicol Poster edges : gimp_poster_edges, gimp_poster_edges_preview(0)
-#@gmicol : Image smoothness = float(20,0,100)
-#@gmicol : Edge threshold = float(60,0,100)
-#@gmicol : Edge shade = float(5,0,30)
-#@gmicol : Edge thickness = float(0,0,5)
-#@gmicol : Edge antialiasing = float(10,0,100)
-#@gmicol : Posterization level = int(0,0,15)
-#@gmicol : Posterization antialiasing = float(0,0,100)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233; and David Revoy</i>.      Latest update: <i>2012/11/30</i>.</small>")
+#@gmicol clone("Poster edges")
 
-#@gmicol Rodilius : gimp_rodilius, gimp_rodilius_preview(1)
-#@gmicol : Amplitude = float(10,0,30)
-#@gmicol : Thickness = float(10,0,100)
-#@gmicol : Sharpness = float(300,0,1000)
-#@gmicol : Orientations = int(5,2,36)
-#@gmicol : Offset = float(30,0,180)
-#@gmicol : Smoothness = int(0,0,5)
-#@gmicol : Color mode = choice(1,"Darker","Lighter")
-#@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Authors: <i>Rod/GimpChat, David Tschumperl&#233;</i>.      Latest update: <i>2011/09/28</i>.</small>")
+#@gmicol clone("Poster obama")
 
-#@gmicol Warhol : warhol, warhol(1)
-#@gmicol : X-tiles = int(3,1,10)
-#@gmicol : Y-tiles = int(3,1,10)
-#@gmicol : Smoothness = float(2,0,10)
-#@gmicol : Color = float(40,0,60)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Rodilius")
 
-#@gmicol Whirl drawing : draw_whirl, gimp_draw_whirl_preview(0)
-#@gmicol : Amplitude = float(20,0,100)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Warhol")
+
+#@gmicol clone("Whirl drawing")
 
 
 #@gmicol _<b>Basics</b>
-#---------------------
+#----------------------
 
 #@gmicol Adjust colors : gmicol_adjust_colors, gmicol_adjust_colors_preview
 #@gmicol : Contrast = float(1,0,3)
