@@ -17837,8 +17837,8 @@ gimp_emulate_film_bw_preview :
 #@gimp : "Polaroid PX-70 --","Polaroid PX-70 -","Polaroid PX-70","Polaroid PX-70 +","Polaroid PX-70 ++","Polaroid PX-70 +++",
 #@gimp : "Polaroid PX-70 Cold --","Polaroid PX-70 Cold -","Polaroid PX-70 Cold","Polaroid PX-70 Cold +","Polaroid PX-70 Cold ++",
 #@gimp : "Polaroid PX-70 Warm --","Polaroid PX-70 Warm -","Polaroid PX-70 Warm","Polaroid PX-70 Warm +","Polaroid PX-70 Warm ++",
-#@gimp : "Polaroid Time Zero (Expired) ---","Polaroid Time Zero (Expired) --","Polaroid Time Zero (Expired) -","Polaroid Time Zero (Expired)","Polaroid Time Zero (Expired) +","Polaroid Time Zero (Expired) ++"}
-#@gimp : "Polaroid Time Zero (Expired) Cold ---","Polaroid Time Zero (Expired) Cold --","Polaroid Time Zero (Expired) Cold -","Polaroid Time Zero (Expired) Cold",
+#@gimp : "Polaroid Time Zero (Expired) ---","Polaroid Time Zero (Expired) --","Polaroid Time Zero (Expired) -","Polaroid Time Zero (Expired)","Polaroid Time Zero (Expired) +","Polaroid Time Zero (Expired) ++",
+#@gimp : "Polaroid Time Zero (Expired) Cold ---","Polaroid Time Zero (Expired) Cold --","Polaroid Time Zero (Expired) Cold -","Polaroid Time Zero (Expired) Cold"}
 #@gimp : sep = separator()
 #@gimp : Gamma = float(1,0.01,5)
 #@gimp : Contrast = float(1,0,4)
