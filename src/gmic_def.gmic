@@ -5590,6 +5590,19 @@ solidify_linear : -check "${1=1.5}>=1 && ${2=1}>=1 && ${3=0.5}>=0 && $3<=1"
    -endif
  -endl -done -v +
 
+#@gmic solidify_watershed
+#@gmic : Replace transparent regions of RGBA image by color propagation.
+#@gmic : $ image.jpg --luminance -ge[-1] 120 -*[-1] 255 -append c --solidify_watershed , -display_rgba
+solidify_watershed :
+  -e[^-1] "Replace transparent regions of RGBA image$? by color propagation."
+  -v - -repeat @# -l[$>]
+    -split_opacity
+    -if {@#>1}
+      -+[0] 1 -ge[1] 50% -*[0] [1] -distance[1] 1 -*[1] -1
+      -watershed[0] [1] -rm[1]
+    -endif
+  -endl -done -v +
+
 #@gmic solve_poisson : "laplacian_command",_nb_iterations>=0,_time_step>0,_nb_scales>=0
 #@gmic : Solve Poisson equation so that applying '-laplacian[n]' is close to the result of '-laplacian_command[n]'.
 #@gmic : Solving is performed using a multi-scale gradient descent algorithm.
@@ -9254,6 +9267,7 @@ polaroid : -check "${1=10}>=0 && ${2=20}>=0"
 #@gmic : Default values: 'edge_threshold=40', 'edge_shade=5', 'edge_thickness=0.5', 'edge_antialiasing=10', 'posterization_level=12' and 'posterization_antialiasing=0'.
 #@gmic : $ image.jpg --poster_edges ,
 poster_edges : -check "${1=40}>=0 && $1<=100 && ${2=5}>=0 && $2<=100 && ${3=0.5}>=0 && ${4=10}>=0 && ${5=12}>=0 && $5<=15 && ${6=0}>=0"
+  -e[^-1] "Apply poster edge on image$?, with edge threshold $1, edge shade $2, edge thickness $3, edge antialiasing $4, $5 level of posterization and posterization antialiasing $6."
   -v - -repeat @# -l[$>] -split_opacity -l[0]
     --gradient xy,1 -a[-2,-1] c -norm[-1] -b[-1] $3 -n[-1] 0,255
     -apply_curve[-1] 1,0,1,{max(0,(100-($1%)^0.1*100)*255%)},0.99,{min(255,(101-($1%)^0.1*100+$2)*255%)},0.01,255,0 -c[-1] 0,1
@@ -9262,6 +9276,19 @@ poster_edges : -check "${1=40}>=0 && $1<=100 && ${2=5}>=0 && $2<=100 && ${3=0.5}
     -if $6 -smooth[0] {min(50,$6)},0,1,{$6/40},{$6/40},0.8,90 -endif
     -*
   -endl -a c -endl -done -v +
+
+#@gmic poster_obama : _smoothness>=0
+#@gmic : Apply Obama poster effect on selected images.
+#@gmic : Default value: 'smoothness=3'.
+#@gmic : $ image.jpg --poster_obama ,
+poster_obama : -check "${1=3}>=0"
+  -e[^-1] "Apply Obama poster effect on image$?, with smoothness $1."
+  -v - -repeat @# -l[$>] -to_rgb
+    -apply_parallel_channels "-smooth 200,0,1,$1,1"
+    -quantize 7,0 -f 'if(i!=5,i,i+1-2*(y%2))'
+    (0,32,47;0,32,47;209,1,23;209,1,23;90,141,145;-1,-1,-1;253,221,138) -permute[-1] yzcx
+    -map[0] [1] -rm[1]
+  -endl -done -v +
 
 #@gmic rodilius : 0<=_amplitude<=100,_0<=thickness<=100,_sharpness>=0,_nb_orientations>0,_offset,_color_mode={ 0=darker | 1=brighter }
 #@gmic : Apply rodilius (fractalius-like) filter on selected images.
@@ -9598,7 +9625,7 @@ raindrops : -check "${2=0.1}>=0 && ${3=1}>=0 && isint(${4=0}) && $4>=0" -skip ${
     100%,100% -noise[-1] $2,2 -distance[-1] 1 -f[-1] 'cos(i)/(1+i/$3)'
     -if $4
       -i[-2] (0,1,0;1,0,1;0,1,0) -/[-2] 2 [-1]
-      -repeat $4 --convolve[-1] [-3],1 --[-1] [-3] -rm[-3] -w[-1] -done -rm[-3,-2]
+      -repeat $4 --convolve[-1] [-3],1 --[-1] [-3] -rm[-3] -done -rm[-3,-2]
     -endif
     -gradient[-1] -a[-2,-1] c -*[-1] {$1/(1e-5+max(abs(im),abs(iM)))}
     -warp[-2] [-1],1 -rm[-1]
@@ -14761,23 +14788,6 @@ gimp_display_filter_sources :
 #@gimp _<b>Arrays &amp; tiles</b>
 #--------------------------------
 
-
-#@gimp Array [regular] : gimp_array, gimp_array_preview(1)
-#@gimp : X-tiles = int(2,1,10)
-#@gimp : Y-tiles = int(2,1,10)
-#@gimp : X-offset = float(0,0,100)
-#@gimp : Y-offset = float(0,0,100)
-#@gimp : Mirror = choice("None","x-axis","y-axis","xy-axes")
-#@gimp : Size = _choice("Shrink", "Expand", "Repeat [Memory consuming!]")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
-gimp_array :
-  -shift -$3%,-$4%,0,0,2
-  -if {$5&1} -mirror x -endif -if {$5>1} -mirror y -endif
-  -array $1,$2,$6
-
-gimp_array_preview :
-  -gimp_array $1,$2,$3,$4,$5,0
-
 #@gimp Array [faded] : gimp_array_fade, gimp_array_fade_preview(1)
 #@gimp : X-tiles = int(2,1,10)
 #@gimp : Y-tiles = int(2,1,10)
@@ -14841,6 +14851,22 @@ gimp_array_color :
   -repeat @# -l[-1]
     $1,$2,1,3 -rand[-1] 0,255 -to_colormode[-1] @{-2,s} -r[-1] [-2] -*[-1] $3 -*[-2] {1-$3} -+[-2,-1]
   -endl -mv[-1] 0 -done
+
+#@gimp Array [regular] : gimp_array, gimp_array_preview(1)
+#@gimp : X-tiles = int(2,1,10)
+#@gimp : Y-tiles = int(2,1,10)
+#@gimp : X-offset = float(0,0,100)
+#@gimp : Y-offset = float(0,0,100)
+#@gimp : Mirror = choice("None","x-axis","y-axis","xy-axes")
+#@gimp : Size = _choice("Shrink", "Expand", "Repeat [Memory consuming!]")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
+gimp_array :
+  -shift -$3%,-$4%,0,0,2
+  -if {$5&1} -mirror x -endif -if {$5>1} -mirror y -endif
+  -array $1,$2,$6
+
+gimp_array_preview :
+  -gimp_array $1,$2,$3,$4,$5,0
 
 #@gimp Chessboard : gimp_chessboard, gimp_chessboard_preview(0)
 #@gimp : First size = int(64,1,512)
@@ -15187,6 +15213,13 @@ gimp_poster_edges :
 
 gimp_poster_edges_preview :
   -gimp_split_preview "-gimp_poster_edges $*",$-1
+
+#@gimp Poster obama : poster_obama, gimp_poster_obama_preview(0)
+#@gimp : Smoothness = float(3,0,20)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/07</i>.</small>")
+gimp_poster_obama_preview :
+  -gimp_split_preview "-poster_obama $*",$-1
 
 #@gimp Rodilius : gimp_rodilius, gimp_rodilius_preview(1)
 #@gimp : Amplitude = float(10,0,30)
@@ -20985,46 +21018,7 @@ gimp_solve_maze_preview :
 gmicol_logo_en :
   -gimp_logo "    - Online -"
 
-#@gmicol Contributors : _none_, _none_
-#@gmicol : note = note{"
-#@gmicol : We would like to thank all these people who contributed to <b>G'MIC</b> in one way or another.
-#@gmicol : A big hug to : \n\n
-#@gmicol : <b> -</b> <i>Sylvie Alexandre</i> <small>(packaging, testing &amp; filters)</small>
-#@gmicol : <b> -</b> <i>Partha Bagchi</i> <small>(packaging)</small>
-#@gmicol : <b> -</b> <i>S&#233;bastien Bougleux</i> <small>(debugging)</small>
-#@gmicol : <b> -</b> <i>J&#233;rome Boulanger</i> <small>(testing &amp; code)</small>
-#@gmicol : <b> -</b> <i>Claude Bulin</i> <small>(packaging)</small>
-#@gmicol : <b> -</b> <i>Aur&#233;lien Ceyden</i> <small>(packaging)</small>
-#@gmicol : <b> -</b> <i>Fran&#231;ois Collard</i> <small>(testing)</small>
-#@gmicol : <b> -</b> <i>Patrick David</i> <small>(testing)</small>
-#@gmicol : <b> -</b> <i>Iain Fergusson</i> <small>(filters)</small>
-#@gmicol : <b> -</b> <i>Roberto Ferramosca</i> <small>(packaging)</small>
-#@gmicol : <b> -</b> <i>J&#233;rome Ferrari</i> <small>(testing, code &amp; tutorials)</small>
-#@gmicol : <b> -</b> <i>Chris Fiedler</i> <small>(gfx)</small>
-#@gmicol : <b> -</b> <i>S&#233;bastien Fourey</i> <small>(ZArt code &amp; G'MIC online)</small>
-#@gmicol : <b> -</b> <i>Gentlemanbeggar</i> <small>(filters)</small>
-#@gmicol : <b> -</b> <i>Claes Holmerson</i> <small>(tutorials)</small>
-#@gmicol : <b> -</b> <i>Arto Huotari</i> <small>(filters)</small>
-#@gmicol : <b> -</b> <i>Tom Keil</i> <small>(testing, filters &amp; tutorials)</small>
-#@gmicol : <b> -</b> <i>Andy Kelday</i> <small>(testing &amp; filters)</small>
-#@gmicol : <b> -</b> <i>Angelo Lama</i> <small>(testing &amp; EKD integration)</small>
-#@gmicol : <b> -</b> <i>St&#233;phane de la Linuxerie</i> <small>(design)</small>
-#@gmicol : <b> -</b> <i>Mark</i> <small>(translation)</small>
-#@gmicol : <b> -</b> <i>Mahvin</i> <small>(testing &amp; design)</small>
-#@gmicol : <b> -</b> <i>MareroQ</i> <small>(translation)</small>
-#@gmicol : <b> -</b> <i>Ramon Miranda</i> <small>(translation)</small>
-#@gmicol : <b> -</b> <i>Mauro Quercia</i> <small>(translation)</small>
-#@gmicol : <b> -</b> <i>PhotoComiX</i> <small>(testing, translation &amp; filters)</small>
-#@gmicol : <b> -</b> <i>James Prichard</i> <small>(testing &amp; filters)</small>
-#@gmicol : <b> -</b> <i>Guilherme Razgriz</i> <small>(translation)</small>
-#@gmicol : <b> -</b> <i>Karsten Rodenacker</i> <small>(packaging &amp; code)</small>
-#@gmicol : <b> -</b> <i>Dani Sard&#224;</i> <small>(translation)</small>
-#@gmicol : <b> -</b> <i>Yuri Shemanin</i> <small>(debugging)</small>
-#@gmicol : <b> -</b> <i>Thorsten "otto" Stettin</i> <small>(packaging)</small>
-#@gmicol : <b> -</b> <i>Stepanekos</i> <small>(translation)</small>
-#@gmicol : <b> -</b> <i>Bernd Zeimetz</i> <small>(packaging)</small>
-#@gmicol : <b> -</b>"}
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/30</i>.</small>")
+#@gmicol clone("Contributors")
 
 #@gmicol _<b>Arrays &amp; tiles</b>
 #----------------------------------
@@ -21040,234 +21034,41 @@ gmicol_logo_en :
 #@gmicol : Size = _choice("Shrink", "Expand")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
 
-#@gmicol Array [mirrored] : gimp_array_mirror, gimp_array_mirror_preview(1)
-#@gmicol : Iterations = int(1,1,4)
-#@gmicol : X-offset = float(0,0,100)
-#@gmicol : Y-offset = float(0,0,100)
-#@gmicol : Array mode = choice(2,"x-axis","y-axis","xy-axes","2xy-axes")
-#@gmicol : Initialization = choice("Original","Mirror X","Mirror Y","Rotate 90 deg.","Rotate 180 deg.","Rotate 270 deg.")
-#@gmicol : Expand size = _bool(false)
-#@gmicol : Crop = int(0,0,100)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Array [random] : array_random, array_random(1)
-#@gmicol : Source X-tiles = int(5,1,20)
-#@gmicol : Source Y-tiles = int(5,1,20)
-#@gmicol : Destination X-tiles = int(7,1,20)
-#@gmicol : Destination Y-tiles = int(7,1,20)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Array [random colors] : gimp_array_color, gimp_array_color(1)
-#@gmicol : X-tiles = int(5,1,20)
-#@gmicol : Y-tiles = int(5,1,20)
-#@gmicol : Opacity = float(0.5,0,1)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Array [regular] : gimp_array, gimp_array_preview(1)
-#@gmicol : X-tiles = int(2,1,10)
-#@gmicol : Y-tiles = int(2,1,10)
-#@gmicol : X-offset = float(0,0,100)
-#@gmicol : Y-offset = float(0,0,100)
-#@gmicol : Mirror = choice("None","x-axis","y-axis","xy-axes")
-#@gmicol : Size = _choice("Shrink", "Expand")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Chessboard : gimp_chessboard, gimp_chessboard_preview(0)
-#@gmicol : First size = int(64,1,512)
-#@gmicol : Second size = int(64,1,512)
-#@gmicol : First offset = int(0,0,512)
-#@gmicol : Second offset = int(0,0,512)
-#@gmicol : Angle = float(0,0,180)
-#@gmicol : Opacity = float(0.5,0,1)
-#@gmicol : First color = color(0,0,0,255)
-#@gmicol : Second color = color(255,255,255,255)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Dices : gimp_dices, gimp_dices(0)
-#@gmicol : Resolution = float(2,1,10)
-#@gmicol : Size = int(24,8,64)
-#@gmicol : Color model = choice(1,"Black dices","White dices")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Grid : gimp_imagegrid, gimp_imagegrid(0)
-#@gmicol : X-size = int(10,2,100)
-#@gmicol : Y-size = int(10,2,100)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Taquin : taquin, taquin(1)
-#@gmicol : X-tiles = int(7,1,20)
-#@gmicol : Y-tiles = int(7,1,20)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Tileable rotation : gimp_rotate_tileable, gimp_rotate_tileable(1)
-#@gmicol : Angle = float(45,0,360)
-#@gmicol : Maximum size factor = int(8,0,20)
-#@gmicol : Array mode = choice(0,"None","x-axis","y-axis","xy-axes","2xy-axes")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Tiled isolation : gimp_isolate_tiles, gimp_isolate_tiles(0)
-#@gmicol : X-size = float(10,0,100)
-#@gmicol : Y-size = float(10,0,100)
-#@gmicol : X-border = float(5,0,100)
-#@gmicol : Y-border = float(5,0,100)
-#@gmicol : Keep tiles square = bool(1)
-#@gmicol : Keep borders square = bool(1)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Tiled normalization : gimp_normalize_tiles, gimp_normalize_tiles(1)
-#@gmicol : X-tiles = int(25,1,80)
-#@gmicol : Y-tiles = int(25,1,80)
-#@gmicol : Minimal value = float(0,0,255)
-#@gmicol : Maximal value = float(255,0,255)
-#@gmicol : Channel(s) = choice(3,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Tiled rotation : gimp_rotate_tiles, gimp_rotate_tiles(1)
-#@gmicol : X-tiles = int(5,1,80)
-#@gmicol : Y-tiles = int(5,1,80)
-#@gmicol : Angle = float(15,0,360)
-#@gmicol : X-shadow = float(3,-20,20)
-#@gmicol : Y-shadow = float(3,-20,20)
-#@gmicol : Smoothness = float(1.8,0,5)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Tiled parameterization : gimp_parameterize_tiles, gimp_parameterize_tiles(1)
-#@gmicol : X-tiles = int(10,1,30)
-#@gmicol : Y-tiles = int(10,1,30)
-#@gmicol : Fitting function = choice("Linear","Quadratic")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Tiled random shifts : gimp_shift_tiles, gimp_shift_tiles(1)
-#@gmicol : X-tiles = int(10,1,30)
-#@gmicol : Y-tiles = int(10,1,30)
-#@gmicol : Amplitude = float(10,0,100)
-#@gmicol : Opacity = float(1,0,1)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Array [mirrored]")
+#@gmicol clone("Array [random]")
+#@gmicol clone("Array [random colors]")
+#@gmicol clone("Array [regular]")
+#@gmicol clone("Chessboard")
+#@gmicol clone("Dices")
+#@gmicol clone("Grid")
+#@gmicol clone("Taquin")
+#@gmicol clone("Tileable rotation")
+#@gmicol clone("Tiled isolation")
+#@gmicol clone("Tiled normalization")
+#@gmicol clone("Tiled rotation")
+#@gmicol clone("Tiled parameterization")
+#@gmicol clone("Tiled random shifts")
 
 #@gmicol _<b>Artistic</b>
 #-----------------------
 
-#@gmicol Bokeh : bokeh, gimp_bokeh_preview(0)
-#@gmicol : note = note("<b><small>Global parameters:</small></b>")
-#@gmicol : Amplitude = float(250,0,600)
-#@gmicol : Smoothness = float(2,0,20)
-#@gmicol : Density = float(0.5,0,5)
-#@gmicol : sep = separator(), note = note("<b><small>Bokeh shape:</small></b>")
-#@gmicol : Size = int(24,1,64)
-#@gmicol : Outline size = float(10,0,100)
-#@gmicol : Outline amplitude = float(2,0,10)
-#@gmicol : Smoothness = float(0.7,0,5)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/04/24</i>.</small>")
-
-#@gmicol Cartoon : cartoon, gimp_cartoon_preview(0)
-#@gmicol : Smoothness = float(3,0,10)
-#@gmicol : Sharpening = float(200,0,400)
-#@gmicol : Edge threshold = float(20,1,30)
-#@gmicol : Edge thickness = float(0.25,0,1)
-#@gmicol : Color strength = float(1.5,0,3)
-#@gmicol : Color quantization = int(8,2,256)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Cubism : gimp_cubism, gimp_cubism_preview(1)
-#@gmicol : Iterations = int(2,0,10)
-#@gmicol : Density = float(50,0,200)
-#@gmicol : Thickness = float(10,0,50)
-#@gmicol : Angle = float(90,0,360)
-#@gmicol : Opacity = float(0.7,0.01,1)
-#@gmicol : Smoothness = float(0,0,5)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/06/05</i>.</small>")
-
-#@gmicol Ellipsionism : gimp_ellipsionism, gimp_ellipsionism_preview(0)
-#@gmicol : Primary radius = float(20,1,100)
-#@gmicol : Secondary radius = float(10,1,100)
-#@gmicol : Smoothness = float(0.5,0,10)
-#@gmicol : Opacity = float(0.7,0,1)
-#@gmicol : Outline = float(8,1,3)
-#@gmicol : Density = float(0.5,0.1,2)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Felt pen : gimp_feltpen, gimp_feltpen_preview(0)
-#@gmicol : Amplitude = float(300,0,4000)
-#@gmicol : Density = float(50,0,100)
-#@gmicol : Smoothness = float(1,0,10)
-#@gmicol : Opacity = float(0.1,0,1)
-#@gmicol : Edge = float(20,0,100)
-#@gmicol : Thickness = int(5,2,32)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/25</i>.</small>")
-
-#@gmicol Kuwahara : gimp_kuwahara, gimp_kuwahara_preview(0)
-#@gmicol : Iterations = int(2,1,8)
-#@gmicol : Radius = int(5,1,30)
-#@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Lylejk's painting : gimp_lylejk_painting, gimp_lylejk_painting_preview(0)
-#@gmicol : Iterations = int(2,1,8)
-#@gmicol : Radius = int(4,1,30)
-#@gmicol : Canvas = float(10,0,100)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Authors: <i>Lyle Kroll, David Tschumperl&#233;</i>.      Latest update: <i>2011/09/21</i>.</small>")
-#@gmicol : note = link("Filter Explained here","http://www.gimpchat.com/viewtopic.php?f=10&t=2624")
-
-#@gmicol Painting : gimp_painting, gimp_painting_preview(0)
-#@gmicol : Abstraction = int(5,1,10)
-#@gmicol : Details scale = float(2.5,0,5)
-#@gmicol : Color = float(1.5,0,4)
-#@gmicol : Smoothness = float(50,0,1000)
-#@gmicol : Sharpen shades = bool(1)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Authors: <i>Lyle Kroll, Angelo Lama, David Tschumperl&#233;</i>.\nLatest update: <i>2011/02/28</i>.</small>")
-
-#@gmicol Pen drawing : gimp_pen_drawing, gimp_pen_drawing_preview(0)
-#@gmicol : Amplitude = float(10,0,30)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Poster edges : gimp_poster_edges, gimp_poster_edges_preview(0)
-#@gmicol : Image smoothness = float(20,0,100)
-#@gmicol : Edge threshold = float(60,0,100)
-#@gmicol : Edge shade = float(5,0,30)
-#@gmicol : Edge thickness = float(0,0,5)
-#@gmicol : Edge antialiasing = float(10,0,100)
-#@gmicol : Posterization level = int(0,0,15)
-#@gmicol : Posterization antialiasing = float(0,0,100)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233; and David Revoy</i>.      Latest update: <i>2012/11/30</i>.</small>")
-
-#@gmicol Rodilius : gimp_rodilius, gimp_rodilius_preview(1)
-#@gmicol : Amplitude = float(10,0,30)
-#@gmicol : Thickness = float(10,0,100)
-#@gmicol : Sharpness = float(300,0,1000)
-#@gmicol : Orientations = int(5,2,36)
-#@gmicol : Offset = float(30,0,180)
-#@gmicol : Smoothness = int(0,0,5)
-#@gmicol : Color mode = choice(1,"Darker","Lighter")
-#@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Authors: <i>Rod/GimpChat, David Tschumperl&#233;</i>.      Latest update: <i>2011/09/28</i>.</small>")
-
-#@gmicol Warhol : warhol, warhol(1)
-#@gmicol : X-tiles = int(3,1,10)
-#@gmicol : Y-tiles = int(3,1,10)
-#@gmicol : Smoothness = float(2,0,10)
-#@gmicol : Color = float(40,0,60)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Whirl drawing : draw_whirl, gimp_draw_whirl_preview(0)
-#@gmicol : Amplitude = float(20,0,100)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
+#@gmicol clone("Bokeh")
+#@gmicol clone("Cartoon")
+#@gmicol clone("Cubism")
+#@gmicol clone("Ellipsionism")
+#@gmicol clone("Felt pen")
+#@gmicol clone("Kuwahara")
+#@gmicol clone("Lylejk's painting")
+#@gmicol clone("Painting")
+#@gmicol clone("Pen drawing")
+#@gmicol clone("Poster edges")
+#@gmicol clone("Poster obama")
+#@gmicol clone("Rodilius")
+#@gmicol clone("Warhol")
+#@gmicol clone("Whirl drawing")
 
 #@gmicol _<b>Basics</b>
-#---------------------
+#----------------------
 
 #@gmicol Adjust colors : gmicol_adjust_colors, gmicol_adjust_colors_preview
 #@gmicol : Contrast = float(1,0,3)
@@ -21367,180 +21168,25 @@ gmicol_rotate :
     -to_rgba -rotate $1,1,$3
   -endif
 
-
 #@gmicol _<b>Black &amp; white</b>
 #--------------------------------
 
-
-#@gmicol Black &amp; White : gimp_blackandwhite, gimp_blackandwhite_preview(1)
-#@gmicol : Red level = float(0.299,0,1)
-#@gmicol : Red smoothness = float(0,0,10)
-#@gmicol : Green level = float(0.587,0,1)
-#@gmicol : Green smoothness = float(0,0,10)
-#@gmicol : Blue level = float(0.114,0,1)
-#@gmicol : Blue smoothness = float(0,0,10)
-#@gmicol : sep = separator()
-#@gmicol : Gamma = float(1,0.01,5)
-#@gmicol : Contrast = float(1,0,4)
-#@gmicol : Brightness = float(0,-255,255)
-#@gmicol : Hue = float(0,0,360)
-#@gmicol : Saturation = float(0,0,1)
-#@gmicol : sep = separator()
-#@gmicol : Grain (shadows) = float(0,0,200)
-#@gmicol : Grain (midtones) = float(0,0,200)
-#@gmicol : Grain (highlights) = float(0,0,200)
-#@gmicol : Grain tone fading = float(2,0,10)
-#@gmicol : Grain scale = float(0,0,3)
-#@gmicol : Grain type = choice("Gaussian","Uniform","Salt and pepper","Poisson")
-#@gmicol : sep = separator()
-#@gmicol : Local contrast = float(0,0,60)
-#@gmicol : Radius = int(16,1,512)
-#@gmicol : Contrast smoothness = float(4,0,10)
-#@gmicol : sep = separator()
-#@gmicol : Pseudo-gray dithering = int(0,0,20)
-#@gmicol : Use maximum tones = bool(false)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Charcoal : gimp_charcoal, gimp_charcoal_preview(0)
-#@gmicol : Granularity = int(65,0,800)
-#@gmicol : Lowlights crossover point = int(70,0,255)
-#@gmicol : Highlights crossover point = int(170,0,255)
-#@gmicol : Boost contrast = bool(0)
-#@gmicol : Resize image for optimum effect = bool(1)
-#@gmicol : Add chalk highlights = bool(0)
-#@gmicol : Minimal highlights = int(50,0,255)
-#@gmicol : Maximal highlights = int(70,0,255)
-#@gmicol : Background color = color(255,255,255)
-#@gmicol : Foreground color = color(0,0,0)
-#@gmicol : Invert background/foreground = bool(0)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-#@gmicol : note = note("<small>Inspired from the Charcoal script by <i>micomicon</i> :</small>")
-#@gmicol : link = link("http://registry.gimp.org/node/25078")
-
-#@gmicol Colorize [with colormap] : gimp_bwrecolorize, gimp_bwrecolorize_preview
-#@gmicol : Gamma = float(1,0.01,5)
-#@gmicol : Contrast = float(1,0,4)
-#@gmicol : Brightness = float(0,-255,255)
-#@gmicol : Normalize = bool(0)
-#@gmicol : sep = separator()
-#@gmicol : Gradient preset = choice("User-defined","Black to white","White to black","Sepia","Solarize")
-#@gmicol : Interpolation type = choice(1,"Nearest","Linear","Cubic","Lanczos")
-#@gmicol : Preserve initial brightness = bool(0)
-#@gmicol : sep = separator(), note = note("<small><u>User-defined gradient :</u></small>")
-#@gmicol : Number of tones = int(5,2,8)
-#@gmicol : 1st tone = color(0,0,0,255)
-#@gmicol : 2nd tone = color(43,25,55,255)
-#@gmicol : 3rd tone = color(158,137,189,255)
-#@gmicol : 4th tone = color(224,191,228,255)
-#@gmicol : 5th tone = color(255,255,255,255)
-#@gmicol : 6th tone = color(255,255,255,255)
-#@gmicol : 7th tone = color(255,255,255,255)
-#@gmicol : 8th tone = color(255,255,255,255)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Dithering : gimp_ditheredbw, gimp_ditheredbw_preview(0)
-#@gmicol : Gamma = float(1,0.01,5)
-#@gmicol : Contrast = float(1,0,4)
-#@gmicol : Brightness = float(0,-255,255)
-#@gmicol : Smoothness = float(0,0,10)
-#@gmicol : Hue = float(0,0,360)
-#@gmicol : Saturation = float(0,0,1)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Ink wash : gimp_ink_wash, gimp_ink_wash(0)
-#@gmicol : note = note("Ink wash controls")
-#@gmicol : Size = float(0.14,0,4)
-#@gmicol : Amplitude = float(23,0,200)
-#@gmicol : sep = separator()
-#@gmicol : note = note("Check if you wish visual control on this step")
-#@gmicol : SKIP all other steps = bool(false)
-#@gmicol : note = note ("UNcheck to reactivate the other controls")
-#@gmicol : sep = separator()
-#@gmicol : Smoother Sharpness = float(0.5,0,2)
-#@gmicol : Smoother Edge Protection = float(0.54,0,1)
-#@gmicol : Smoother Softness = float(2.25,0,10)
-#@gmicol : sep = separator()
-#@gmicol : Stretch Contrast = choice("None","Automatic","Automatic & Contrast Mask","Manual Controls")
-#@gmicol : note = note ("To activate the sliders below chose 'Manual Controls'")
-#@gmicol :sep = separator()
-#@gmicol : LN Amplititude = float(2,0,60)
-#@gmicol : LN Size = float(6,0,64)
-#@gmicol : LN Neightborhood-Smoothness = float(5,0,40)
-#@gmicol : LN Average-Smoothness = float(20,0,40)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>PhotoComiX</i>.      Latest update: <i>2011/4/5</i>.</small>")
-#@gmicol : note = link(0,"Forum thread about the filter discussion","http://gimpchat.com/viewtopic.php?f=10&t=914")
-
-#@gmicol Pencil : gimp_pencilbw, gimp_pencilbw_preview(0)
-#@gmicol : Size = float(0.3,0,5)
-#@gmicol : Amplitude = float(60,0,200)
-#@gmicol : Hue = float(0,0,360)
-#@gmicol : Saturation = float(0,0,1)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Stamp : gimp_stamp, gimp_stamp_preview(0)
-#@gmicol : Auto-threshold = bool(1)
-#@gmicol : Threshold = int(50,0,100)
-#@gmicol : Smoothness = float(0,0,10)
-#@gmicol : Sharpening = float(0,0,30)
-#@gmicol : Grain = float(0,0,100)
-#@gmicol : Invert colors = bool(false)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Authors: <i>Antaron, Mahvin, David Tschumperl&#233;</i>.             Latest update: 2011/05/17.</small>")
-
-#@gmicol Stencil : gimp_stencilbw, gimp_stencilbw_preview(0)
-#@gmicol : Threshold = float(10,0,30)
-#@gmicol : Smoothness = float(10,0,30)
-#@gmicol : Hue = float(0,0,360)
-#@gmicol : Saturation = float(0,0,1)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
+#@gmicol clone("Black &amp; White")
+#@gmicol clone("Charcoal")
+#@gmicol clone("Colorize [with colormap]")
+#@gmicol clone("Dithering")
+#@gmicol clone("Ink wash")
+#@gmicol clone("Pencil")
+#@gmicol clone("Stamp")
+#@gmicol clone("Stencil")
 
 #@gmicol _<b>Colors</b>
 #----------------------
 
-
-#@gmicol Abstraction : gimp_color_abstraction, gimp_color_abstraction_preview(0)
-#@gmicol : Smoothness = float(1,0,10)
-#@gmicol : Levels = int(10,2,255)
-#@gmicol : Contrast = float(0.2,0.01,1)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Boost / Fade : gimp_boost_fade, gimp_boost_fade_preview
-#@gmicol : Amplitude = float(5,0,10)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Channel processing : gimp_channel_processing, gimp_channel_processing_preview(1)
-#@gmicol : Gamma = float(1,0.01,5)
-#@gmicol : Contrast = float(1,0,4)
-#@gmicol : Brightness = float(0,-255,255)
-#@gmicol : Smoothness = float(0,0,10)
-#@gmicol : Value action = choice("None","Cut","Cut & Normalize","Normalize","Threshold")
-#@gmicol : Low value = float(0,0,100)
-#@gmicol : High value = float(100,0,100)
-#@gmicol : Quantization = int(256,1,256)
-#@gmicol : Equalization = bool(0)
-#@gmicol : Negation = bool(0)
-#@gmicol : note = note()
-#@gmicol : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gmicol : Tones smoothness = float(2,0,10)
-#@gmicol : note = note()
-#@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Color balance : gimp_balance_gamma, gimp_balance_gamma_preview
-#@gmicol : Neutral color = color(128,128,128)
-#@gmicol : Stretch colors = bool(1)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Abstraction")
+#@gmicol clone("Boost / Fade")
+#@gmicol clone("Channel processing")
+#@gmicol clone("Color balance")
 
 #@gmicol Color temperature : gmicol_tk_colortemp, gmicol_tk_colortemp_preview(1)
 #@gmicol : Color temperature = float(0,-20,20)
@@ -21557,288 +21203,28 @@ gmicol_tk_colortemp :
 gmicol_tk_colortemp_preview :
   -gimp_split_preview "-gmicol_tk_colortemp $*",$-1
 
-#@gmicol Colormap : gimp_colormap,gimp_colormap_preview
-#@gmicol : Colormap = choice[1,"Adaptive","Custom","Standard (256)","HSV (256)","Lines (256)","Hot (256)","Cool (256)","Jet (256)","Flag (256)","Cube (256)"]
-#@gmicol : Dithering = float(1,0,1)
-#@gmicol : sep = separator(), note = note("<small><i>For adaptive and custom colormaps only :</i></small>")
-#@gmicol : Number of tones = int(32,2,256)
-#@gmicol : sep = separator(), note = note("<small><i>For custom colormaps only :</i></small>")
-#@gmicol : Number of colors = int(8,2,8)
-#@gmicol : 1st color = color(0,0,0)
-#@gmicol : 2nd color = color(255,255,255)
-#@gmicol : 3rd color = color(255,0,0)
-#@gmicol : 4th color = color(0,255,0)
-#@gmicol : 5th color = color(0,0,255)
-#@gmicol : 6th color = color(255,255,0)
-#@gmicol : 7th color = color(255,0,255)
-#@gmicol : 8th color = color(0,255,255)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Curves : gimp_apply_curve, gimp_apply_curve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
-#@gmicol : Value range = choice("Cut","Normalize")
-#@gmicol : Display histogram = float(0,0,1)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Colormap")
+#@gmicol clone("Curves")
 
 #@gmicol Curves [RGB]
-#@gmicol Red : gimp_apply_RGBcurve, gimp_apply_Rcurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Green : gimp_apply_RGBcurve, gimp_apply_Gcurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Blue : gimp_apply_RGBcurve, gimp_apply_Bcurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Red")
+#@gmicol clone("Green")
+#@gmicol clone("Blue")
 #@gmicol _
 
 #@gmicol Curves [YCbCr]
-#@gmicol Luminance : gimp_apply_YCbCrcurve, gimp_apply_Ycurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Blue chrominance : gimp_apply_YCbCrcurve, gimp_apply_Cbcurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Red Chrominance : gimp_apply_YCbCrcurve, gimp_apply_Crcurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Luminance")
+#@gmicol clone("Blue chrominance")
+#@gmicol clone("Red Chrominance")
 #@gmicol _
 
 #@gmicol Curves [Lab]
-#@gmicol Lightness : gimp_apply_Labcurve, gimp_apply_Lcurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol A-color : gimp_apply_Labcurve, gimp_apply_acurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol B-color : gimp_apply_Labcurve, gimp_apply_bcurve_preview
-#@gmicol : Starting Y = int(0,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(1) = int(-1,-1,255)
-#@gmicol : Y-coord(1) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(2) = int(-1,-1,255)
-#@gmicol : Y-coord(2) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(3) = int(-1,-1,255)
-#@gmicol : Y-coord(3) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(4) = int(-1,-1,255)
-#@gmicol : Y-coord(4) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : X-coord(5) = int(-1,-1,255)
-#@gmicol : Y-coord(5) = int(128,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Ending Y = int(255,0,255)
-#@gmicol : sep = separator()
-#@gmicol : Curve smoothness = float(1,0,1)
-#@gmicol : Display histogram = float(0,0,100)
-#@gmicol : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Lightness")
+#@gmicol clone("A-color")
+#@gmicol clone("B-color")
 #@gmicol _
 
-#@gmicol Decompose channels : gimp_decompose_channels, gimp_decompose_channels_preview
-#@gmicol : Color basis = choice(7,"RGB","HSV","HSL","HSI","YUV","YCbCr","XYZ","Lab","Lch","CMY","CMYK")
-#@gmicol : Action = choice("Decompose","Recompose")
-#@gmicol : Use multiple layers = bool(0)
-#@gmicol : Include opacity layer = bool(1)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Decompose channels")
 
 #@gmicol Equalize HSV : gimp_hsv_equalizer, gimp_hsv_equalizer_preview
 #@gmicol : Preview bands = bool(false)
@@ -21902,115 +21288,15 @@ gmicol_tk_metallic :
 gmicol_tk_metallic_preview :
   -gimp_split_preview "-gmicol_tk_metallic $*",$-1
 
-#@gmicol Mixer [RGB] : gimp_mix_rgb, gimp_mix_rgb_preview(1)
-#@gmicol : Red contrast = float(1,0,4)
-#@gmicol : Red brightness = float(0,-255,255)
-#@gmicol : Red smoothness = float(0,0,10)
-#@gmicol : Green contrast = float(1,0,4)
-#@gmicol : Green brightness = float(0,-255,255)
-#@gmicol : Green smoothness = float(0,0,10)
-#@gmicol : Blue contrast = float(1,0,4)
-#@gmicol : Blue brightness = float(0,-255,255)
-#@gmicol : Blue smoothness = float(0,0,10)
-#@gmicol : note = note()
-#@gmicol : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gmicol : Tones smoothness = float(2,0,10)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Mixer [YCbCr] : gimp_mix_ycbcr, gimp_mix_ycbcr_preview(1)
-#@gmicol : Luminance contrast = float(1,0,4)
-#@gmicol : Luminance brightness = float(0,-255,255)
-#@gmicol : Luminance smoothness = float(0,0,10)
-#@gmicol : Blue chroma contrast = float(1,0,4)
-#@gmicol : Blue chroma brightness = float(0,-255,255)
-#@gmicol : Blue chroma smoothness = float(0,0,10)
-#@gmicol : Red chroma contrast = float(1,0,4)
-#@gmicol : Red chroma brightness = float(0,-255,255)
-#@gmicol : Red chroma smoothness = float(0,0,10)
-#@gmicol : note = note()
-#@gmicol : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gmicol : Tones smoothness = float(2,0,10)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Mixer [HSV] : gimp_mix_hsv, gimp_mix_hsv_preview(1)
-#@gmicol : Hue contrast = float(1,0,4)
-#@gmicol : Hue brightness = float(0,-180,180)
-#@gmicol : Hue smoothness = float(0,0,10)
-#@gmicol : Saturation contrast = float(1,0,4)
-#@gmicol : Saturation brightness = float(0,-1,1)
-#@gmicol : Saturation smoothness = float(0,0,10)
-#@gmicol : Value contrast = float(1,0,4)
-#@gmicol : Value brightness = float(0,-1,1)
-#@gmicol : Value smoothness = float(0,0,10)
-#@gmicol : note = note()
-#@gmicol : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gmicol : Tones smoothness = float(2,0,10)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Mixer [Lab] : gimp_mix_lab, gimp_mix_lab_preview(1)
-#@gmicol : Lightness contrast = float(1,0.5,1.5)
-#@gmicol : Lightness brightness = float(0,-50,50)
-#@gmicol : Lightness smoothness = float(0,0,10)
-#@gmicol : A-color contrast = float(1,0,4)
-#@gmicol : A-color brightness = float(0,-20,20)
-#@gmicol : A-color smoothness = float(0,0,10)
-#@gmicol : B-color contrast = float(1,0,4)
-#@gmicol : B-color brightness = float(0,-20,20)
-#@gmicol : B-color smoothness = float(0,0,10)
-#@gmicol : note = note()
-#@gmicol : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gmicol : Tones smoothness = float(2,0,10)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Mixer [CMYK] : gimp_mix_cmyk, gimp_mix_cmyk_preview(1)
-#@gmicol : Cyan contrast = float(1,0,4)
-#@gmicol : Cyan brightness = float(0,-255,255)
-#@gmicol : Cyan smoothness = float(0,0,10)
-#@gmicol : Magenta contrast = float(1,0,4)
-#@gmicol : Magenta brightness = float(0,-255,255)
-#@gmicol : Magenta smoothness = float(0,0,10)
-#@gmicol : Yellow contrast = float(1,0,4)
-#@gmicol : Yellow brightness = float(0,-255,255)
-#@gmicol : Yellow smoothness = float(0,0,10)
-#@gmicol : Key contrast = float(1,0,4)
-#@gmicol : Key brightness = float(0,-255,255)
-#@gmicol : Key smoothness = float(0,0,10)
-#@gmicol : note = note()
-#@gmicol : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
-#@gmicol : Tones smoothness = float(2,0,10)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Replace color : gimp_replace_color, gimp_replace_color(0)
-#@gmicol : Tolerance = float(100,1,450)
-#@gmicol : Smoothness = float(0,0,10)
-#@gmicol : Selected color = color(255,255,255,255)
-#@gmicol : Replaced color = color(0,0,0,0)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Select color : gimp_select_color, gimp_select_color(1)
-#@gmicol : Similarity space = choice(0,"RGB[A]","RGB","YCbCr","Red","Green","Blue","Opacity","Luminance","Blue & Red chrominances","Hue","Saturation")
-#@gmicol : Tolerance = float(20,0,100)
-#@gmicol : Smoothness = float(0,0,10)
-#@gmicol : Selected color = color(255,255,255,255)
-#@gmicol : Output as = choice(0,"Selected colors","Selected mask")
-#@gmicol : Invert selection = bool(0)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Sepia : gimp_sepia, gimp_sepia_preview
-#@gmicol : Gamma = float(1,0.01,5)
-#@gmicol : Contrast = float(1,0,4)
-#@gmicol : Brightness = float(0,-255,255)
-#@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
-#@gmicol Split tones : gimp_split_tones, gimp_split_tones_preview(0)
-#@gmicol : Number of tones = int(3,2,10)
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol clone("Mixer [RGB]")
+#@gmicol clone("Mixer [YCbCr]")
+#@gmicol clone("Mixer [HSV]")
+#@gmicol clone("Mixer [Lab]")
+#@gmicol clone("Mixer [CMYK]")
+#@gmicol clone("Replace color")
+#@gmicol clone("Select color")
+#@gmicol clone("Sepia")
+#@gmicol clone("Split tones")
 
 #@gmicol Tone presets : gmicol_tone_presets, gmicol_tone_presets_preview
 #@gmicol : Preset = choice(1,"Whiter Whites","Warm Vintage","Magenta-Yellow","Velvetia","Seventies Magazine","Faded Print","Expired 69","Modern Film")
@@ -22095,16 +21381,7 @@ cmyk_tone :
   -elif {$54==4} -k[-1]	-cmyk2rgb -n 0,255
   -endif
 
-#@gmicol User-defined : gimp_custom_transform, gimp_custom_transform
-#@gmicol : Red - Green - Blue - Alpha = text{"i"}
-#@gmicol : Red - Green - Blue = text{"i + 90*(x/w)*cos(i/10)"}
-#@gmicol : Red = text{"i"}
-#@gmicol : Green = text{"i"}
-#@gmicol : Blue = text{"i"}
-#@gmicol : Alpha = text{"i"}
-#@gmicol : Value normalization = choice("None","RGB","RGBA")
-#@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
-
+#@gmicol clone("User-defined")
 
 #@gmicol _<b>Contours</b>
 #----------------------
