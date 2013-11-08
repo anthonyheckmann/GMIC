@@ -394,6 +394,7 @@ _gmic_def()
 	      -split_freq --split_freq\
 	      -solidify --solidify\
 	      -solidify_linear --solidify_linear\
+	      -solidify_watershed --solidify_watershed\
 	      -solve_poisson --solve_poisson\
 	      -structuretensors --structuretensors\
 	      -tv_flow --tv_flow\
@@ -657,6 +658,7 @@ _gmic_def()
 	      -pencilbw --pencilbw\
 	      -polaroid --polaroid\
 	      -poster_edges --poster_edges\
+	      -poster_hope --poster_hope\
 	      -rodilius --rodilius\
 	      -stained_glass --stained_glass\
 	      -stars --stars\
@@ -1210,6 +1212,7 @@ _gmic_def()
 	      split_freq\
 	      solidify\
 	      solidify_linear\
+	      solidify_watershed\
 	      solve_poisson\
 	      structuretensors\
 	      tv_flow\
@@ -1473,6 +1476,7 @@ _gmic_def()
 	      pencilbw\
 	      polaroid\
 	      poster_edges\
+	      poster_hope\
 	      rodilius\
 	      stained_glass\
 	      stars\
@@ -2603,7 +2607,7 @@ _gmic_def()
 		return 0
 		;;
 		"-pack_sprites" | "--pack_sprites")
-		COMPREPLY=( $(compgen -W "_nb_scales>=0,0<=_min_scale<=100,_allow_rotation={0=0°|1=180°|2=90°|3=any},_spacing,_precision>=0,,max_iterations>=0 >") )
+		COMPREPLY=( $(compgen -W "_nb_scales>=0,0<=_min_scale<=100,_allow_rotation={0=0deg.|1=180deg.|2=90deg.|3=any},_spacing,_precision>=0,,max_iterations>=0 >") )
 		return 0
 		;;
 		"-piechart" | "--piechart")
@@ -3168,6 +3172,10 @@ _gmic_def()
 		;;
 		"-poster_edges" | "--poster_edges")
 		COMPREPLY=( $(compgen -W "0<=_edge_threshold<=100,0<=_edge_shade<=100,_edge_thickness>=0,_edge_antialiasing>=0,0<=_posterization_level<=15,_posterization_antialiasing>=0 >") )
+		return 0
+		;;
+		"-poster_hope" | "--poster_hope")
+		COMPREPLY=( $(compgen -W "_smoothness>=0 >") )
 		return 0
 		;;
 		"-rodilius" | "--rodilius")
