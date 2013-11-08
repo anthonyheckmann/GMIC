@@ -5592,7 +5592,7 @@ solidify_linear : -check "${1=1.5}>=1 && ${2=1}>=1 && ${3=0.5}>=0 && $3<=1"
 
 #@gmic solidify_watershed
 #@gmic : Replace transparent regions of RGBA image by color propagation.
-#@gmic : $ image.jpg --luminance -ge[-1] 120 -*[-1] 255 -append c --solidify_watershed , -display_rgba
+#@gmic : $ image.jpg --luminance -ge[-1] 120 -*[-1] 255 -append c --solidify_watershed -display_rgba
 solidify_watershed :
   -e[^-1] "Replace transparent regions of RGBA image$? by color propagation."
   -v - -repeat @# -l[$>]
