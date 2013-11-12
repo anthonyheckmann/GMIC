@@ -1229,26 +1229,27 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
     -if $6 100%,100% -axes[-1] $m,$M,$vM,0,13,1,255 --dilate[-1] 3 -r[-2] [-3] -j[-3] [-2],0,0,0,0,1,[-1],255 -rm[-2,-1] -endif
   -nm $nm,1 -endl -done -v +
 
-#@gmic display_parametric : _width>32,_height>32,_outline_type,_is_antialias={ 0 | 1 },_is_decoration={ 0 | 1 },_xlabel,_ylabel
-#@gmic : Render 2d or 3d parametric curve from selected image data.
-#@gmic : Curve points are defined as the pixels of a 2 or 3-channel image.
-#@gmic : If the point image contains more than 3 channels, additional data define the (R,G,B) color of each vertex.
-#@gmic : 'outline_type' can be { r<0=dots with radius -r | r>=0=lines+dots with radius r }.
-#@gmic : Default values: 'width=500', 'height=width', 'outline_type=1', 'is_antialias=1', 'is_decoration=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
+#@gmic display_parametric : _width>32,_height>32,_plot_opacity,_vertex_radius>=0,_is_antialiased={ 0 | 1 },_is_decorated={ 0 | 1 },_xlabel,_ylabel
+#@gmic : Render 2d or 3d parametric curve or point clouds from selected image data.
+#@gmic : Curve points are defined as pixels of a 2 or 3-channel image.
+#@gmic : If the point image contains more than 3 channels, additional channels define the (R,G,B) color for each vertex.
+#@gmic : Default values: 'width=512', 'height=width', 'plot_opacity=1', 'vertex_radius=0', 'is_antialiased=1', 'is_decorated=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
 #@gmic : $ 1024,1,1,2,'t=x/40;if(c==0,sin(t),cos(t))*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)' -display_parametric 512,512,4
-display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},${5=1},"${6=x-axis}","${7=y-axis}"
-  -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with outline $3."
-  -v - -repeat @# -l[$>]
+#@gmic : $ 30,30,1,2,?(0,255) -quantize 3,1 -blur 0.5 -noise 3 -channels 0,2 [-1] -a c -display_parametric 512,512,0.1,8
+display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=1},${5=1},${6=1},"${7=x-axis}","${8=y-axis}"
+  -v - s0="no " s1=""
+  -v + -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with plot opacity $3, vertex radius $4, "${s{$5!=0}}"antialiasing and "${s{$6!=0}}"decoration." -v -
+  -repeat @# -l[$>]
     nm=@{0,n} N={w*h*d}
     -i[0] ({'CImg3d'}) -+[0] 0.5 -i[1] ($N;$N)  # Header + nb of vertices/primitives.
 
-    # Calibrate vertex colors.
+    # Calibrate colors of vertices.
     -if {s<=3} -channels[-1] 0,5 -sh[-1] 3,5 -f[-1] 150 -rm[-1]
     -elif {s==4} --channels[-1] 3,3 -r[-1] 100%,100%,1,2 -a[-2,-1] c
     -else -channels[-1] 0,5
     -endif
 
-    # Manage vertex coordinates.
+    # Manage coordinates of vertices.
     -sh[-1] 0,0 xm={im} xM={iM} -rm[-1]
     -sh[-1] 1,1 ym={im} yM={iM} -rm[-1]
     -sh[-1] 2,2 zm={im} zM={iM} -rm[-1]
@@ -1256,25 +1257,25 @@ display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},${5=
     -i[-2] (1,0;1,{$N-1}) -r[-2] 2,$N,1,1,3 -round[-2] 1,$N,1,1,1 # Primitives, colors and opacities.
     -y y -a y -c3d -n3d -*3d 1,-1,1
 
-    {if($5,$1-32,$1)},{if($5,$2-32,$2)},1,3,255
+    {if($6,$1-32,$1)},{if($6,$2-32,$2)},1,3,255
     -*3d[0] {0.96*min(w,h)}
-    -if $5 L={0.1*max($1,$2)} -grid[1] $L,$L,0,0,0.25,0xCCCCCCCC,0 -endif
+    -if $6 L={0.1*max($1,$2)} -grid[1] $L,$L,0,0,0.25,0xCCCCCCCC,0 -endif
 
-    -if $4 # Anti-aliased.
+    -if $5 # Anti-aliased.
       -r[1] 200%,200%,1,3,1 -*3d[0] 2
-      -if $3 --circles3d[0] {2*abs($3)} -object3d[1] [2],50%,50%,0,1,3,0,0 -rm[2] -endif
-    -elif $3 # Aliased.
-      --circles3d[0] {abs($3)} -object3d[1] [2],50%,50%,0,1,3,0,0 -rm[2]
+      -if $4 --circles3d[0] {2*$4} -object3d[1] [2],50%,50%,0,1,3,0,0 -rm[2] -endif
+    -elif $4 # Aliased.
+      --circles3d[0] $4 -object3d[1] [2],50%,50%,0,1,3,0,0 -rm[2]
     -endif
 
-    -if {$3>=0} -l[0] -s3d -f[1] 'i-y' -rm[3] -i[3] (2,0,1;2,{$N-2},{$N-1}) -r[3] 3,{$N-1},1,1,3 -round[3]  # Convert point cloud to connected segments.
-      -r[5] 1,{h-1},1,1,0 -rm[4] -i[4] 3,{$N-1} -y y -a y -endl -object3d[1] [0],50%,50%,0,1,2,0,0
+    -if $3 -l[0] -s3d -f[1] 'i-y' -rm[3] -i[3] (2,0,1;2,{$N-2},{$N-1}) -r[3] 3,{$N-1},1,1,3 -round[3]  # Convert point cloud to connected segments.
+      -r[5] 1,{h-1},1,1,0 -rm[4] -i[4] 3,{$N-1} -y y -a y -endl -object3d[1] [0],50%,50%,0,$3,2,0,0
     -endif
 
     -rm[0]
-    -if $4 -r[-1] 50%,50%,1,3,2 -endif
+    -if $5 -r[-1] 50%,50%,1,3,2 -endif
 
-    -if $5 # Add decoration.
+    -if $6 # Add decoration.
       xc={0.5*($xm+$xM)} yc={0.5*($ym+$yM)} dx={0.5*($xM-$xm)/0.96} dy={0.5*($yM-$ym)/0.96}
       xm={$xc-$dx} xM={$xc+$dx} ym={$yc-$dy} yM={$yc+$dy}
       100%,100% -axes[-1] $xm,$xM,$yM,$ym,13,1,1
@@ -1285,8 +1286,8 @@ display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},${5=
       --dilate[-1] 3 --[-1] [-2] -*[-1] 200 -eq[-2] 0
       -*[-3,-2] -+[-2,-1] -c[-1] 0,255
       -frame 1,1,128 -frame 15,15,220
-      0 -t[-1] "$6",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
-      0 -t[-1] "$7",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
+      0 -t[-1] "$7",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
+      0 -t[-1] "$8",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
     -endif
     -nm[-1] $nm,1
   -endl -done -v +
@@ -19802,8 +19803,8 @@ _gimp_random3d4 : ($1) -/[-1] 3 -torus3d $1,@-1 -rm[-2]
 #@gimp : Min-t = float(0,-1000,1000)
 #@gimp : Max-t = float(100,-1000,1000)
 #@gimp : Resolution = int(4096,2,16384)
-#@gimp : Dots = int(4,0,16)
-#@gimp : Outline = bool(1)
+#@gimp : Plot opacity = float(0.7,0,1)
+#@gimp : Dot size = int(4,0,16)
 #@gimp : Antialiasing = bool(1)
 #@gimp : Decoration = bool(1)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/12</i>.</small>")
@@ -19811,7 +19812,7 @@ gimp_equation_parametric :
   -repeat @# -l[$>]
     w={w} h={h} -rm
     $5,1,1,2,'"t=$3+x*($4-$3)/($5-1);if(c==0,$1,$2)"'
-    -display_parametric $w,$h,{if($7,$6,-$6)},$8,$9
+    -display_parametric $w,$h,$6,$7,$8,$9
   -endl -done
 
 #@gimp Equation plot [y=f(x)] : gimp_equation_plot, gimp_equation_plot
