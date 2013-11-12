@@ -1229,12 +1229,12 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
     -if $6 100%,100% -axes[-1] $m,$M,$vM,0,13,1,255 --dilate[-1] 3 -r[-2] [-3] -j[-3] [-2],0,0,0,0,1,[-1],255 -rm[-2,-1] -endif
   -nm $nm,1 -endl -done -v +
 
-#@gmic display_parametric : _width>32,_height>32,_outline_type,_is_antialias={ 0 | 1 },_xlabel,_ylabel
+#@gmic display_parametric : _width>32,_height>32,_outline_type,_is_antialias={ 0 | 1 },_is_decoration={ 0 | 1 },_xlabel,_ylabel
 #@gmic : Render 2d or 3d parametric curve from selected image data.
 #@gmic : 'outline_type' can be { r<0=dots with radius -r | r>=0=lines+dots with radius r }.
-#@gmic : Default values: 'width=500', 'height=width', 'outline_type=1', 'is_antialias=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
+#@gmic : Default values: 'width=500', 'height=width', 'outline_type=1', 'is_antialias=1', 'is_decoration=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
 #@gmic : $ 1024,1,1,2,'t=x/40;if(c==0,sin(t),cos(t))*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)' -display_parametric 512,512,4
-display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},"${5=x-axis}","${6=y-axis}"
+display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},${5=1},"${6=x-axis}","${7=y-axis}"
   -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with outline $3."
   -v - -repeat @# -l[$>]
     N={w*h*d}
@@ -1248,31 +1248,35 @@ display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},"${5
     (2,0,1;2,{$N-2},{$N-1}) -r[-1] 3,{$N-1},1,1,3 -round[-1]
     1,{4*($N-1)},1,1,1
     -y y -a y -c3d -n3d -*3d 1,-1,1
-    {$1-32},{$2-32},1,3,255 L={0.1*max($1,$2)}
+    {if($5,$1-32,$1)},{if($5,$2-32,$2)},1,3,255 L={0.1*max($1,$2)}
     -*3d[-2] {0.96*min(w,h)}
-    -grid[-1] $L,$L,0,0,0.25,0xCCCCCCCC,0
-    -if $4 # Anti-aliasing
+    -if $5 -grid[-1] $L,$L,0,0,0.25,0xCCCCCCCC,0 -endif
+    -if $4 # Anti-aliased.
       -r[-1] 200%,200%,1,3,1 -*3d[-2] 2
       -if $3 --circles3d[-2] {2*abs($3)} -col3d[-1] 163 -object3d[-2] [-1],50%,50%,0,1,3,0,0 -rm[-1] -endif
       -if {$3>=0} -col3d[-2] 0 -object3d[-1] [-2],50%,50%,0,1,2,0,0 -endif
       -r[-1] 50%,50%,1,1,2
-    -else # No anti-aliasing
+    -else # Aliased.
       -if $3 --circles3d[-2] {abs($3)} -col3d[-1] 163 -object3d[-2] [-1],50%,50%,0,1,3,0,0 -rm[-1] -endif
       -if {$3>=0} -col3d[-2] 0 -object3d[-1] [-2],50%,50%,0,1,2,0,0 -endif
     -endif
     -rm[-2]
-    xc={0.5*($xm+$xM)} yc={0.5*($ym+$yM)} dx={0.5*($xM-$xm)/0.96} dy={0.5*($yM-$ym)/0.96}
-    xm={$xc-$dx} xM={$xc+$dx} ym={$yc-$dy} yM={$yc+$dy}
-    100%,100% -axes[-1] $xm,$xM,$yM,$ym,13,1,1
-    -if {$xm>0} -axes[-1] 0,0,$yM,$ym,13,1,160 -endif
-    -if {$xM<0} -axes[-1] {w-1},{w-1},$yM,$ym,13,1,160 -endif
-    -if {$ym>0} -axes[-1] $xm,$xM,{h-1},{h-1},13,1,160 -endif
-    -if {$yM<0} -axes[-1] $xm,$xM,0,0,13,1,160 -endif
-    --dilate[-1] 3 --[-1] [-2] -*[-1] 200 -eq[-2] 0
-    -*[-3,-2] -+[-2,-1] -c[-1] 0,255
-    -frame 1,1,128 -frame 15,15,220
-    0 -t[-1] "$5",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
-    0 -t[-1] "$6",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
+
+    -if $5 # Add decoration.
+      xc={0.5*($xm+$xM)} yc={0.5*($ym+$yM)} dx={0.5*($xM-$xm)/0.96} dy={0.5*($yM-$ym)/0.96}
+      xm={$xc-$dx} xM={$xc+$dx} ym={$yc-$dy} yM={$yc+$dy}
+      100%,100% -axes[-1] $xm,$xM,$yM,$ym,13,1,1
+      -if {$xm>0} -axes[-1] 0,0,$yM,$ym,13,1,160 -endif
+      -if {$xM<0} -axes[-1] {w-1},{w-1},$yM,$ym,13,1,160 -endif
+      -if {$ym>0} -axes[-1] $xm,$xM,{h-1},{h-1},13,1,160 -endif
+      -if {$yM<0} -axes[-1] $xm,$xM,0,0,13,1,160 -endif
+      --dilate[-1] 3 --[-1] [-2] -*[-1] 200 -eq[-2] 0
+      -*[-3,-2] -+[-2,-1] -c[-1] 0,255
+      -frame 1,1,128 -frame 15,15,220
+      0 -t[-1] "$6",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
+      0 -t[-1] "$7",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
+    -endif
+
   -endl -done -v +
 
 #@gmic dp : eq. to '-display_polar'.
@@ -14533,29 +14537,6 @@ gimp_logo_old :
 gimp_logo_en :
   -gimp_logo "Plug-in for GIMP\n     "[@{-strver}]
 
-#@gimp_en Filters design : _none_, _none_
-#@gimp_en : note = note{"
-#@gimp_en : <b>G'MIC</b> is an <b>open</b> image processing framework. Thus, including
-#@gimp_en : <b>user-defined filters</b> into this plug-in is possible.\n\n
-#@gimp_en : To do so, you need to create a <span foreground="purple" style="italic">.gmic</span>
-#@gimp_en : file in your <i>Home</i> folder (or <i>Applications Data/</i> on Windows, without the first dot).
-#@gimp_en : It will be read each time the plug-in is launched, or when the <i>Refresh</i>
-#@gimp_en : button (under the central pane) is pressed. It must be a regular ASCII file, containing the declarations and
-#@gimp_en : implementations of the filters (written in the <b>G'MIC</b> language) that will be added
-#@gimp_en : to the list of available ones.\n\n
-#@gimp_en : Existing filters are already defined this way."}
-#@gimp_en : note = note{"
-#@gimp_en : Writing a new filter in <b>G'MIC</b> is not particularly awful and
-#@gimp_en : can be generally done in very few lines.\n\n
-#@gimp_en : <span foreground="purple" underline="single">Example of a valid <i>.gmic</i> entry :</span>\n\n
-#@gimp_en : <tt>#@gimp My effect : my_effect, my_effect\n
-#@gimp_en : #@gimp : Sigma = float(2,0,10)\n
-#@gimp_en : my_effect :\n     --blur $1 -n 0,255 -xor</tt>\n\n
-#@gimp_en : By the way, you are encouraged to share your nice custom filters on the dedicated forum,
-#@gimp_en : for inclusion into next releases of <b>G'MIC</b> :
-#@gimp_en : "}
-#@gimp_en : note = link("Go to the G'MIC forum","http://www.flickr.com/groups/gmic/discuss/")
-
 #---------------------
 # French translations
 #---------------------
@@ -14581,27 +14562,6 @@ gimp_logo_en :
 gimp_logo_fr :
   -gimp_logo "Greffon pour GIMP\n     "[@{-strver}]
 
-#@gimp_fr Cr&#233;ation de filtres : _none_, _none_
-#@gimp_fr : note = note{"
-#@gimp_fr : <b>G'MIC</b> est un système <b>ouvert</b> de traitement d'image. Il est ainsi possible
-#@gimp_fr : d'ajouter vos <b>propres filtres personnalisés</b> à l'intérieur même de ce greffon.\n\n
-#@gimp_fr : Pour cela, il vous suffit de cr&#233;er un fichier <span foreground="purple" style="italic">.gmic</span>
-#@gimp_fr : dans votre dossier <i>Home</i> (ou <i>Applications Data/</i> sous Windows, sans le premier point).
-#@gimp_fr : Ce fichier va être lu &#224; chaque d&#233;marrage du greffon, ou lorsque le bouton <i>Actualiser</i>
-#@gimp_fr : (sous le panneau central) sera cliqu&#233;. Ce fichier ASCII va contenir les déclarations et les
-#@gimp_fr : implémentations des filtres (écrits en langage <b>G'MIC</b>) qui vont s'ajouter à la liste des filtres disponibles.\n\n
-#@gimp_fr : Tous les filtres existants sont déjà définis de cette façon."}
-#@gimp_fr : note = note{"
-#@gimp_fr : Ecrire un filtre en langage <b>G'MIC</b> n'est pas particulièrement difficile (sans être trivial),
-#@gimp_fr : et ne n&#233;cessite souvent que quelques lignes.\n\n
-#@gimp_fr : <span foreground="purple" underline="single">Exemple de fichier <i>.gmic</i> valide :</span>\n\n
-#@gimp_fr : <tt>#@gimp My effect : my_effect, my_effect, Sigma = float(2,0,10)\n
-#@gimp_fr : my_effect :\n     --blur $1 -n 0,255 -xor</tt>\n\n
-#@gimp_fr : Vous &#234;tes bien s&#251;r encourag&#233;s &#224; partager vos propres filtres sur le forum pr&#233;vu &#224;
-#@gimp_fr : cet effet, pour une inclusion éventuelle dans les prochaines versions de <b>G'MIC</b> :
-#@gimp_fr : "}
-#@gimp_fr : note = link("Participer au forum G'MIC","http://sourceforge.net/projects/gmic/forums/forum/849382")
-
 #----------------------
 # Catalan translations
 #----------------------
@@ -14626,27 +14586,38 @@ gimp_logo_fr :
 gimp_logo_ca :
   -gimp_logo "  per al GIMP\n     "[@{-strver}]
 
-#@gimp_ca Filters design : _none_, _none_
-#@gimp_ca : note = note{"
-#@gimp_ca : Si voleu podeu afegir els vostres <b>filtres d'usuari</b> al connector <b>G'MIC</b> :\n\n
-#@gimp_ca : Per a fer-ho, cal que creeu un fitxer <span foreground="purple" style="italic">.gmic</span> (no oblideu el primer punt !)
-#@gimp_ca : a la vostra <i>Carpeta d'inici</i> (o a la carpeta <i>Application Data</i> al Windows).
-#@gimp_ca : El connector el llegir&#224; cada vegada que s'arranqui, o quan premeu el bot&#243; <i>Actualitzar els filtres</i>.
-#@gimp_ca : Aquest fitxer ha de ser un arxiu de command del <b>G'MIC</b>, i ha de contindre les definicions de filtre
-#@gimp_ca : que han d'apar&#232;ixer a la llista de filtres."}
-#@gimp_ca : note = note{"
-#@gimp_ca : Escriure un nou filtre amb el llenguatge <b>G'MIC</b> no &#233;s trivial del tot (per&#242; tampoc una cosa inabastable), per&#242;
-#@gimp_ca : normalment es pot fer en unes quantes l&#237;nies.\n\n
-#@gimp_ca : <span foreground="purple" underline="single">Example d'un fitxer <i>.gmic</i> v&#224;lid :</span>\n\n
-#@gimp_ca : <tt>#@gimp My effect : my_effect, my_effect, Sigma = float(2,0,10)\n
-#@gimp_ca : my_effect :\n  --blur $1 -n 0,255 -xor</tt>\n\n
-#@gimp_ca : Per cert, us encoratgem a que compartiu els vostres filtres personalitzats al f&#242;rum espec&#237;fic de <b>G'MIC</b> :
-#@gimp_ca : "}
-#@gimp_ca : note = link("Enlla\303\247a al f\303\262rum G'MIC","http://sourceforge.net/projects/gmic/forums/forum/849382")
-
 #----------------------
 # Untranslated filters
 #----------------------
+
+#@gimp Filter design : _none_, _none_
+#@gimp : note = note{"
+#@gimp : <b>G'MIC</b> is an <b>open</b> image processing framework. Thus, including
+#@gimp : <b>user-defined filters</b> into this plug-in is possible.\n\n
+#@gimp : To do so, you need to create a <span foreground="purple" style="italic">.gmic</span>
+#@gimp : file in your <i>Home</i> folder (or <i>Applications Data/</i> on Windows, without the first dot).
+#@gimp : It will be read each time the plug-in is launched, or when the <i>Refresh</i>
+#@gimp : button (under the central pane) is pressed. It must be a regular ASCII file, containing the declarations and
+#@gimp : implementations of the filters (written in the <b>G'MIC</b> language) that will be added
+#@gimp : to the list of available ones."}
+#@gimp : note = note{"
+#@gimp : Existing filters are already defined this way.
+#@gimp : Writing a filter from scratch in <b>G'MIC</b> require some skills, but
+#@gimp : can be generally done in very few lines.\n\n
+#@gimp : <span foreground="purple" underline="single">Example of a valid <i>.gmic</i> entry :</span>"}
+#@gimp : note = note{"<tt>#@gimp My effect : my_effect, my_effect</tt>"}
+#@gimp : note = note{"<tt>#@gimp : Sigma = float(2,0,10)</tt>"}
+#@gimp : note = note{"<tt>my_effect :\n     --blur $1 -n 0,255 -xor</tt>"}
+#@gimp : note = note{"
+#@gimp : Look at the reference documentation to learn more.
+#@gimp : By the way, you are encouraged to share your nice custom filters with us on our forums,
+#@gimp : for inclusion into next releases of <b>G'MIC</b>.
+#@gimp : "}
+#@gimp : sep = separator()
+#@gimp : note = link(0,"[1] G'MIC reference documentation","http://gmic.sourceforget.net/reference.shtml");
+#@gimp : note = link(0,"[2] G'MIC on Flickr","http://www.flickr.com/groups/gmic/discuss/")
+#@gimp : note = link(0,"[3] G'MIC on GimpChat","http://www.gimpchat.com/viewforum.php?f=28")
+#@gimp : note = link(0,"[4] G'MIC on Google+","https://plus.google.com/117441237982283011318/posts")
 
 #@gimp Release notes : _none_, _none_
 #@gimp : note = note{"
@@ -14661,7 +14632,7 @@ gimp_logo_ca :
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
 #@gimp : - <span foreground="purple"><b>2013/10/28</b> : version <i>1.5.7.2</i> (Current stable).</span>\n
-#@gimp : - <b>2013/11/04</b> : version <i>1.5.7.2</i> (Current beta).\n
+#@gimp : - <b>2013/11/04</b> : version <i>1.5.8.0</i> (Current beta).\n
 #@gimp : "}
 #@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157636080337636/")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/09/17</i>.</small>")
@@ -14814,19 +14785,20 @@ gimp_gmicky_preview :
   -r2dy $h -- 255 -r $w,$h,1,3,0,0,0.5,0.5 -+ 255
 
 #@gimp Filter sources : _none_, gimp_display_filter_sources
-#@gimp : note = note{"Here you can see the list of external filter sources currently enabled in your plug-in.
-#@gimp : Most of the time, there will be only two items listed there."}
+#@gimp : note = note{"Here you can see the filter sources currently enabled in your plug-in.
+#@gimp : For most users, there will be only one URL listed there."}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/06/03</i>.</small>")
 gimp_display_filter_sources :
   -if @# -k[0] -f 0 -else 256,256 -endif
   -l[] -gimp_filter_sources -y x -a y -onfail (0) -endl
   -text[0] "Enabled external sources:\n--------------------------------",5,5,13,1,255
-  -repeat {h}
+  -if @{-is_windows} path=@{-path_user}/ -else path=@{-path_user}/. -endif
+  i=1 -repeat {h}
     --rows[-1] $>
     -if {@{-1,0-3}'=='{'http'}}
-      -text[0] [{1+$>}]" "@{-1,t},5,{32+15*$>},13,1,255
+      -text[0] [$i]" "@{-1,t},5,{32+15*$i},13,1,255 i={$i+1}
     -else
-      -text[0] [{1+$>}]" "@{-1,t}" (local file)",5,{32+15*$>},13,1,255
+      -if $path@{-1,t} -text[0] [$i]" "@{-1,t}" (local file)",5,{32+15*$i},13,1,255 i={$i+1} -endif
     -endif
     -rm[-1]
   -done
@@ -17522,7 +17494,6 @@ gimp_gaussian_blur_preview :
 
 #@gimp Blur [glow] : gimp_glow, gimp_glow_preview(0)
 #@gimp : Amplitude = float(6,0,20)
-#@gimp : note = note()
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
@@ -19816,22 +19787,23 @@ _gimp_random3d4 : ($1) -/[-1] 3 -torus3d $1,@-1 -rm[-2]
 #@gimp Equation plot [parametric] : gimp_equation_parametric, gimp_equation_parametric
 #@gimp : X(t) = text{"sin(t)*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)"}
 #@gimp : Y(t) = text{"cos(t)*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)"}
-#@gimp : Min t = float(0,-1000,1000)
-#@gimp : Max t = float(100,-1000,1000)
+#@gimp : Min-t = float(0,-1000,1000)
+#@gimp : Max-t = float(100,-1000,1000)
 #@gimp : Resolution = int(4096,2,16384)
 #@gimp : Dots = int(4,0,16)
 #@gimp : Outline = bool(1)
 #@gimp : Antialiasing = bool(1)
+#@gimp : Decoration = bool(1)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/12</i>.</small>")
 gimp_equation_parametric :
   -repeat @# -l[$>]
     w={w} h={h} -rm
     $5,1,1,2,'"t=$3+x*($4-$3)/($5-1);if(c==0,$1,$2)"'
-    -display_parametric $w,$h,{if($7,$6,-$6)},$8
+    -display_parametric $w,$h,{if($7,$6,-$6)},$8,$9
   -endl -done
 
 #@gimp Equation plot [y=f(x)] : gimp_equation_plot, gimp_equation_plot
-#@gimp : Equation = text{"X*c+10*cos(X+c+?)"}
+#@gimp : f(X) = text{"X*c+10*cos(X+c+?)"}
 #@gimp : X-min = float(-10,-100,100)
 #@gimp : X-max = float(10,-100,100)
 #@gimp : Resolution = int(100,2,1024)
@@ -20199,13 +20171,15 @@ gimp_quick_copyright :
 #@gimp : Opacity = float(80,0,199)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_rainbow :
-  -channels 0 -f 0
-  -spline 0,$1%,100,{-$3}%,100%,$2%,100,$4%,256,1,1
-  -flood 0,0,0,0,0,1,1 -flood {w-1},0,0,0,0,1,1
-  -distance 0 -c 0,255 -n 0,{$5*255}
-  -rainbow_lut --luminance[-1] -c[-1] 0,{min(100,200-$6)}% -n[-1] 0,255 -a[-2,-1] c
-  -map[^-1] [-1] -rm[-1]
-  -if {$6<100} -repeat @# -sh[$>] 3,3 -*[-1] {$6/100} -rm[-1] -done -endif
+  -repeat @# -l[$>]
+    100%,100% -spline[-1] 0,$1%,100,{-$3}%,100%,$2%,100,$4%,256,1,1
+    -flood[-1] 0,0,0,0,0,1,1 -flood[-1] {w-1},0,0,0,0,1,1
+    -distance[-1] 0 -c[-1] 0,255 -n[-1] 0,{$5*255}
+    -rainbow_lut --luminance[-1] -c[-1] 0,{min(100,200-$6)}% -n[-1] 0,255 -a[-2,-1] c
+    -map[-2] [-1] -rm[-1]
+    -if {$6<100} -sh[-1] 3,3 -*[-1] {$6/100} -rm[-1] -endif
+    -blend alpha
+  -endl -done
 
 #@gimp Random color ellipses : gimp_color_ellipses, gimp_color_ellipses(1)
 #@gimp : Density = int(400,0,3000)
