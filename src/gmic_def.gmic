@@ -1237,7 +1237,7 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
 display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},"${5=x-axis}","${6=y-axis}"
   -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with outline $3."
   -v - -repeat @# -l[$>]
-    N={w*h*d}
+    nm=@{0,n} N={w*h*d}
     -i[0] ({'CImg3d'}) -+[0] 0.5
     -i[1] ($N;{$N-1})
     -channels[-1] 0,2
@@ -1253,11 +1253,11 @@ display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},"${5
     -grid[-1] $L,$L,0,0,0.25,0xCCCCCCCC,0
     -if $4 # Anti-aliasing
       -r[-1] 200%,200%,1,3,1 -*3d[-2] 2
-      -if $3 --circles3d[-2] {2*abs($3)} -col3d[-1] 163 -object3d[-2] [-1],50%,50%,0,1,3,0,0 -rm[-1] -endif
+      -if $3 --circles3d[-2] {2*abs($3)} -col3d[-1] 100 -object3d[-2] [-1],50%,50%,0,1,3,0,0 -rm[-1] -endif
       -if {$3>=0} -col3d[-2] 0 -object3d[-1] [-2],50%,50%,0,1,2,0,0 -endif
       -r[-1] 50%,50%,1,1,2
     -else # No anti-aliasing
-      -if $3 --circles3d[-2] {abs($3)} -col3d[-1] 163 -object3d[-2] [-1],50%,50%,0,1,3,0,0 -rm[-1] -endif
+      -if $3 --circles3d[-2] {abs($3)} -col3d[-1] 100 -object3d[-2] [-1],50%,50%,0,1,3,0,0 -rm[-1] -endif
       -if {$3>=0} -col3d[-2] 0 -object3d[-1] [-2],50%,50%,0,1,2,0,0 -endif
     -endif
     -rm[-2]
@@ -1273,6 +1273,7 @@ display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},${4=1},"${5
     -frame 1,1,128 -frame 15,15,220
     0 -t[-1] "$5",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
     0 -t[-1] "$6",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
+    -nm[-1] $nm,1
   -endl -done -v +
 
 #@gmic dp : eq. to '-display_polar'.
