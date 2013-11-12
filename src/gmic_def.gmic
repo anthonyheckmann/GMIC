@@ -1229,24 +1229,62 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
     -if $6 100%,100% -axes[-1] $m,$M,$vM,0,13,1,255 --dilate[-1] 3 -r[-2] [-3] -j[-3] [-2],0,0,0,0,1,[-1],255 -rm[-2,-1] -endif
   -nm $nm,1 -endl -done -v +
 
+#@gmic display_parametric : _width>32,_height>32,_outline_type,_xlabel,_ylabel
+#@gmic : Render 2d or 3d parametric curve from selected image data.
+#@gmic : 'outline_type' can be { r<0=dots with radius -r | r>=0=lines+dots with radius r }.
+#@gmic : Default values: 'width=500', 'height=width' and 'outline_type=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
+#@gmic : $ 1024,1,1,2,'t=x/40;if(c==0,sin(t),cos(t))*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)' -display_parametric 512,512,4
+display_parametric : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=4},"${4=x-axis}","${5=y-axis}"
+  -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with outline $3."
+  -v - -repeat @# -l[$>]
+    N={w*h*d}
+    -i[0] ({'CImg3d'}) -+[0] 0.5
+    -i[1] ($N;{$N-1})
+    -channels[-1] 0,2
+    -sh[-1] 0,0 xm={im} xM={iM} -rm[-1]
+    -sh[-1] 1,1 ym={im} yM={iM} -rm[-1]
+    -sh[-1] 2,2 zm={im} zM={iM} -rm[-1]
+    -permute[-1] cxyz
+    (2,0,1;2,{$N-2},{$N-1}) -r[-1] 3,{$N-1},1,1,3 -round[-1]
+    1,{4*($N-1)},1,1,1
+    -y y -a y
+    -c3d -n3d -*3d[-1] {min({$1-32},{$2-32})} -*3d[-1] 0.96,-0.96,1
+    {$1-32},{$2-32},1,3,255 L={0.1*max($1,$2)} -grid[-1] $L,$L,0,0,0.25,0xCCCCCCCC,0
+    -if $3 --circles3d[-2] {abs($3)} -col3d[-1] 163 -object3d[-2] [-1],50%,50%,0,1,3,0,0 -rm[-1] -endif
+    -if {$3>=0} -col3d[-2] 0 -object3d[-1] [-2],50%,50%,0,1,2,0,0 -endif
+    -rm[-2]
+    xc={0.5*($xm+$xM)} yc={0.5*($ym+$yM)} dx={0.5*($xM-$xm)/0.96} dy={0.5*($yM-$ym)/0.96}
+    xm={$xc-$dx} xM={$xc+$dx} ym={$yc-$dy} yM={$yc+$dy}
+    100%,100% -axes[-1] $xm,$xM,$yM,$ym,13,1,1
+    -if {$xm>0} -axes[-1] 0,0,$yM,$ym,13,1,160 -endif
+    -if {$xM<0} -axes[-1] {w-1},{w-1},$yM,$ym,13,1,160 -endif
+    -if {$ym>0} -axes[-1] $xm,$xM,{h-1},{h-1},13,1,160 -endif
+    -if {$yM<0} -axes[-1] $xm,$xM,0,0,13,1,160 -endif
+    --dilate[-1] 3 --[-1] [-2] -*[-1] 200 -eq[-2] 0
+    -*[-3,-2] -+[-2,-1] -c[-1] 0,255
+    -frame 1,1,128 -frame 15,15,220
+    0 -t[-1] "$4",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
+    0 -t[-1] "$5",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
+  -endl -done -v +
+
 #@gmic dp : eq. to '-display_polar'.
 dp :
   -v - __s="$?" -v +
   -_display_polar $*
 
-#@gmic display_polar : _width>32,_height>32,_outline_type,_fill_R,_fill_G,_fill_B,_theta_start,_theta_end
+#@gmic display_polar : _width>32,_height>32,_outline_type,_fill_R,_fill_G,_fill_B,_theta_start,_theta_end,_xlabel,_ylabel
 #@gmic : Render polar curve from selected image data.
 #@gmic : (eq. to '-dp').
 #@gmic : 'outline_type' can be { r<0=dots with radius -r | 0=no outline | r>0=lines+dots with radius r }.
 #@gmic : 'fill_color' can be { -1=no fill | R,G,B=fill with specified color }.
-#@gmic : Default values: 'width=500', 'height=width', 'outline_type=1', 'fill_R=fill_G=fill_B=200', 'theta_start=0' and 'theta_end=360'.
+#@gmic : Default values: 'width=500', 'height=width', 'outline_type=1', 'fill_R=fill_G=fill_B=200', 'theta_start=0', 'theta_end=360', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
 #@gmic : $ 300,1,1,1,'0.3+abs(cos(10*pi*x/w))+?(0.4)' -display_polar 512,512,4,200,255,200
 #@gmic : $ 3000,1,1,1,'x^3/1e10' -display_polar 400,400,1,-1,,,0,{15*360}
 display_polar :
   -v - __s="$?" -v +
   -_$0 $*
 
-_display_polar : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=1},${4=200},${5=$4},${6=$5},${7=0},${8=360}
+_display_polar : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=1},${4=200},${5=$4},${6=$5},${7=0},${8=360},"${9=x-axis}","${10=y-axis}"
   -e[0--3] "Render $1x$2 polar graph plot from data of image"$__s", with outline $4 and fill color ($4,$5,$6)."
   -v - -repeat @# -l[$>] nm=@{0,n}
 
@@ -1302,6 +1340,8 @@ _display_polar : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=1},${4=200},${5=$4
     --dilate[-1] 3 --[-1] [-2] -*[-1] 200 -eq[-2] 0
     -*[-3,-2] -+[-2,-1] -c[-1] 0,255
     -frame[-1] 1,1,128 -frame[-1] 15,15,220
+    0 -t[-1] "$9",0,0,13,1,-220,-220,-220 -j[-2] [-1],{(@{-2,w}-w)/2},{@{-2,h}-16},0,0,-1 -rm[-1]
+    0 -t[-1] "$10",0,0,13,1,-220,-220,-220 -rotate[-1] -90 -j[-2] [-1],2,{(@{-2,h}-h)/2},0,0,-1 -rm[-1]
 
   -nm $nm,1 -endl -done -v +
 
@@ -7100,7 +7140,7 @@ circles3d : -check ${1=1}>=0
 #@gmic color3d : R,_G,_B,_opacity : (+)
 #@gmic : Set color and opacity of selected 3d objects.
 #@gmic : (eq. to '-col3d').
-#@gmic : Default value: 'opacity=(undefined)'.
+#@gmic : Default value: 'B=G=R' and 'opacity=(undefined)'.
 #@gmic : $ -torus3d 100,10 -double3d 0 -repeat 7 --rotate3d[-1] 1,0,0,20 -color3d[-1] @{-RGB} -done -add3d
 
 #@gmic colorcube3d
