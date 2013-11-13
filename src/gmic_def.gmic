@@ -18959,6 +18959,23 @@ gimp_halftone :
 gimp_halftone_preview :
   -gimp_split_preview "-gimp_halftone $*",$-1
 
+#@gimp Heart : gimp_heart, gimp_heart
+#@gimp : Smoothness = float(0,0,10)
+#@gimp : Color = color(255,0,0,255)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/13</i>.</small>")
+gimp_heart :
+  2048,1,1,1,'t=2*pi*x/w;16*sin(t)^3'
+  2048,1,1,1,'t=2*pi*x/w;13*cos(t)-5*cos(2*t)-2*cos(3*t)-cos(4*t)'
+  -a[-2,-1] c
+  -repeat {@#-1}
+    w=@{$>,w} h=@{$>,h} -rm[$>]
+    --display_parametric[-1] $w,$h,1,0,0,0
+    -flood[-1] 0,0,0,0,0,1,0 -channels[-1] 0 -neq[-1] 0 -to_rgba[-1]
+    -replace_color[-1] 0,0,1,1,1,255,$2,$3,$4,$5
+    -replace_color[-1] 0,0,0,0,0,255,$2,$3,$4,0
+  -mv[-1] $> -done -rm[-1]
+  -frame {2.5*$1}%,{2.5*$1}%,$2,$3,$4,0 -b $1%
+
 #@gimp Hearts : gimp_hearts, gimp_hearts_preview(0)
 #@gimp : Density = float(10,0,100)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
@@ -21459,6 +21476,7 @@ gmicol_rotate :
 #@gmicol clone("Denim texture")
 #@gmicol clone("Dots")
 #@gmicol clone("Halftone")
+#@gmicol clone("Heart")
 #@gmicol clone("Hearts")
 #@gmicol clone("Lava")
 #@gmicol clone("Marble")
@@ -21484,8 +21502,8 @@ gmicol_rotate :
 #@gmicol clone("3d image object")
 #@gmicol clone("3d lathing")
 #@gmicol clone("3d random objects")
-#@gmicol clone("Equation plot [y=f(x)]")
 #@gmicol clone("Equation plot [parametric]")
+#@gmicol clone("Equation plot [y=f(x)]")
 #@gmicol clone("Gradient [corners]")
 #@gmicol clone("Gradient [custom shape]")
 #@gmicol clone("Gradient [linear]")
