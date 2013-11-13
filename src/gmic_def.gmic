@@ -1235,7 +1235,7 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
 #@gmic : If the point image contains more than 3 channels, additional channels define the (R,G,B) color for each vertex.
 #@gmic : Default values: 'width=512', 'height=width', 'plot_opacity=1', 'vertex_radius=0', 'is_antialiased=1', 'is_decorated=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
 #@gmic : $ 1024,1,1,2,'t=x/40;if(c==0,sin(t),cos(t))*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)' -display_parametric 512,512,4
-#@gmic : $ 30,30,1,2,?(-100,100) -quantize 3,1 -blur 0.5 -noise 3 -channels 0,2 --normalize 0,255 -append c -display_parametric 512,512,0.1,8
+#@gmic : $ 1000,1,1,2,?(-100,100) -quantize 4,1 -noise 12 -channels 0,2 --normalize 0,255 -append c -display_parametric 512,512,0.1,8
 display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=1},${5=1},${6=1},"${7=x-axis}","${8=y-axis}"
   -v - s0="no " s1=""
   -v + -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with plot opacity $3, vertex radius $4, "${s{$5!=0}}"antialiasing and "${s{$6!=0}}"decoration." -v -
@@ -19816,7 +19816,7 @@ gimp_equation_parametric :
   -endl -done
 
 #@gimp Equation plot [y=f(x)] : gimp_equation_plot, gimp_equation_plot
-#@gimp : f(X) = text{"X*c+10*cos(X+c+?)"}
+#@gimp : F(x) = text{"X*c+10*cos(X+c+?)"}
 #@gimp : X-min = float(-10,-100,100)
 #@gimp : X-max = float(10,-100,100)
 #@gimp : Resolution = int(100,2,1024)
@@ -19825,8 +19825,10 @@ gimp_equation_parametric :
 #@gimp : Vertex type = choice(0,"None","Points","Crosses 1","Crosses 2","Circles 1","Circles 2","Square 1","Square 2")
 #@gimp : sep = separator()
 #@gimp : note = note("<b>Note</b> :
-#@gimp : Use variable 'X' instead of 'x' in the equation to take care of X-min/max settings.
-#@gimp : Variable 'c' refers to the current channel number. Reduce resolution to be able to view
+#@gimp : Use variable <b>X</b> instead of <b>x</b> in the above equation to take care of the X-min/max settings.
+#@gimp : Variable <b>c</b> refers to the current channel number.
+#@gimp : Variable <b>?</b> refers to a uniformly distributed random value in [0,1].
+#@gimp : Reduce resolution to be able to view
 #@gimp : separate graph vertices.")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_equation_plot :
@@ -20895,7 +20897,7 @@ gimp_fourier_preview :
   -endif
 
 #@gimp Fourier watermark : gimp_watermark_fourier, _none_
-#@gimp : Text = text("\251 G'MIC")
+#@gimp : Text = text{"(c) G'MIC"}
 #@gimp : Size = int(57,13,128)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Note: </b> To make the watermark visible afterwards, use the 'Fourier Analysis' filter. </small>")
