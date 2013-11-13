@@ -952,7 +952,17 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
         if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
           _inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
-          const float ssd = (pC-=pP).mul(pM).sqr().sum();
+          float ssd = 0;
+          const T *_pP = pP._data;
+          const float *_pC = pC._data;
+          cimg_for(pM,_pM,unsigned char) { if (*_pM) {
+              cimg_forC(pC,c) { ssd+=cimg::sqr(*_pC-*_pP); _pC+=patch_size2; _pP+=patch_size2; }
+              if (ssd>=best_ssd) break;
+              _pC-=pC._spectrum*patch_size2;
+              _pP-=pC._spectrum*patch_size2;
+            }
+            ++_pC; ++_pP;
+          }
           if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
         }
       }

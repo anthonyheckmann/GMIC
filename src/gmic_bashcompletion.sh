@@ -36,6 +36,7 @@ _gmic_def()
 	      -display_graph --display_graph\
 	      -dh --dh\
 	      -display_histogram --display_histogram\
+	      -display_parametric --display_parametric\
 	      -dp --dp\
 	      -display_polar --display_polar\
 	      -drgba --drgba\
@@ -854,6 +855,7 @@ _gmic_def()
 	      display_graph\
 	      dh\
 	      display_histogram\
+	      display_parametric\
 	      dp\
 	      display_polar\
 	      drgba\
@@ -1678,8 +1680,12 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1} >") )
 		return 0
 		;;
+		"-display_parametric" | "--display_parametric")
+		COMPREPLY=( $(compgen -W "_width>32,_height>32,_plot_opacity,_vertex_radius>=0,_is_antialiased={0|1},_is_decorated={0|1},_xlabel,_ylabel >") )
+		return 0
+		;;
 		"-display_polar" | "--display_polar")
-		COMPREPLY=( $(compgen -W "_width>32,_height>32,_outline_type,_fill_R,_fill_G,_fill_B,_theta_start,_theta_end >") )
+		COMPREPLY=( $(compgen -W "_width>32,_height>32,_outline_type,_fill_R,_fill_G,_fill_B,_theta_start,_theta_end,_xlabel,_ylabel >") )
 		return 0
 		;;
 		"-display_tensors" | "--display_tensors")
@@ -3635,7 +3641,7 @@ _gmic_def()
 		return 0
 		;;
 		"-dp" | "--dp")
-		COMPREPLY=( $(compgen -W "_width>32,_height>32,_outline_type,_fill_R,_fill_G,_fill_B,_theta_start,_theta_end >") )
+		COMPREPLY=( $(compgen -W "_width>32,_height>32,_outline_type,_fill_R,_fill_G,_fill_B,_theta_start,_theta_end,_xlabel,_ylabel >") )
 		return 0
 		;;
 		"-dt" | "--dt")
