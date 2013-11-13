@@ -1235,23 +1235,25 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
     -a z -nm $nm,1
   -endl -done -v +
 
-#@gmic display_parametric : _width>32,_height>32,_plot_opacity,_vertex_radius>=0,_is_antialiased={ 0 | 1 },_is_decorated={ 0 | 1 },_xlabel,_ylabel
+#@gmic display_parametric : _width>32,_height>32,_outline_opacity,_vertex_radius>=0,_is_antialiased={ 0 | 1 },_is_decorated={ 0 | 1 },_xlabel,_ylabel
 #@gmic : Render 2d or 3d parametric curve or point clouds from selected image data.
 #@gmic : Curve points are defined as pixels of a 2 or 3-channel image.
 #@gmic : If the point image contains more than 3 channels, additional channels define the (R,G,B) color for each vertex.
-#@gmic : Default values: 'width=512', 'height=width', 'plot_opacity=1', 'vertex_radius=0', 'is_antialiased=1', 'is_decorated=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
+#@gmic : If 'outline_opacity>1', the outline is colored according to the specified vertex colors and 'outline_opacity-1' is used as
+#@gmic : the actual drawing opacity.
+#@gmic : Default values: 'width=512', 'height=width', 'outline_opacity=3', 'vertex_radius=0', 'is_antialiased=1', 'is_decorated=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
 #@gmic : $ 1024,1,1,2,'t=x/40;if(c==0,sin(t),cos(t))*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)' -display_parametric 512,512,4
 #@gmic : $ 1000,1,1,2,?(-100,100) -quantize 4,1 -noise 12 -channels 0,2 --normalize 0,255 -append c -display_parametric 512,512,0.1,8
-display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=1},${5=1},${6=1},"${7=x-axis}","${8=y-axis}"
-  -v - s0="no " s1=""
-  -v + -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with plot opacity $3, vertex radius $4, "${s{$5!=0}}"antialiasing and "${s{$6!=0}}"decoration." -v -
+display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=3},${5=1},${6=1},"${7=x-axis}","${8=y-axis}"
+  -v - s0="no " s1="" o0="" o1="colored "
+  -v + -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with "${o{$3>1}}"outline opacity "{if($3>1,$3-1,$3)}\
+               ", vertex radius $4, "${s{$5!=0}}"antialiasing and "${s{$6!=0}}"decoration." -v -
   -repeat @# -l[$>]
     nm=@{0,n} N={w*h*d}
     -i[0] ({'CImg3d'}) -+[0] 0.5 -i[1] ($N;$N)  # Header + nb of vertices/primitives.
 
     # Calibrate colors of vertices.
-    -if {s<=3} -channels[-1] 0,5 -sh[-1] 3,5 -f[-1] 150 -rm[-1]
-    -elif {s==4} --channels[-1] 3,3 -r[-1] 100%,100%,1,2 -a[-2,-1] c
+    -if {s==4} --channels[-1] 3,3 -r[-1] 100%,100%,1,2 -a[-2,-1] c
     -else -channels[-1] 0,5
     -endif
 
@@ -1275,7 +1277,9 @@ display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=1
     -endif
 
     -if $3 -l[0] -s3d -f[1] 'i-y' -rm[3] -i[3] (2,0,1;2,{$N-2},{$N-1}) -r[3] 3,{$N-1},1,1,3 -round[3]  # Convert point cloud to connected segments.
-      -r[5] 1,{h-1},1,1,0 -rm[4] -i[4] 3,{$N-1} -y y -a y -endl -object3d[1] [0],50%,50%,0,$3,2,0,0
+      -r[5] 1,{h-1},1,1,0
+      -if {$3>1} -r[4] 3,@{4,h/3},1,1,-1 -r[4] 3,@{4,h-1},1,1,2 -else -rm[4] -i[4] 3,{$N-1} -endif
+      -y y -a y -endl -object3d[1] [0],50%,50%,0,{if($3>1,$3-1,$3)},2,0,0
     -endif
 
     -rm[0]
@@ -19808,17 +19812,22 @@ _gimp_random3d4 : ($1) -/[-1] 3 -torus3d $1,@-1 -rm[-2]
 #@gimp : Y(t) = text{"cos(t)*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)"}
 #@gimp : Min-t = float(0,-1000,1000)
 #@gimp : Max-t = float(100,-1000,1000)
-#@gimp : Resolution = int(4096,2,16384)
-#@gimp : Plot opacity = float(0.7,0,1)
-#@gimp : Dot size = int(4,0,16)
+#@gimp : Resolution = int(4096,2,32768)
+#@gimp : Outline opacity = float(1,0,1)
+#@gimp : Dot size = int(0,0,16)
+#@gimp : Start color = color(64,0,0)
+#@gimp : End color = color(128,0,0)
+#@gimp : Colored outline = bool(1)
 #@gimp : Antialiasing = bool(1)
 #@gimp : Decoration = bool(1)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/12</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/13</i>.</small>")
 gimp_equation_parametric :
   -repeat @# -l[$>]
     w={w} h={h} -rm
     $5,1,1,2,'"t=$3+x*($4-$3)/($5-1);if(c==0,$1,$2)"'
-    -display_parametric $w,$h,$6,$7,$8,$9
+    -channels[-1] 0,2
+    ($8,$11^$9,$12^$10,$13) -r[-1] @{-2,w},1,1,3,3 -a c
+    -display_parametric $w,$h,{$6+$14*1.001},$7,$15,$16
   -endl -done
 
 #@gimp Equation plot [y=f(x)] : gimp_equation_plot, gimp_equation_plot
