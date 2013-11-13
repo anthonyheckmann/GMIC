@@ -1210,6 +1210,7 @@ dh :
 
 #@gmic display_histogram : _width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={ 0 | 1 }
 #@gmic : Render a channel-by-channel histogram.
+#@gmic : If selected image has several slices, the rendering is performed for all input slices.
 #@gmic : (eq. to '-dh').
 #@gmic : Default values: 'width=512', 'height=300', 'clusters=256', 'min_value=0%', 'max_value=100%' and 'show_axes=1'.
 #@gmic : $ image.jpg --display_histogram 512,300
@@ -1222,12 +1223,17 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
   -v - -repeat @# -l[$>] nm=@{0,n}
     -if @{-is_percent\ $4} m={im+(iM-im)*$4} -else m=$4 -endif
     -if @{-is_percent\ $5} M={im+(iM-im)*$5} -else M=$5 -endif
-    -s c -histogram $3,$m,$M -a c vM={iM}
-    $1,$2,1,{s},-255
-    -repeat {s} -sh[-2,-1] $>,$> -graph[-1] [-2],3,0,$vM,0,1,0 -rm[-2,-1] -done
-    -rm[-2] -+ 255
-    -if $6 100%,100% -axes[-1] $m,$M,$vM,0,13,1,255 --dilate[-1] 3 -r[-2] [-3] -j[-3] [-2],0,0,0,0,1,[-1],255 -rm[-2,-1] -endif
-  -nm $nm,1 -endl -done -v +
+    s={s} -s c
+    -repeat $s -l[{-1-$>}] -s z -histogram $3,$m,$M -a z -endl -done
+    -a c vM={iM} -s z
+    -repeat @# -l[$>]
+      $1,$2,1,{s},-255
+      -repeat {s} -sh[-2,-1] $>,$> -graph[-1] [-2],3,0,$vM,0,1,0 -rm[-2,-1] -done
+      -rm[-2] -+ 255
+      -if $6 100%,100% -axes[-1] $m,$M,$vM,0,13,1,255 --dilate[-1] 3 -r[-2] [-3] -j[-3] [-2],0,0,0,0,1,[-1],255 -rm[-2,-1] -endif
+    -endl -done
+    -a z -nm $nm,1
+  -endl -done -v +
 
 #@gmic display_parametric : _width>32,_height>32,_plot_opacity,_vertex_radius>=0,_is_antialiased={ 0 | 1 },_is_decorated={ 0 | 1 },_xlabel,_ylabel
 #@gmic : Render 2d or 3d parametric curve or point clouds from selected image data.
