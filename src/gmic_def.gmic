@@ -732,7 +732,7 @@ _help_usage :
   -_help_paragraph "  - G'MIC has an embedded mathematical parser. It is used to evaluate expressions inside
 \n     braces '{}', or formulas in commands that may take one as an argument (e.g. '-fill').
 \n  - When used in commands, a formula is evaluated for each pixel of the selected images.
-\n  - The math parser understands the following set of functions, operators and variables:
+\n  - The mathematical parser understands the following set of functions, operators and variables:
 \n    _ Usual operators: || (logical or), && (logical and), | (bitwise or), & (bitwise and),
 \n       !=, ==, <=, >=, <, >, << (left bitwise shift), >> (right bitwise shift), -, +, *, /,
 \n       % (modulo), ^ (power), ! (logical not), ~ (bitwise not).
@@ -746,7 +746,7 @@ _help_usage :
 \n       Functions 'min()' and 'max()' can be called with an arbitrary number of arguments.
 \n       Functions 'isval()', 'isnan()', 'isinf()', 'isbool()' can be used to test the type of
 \n       a given number or expression.
-\n    _ The variable names below are pre-defined. They cannot be overloaded (except for 'w,h,d,s,x,y,z,c,e,pi').
+\n    _ The variable names below are pre-defined. They can be overloaded if necessary.
 \n         . 'w': width of the associated image, if any (0 otherwise).
 \n         . 'h': height of the associated image, if any (0 otherwise).
 \n         . 'd': depth of the associated image, if any (0 otherwise).
