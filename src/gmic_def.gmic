@@ -17735,10 +17735,11 @@ _gimp_freaky_details :
       -repeat $1 -bilateral[-1] $2,{1.5*$2} -done
       -blend[-2,-1] vividlight -blend overlay
     -done
-  -endl -done -n 0,255
+  -endl -done
 
 gimp_freaky_details :
   -apply_channels "-gimp_parallel_overlap \"-_gimp_freaky_details ${1-3}\",$5,$6",$4,0
+  -n 0,255
 
 gimp_freaky_details_preview :
   -gimp_split_preview "-gimp_freaky_details $*",$-1
@@ -19871,7 +19872,7 @@ _gimp_random3d4 : ($1) -/[-1] 3 -torus3d $1,@-1 -rm[-2]
 
 #@gimp Cupid : gimp_cupid, gimp_cupid
 #@gimp : Smoothness = float(0,0,10)
-#@gimp : Color = color(255,255,255,255)
+#@gimp : Color = color(255,0,0,255)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/13</i>.</small>")
 gimp_cupid :
   -if {@#>0} siz={min(@{-min_w},@{-min_h})} -else siz=512 -endif
@@ -21805,5 +21806,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
-
