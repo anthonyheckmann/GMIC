@@ -746,7 +746,7 @@ _help_usage :
 \n       Functions 'min()' and 'max()' can be called with an arbitrary number of arguments.
 \n       Functions 'isval()', 'isnan()', 'isinf()', 'isbool()' can be used to test the type of
 \n       a given number or expression.
-\n    _ The variable names below are pre-defined. They cannot be overloaded:
+\n    _ The variable names below are pre-defined. They cannot be overloaded (except for 'w,h,d,s,x,y,z,c,e,pi').
 \n         . 'w': width of the associated image, if any (0 otherwise).
 \n         . 'h': height of the associated image, if any (0 otherwise).
 \n         . 'd': depth of the associated image, if any (0 otherwise).
@@ -755,6 +755,11 @@ _help_usage :
 \n         . 'y': current processed row of the associated image, if any (0 otherwise).
 \n         . 'z': current processed slice of the associated image, if any (0 otherwise).
 \n         . 'c': current processed channel of the associated image, if any (0 otherwise).
+\n         . 'e': value of e, i.e. 2.71828..
+\n         . 'pi': value of pi, i.e. 3.1415926..
+\n         . '?' or 'u': a random value between [0,1], following a uniform distribution.
+\n         . 'g': a random value, following a gaussian distribution of variance 1
+\n            (roughly in [-5,5]).
 \n         . 'i': current processed pixel value (i.e. value located at (x,y,z,c)) of the
 \n            associated image, if any (0 otherwise).
 \n         . 'im','iM','ia','iv': Respectively the minimum, maximum, average values and
@@ -763,11 +768,6 @@ _help_usage :
 \n            image, if any (0 otherwise).
 \n         . 'xM','yM','zM','cM': The pixel coordinates of the maximum value in the
 \n            associated image, if any (0 otherwise).
-\n         . 'pi': value of pi, i.e. 3.1415926..
-\n         . 'e': value of e, i.e. 2.71828..
-\n         . '?' or 'u': a random value between [0,1], following a uniform distribution.
-\n         . 'g': a random value, following a gaussian distribution of variance 1
-\n            (roughly in [-5,5]).
 \n    _ These special operators can be used:
 \n         . ';': expression separator. The returned value is always the last encountered
 \n            expression. For instance expression '1;2;pi' is evaluated as 'pi'.

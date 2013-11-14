@@ -22,6 +22,7 @@ _gmic_def()
 	      -camera --camera\
 	      -m --m\
 	      -command --command\
+	      -cupid --cupid\
 	      -d --d\
 	      -display --display\
 	      -d0 --d0\
@@ -53,6 +54,7 @@ _gmic_def()
 	      -function1d --function1d\
 	      -gmicky --gmicky\
 	      -gmicky_wilber --gmicky_wilber\
+	      -heart --heart\
 	      -i --i\
 	      -input --input\
 	      -o --o\
@@ -841,6 +843,7 @@ _gmic_def()
 	      camera\
 	      m\
 	      command\
+	      cupid\
 	      d\
 	      display\
 	      d0\
@@ -872,6 +875,7 @@ _gmic_def()
 	      function1d\
 	      gmicky\
 	      gmicky_wilber\
+	      heart\
 	      i\
 	      input\
 	      o\
@@ -1664,6 +1668,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "_camera_index>=0,_nb_frames>0,_skip_frames>=0,release_camera={0|1},_capture_width>=0,_capture_height>=0 >") )
 		return 0
 		;;
+		"-cupid" | "--cupid")
+		COMPREPLY=( $(compgen -W "0<_width<=512,0<_height<=512 >") )
+		return 0
+		;;
 		"-display" | "--display")
 		COMPREPLY=( $(compgen -W "_X,_Y,_Z >") )
 		return 0
@@ -1681,7 +1689,7 @@ _gmic_def()
 		return 0
 		;;
 		"-display_parametric" | "--display_parametric")
-		COMPREPLY=( $(compgen -W "_width>32,_height>32,_plot_opacity,_vertex_radius>=0,_is_antialiased={0|1},_is_decorated={0|1},_xlabel,_ylabel >") )
+		COMPREPLY=( $(compgen -W "_width>32,_height>32,_outline_opacity,_vertex_radius>=0,_is_antialiased={0|1},_is_decorated={0|1},_xlabel,_ylabel >") )
 		return 0
 		;;
 		"-display_polar" | "--display_polar")
@@ -1714,6 +1722,10 @@ _gmic_def()
 		;;
 		"-function1d" | "--function1d")
 		COMPREPLY=( $(compgen -W "0<=smoothness<=1,x0>=0,y0,x1>=0,y1,...,xn>=0,yn >") )
+		return 0
+		;;
+		"-heart" | "--heart")
+		COMPREPLY=( $(compgen -W "_width>0,_height>0 >") )
 		return 0
 		;;
 		"-output_ggr" | "--output_ggr")
