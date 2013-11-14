@@ -1226,24 +1226,25 @@ dh :
   -v - __s="$?" -v +
   -_display_histogram $*
 
-#@gmic display_histogram : _width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={ 0 | 1 }
+#@gmic display_histogram : _width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={ 0 | 1 },_cut_value.
 #@gmic : Render a channel-by-channel histogram.
 #@gmic : If selected image has several slices, the rendering is performed for all input slices.
+#@gmic : 'cut_value' can be { -1=no-cut | >=0 }.
 #@gmic : (eq. to '-dh').
-#@gmic : Default values: 'width=512', 'height=300', 'clusters=256', 'min_value=0%', 'max_value=100%' and 'show_axes=1'.
+#@gmic : Default values: 'width=512', 'height=300', 'clusters=256', 'min_value=0%', 'max_value=100%', 'show_axes=1' and 'cut_value=-1'.
 #@gmic : $ image.jpg --display_histogram 512,300
 display_histogram :
   -v - __s="$?" -v +
   -_$0 $*
 
-_display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0%},${5=100%},${6=1}
+_display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0%},${5=100%},${6=1},${7=-1}
   -e[0--3] "Render $1x$2 channel-by-channel histogram of image"$__s", with $3 clusters, minimum value $4 and maximum value $5."
   -v - -repeat @# -l[$>] nm=@{0,n}
     -if @{-is_percent\ $4} m={im+(iM-im)*$4} -else m=$4 -endif
     -if @{-is_percent\ $5} M={im+(iM-im)*$5} -else M=$5 -endif
     s={s} -s c
     -repeat $s -l[{-1-$>}] -s z -histogram $3,$m,$M -a z -endl -done
-    -a c vM={iM} -s z
+    -a c vM={if($7>=0,$7,iM)} -s z
     -repeat @# -l[$>]
       $1,$2,1,{s},-255
       -repeat {s} -sh[-2,-1] $>,$> -graph[-1] [-2],3,0,$vM,0,1,0 -rm[-2,-1] -done
@@ -19841,15 +19842,12 @@ _gimp_random3d4 : ($1) -/[-1] 3 -torus3d $1,@-1 -rm[-2]
 #@gimp Cupid : gimp_cupid, gimp_cupid
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : Color = color(255,255,255,255)
-#@gimp : sep = separator()
-#@gimp : note = note("<small><b>Note:</b> This filter generates the <i>Cupid parametric curve</i>, proposed by Adriana Salerno, in:</small>")
-#@gimp : link = link("http://blogs.ams.org/phdplus/2013/02/14/love-and-other-parametric-curves/")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/13</i>.</small>")
 gimp_cupid :
   -if {@#>0} wh=@{-max_wh} w={min(512,arg(1,$wh))} h={min(512,arg(2,$wh))} -else w=512 h=512 -endif
   -cupid $w,$h -to_rgba[-1]
-  -replace_color[-1] 0,0,1,1,1,255,$2,$3,$4,$5
   -replace_color[-1] 0,0,0,0,0,255,$2,$3,$4,0
+  -replace_color[-1] 0,0,1,1,1,255,$2,$3,$4,$5
   -frame[-1] {2.5*$1}%,{2.5*$1}%,$2,$3,$4,0 -b[-1] $1%
   -blend[-2,-1] alpha
 
