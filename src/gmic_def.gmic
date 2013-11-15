@@ -3238,8 +3238,17 @@ _threshold2 :
 uncompress_rle :
   -e[^-1] "Uncompress data vector$?, using RLE algorithm."
   -v - -repeat @# -l[$>]
-    whds=@{0,0-3} -r 2,{h-2},1,1,0,0,1,1
-    -repeat {h} @{0,(0,$>)},1,1,1,@{0,(1,$>)} -done -a[1--1] x -rm[0] -r $whds,-1
+    whds=@{0,0-3} -rows 2,100% -s y,-256
+    -repeat @# -l[$>]
+      -i[0] ({'CImg3d'}) -+[0] 0.5
+      -i[1] ({2*h};{h})
+      -s[-1] x,2 -cumul[-2] siz=@{-2,-1}
+      --shift[-2] 0,1 --[-3] 1 -rv[-3,-1] -z[-3,-1] 0,2 -a[-3,-1] x
+      -i[3] (2,0,1;2,{2*h-2},{2*h-1}) -r[3] 3,{h},1,1,3 -round[3]
+      -r[4] 3 1,100%,1,1,1 -y y -a y
+      $siz -object3d[-1] [-2],0,0,0,1,2,0,0 -rm[-2]
+    -endl -done
+    -a x -r[-1] $whds,-1
   -endl -done -v +
 
 #@gmic unrepeat
