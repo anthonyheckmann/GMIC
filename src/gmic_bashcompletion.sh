@@ -164,6 +164,7 @@ _gmic_def()
 	      -apply_gamma --apply_gamma\
 	      -balance_gamma --balance_gamma\
 	      -complex2polar --complex2polar\
+	      -compress_rle --compress_rle\
 	      -cumul --cumul\
 	      -c --c\
 	      -cut --cut\
@@ -202,6 +203,8 @@ _gmic_def()
 	      -threshold --threshold\
 	      -t2 --t2\
 	      -threshold2 --threshold2\
+	      -uncompress_rle --uncompress_rle\
+	      -unrepeat --unrepeat\
 	      -vector2tensor --vector2tensor\
 	      -apply_channels --apply_channels\
 	      -autoindex --autoindex\
@@ -985,6 +988,7 @@ _gmic_def()
 	      apply_gamma\
 	      balance_gamma\
 	      complex2polar\
+	      compress_rle\
 	      cumul\
 	      c\
 	      cut\
@@ -1023,6 +1027,8 @@ _gmic_def()
 	      threshold\
 	      t2\
 	      threshold2\
+	      uncompress_rle\
+	      unrepeat\
 	      vector2tensor\
 	      apply_channels\
 	      autoindex\
@@ -1669,7 +1675,7 @@ _gmic_def()
 		return 0
 		;;
 		"-cupid" | "--cupid")
-		COMPREPLY=( $(compgen -W "0<_width<=512,0<_height<=512 >") )
+		COMPREPLY=( $(compgen -W "_size>0 >") )
 		return 0
 		;;
 		"-display" | "--display")
@@ -1685,7 +1691,7 @@ _gmic_def()
 		return 0
 		;;
 		"-display_histogram" | "--display_histogram")
-		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1} >") )
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1},_cut_value. >") )
 		return 0
 		;;
 		"-display_parametric" | "--display_parametric")
@@ -3649,7 +3655,7 @@ _gmic_def()
 		return 0
 		;;
 		"-dh" | "--dh")
-		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1} >") )
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1},_cut_value. >") )
 		return 0
 		;;
 		"-dp" | "--dp")
