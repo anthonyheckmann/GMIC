@@ -1793,7 +1793,9 @@ gmic& gmic::add_commands(const char *const data_commands,
     CImg<unsigned int> hdist(256);
     unsigned int nb_coms = 0;
     cimg_forX(hdist,i) { hdist[i] = commands[i].size(); nb_coms+=commands[i].size(); }
-    debug("Distribution of command hashes: [ %s ] (%u commands).",hdist.value_string().data(),nb_coms);
+    const CImg<double> st = hdist.get_stats();
+    debug("Distribution of command hashes: [ %s ], min = %u, max = %u, mean = %g, std = %g (%u commands).",
+          hdist.value_string().data(),(unsigned int)st[0],(unsigned int)st[1],st[2],std::sqrt(st[3]),nb_coms);
   }
   return *this;
 }
