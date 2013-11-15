@@ -1793,7 +1793,7 @@ gmic& gmic::add_commands(const char *const data_commands,
     CImg<unsigned int> hdist(256);
     unsigned int nb_coms = 0;
     cimg_forX(hdist,i) { hdist[i] = commands[i].size(); nb_coms+=commands[i].size(); }
-    debug("Distribution of command hashes: ( %s ) (%u commands).",hdist.value_string().data(),nb_coms);
+    debug("Distribution of command hashes: [ %s ] (%u commands).",hdist.value_string().data(),nb_coms);
   }
   return *this;
 }
