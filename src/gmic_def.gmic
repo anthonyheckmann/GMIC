@@ -2901,7 +2901,7 @@ compress_rle :
     -f[-1] '>if(y==0,i,if(y==1,if(i(x,0)==i(x+1,0),-1,x),if(i(x-1,1)==-1,i(x-1,2)+1,1)))'
     -z 0,{w-2} -s y,3 -discard[1] -1
     -warp[0,2] [1],0,0 -rm[1]
-    -rv -a x -i[0] ($whds) -a y
+    -rv -a x -i[0] ($whds) -a y -y y
     -nm $nm,1
   -endl -done -v +
 
@@ -3238,7 +3238,7 @@ _threshold2 :
 uncompress_rle :
   -e[^-1] "Uncompress data vector$?, using RLE algorithm."
   -v - -repeat @# -l[$>]
-    whds=@{0,0-3} -rows 2,100% -s y,-256
+    whds=@{0,0-3} -rows 2,100% -r 2,{w*h*d*s/2},1,1,-1 -s y,-256
     -repeat @# -l[$>]
       -i[0] ({'CImg3d'}) -+[0] 0.5
       -i[1] ({2*h};{h})
