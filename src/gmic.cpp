@@ -8807,11 +8807,13 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                       gmic_selection,
                       _axes.data(),
                       axes.size()>1?'e':'i');
-              unsigned int off = 0;
+              int off = 0;
               cimg_forY(selection,l) {
                 const unsigned int ind = selection[l] + off;
                 const CImg<T>& img = gmic_check(images[ind]);
-                if (img) {
+                if (!img) {
+                  if (!is_get_version) { images.remove(ind); images_names.remove(ind); off-=1; }
+                } else {
                   CImg<char> name = images_names[ind].get_mark();
                   CImgList<T> split(img,true);
                   cimglist_for(axes,i) {
@@ -8827,7 +8829,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   } else {
                     images.remove(ind);
                     images_names.remove(ind);
-                    off+=split.size() - 1;
+                    off+=(int)split.size() - 1;
                     images_names.insert(split.size(),name.get_copymark(),ind);
                     name.move_to(images_names[ind]);
                     split.move_to(images,ind);
@@ -8870,7 +8872,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               }
               ++position;
             } else {
-              print(images,"Split image%s into images of same values.",
+              print(images,"Split image%s as a set of constant sub-vectors.",
                     gmic_selection);
               unsigned int off = 0;
               cimg_forY(selection,l) {

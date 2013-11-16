@@ -4772,8 +4772,8 @@ shrink_z : -check "$1>=0"
 
 #@gmic s : eq. to '-split'. : (*)
 
-#@gmic split : { x | y | z | c }..{ x | y | z | c },_nb_parts : keep_splitting_values={ + | - },value1,value2,... : (*)
-#@gmic : Split selected images along specified axis, or sequence of scalar values.
+#@gmic split : { x | y | z | c }..{ x | y | z | c },_nb_parts : keep_splitting_values={ + | - },value1,value2,... : (no args) : (*)
+#@gmic : Split selected images either along a specified axis, or regarding to a sequence of scalar values, or as a set of constant sub-vectors.
 #@gmic : (eq. to '-s').
 #@gmic : 'nb_parts' can be { 0=maximum split | >0=split in N parts | <0=split in parts of size -N }.
 #@gmic : Default value: 'nb_parts=0'.
