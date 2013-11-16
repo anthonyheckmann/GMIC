@@ -1783,7 +1783,7 @@ _gmic_def()
 		return 0
 		;;
 		"-verbose" | "--verbose")
-		COMPREPLY=( $(compgen -W "level {+|-}") )
+		COMPREPLY=( $(compgen -W "_level {+|-}") )
 		return 0
 		;;
 		"-wait" | "--wait")
@@ -2199,7 +2199,7 @@ _gmic_def()
 		return 0
 		;;
 		"-split" | "--split")
-		COMPREPLY=( $(compgen -W "{x|y|z|c}..{x|y|z|c},_nb_parts keep_splitting_values={+|-},value1,value2,...") )
+		COMPREPLY=( $(compgen -W "{x|y|z|c}..{x|y|z|c},_nb_parts keep_splitting_values={+|-},value1,value2,... (noargs)") )
 		return 0
 		;;
 		"-split_tiles" | "--split_tiles")
@@ -2207,7 +2207,7 @@ _gmic_def()
 		return 0
 		;;
 		"-unroll" | "--unroll")
-		COMPREPLY=( $(compgen -W "axis={x|y|z|c} >") )
+		COMPREPLY=( $(compgen -W "_axis={x|y|z|c} >") )
 		return 0
 		;;
 		"-upscale_smart" | "--upscale_smart")
@@ -2491,7 +2491,7 @@ _gmic_def()
 		return 0
 		;;
 		"-histogram" | "--histogram")
-		COMPREPLY=( $(compgen -W "nb_levels>0[%],_value0[%],_value1[%] >") )
+		COMPREPLY=( $(compgen -W "_nb_levels>0[%],_value0[%],_value1[%] >") )
 		return 0
 		;;
 		"-histogram3" | "--histogram3")
@@ -2627,7 +2627,7 @@ _gmic_def()
 		return 0
 		;;
 		"-object3d" | "--object3d")
-		COMPREPLY=( $(compgen -W "[object3d],_x[%],_y[%],_z,_opacity,_rendering_mode,_is_double3d={0|1},_is_zbuffer={0|1},_focale,_light_x,_light_y,_light_z,_specular_lightness,_specular_shininess >") )
+		COMPREPLY=( $(compgen -W "[object3d],_x[%],_y[%],_z,_opacity,_rendering_mode,_is_double_sided={0|1},_is_zbuffer={0|1},_focale,_light_x,_light_y,_light_z,_specular_lightness,_specular_shininess >") )
 		return 0
 		;;
 		"-pack_sprites" | "--pack_sprites")
@@ -2639,7 +2639,7 @@ _gmic_def()
 		return 0
 		;;
 		"-plasma" | "--plasma")
-		COMPREPLY=( $(compgen -W "alpha,_beta,_scale>=0 >") )
+		COMPREPLY=( $(compgen -W "_alpha,__beta,_scale>=0 >") )
 		return 0
 		;;
 		"-point" | "--point")
@@ -2775,7 +2775,7 @@ _gmic_def()
 		return 0
 		;;
 		"-double3d" | "--double3d")
-		COMPREPLY=( $(compgen -W "is_doubled={0|1} >") )
+		COMPREPLY=( $(compgen -W "_is_double_sided={0|1} >") )
 		return 0
 		;;
 		"-elevation3d" | "--elevation3d")
@@ -2835,11 +2835,11 @@ _gmic_def()
 		return 0
 		;;
 		"-mode3d" | "--mode3d")
-		COMPREPLY=( $(compgen -W "mode >") )
+		COMPREPLY=( $(compgen -W "_mode >") )
 		return 0
 		;;
 		"-moded3d" | "--moded3d")
-		COMPREPLY=( $(compgen -W "mode >") )
+		COMPREPLY=( $(compgen -W "_mode >") )
 		return 0
 		;;
 		"-mul3d" | "--mul3d")
@@ -2847,7 +2847,7 @@ _gmic_def()
 		return 0
 		;;
 		"-opacity3d" | "--opacity3d")
-		COMPREPLY=( $(compgen -W "opacity >") )
+		COMPREPLY=( $(compgen -W "_opacity >") )
 		return 0
 		;;
 		"-parametric3d" | "--parametric3d")
@@ -3686,6 +3686,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "x0[%],x1[%],y[%],z[%],v[%] y0[%],y1[%],z[%],v[%] z0[%],z1[%],v[%] v0[%],v1[%] (noargs)") )
 		return 0
 		;;
+		"-v" | "--v")
+		COMPREPLY=( $(compgen -W "_level {+|-}") )
+		return 0
+		;;
 		"-w" | "--w")
 		COMPREPLY=( $(compgen -W "_width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_title >") )
 		return 0
@@ -3823,11 +3827,11 @@ _gmic_def()
 		return 0
 		;;
 		"-s" | "--s")
-		COMPREPLY=( $(compgen -W "{x|y|z|c}..{x|y|z|c},_nb_parts keep_splitting_values={+|-},value1,value2,...") )
+		COMPREPLY=( $(compgen -W "{x|y|z|c}..{x|y|z|c},_nb_parts keep_splitting_values={+|-},value1,value2,... (noargs)") )
 		return 0
 		;;
 		"-y" | "--y")
-		COMPREPLY=( $(compgen -W "axis={x|y|z|c} >") )
+		COMPREPLY=( $(compgen -W "_axis={x|y|z|c} >") )
 		return 0
 		;;
 		"-b" | "--b")
@@ -3863,7 +3867,7 @@ _gmic_def()
 		return 0
 		;;
 		"-db3d" | "--db3d")
-		COMPREPLY=( $(compgen -W "is_doubled={0|1} >") )
+		COMPREPLY=( $(compgen -W "_is_double_sided={0|1} >") )
 		return 0
 		;;
 		"-f3d" | "--f3d")
@@ -3875,11 +3879,11 @@ _gmic_def()
 		return 0
 		;;
 		"-m3d" | "--m3d")
-		COMPREPLY=( $(compgen -W "mode >") )
+		COMPREPLY=( $(compgen -W "_mode >") )
 		return 0
 		;;
 		"-md3d" | "--md3d")
-		COMPREPLY=( $(compgen -W "mode >") )
+		COMPREPLY=( $(compgen -W "_mode >") )
 		return 0
 		;;
 		"-*3d" | "--*3d")
@@ -3887,7 +3891,7 @@ _gmic_def()
 		return 0
 		;;
 		"-o3d" | "--o3d")
-		COMPREPLY=( $(compgen -W "opacity >") )
+		COMPREPLY=( $(compgen -W "_opacity >") )
 		return 0
 		;;
 		"-p3d" | "--p3d")
