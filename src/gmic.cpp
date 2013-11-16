@@ -8844,13 +8844,16 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     gmic_selection,
                     keep_values=='-'?"discard":"keep",
                     argument_text+2);
-              unsigned int off = 0, nb_values = 1;
+              unsigned int nb_values = 1;
+              int off = 0;
               for (const char *s = argument+2; *s; ++s) if (*s==',') ++nb_values;
               const CImg<T> values(nb_values,1,1,1,argument+2,true);
               cimg_forY(selection,l) {
                 const unsigned int ind = selection[l] + off;
                 const CImg<T>& img = gmic_check(images[ind]);
-                if (img) {
+                if (!img) {
+                  if (!is_get_version) { images.remove(ind); images_names.remove(ind); off-=1; }
+                } else {
                   CImg<char> name = images_names[ind].get_mark();
                   CImgList<T> split = img.get_split(values,keep_values=='+',false);
                   if (is_get_version) {
@@ -8862,7 +8865,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     images.remove(ind);
                     images_names.remove(ind);
                     if (split) {
-                      off+=split.size() - 1;
+                      off+=(int)split.size() - 1;
                       images_names.insert(split.size(),name.get_copymark(),ind);
                       name.move_to(images_names[ind]);
                       split.move_to(images,ind);
@@ -8874,11 +8877,13 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             } else {
               print(images,"Split image%s as a set of constant sub-vectors.",
                     gmic_selection);
-              unsigned int off = 0;
+              int off = 0;
               cimg_forY(selection,l) {
                 const unsigned int ind = selection[l] + off;
                 const CImg<T>& img = gmic_check(images[ind]);
-                if (img) {
+                if (!img) {
+                  if (!is_get_version) { images.remove(ind); images_names.remove(ind); off-=1; }
+                } else {
                   CImg<char> name = images_names[ind].get_mark();
                   CImgList<T> split = img.get_split(false);
                   if (is_get_version) {
@@ -8890,7 +8895,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     images.remove(ind);
                     images_names.remove(ind);
                     if (split) {
-                      off+=split.size() - 1;
+                      off+=(int)split.size() - 1;
                       images_names.insert(split.size(),name.get_copymark(),ind);
                       name.move_to(images_names[ind]);
                       split.move_to(images,ind);
