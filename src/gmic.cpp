@@ -4869,14 +4869,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Set double-sided mode for 3d rendering.
           if (!std::strcmp("-double3d",item)) {
             gmic_substitute_args();
-            int value = 0;
-            if (std::sscanf(argument,"%d%c",
-                            &value,&end)==1) {
-              is_double3d = (bool)value;
-              print(images,"%s double-sided mode for 3d rendering.",
-                    is_double3d?"Enable":"Disable");
-            } else arg_error("double3d");
-            ++position; continue;
+            is_double3d = true;
+            if (!argument[1] && (*argument=='0' || *argument=='1')) { is_double3d = (*argument=='1'); ++position; }
+            print(images,"%s double-sided mode for 3d rendering.",
+                  is_double3d?"Enable":"Disable");
+            continue;
           }
 
           // Patch-based smoothing.
@@ -5261,29 +5258,28 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                               &nb_levels,&sep,&value0,&sep0,&value1,&sep1,&end)==6 && sep=='%' &&
                   sep0=='%' && sep1=='%')) &&
                 nb_levels>=0.5) {
-              nb_levels = cimg::round(nb_levels);
-              if (value0==value1 && value0==0) { value1 = 100; sep0 = sep1 = '%'; }
-              print(images,"Equalize histogram of image%s, with %g%s levels in range [%g%s,%g%s].",
-                    gmic_selection,
-                    nb_levels,sep=='%'?"%":"",
-                    value0,sep0=='%'?"%":"",
-                    value1,sep1=='%'?"%":"");
-              cimg_forY(selection,l) {
-                CImg<T>& img = gmic_check(images[selection[l]]);
-                double vmin = 0, vmax = 0, nvalue0 = value0, nvalue1 = value1;
-                if (sep0=='%' || sep1=='%') {
-                  if (img) vmax = (double)img.max_min(vmin);
-                  if (sep0=='%') nvalue0 = vmin + (vmax-vmin)*value0/100;
-                  if (sep1=='%') nvalue1 = vmin + (vmax-vmin)*value1/100;
-                }
-                const unsigned int
-                  _nb_levels = cimg::max(1U,(unsigned int)cimg::round(sep=='%'?
-                                                                      nb_levels*(1+nvalue1-nvalue0)/100:
-                                                                      nb_levels));
-                gmic_apply(images[selection[l]],equalize(_nb_levels,(T)nvalue0,(T)nvalue1));
+              nb_levels = cimg::round(nb_levels); ++position; }
+            if (value0==value1 && value0==0) { value1 = 100; sep0 = sep1 = '%'; }
+            print(images,"Equalize histogram of image%s, with %g%s levels in range [%g%s,%g%s].",
+                  gmic_selection,
+                  nb_levels,sep=='%'?"%":"",
+                  value0,sep0=='%'?"%":"",
+                  value1,sep1=='%'?"%":"");
+            cimg_forY(selection,l) {
+              CImg<T>& img = gmic_check(images[selection[l]]);
+              double vmin = 0, vmax = 0, nvalue0 = value0, nvalue1 = value1;
+              if (sep0=='%' || sep1=='%') {
+                if (img) vmax = (double)img.max_min(vmin);
+                if (sep0=='%') nvalue0 = vmin + (vmax-vmin)*value0/100;
+                if (sep1=='%') nvalue1 = vmin + (vmax-vmin)*value1/100;
               }
-            } else arg_error("equalize");
-            is_released = false; ++position; continue;
+              const unsigned int
+                _nb_levels = cimg::max(1U,(unsigned int)cimg::round(sep=='%'?
+                                                                    nb_levels*(1+nvalue1-nvalue0)/100:
+                                                                    nb_levels));
+              gmic_apply(images[selection[l]],equalize(_nb_levels,(T)nvalue0,(T)nvalue1));
+            }
+            is_released = false; continue;
           }
 
           // Erode.
@@ -9965,15 +9961,13 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Unroll.
           if (!std::strcmp("-unroll",command)) {
             gmic_substitute_args();
-            const char axis = *argument;
-            if (std::strlen(argument)==1 &&
-                (axis=='x' || axis=='y' || axis=='z' || axis=='c')) {
-              print(images,"Unroll image%s along the '%c'-axis.",
-                    gmic_selection,
-                    axis);
-              cimg_forY(selection,l) gmic_apply(images[selection[l]],unroll(axis));
-            } else arg_error("unroll");
-            is_released = false; ++position; continue;
+            char axis = 'y';
+            if (!argument[1] && (*argument=='x' || *argument=='y' || *argument=='z' || *argument=='c')) { axis = *argument; ++position; }
+            print(images,"Unroll image%s along the '%c'-axis.",
+                  gmic_selection,
+                  axis);
+            cimg_forY(selection,l) gmic_apply(images[selection[l]],unroll(axis));
+            is_released = false; continue;
           }
 
           // Remove custom command.

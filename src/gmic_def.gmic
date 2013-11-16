@@ -133,7 +133,7 @@ h :
 #@gmic : (eq. to '-h').
 help : -skip ${1=""},${2=1}
   -if {!@#} -return -endif
-  -y y -a y
+  -y -a y
   --_help $1,$2 -k[0]
   -if {narg(@{})} -_help[0] @{},0 -endif
   -rm
@@ -178,7 +178,7 @@ _help : -skip ${1=""}
           -rows 1,100% -autocrop {'" "'} # Discard '$' character.
           -if $_is_example -i[0] ({'"            "'})
           -else -i[0] ({'"\n        Example(s): "'}) _is_example=1 -endif
-          -y[0] y -a y
+          -y[0] -a y
         -endif
         -_document_gmic_description_ascii 0
       -endif
@@ -1275,7 +1275,7 @@ display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=3
     -sh[-1] 2,2 zm={im} zM={iM} -rm[-1]
     -permute[-1] cxyz -s[-1] x,2
     -i[-2] (1,0;1,{$N-1}) -r[-2] 2,$N,1,1,3 -round[-2] 1,$N,1,1,1 # Primitives, colors and opacities.
-    -y y -a y -c3d -n3d -*3d 1,-1,1
+    -y -a y -c3d -n3d -*3d 1,-1,1
 
     {if($6,$1-32,$1)},{if($6,$2-32,$2)},1,{if($is_grayscale,1,3)},255
     -*3d[0] {0.96*min(w,h)}
@@ -1291,7 +1291,7 @@ display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=3
     -if $3 -l[0] -s3d -f[1] 'i-y' -rm[3] -i[3] (2,0,1;2,{$N-2},{$N-1}) -r[3] 3,{$N-1},1,1,3 -round[3]  # Convert point cloud to connected segments.
       -r[5] 1,{h-1},1,1,0
       -if {$3>1} -r[4] 3,@{4,h/3},1,1,-1 -r[4] 3,@{4,h-1},1,1,2 -else -rm[4] -i[4] 3,{$N-1} -endif
-      -y y -a y -endl -object3d[1] [0],50%,50%,0,{if($3>1,$3-1,$3)},2,0,0
+      -y -a y -endl -object3d[1] [0],50%,50%,0,{if($3>1,$3-1,$3)},2,0,0
     -endif
 
     -rm[0]
@@ -1338,7 +1338,7 @@ _display_polar : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=1},${4=200},${5=$4
     # Compute (x,y) coordinates of the polar curve points.
     M={max(abs(iM),abs(im))}
     -* {0.48*min($1,$2)/$M}
-    -y y ({$7*pi/180};{-$8*pi/180}) -r[-1] 1,[-2],1,1,3
+    -y ({$7*pi/180};{-$8*pi/180}) -r[-1] 1,[-2],1,1,3
     --sin[-1] -cos[-2] -*[-1] [-3] -*[-3,-2]
     -a[-2,-1] x N={h}
     -nm[-1] coords
@@ -1348,7 +1348,7 @@ _display_polar : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=1},${4=200},${5=$4
       ({'CImg3d'}) -+[-1] 0.5 ($N,$N)
       --z[coords] 0,2
       1,$N,1,1,2 1,$N,1,1,'y' --+[-1] 1 -a[-3--1] x -=[-1] 0,2,100%
-      3,$N,1,1,0 1,$N,1,1,1 -y[-6--1] y -a[-6--1] y
+      3,$N,1,1,0 1,$N,1,1,1 -y[-6--1] -a[-6--1] y
       -nm[-1] _plot_polar_outline
     -endif
 
@@ -1358,7 +1358,7 @@ _display_polar : -check "${1=500}>32 && ${2=$1}>32" -skip ${3=1},${4=200},${5=$4
       --z[coords] 0,-1,2,100% -z[-1] 0,2
       1,$N,1,1,3 1,$N 1,$N,1,1,'1+y' --+[-1] 1 -a[-4--1] x -=[-1] 1,3,100%
       3,$N,1,1,$4,$5,$6 1,$N,1,1,1
-      -y[-6--1] y -a[-6--1] y
+      -y[-6--1] -a[-6--1] y
       -nm[-1] _plot_polar_fill
     -endif
     -rm[coords]  # Remove original curve coordinates.
@@ -2547,7 +2547,7 @@ sort_list : -skip ${1=+},${2=i}
 #@gmic : Sort selected images (viewed as a list of strings) in lexicographic order.
 sort_str :
   -e[^-1] "Sort image$? in lexicographic order."
-  -v - -y y -a x
+  -v - -y -a x
   -repeat {round(h/4,1,1)} y={4*$>}
     -repeat @# -l[$<]
       --rows $y,{$y+3} -f[1] 'if(i>=97&&i<=122,i-32,i)' --[-1] 32 -c[-1] 0,63 -s[-1] y -*[-2] 64 -*[-3] 4096 -*[-4] 262144 -+[-4--1]
@@ -2900,7 +2900,8 @@ compress_rle :
     -- $im -y x ({@{0,-1}+1}) -a x -r 100%,3
     -f[-1] '>if(y==0,i,if(y==1,if(i(x,0)==i(x+1,0),-1,x),if(i(x-1,1)==-1,i(x-1,2)+1,1)))'
     -z 0,{w-2} -s y,3 -discard[1] -1 -warp[0,2] [1],0,0 -rm[1]
-    -*[-1] -1 -rv -a x -y y -discard -1 -i[0] ($whds) -a y -nm $nm,1
+    -*[-1] -1 -rv -a x -y
+    -discard -1 -i[0] ($whds) -a y -nm $nm,1
   -endl -done -v +
 
 #@gmic cumul
@@ -2966,8 +2967,8 @@ eigen2tensor :
 #@gmic : Equalize histograms of selected images.
 #@gmic : If value range is specified, the equalization is done only for pixels in the specified
 #@gmic : value range.
-#@gmic : Default values: 'value_min=0%' and 'value_max=100%'.
-#@gmic : $ image.jpg --equalize 256
+#@gmic : Default values: 'nb_levels=256', 'value_min=0%' and 'value_max=100%'.
+#@gmic : $ image.jpg --equalize
 #@gmic : $ image.jpg --equalize 4,0,128
 
 #@gmic f : eq. to '-fill'. : (+)
@@ -3238,7 +3239,7 @@ uncompress_rle :
   -v - -repeat @# -l[$>]
 
     # Retrieve original data dimension and min value.
-    -y y whds=@{0,0-3} im=@{0,4} -rows 5,100%
+    -y whds=@{0,0-3} im=@{0,4} -rows 5,100%
 
     # Transform RLE data to list of pairs {nb_occurences,value}.
     --lt 0 (1;1;0) -dilate[-2] [-1] -rm[-1] -*[-1] -2 -+[-1] 1
@@ -3252,7 +3253,7 @@ uncompress_rle :
       -s[-1] x,2 -cumul[-2] siz=@{-2,-1}
       --shift[-2] 0,1 --[-3] 1 -rv[-3,-1] -z[-3,-1] 0,2 -a[-3,-1] x
       -i[3] (2,0,1;2,{2*h-2},{2*h-1}) -r[3] 3,{h},1,1,3 -round[3]
-      -r[4] 3 1,100%,1,1,1 -y y -a y
+      -r[4] 3 1,100%,1,1,1 -y -a y
       $siz -object3d[-1] [-2],0,0,0,1,2,0,0 -rm[-2]
     -endl -done
     -a x -r $whds,-1 -+ $im
@@ -3292,7 +3293,7 @@ vector2tensor :
 #@gmic apply_channels : "command",_channels={ all=0 | rgba=1 | rgb=2 | y=3 | cbcr=4 | cb=5 | cr=6 | l=7 | ab=8 | a=9 | b=10 | h=11 | s=12 | v=13 | k=14 | cg=15 | ch=16 | c=17 | H=18 | r=19 | g=20 | b=21 | alpha==22 },_normalize={ 0=cut | 1=normalize }
 #@gmic : Apply specified command on chosen normalized channels of each selected images.
 #@gmic : Default value: 'normalize=0'.
-#@gmic : $ image.jpg --apply_channels "-equalize 256 -blur 2",5
+#@gmic : $ image.jpg --apply_channels "-equalize -blur 2",5
 apply_channels : -skip ${3=0}
 
   # All components.
@@ -3681,7 +3682,7 @@ direction2rgb :
 
 #@gmic ditheredbw
 #@gmic : Create dithered B&W version of selected images.
-#@gmic : $ image.jpg --equalize 256 -ditheredbw[-1]
+#@gmic : $ image.jpg --equalize -ditheredbw[-1]
 ditheredbw :
   -e[^-1] "Create dithered B&W version of image$?."
   -v - -repeat @# -l[$>] -split_opacity
@@ -3710,7 +3711,7 @@ _fill_color :
 #@gmic gradient2rgb : _is_orientation={ 0 | 1 }
 #@gmic : Compute RGB representation of 2d gradient of selected images.
 #@gmic : Default value: 'is_orientation=0'.
-#@gmic : $ image.jpg --gradient2rgb 0 -equalize[-1] 256
+#@gmic : $ image.jpg --gradient2rgb 0 -equalize[-1]
 gradient2rgb : -check "isbool(${1=0})"
   -arg 1+!$1,"orientation ",""
   -e[^-1] "Compute RGB representation of 2d gradient "@{}"of image$?."
@@ -4338,7 +4339,7 @@ autocrop_components : -skip ${1=0%} -check "${2=0.1%}>=0 && isbool(${3=0}) && is
       --==[1] $n --*[0,-1] -rm[-2]
       -if {$4==0} coords=@{-autocrop_coords[-1]\ auto} -rm[-1] --z[0] $coords
       -elif {$4==1} -autocrop[-1]
-      -else coords=@{-autocrop_coords[-1]\ auto} -rm[-1] ($coords) -y[-1] y
+      -else coords=@{-autocrop_coords[-1]\ auto} -rm[-1] ($coords) -y[-1]
       -endif
     -done
     -rm[0,1]
@@ -4390,7 +4391,7 @@ autocrop_seq : -skip ${1=auto}
 #@gmic : $ 1,10,1,1,'y' --diagonal
 diagonal :
   -e[^-1] "Transform vector$? as diagonal matrix."
-  -v - -y y -repeat @# -r[$>] @{$>,h+1},100%,1,1,0 -r[$>] @{$>,h},100%,1,1,-1 -done -v +
+  -v - -y -repeat @# -r[$>] @{$>,h+1},100%,1,1,0 -r[$>] @{$>,h},100%,1,1,-1 -done -v +
 
 #@gmic elevate : _depth,_is_plain,_is_colored
 #@gmic : Elevate selected 2d images into 3d volumes.
@@ -4794,9 +4795,10 @@ split_tiles : -skip ${2=$1},${3=0}
 
 #@gmic y : eq. to '-unroll'. : (*)
 
-#@gmic unroll : axis={ x | y | z | c } : (*)
+#@gmic unroll : _axis={ x | y | z | c } : (*)
 #@gmic : Unroll selected images along specified axis.
 #@gmic : (eq. to '-y').
+#@gmic : Default value: 'axis=y'.
 #@gmic : $ (1,2,3;4,5,6;7,8,9) --unroll y
 
 #@gmic upscale_smart : width,_height,_depth,_smoothness>=0,_anisotropy=[0,1],sharpening>=0
@@ -5268,7 +5270,7 @@ diffusiontensors : -check "${1=0.7}>=0 && ${2=0.3}>=0 && $2<=1" -skip ${3=0.6},$
 #@gmic : $ image.jpg --edges 15%
 edges : -skip ${1=15%}
   -e[^-1] "Estimate image contours of image$?, with threshold $1."
-  -v - -gradient_norm -b 0.5 -ge $1 -distance 0 -equalize 256 -negative -c 30%,70% -n 0,1 -v +
+  -v - -gradient_norm -b 0.5 -ge $1 -distance 0 -equalize -negative -c 30%,70% -n 0,1 -v +
 
 #@gmic erode : size>=0 : size_x>=0,size_y>=0,_size_z>=0 : [mask],_boundary,_is_normalized={ 0 | 1 } : (+)
 #@gmic : Erode selected images by a rectangular or the specified structuring element.
@@ -5332,7 +5334,7 @@ gradient_orientation : -check "${1=3}==1 || $1==2 || $1==3"
 
 #@gmic gradient_norm
 #@gmic : Compute gradient norm of selected images.
-#@gmic : $ image.jpg --gradient_norm -equalize[-1] 256
+#@gmic : $ image.jpg --gradient_norm -equalize[-1]
 gradient_norm :
   -e[^-1] "Compute gradient norm of image$?."
   -v - -repeat @# -l[$>]
@@ -5522,7 +5524,7 @@ lic : -skip ${1=30},${2=1}
   -v - -repeat @# -l[$>] nm=@{0,n}
      -channels 0,1 -/ {max(abs(@{-1,m}),abs(@{-1,M}))} -vector2tensor
      100%,100%,100%,$2 -rand[-1] 0,255 -smooth[-1] [-2],$1 -rm[-2]
-     -equalize 256
+     -equalize
   -nm $nm,1 -endl -done -v +
 
 #@gmic map_tones : _threshold>=0,_gamma>=0,_smoothness>=0,nb_iter>=0
@@ -5997,10 +5999,10 @@ histogram_pointwise : -skip ${2=0%},${3=100%}
     -- $value0 -* {$nb_levels/max(1,abs($value1-$value0))} -c 0,{$nb_levels-1} -round
     w={w} h={h} d={d} -r {w*h*d},{s},1,1,-1
     -i[-2] (0,{w-1}) -r[-2] [-1],[-1],1,1,3 -round[-2]
-    -r[-2,-1] 300%,100%,1,1,4 -shift[-1] 1 -+[-2,-1] -y[-1] y
+    -r[-2,-1] 300%,100%,1,1,4 -shift[-1] 1 -+[-2,-1] -y[-1]
     -i[-2] ({'CImg3d'},{h/3},{h/3})
     (1,0;1,{h/3-1}) -r[-1] 2,@{-2,h/3},1,1,3 -round[-1]
-    3,100%,1,1,1 1,100%,1,1,-1 -y[-5,-3,-2] y -a[-5--1] y
+    3,100%,1,1,1 1,100%,1,1,-1 -y[-5,-3,-2] -a[-5--1] y
     {$w*$h*$d},$nb_levels -object3d[-1] [-2],0,0,0,1,0,0,0 -rm[-2]
     -r $w,$h,$d,$nb_levels,-1
   -nm $nm,1 -endl -done -v +
@@ -6168,7 +6170,7 @@ pointcloud : -check "${1=0}<3" -skip ${2=0},${3=0},${4=0}
       -i[-3] ({'CImg3d'}) -transpose[-3--1] -i[-3] ($nbp;$nbp) # Header
       -i[-2] 1,$nbp,1,1,1 -i[-2] 1,$nbp,1,1,y -a[-3,-2] x      # Vertices and primitives.
       1,$nbp,1,1,{if($1<0,-$1,if($1==1,-1,1))}                 # Opacities.
-      -y[-4--2] y -a y                                         # Merge object attributes.
+      -y[-4--2] -a y                                           # Merge object attributes.
     -endl -done
     -+3d
 
@@ -6332,14 +6334,14 @@ cie1931 :
   xM=731 yM=829
   2,{h-1},1,1,3,0 1,{h},1,1,'y' --+[-1] 1 -%[-1] {h} -+[-2,-1] 1 -a[-3--1] x  # Primitives.
   3,{h},1,1,160 1,{h},1,1,1  # Colors + opacities.
-  -y[-4--2] y -a[-5--1] y -mv[-1] 0
+  -y[-4--2] -a[-5--1] y -mv[-1] 0
 
   # Generate RGB triangle of displayable colors.
   xR=636 yR=504 xG=297 yG=234 xB=147 yB=774
   512,512,1,3 -triangle_shade[-1] 0,0,{w-1},0,0,{h-1},""255,0,0,""0,255,0,""0,0,255 -rgb2srgb[-1]
   --compose_channels[-1] max -+[-1] 1e-8 -/[-2,-1] -*[-1] 255
   -i[-2] (67.5;73.5;109.5;103.5;51.5;100.5;3;1;$xR;$yR;-0.01;$xG;$yG;-0.01;$xB;$yB;-0.01;9;0;1;2;0;0;511;0;0;511;-128;512;512;3)
-  -y[-1] y (1) -a[-3--1] y -mv[-1] 1
+  -y[-1] (1) -a[-3--1] y -mv[-1] 1
 
   # Draw chroma diagram.
   -repeat {@#-2}
@@ -6456,7 +6458,7 @@ grid : -check "$1>=0 && $2>=0" -skip ${3=0},${4=0},${5=1},${6=0}
       -if {$n>1} 1,{4*($n-1)},1,1,-128,0,0,0 -endif
       (-128;1;$h;1) 1,$h,1,1 -line[-1] 0,0,0,100%,1,$pattern,1 # Opacities.
       -if {$n>1} 1,{4*($n-1)},1,1,-128,0,0,0 -endif
-      -y[^0] y -a[^0] y -object3d[0] [1],0,0,0,$5,0,0,0 -rm[1] # Merge and draw.
+      -y[^0] -a[^0] y -object3d[0] [1],0,0,0,$5,0,0,0 -rm[1] # Merge and draw.
     -endif
 
     # Draw grid along y-axis.
@@ -6471,7 +6473,7 @@ grid : -check "$1>=0 && $2>=0" -skip ${3=0},${4=0},${5=1},${6=0}
       -if {$n>1} 1,{4*($n-1)},1,1,-128,0,0,0 -endif
       (-128;$w;1;1) $w,1,1,1 -line[-1] 0,0,100%,0,1,$pattern,1 # Opacities
       -if {$n>1} 1,{4*($n-1)},1,1,-128,0,0,0 -endif
-      -y[^0] y -a[^0] y -object3d[-2] [-1],0,0,0,$5,0,0,0 -rm[-1]  # Merge and draw.
+      -y[^0] -a[^0] y -object3d[-2] [-1],0,0,0,$5,0,0,0 -rm[-1]  # Merge and draw.
     -endif
 
   -endl -done -v +
@@ -6581,7 +6583,7 @@ maze_mask : -check "isint(${1=24}) && $1>0"
     -rm[0] -+ -_render_maze[-1] $1 -nm[-1] [maze]
   -endl -done -v +
 
-#@gmic object3d : [object3d],_x[%],_y[%],_z,_opacity,_rendering_mode,_is_double3d={ 0 | 1 },_is_zbuffer={ 0 | 1 },_focale,_light_x,_light_y,_light_z,_specular_lightness,_specular_shininess : (+)
+#@gmic object3d : [object3d],_x[%],_y[%],_z,_opacity,_rendering_mode,_is_double_sided={ 0 | 1 },_is_zbuffer={ 0 | 1 },_focale,_light_x,_light_y,_light_z,_specular_lightness,_specular_shininess : (+)
 #@gmic : Draw specified 3d object on selected images.
 #@gmic : 'rendering_mode' can be { 0=dots | 1=wireframe | 2=flat | 3=flat-shaded | 4=gouraud-shaded | 5=phong-shaded }.
 #@gmic : Default values: 'x=y=z=0', 'opacity=1' and 'is_zbuffer=1'. All other arguments take their default values from the 3d environment variables.
@@ -6649,7 +6651,7 @@ pack_sprites : -check "isint(${1=5}) && $1>=0 && ${2=25}>=0 && $2<=100 && isint(
       -if {$N>1} -l[-1]
         -s3d -/[1] $N -round[1] -max[1] 1 n=@{1,0}
         -r[2] 3,{@{2,h}/3},1,1,-1
-        -i[2] 1,@{2,h} -rand[2] 0,1 -a[2,3] x -sort[2] +,y -z[2] 1,3 -r[2] 3,$n,1,1 -y[2] y
+        -i[2] 1,@{2,h} -rand[2] 0,1 -a[2,3] x -sort[2] +,y -z[2] 1,3 -r[2] 3,$n,1,1 -y[2]
         -r[3] 1,{2*$n},1,1,0 -r[4] 1,{3*$n},1,1,0 -r[5] 1,$n,1,1,0 -a y
       -endl -endif
 
@@ -6681,7 +6683,7 @@ pack_sprites : -check "isint(${1=5}) && $1>=0 && ${2=25}>=0 && $2<=100 && isint(
           -if {$n>3} --channels[-8] 100% -i[-2] (-128;{w};{h};{s}) -endif
           -if {$n>4} [-9] -endif
         -endif
-        -y[{$N+3}--1] y -a[{$N+3}--1] y
+        -y[{$N+3}--1] -a[{$N+3}--1] y
       -endif
       -rm[-3] # Delete reference sprite.
 
@@ -7099,7 +7101,7 @@ apply_camera3d : -skip ${4=0},${5=0},${6=0},${7=0},${8=-1},${9=0}
   -v +
 
 _cross3d :
-  ({$2*$6-$3*$5}^{$3*$4-$1*$6}^{$1*$5-$2*$4}) -orientation[-1] -y[-1] y
+  ({$2*$6-$3*$5}^{$3*$4-$1*$6}^{$1*$5-$2*$4}) -orientation[-1] -y[-1]
 
 #@gmic apply_pose3d : p1,..,p12
 #@gmic : Apply 3d pose matrix to selected 3d objects.
@@ -7135,7 +7137,7 @@ arrow3d : -check "${7=5%}>=0 && ${8=25%}>=0 && ${9=15%}>=0"
 
   # Rotate and translate the arrow at specified coordinates.
   -s3d[-2] -r[-5] 3,@{-5,h/3},1,1,-1 -**[-5,-1]
-  -y[-4] y -a[-6--1] y -+3d[-1] ${1-3}
+  -y[-4] -a[-6--1] y -+3d[-1] ${1-3}
   -v +
 
 #@gmic axes3d : _size_x,_size_y,_size_z,_font_size>0,_label_x,_label_y,_label_z
@@ -7168,7 +7170,7 @@ axes3d : -check ${4=24}>0 -skip ${1=1},${2=$1},${3=$2},"${5=X},${6=Y},${7=Z}"
 _axes3d :
   0 -t[-1] "$1",2,0,$2,1,1 --dilate[-1] 3 -*[-2] 255 -r[-2] 100%,100%,1,3
   -i[-3] (67.5;73.5;109.5;103.5;51.5;100.5;1;1;0;0;0;1;0;-128;{w};{h};3)
-  -i[-2] (-128;{w};{h};1) -y[-3,-1] y -a[-4--1] y
+  -i[-2] (-128;{w};{h};1) -y[-3,-1] -a[-4--1] y
 
 #@gmic b3d : eq. to '-background3d'. : (+)
 
@@ -7212,7 +7214,7 @@ _center3d :
     -if {$n>0}
       -sh 8,{7+3*$n},0,0 -r[-1] 3,{h/3},1,1,-1 -s[-1] x
       --[-3] @{-3,(iM+im)/2} --[-2] @{-2,(iM+im)/2} --[-1] {(iM+im)/2}
-      -a[-3--1] x -y[-1] y -j[-2] [-1],0,8 -rm[-1]
+      -a[-3--1] x -y[-1] -j[-2] [-1],0,8 -rm[-1]
     -endif
   -endl -done -v +
 
@@ -7243,7 +7245,7 @@ circles3d : -check ${1=1}>=0
     -if {$nbv&&$nbp}
       --3d {$1/2},0,0 --+3d $1,0,0 -+3d nbp2=@{-1,7}
       -s3d -=[1] $nbp,0,1
-      -r[3] 2,$nbp2,1,1,-1 -columns[3] 1,1 -s[3] y,2 -i[3] 1,$nbp,1,1,5 -a[3-5] x -columns[3] 0,5 -y[3] y
+      -r[3] 2,$nbp2,1,1,-1 -columns[3] 1,1 -s[3] y,2 -i[3] 1,$nbp,1,1,5 -a[3-5] x -columns[3] 0,5 -y[3]
       -rows[4] 0,{3*$nbp-1} -rows[5] 0,{$nbp-1} -a y
     -endif
   -endl -done -v +
@@ -7283,7 +7285,7 @@ colorcube3d :
   (0,255;0,255^0,0;255,255^255,255;255,255)
   (0,255;0,255^0,0;0,0^0,0;255,255)
   (0,255;0,255^255,255;255,255^0,0;255,255)
-  -r[-6--1] 64,64,1,3,3 -y[-6--1] y -i[-7--2] (-128;64;64;3)
+  -r[-6--1] 64,64,1,3,3 -y[-6--1] -i[-7--2] (-128;64;64;3)
   (1;1;1;1;1;1)
   -a[-16--1] y -nm[-1] [3d\ colorcube]
   -v +
@@ -7312,7 +7314,7 @@ cone3d : -check ${3=24}>0 -skip ${1=1},${2=1}
   # Colors / opacities.
   3,{h},1,1,200
   1,{h},1,1,1
-  -y[-4--2] y -a[-6--1] y -nm[-1] [3d\ cone]
+  -y[-4--2] -a[-6--1] y -nm[-1] [3d\ cone]
   -v +
 
 #@gmic cubes3d : _size>=0
@@ -7337,7 +7339,7 @@ cubes3d : -check ${1=1}>=0
       -+ '"0,0,2,3,1, 0,4,5,7,6, 0,0,1,5,4, 0,2,6,7,3, 0,0,4,6,2, 0,1,3,7,5"'
       -endl
       -l[4] -r 3,{h/3},1,1,-1 -r 18,100%,1,1,0,2 -endl -r[5] 6,100% # Colors & opacities.
-      -y y -a y
+      -y -a y
     -endif
   -endl -done -v +
 
@@ -7381,7 +7383,7 @@ cylinder3d : -check ${3=24}>0 -skip ${1=1},${2=1}
   # Colors / opacities.
   3,{3*$3},1,1,200
   1,{h},1,1,1
-  -y[-6--2] y -a[-8--1] y -nm[-1] [3d\ cylinder]
+  -y[-6--2] -a[-8--1] y -nm[-1] [3d\ cylinder]
   -v +
 
 #@gmic distribution3d
@@ -7389,15 +7391,15 @@ cylinder3d : -check ${3=24}>0 -skip ${1=1},${2=1}
 #@gmic : $ image.jpg -distribution3d -colorcube3d -primitives3d[-1] 1 -add3d
 distribution3d :
   -e[^-1] "Get 3d color distribution of image$?."
-  -v - -to_rgb -permute "cxyz" -y y
+  -v - -to_rgb -permute "cxyz" -y
   -repeat @# -l[$>]
     nbp={h/3}
-    -i[-2] (67.5;73.5;109.5;103.5;51.5;100.5;\                 # Magick number for CImg3d.
-            $nbp;$nbp)                                         # Number of vertices and primitives.
-    (1,0;1,{$nbp-1}) -r[-1] 2,$nbp,1,1,3 -round[-1] 1 -y[-1] y # Primitives.
-    [-2]                                                       # Colors.
-    1,$nbp,1,1,1                                               # Opacities.
-    -a y -nm[-1] [3d\ distribution]                            # Build 3d object.
+    -i[-2] (67.5;73.5;109.5;103.5;51.5;100.5;\               # Magick number for CImg3d.
+            $nbp;$nbp)                                       # Number of vertices and primitives.
+    (1,0;1,{$nbp-1}) -r[-1] 2,$nbp,1,1,3 -round[-1] 1 -y[-1] # Primitives.
+    [-2]                                                     # Colors.
+    1,$nbp,1,1,1                                             # Opacities.
+    -a y -nm[-1] [3d\ distribution]                          # Build 3d object.
   -endl -done -v +
 
 #@gmic /3d : eq. to '-div3d'. : (+)
@@ -7411,9 +7413,10 @@ distribution3d :
 
 #@gmic db3d : eq. to '-double3d'. : (+)
 
-#@gmic double3d : is_doubled={ 0 | 1 } : (+)
+#@gmic double3d : _is_double_sided={ 0 | 1 } : (+)
 #@gmic : Enable/disable double-sided mode for 3d rendering.
 #@gmic : (eq. to '-db3d').
+#@gmic : Default value: 'is_double_sided=1'.
 #@gmic : $ -mode3d 1 -repeat 2 -torus3d 100,30 -rotate3d[-1] 1,1,0,60 -double3d $> -snapshot3d[-1] 400 -done
 
 #@gmic elevation3d : z-factor : [elevation_map] : 'formula' : (no args) : (+)
@@ -7461,8 +7464,8 @@ gaussians3d : -check "${1=32}>0" -skip ${2=0.3}
   -e[^-1] "Convert 3d object$? into sets of gaussian-shaped 3d sprites, with size $1 and opacity $2."
   -v - -p3d 2 -p3d 0 -repeat @# -l[$>] nm=@{0,n} -s3d
     nbv={h} -rm[-1] (-128;$1;$1;1)
-    $1,$1 -gaussian[-1] 35%,35%,0 -c[-1] 30%,100% -n[-1] 0,$2 -y[-1] y -a[-2,-1] y  # First opacity is generated.
-    -if {$nbv>1} 4,{$nbv-1},1,1,-128,0,0,0 -y[-2,-1] y -a[-2,-1] y -endif           # Other ones are shared copies of the first one.
+    $1,$1 -gaussian[-1] 35%,35%,0 -c[-1] 30%,100% -n[-1] 0,$2 -y[-1] -a[-2,-1] y  # First opacity is generated.
+    -if {$nbv>1} 4,{$nbv-1},1,1,-128,0,0,0 -y[-2,-1] -a[-2,-1] y -endif           # Other ones are shared copies of the first one.
     -a y
   -nm $nm,1 -endl -done -v +
 
@@ -7566,7 +7569,7 @@ imagecube3d :
             12;4;0;1;5;0;0;0;$h1;$w1;$h1;$w1;0;\
             12;3;7;6;2;0;0;0;$h1;$w1;$h1;$w1;0;\
             -128;{w};{h};{s})       # Texture map for the first face.
-    -y[-1] y
+    -y[-1]
     (-128;0;0;0;-128;0;0;0;-128;0;0;0;-128;0;0;0;-128;0;0;0;1;1;1;1;1;1)  # Other faces and opacities.
     -a y
   -nm $nm,1 -endl -done -v +
@@ -7586,7 +7589,7 @@ imageplane3d :
             {0};{h};0;\
             12;0;3;2;1;0;0;0;$h1;$w1;$h1;$w1;0;\ # Primitives description.
             -128;{w};{h};{s})                    # Texture map.
-    -y[-1] y
+    -y[-1]
     (1)  # Opacity.
     -a y
   -nm $nm,1 -endl -done -v +
@@ -7611,7 +7614,7 @@ imagepyramid3d :
             9;2;4;1;0;$h1;$w2;0;$w1;$h1;\
             9;3;4;2;0;$h1;$w2;0;$w1;$h1;\
             -128;{w};{h};{s})                   # Texture map for the first face.
-    -y[-1] y
+    -y[-1]
     (-128;0;0;0;-128;0;0;0;-128;0;0;0;-128;0;0;0;1;1;1;1;1)  # Other faces and opacities.
     -a y
   -nm $nm,1 -endl -done -v +
@@ -7641,7 +7644,7 @@ imagerubik3d : -check "${1=3}>=1 && ${2=5}>=0 && $2<=100 && ${3=5}>=0 && $3<=100
      4,1,5,6,2)
     3,5,1,1,200
     1,5,1,1,1
-    -y[-6--1] y -a[-6--1] y
+    -y[-6--1] -a[-6--1] y
     -repeat {$1-1} --+3d[-1] 100 -done -+3d[-$1--1]   # Duplicate along X
     -repeat {$1-1} --+3d[-1] 0,100 -done -+3d[-$1--1] # Duplicate along Y
     -t3d[-1] [-2] -rm[-2]
@@ -7670,7 +7673,7 @@ imagesphere3d : -check "${1=32}>=3 && ${2=16}>=3"
     (0;0;1) (0;0;-1) (0,{2*pi};0,{2*pi}^0,0;{pi},{pi})
     -r[-1] {$1+1},$2,1,2,3 -z[-1] 0,1,{w-2},{h-2} -s[-1] c
     --sin[-1] --sin[-3] -*[-2,-1] --cos[-2] -sin[-3] -cos[-4] -*[-4,-3]
-    -a[-3--1] c -permute[-1] cxyz -y[-1] y -a[-3--1] y
+    -a[-3--1] c -permute[-1] cxyz -y[-1] -a[-3--1] y
 
     # Define sphere primitives (triangles and quadrangles).
     -repeat $1
@@ -7685,7 +7688,7 @@ imagesphere3d : -check "${1=32}>=3 && ${2=16}>=3"
     -a[-$nbp--1] y
 
     # Define sphere textures, opacities and generate object.
-    -mv[-4] @# -i[-2] (-128;{w};{h};3) -y[-1] y 1,{4*($nbp-1)},1,1,-128,0,0,0 1,$nbp,1,1,1 -a y
+    -mv[-4] @# -i[-2] (-128;{w};{h};3) -y[-1] 1,{4*($nbp-1)},1,1,-128,0,0,0 1,$nbp,1,1,1 -a y
   -nm $nm,1 -endl -done -v +
 
 #@gmic isoline3d : isovalue[%] : 'formula',value,_x0,_y0,_x1,_y1,_size_x>0[%],_size_y>0[%] : (+)
@@ -7712,11 +7715,11 @@ label_points3d : -check ${1=13}>0 -skip ${2=0.8}
     (1,0;1,{$nbp-1}) -r[-1] 2,$nbp,1,1,3 -r[-1] 1,{2*h},1,1,-1  # Create new primitive data
     -repeat $nbp                                                # Create texture labels as primitive colors.
       0 -t[-1] $>,0,0,$1,1,255,255,255 -autocrop[-1] 0
-      -i[-2] (-128;{w};{h};3) -y[-1] y
+      -i[-2] (-128;{w};{h};3) -y[-1]
     -done
     -repeat $nbp                                                # Create texture masks as primitive opacities.
       0 -t[-1] $>,0,0,$1,1,$2 -autocrop[-1] 0
-      -i[-2] (-128;{w};{h};1) -y[-1] y
+      -i[-2] (-128;{w};{h};1) -y[-1]
     -done
     -a y  # Merge final object data.
     -endl
@@ -7871,7 +7874,7 @@ pca_patch3d : -check "isint(${1=7}) && $1>0 && isint(${2=1000}) && $2>0 && isint
     s={s}
 
     # Pick set of M random located patchs.
-    1,$2 -rand[-1] 0,@{0,w-1} --rand[-1] 0,@{0,h-1} --f[-1] 0 -a[-3--1] x -round[-1] 1 --patches[0] $1,$1,1,@-1 -y[2--1] y -a[2--1] x
+    1,$2 -rand[-1] 0,@{0,w-1} --rand[-1] 0,@{0,h-1} --f[-1] 0 -a[-3--1] x -round[-1] 1 --patches[0] $1,$1,1,@-1 -y[2--1] -a[2--1] x
     -z[1] 0,1 -transpose[1] -*[1] $6 -a[1,2] y -s[^0] x
 
     # Normalize patch coordinates by using average and standard deviation.
@@ -7891,7 +7894,7 @@ pca_patch3d : -check "isint(${1=7}) && $1>0 && isint(${2=1000}) && $2>0 && isint
       y={round(?(@{0,h}))}
       ({$6*$x};{$6*$y})
       --z[0] {$x-$P1},{$y-$P1},{$x+$P2},{$y+$P2},1
-      -y[-1] y -a[-2,-1] y
+      -y[-1] -a[-2,-1] y
     -done
 
     # Generate 3d representation of the projected patch set.
@@ -7900,7 +7903,7 @@ pca_patch3d : -check "isint(${1=7}) && $1>0 && isint(${2=1000}) && $2>0 && isint
     -if {$s!=3}
       -r[2--1] $1,$1,1,{min(3,$s)},-1
       -r[2--1] $1,$1,1,3,{if($s!=1,0,1)}
-      -y[2--1] y
+      -y[2--1]
     -endif
     -i[2--2] (-128;$1;$1;3) -a[2--1] y
     -rm[0]                                                 # Remove input image (now useless).
@@ -7908,7 +7911,7 @@ pca_patch3d : -check "isint(${1=7}) && $1>0 && isint(${2=1000}) && $2>0 && isint
     -i[1] ($3;$3)                                          # Geometry.
     -i[3] 2,$3,1,1,if(x==0,1,y)                            # Primitives.
     1,$3,1,1,1                                             # Opacities.
-    -y y -a[-6--1] y                                       # Merge as a 3d object.
+    -y -a[-6--1] y                                         # Merge as a 3d object.
 
   -nm $nm,1 -endl -done -v +
 
@@ -7948,7 +7951,7 @@ pointcloud3d :
         -else -r[-1] 3,{h},1,1,0
         -endif
         1,{h},1,1,1                                          # Opacities.
-        -y[-6--1] y -a[-6--1] y
+        -y[-6--1] -a[-6--1] y
       -else -rm -empty3d
       -endif
       -endl -done
@@ -8145,7 +8148,7 @@ snapshot3d : -check "${1=512}>0 && ${2=1}>=0" -skip ${3=""}
 spherical3d : -check "${1=64}>=3 && ${2=$1}>=3" -skip "${3=abs(1+0.5*cos(3*phi)*sin(4*theta))}"
   -e[^-1] "Input 3d spherical object, with subdivisions ($1,$2) and height function '$3'."
   -v -
-  ({'CImg3d'}) -y[-1] y # Magic number.
+  ({'CImg3d'}) -y[-1] # Magic number.
   n1={round($1)} n2={round($2)}
 
   # Define 3d vertices.
@@ -8157,7 +8160,7 @@ spherical3d : -check "${1=64}>=3 && ${2=$1}>=3" -skip "${3=abs(1+0.5*cos(3*phi)*
                    ($3)*if(c==0,ct*cp,if(c==1,ct*sp,sin(theta)))"
   -r[-1] {w*h},3,1,1,-1 -permute[-1] yxzc
   -i[-2] (0,0,{phi=0;theta=-pi/2;-$3};0,0,{phi=0;theta=pi/2;$3}) -a[-2,-1] y  # Add the two poles.
-  nbv={h} -y[-1] y
+  nbv={h} -y[-1]
 
   # Define 3d primitives.
   $n1,{$n2-2},1,4,"nx=(x+1)%w;ny=(y+1);2+if(c==0,x+y*"$n1",if(c==1,nx+y*"$n1",if(c==2,nx+ny*"$n1",x+ny*"$n1")))"
@@ -8165,7 +8168,7 @@ spherical3d : -check "${1=64}>=3 && ${2=$1}>=3" -skip "${3=abs(1+0.5*cos(3*phi)*
   2,$n1,1,1,3,0 1,$n1,1,1,'y' --+[-1] 1 -%[-1] {h} 2,$n1,1,1,3,1 [-3,-2]  # Connect the two poles.
   -+[-5,-4] 2 -rv[-5,-4] -+[-2,-1] {$nbv-$n1} -a[-3--1] x -a[-4--2] x
   nbp={h+@{-2,h}+@{-3,h}}
-  -y[-3--1] y -a[-3--1] y
+  -y[-3--1] -a[-3--1] y
 
   # Define other object information (properties, colors and opacities).
   -i[-3] ($nbv;$nbp)
@@ -8194,7 +8197,7 @@ spline3d : -check ${13=128}>=2
   -a[-3--1] x
   1,{$13-1},1,1,2 (0,1;{$13-2},{$13-1}) -r[-1] 2,[-2],1,1,3 -round[-1] -a[-2,-1] x # Primitives.
   1,{3*($13-1)},1,1,200 1,{$13-1},1,1,1 # Colors / opacities.
-  -y[-3,-4,-6] y -a[-6--1] y
+  -y[-3,-4,-6] -a[-6--1] y
   -v +
 
 #@gmic split3d : (+)
@@ -8212,9 +8215,9 @@ sprite3d :
   -e[^-1] "Convert image$? as 3d sprites."
   -v - -repeat @# -l[$>] nm=@{0,n}
     -split_opacity
-    -i[0] (67.5;73.5;109.5;103.5;51.5;100.5;1;1;0;0;0;1;0;-128;{w};{h};@{0,s}) -y[1] y
+    -i[0] (67.5;73.5;109.5;103.5;51.5;100.5;1;1;0;0;0;1;0;-128;{w};{h};@{0,s}) -y[1]
     -if {@#==2} (1) -a y
-    -else -/[-1] 255 -i[-2] (-128;{w};{h};{s}) -y[-1] y
+    -else -/[-1] 255 -i[-2] (-128;{w};{h};{s}) -y[-1]
     -endif
     -a y
   -nm $nm,1 -endl -done -v +
@@ -8237,11 +8240,11 @@ sprites3d :
       -i[-2] (-128;{w};{h};1)
       -if {$N>1} 1,{4*($N-1)},1,1,-128,0,0,0 -endif
     -else
-      -i[-2] (-128;{w};{h};{s}) -y[-3,-1] y
+      -i[-2] (-128;{w};{h};{s}) -y[-3,-1]
       -if {$N>1} 1,{4*($N-1)},1,1,-128,0,0,0 -endif
       1,$N,1,1,1
     -endif
-    -y y -a y
+    -y -a y
   -endl -done -rm[-1] -v +
 
 #@gmic star3d : nb_branches>0,0<=thickness<=1
@@ -8255,7 +8258,7 @@ star3d : -check "${1=5}>0 && ${2=0.38}>=0 && $2<=1"
   ({-pi/2};{3*pi/2}) -r[-1] 1,{$N+1},1,1,3 -rows[-1] 0,{h-2} --sin[-1] -cos[-2] -a[-2,-1] x
   (1,1;$2,$2) -*[-2,-1] -z[-1] 0,2 -r[-1] 3,{h+1},1,1,0
   (3,$N,1,0;3,$N,$N,{$N-1}) -r[-1] 4,$N,1,1,3 -=[-1] 0,2,100%
-  3,$N,1,1,200 1,$N,1,1,1 -y[-6,-4--2] y -a[-6--1] y -nm[-1] [3d\ star]
+  3,$N,1,1,200 1,$N,1,1,1 -y[-6,-4--2] -a[-6--1] y -nm[-1] [3d\ star]
   -v +
 
 #@gmic streamline3d : x[%],y[%],z[%],_L>=0,_dl>0,_interpolation,_is_backward={ 0 | 1 },_is_oriented={ 0 | 1 } : 'formula',x,y,z,_L>=0,_dl>0,_interpolation,_is_backward={ 0 | 1 },_is_oriented={ 0 | 1 } : (+)
@@ -8355,14 +8358,14 @@ torus3d : -check "${3=24}>2 && ${4=12}>2" -skip ${1=1},${2=0.3}
   -r[-1] {$4+1},1,1,1,3 -z[-1] 0,{$4-1}
   --sin[-2,-1] -cos[-4,-3] -r[-4--1] $4,$3
   -*[-3] $2 -+[-3] $1 -*[-1] $2 -*[-4] [-3] -*[-3,-2]
-  -y[-3--1] y -a[-3--1] x
+  -y[-3--1] -a[-3--1] x
 
   # Primitives.
   1,$3,1,1,'y' -*[-1] $4 --shift[-1] 0,-1 $4,1,1,1,'x' --shift[-1] -1 -r[-4--1] $4,$3
-  --+[-4,-1] -+[-2] [-4] -+[-5] [-3] -+[-4,-3] -y[-4--1] y -i[-5] 1,{h},1,1,4 -a[-5--1] x
+  --+[-4,-1] -+[-2] [-4] -+[-5] [-3] -+[-4,-3] -y[-4--1] -i[-5] 1,{h},1,1,4 -a[-5--1] x
 
   # Colors / opacities.
-  3,{h},1,1,200 1,{h},1,1,1 -y[-4--2] y -a[-5--1] y
+  3,{h},1,1,200 1,{h},1,1,1 -y[-4--2] -a[-5--1] y
   -nm[-1] [3d\ torus]
   -v +
 
@@ -8410,15 +8413,14 @@ weird3d : -skip ${1=32}
 #@gmic : Apply specified command on each of the selected images, by parallelizing it for all image of the list.
 #@gmic : $ image.jpg --mirror x --mirror y -apply_parallel "-blur 3"
 apply_parallel :
-  -v - -if {@.>1570} M=@* -else M=8 -endif -v +
-  -e[^-1] "Execute command '$*' on all image$? in parallel, using "$M" threads."
+  -e[^-1] "Execute command '$*' on all image$? in parallel, using "@*" threads."
   -v - -m "_apply_parallel : $*" N=@#
   -l[]
-    -repeat $M ({'-_apply_parallel[$>]'}) -done -if {@#>1} -i[1--2] ({','}) -endif -a x arg0=@{-1,t} -rm
-    -if {$N%$M} -repeat {$N%$M} ({'-_apply_parallel[$>]'}) -done -if {@#>1} -i[1--2] ({','}) -endif -a x arg1=@{-1,t} -rm -endif
+    -repeat @* ({'-_apply_parallel[$>]'}) -done -if {@#>1} -i[1--2] ({','}) -endif -a x arg0=@{-1,t} -rm
+    -if {$N%@*} -repeat {$N%@*} ({'-_apply_parallel[$>]'}) -done -if {@#>1} -i[1--2] ({','}) -endif -a x arg1=@{-1,t} -rm -endif
   -endl
-  -repeat {round(@#/$M,1,1)} -l[{$M*$>}-{min($M*$>+$M-1,@#-1)}]
-    -parallel ${arg{@#!=$M}}
+  -repeat {round(@#/@*,1,1)} -l[{@**$>}-{min(@**$>+@*-1,@#-1)}]
+    -parallel ${arg{@#!=@*}}
   -endl -done
   -uncommand _apply_parallel -v +
 
@@ -8426,8 +8428,7 @@ apply_parallel :
 #@gmic : Apply specified command on each of the selected images, by parallelizing it for all channel of the images independently.
 #@gmic : $ image.jpg -apply_parallel_channels "-blur 3"
 apply_parallel_channels :
-  -v - -if {@.>1570} M=@* -else M=8 -endif -v +
-  -e[^-1] "Execute command '$*' on all channels of image$? in parallel, using "$M" threads."
+  -e[^-1] "Execute command '$*' on all channels of image$? in parallel, using "@*" threads."
   -v - N=@# -repeat $N s$>=@{$>,s} -done -s c
   -apply_parallel "$1"
   -repeat $N -a[$>-{$>+${s$>}-1}] c -done -v +
@@ -8438,7 +8439,7 @@ apply_parallel_channels :
 #@gmic : Default values: 'overlap=0','nb_threads=0'.
 #@gmic : $ image.jpg --apply_parallel_overlap "-smooth 500,0,1",16
 apply_parallel_overlap : -check "${2=0}>=0 && isint(${3=0}) && $3>=0"
-  -v - -if {@.>1570} N={if($3,max(1,round($3)),@*)} -else N={if($3,max(1,round($3)),4)} -endif N={2^int(log2(min(16,$N)))} -v +
+  -v - N={if($3,max(1,round($3)),@*)} N={2^int(log2(min(16,$N)))} -v +
   -e[^-1] "Apply parallelized command '$1' on image$?, with overlap $2 and "$N" threads."
   -v -
   -m "_check1 : -if {@#!=1} -error[0--9] \"Specified command '$1' changes the size of the image stack.\" -endif"
@@ -8720,7 +8721,7 @@ frame_cube : -check "${1=1}>=0" -skip ${2=0},${3=0},${4=0},${5=0},${6=0},${7=0}
       cy=$3*$h/2*($f+$m*$1)/$f
       -s3d -r[2] 3,{@{2,h}/3},1,1,-1
       -f[2] "if(i(2,y)<0.5,i,i+if(x==0,"$cx",if(x==1,"$cy",($1-1)*"$m")))"
-      -y[2] y -a y
+      -y[2] -a y
       -*3d 2 {2*$w},{2*$h},1,$s -f3d {2*$f}
       -object3d[-1] [-2],50%,50%,0,1,2,0,0 -rm[-2]
       -r $w,$h,1,100%,2
@@ -8898,7 +8899,7 @@ linearize_tiles : -check "$1>0 && ${2=$1}>0"
     s={s} -split_tiles $1,$2 -s c # Split as tiles for all channels.
     -repeat @# -l[$>]
       wh={w},{h}
-      --f x --f[-1] y --f[-1] 1 -y y -a[^0] x -solve[-2] [-1] -rm[-1]
+      --f x --f[-1] y --f[-1] 1 -y -a[^0] x -solve[-2] [-1] -rm[-1]
       $wh,1,1,@{-1,0}"*x + "@{-1,1}"*y + "@{-1,2} -rm[-2]
     -endl -done
     -repeat {int(@#/$s)} -a[-$s--1] c -mv[-1] 0 -done -append_tiles $1,$2
@@ -8914,7 +8915,7 @@ quadratize_tiles : -check "$1>0 && ${2=$1}>0"
     s={s} -split_tiles $1,$2 -s c # Split as tiles for all channels.
     -repeat @# -l[$>]
       wh={w},{h}
-      --f x^2 --f[-1] y^2 --f[-1] x*y --f[-1] x --f[-1] y --f[-1] 1 -y y -a[^0] x -solve[-2] [-1] -rm[-1]
+      --f x^2 --f[-1] y^2 --f[-1] x*y --f[-1] x --f[-1] y --f[-1] 1 -y -a[^0] x -solve[-2] [-1] -rm[-1]
       $wh,1,1,@{-1,0}"*x^2 + "@{-1,1}"*y^2 + "@{-1,2}"*x*y +"@{-1,3}"*x + "@{-1,4}"*y + "@{-1,5} -rm[-2]
     -endl -done
     -repeat {int(@#/$s)} -a[-$s--1] c -mv[-1] 0 -done -append_tiles $1,$2
@@ -9109,7 +9110,7 @@ cubism : -check "${1=50}>=0 && ${2=10}>=0 && $2<=50 && ${5=0}>=0" -skip ${3=75},
     1,$N,1,1,1
 
     # Apply effect on current image.
-    -y[1--1] y -a[1--1] y -rv3d[-1]
+    -y[1--1] -a[1--1] y -rv3d[-1]
     -if {$4>=1} -object3d[0] [1],0,0,0,1,2,0,0 -rm[1]
     -else --object3d[0] [1],0,0,0,1,2,0,0 -rm[1] -blend alpha,$4
     -endif
@@ -9140,7 +9141,7 @@ draw_whirl : -skip ${1=100}
   -e[^-1] "Apply whirl drawing effect on image$? with amplitude $1."
   -v - -repeat @# -l[$>]
     100%,100% -noise[-1] 70,2 -*[-1] 255 -r[-1] [-2] -and[-1,-2] -smooth[-1] $1,0,1,2,2
-    -sqrt[-1] -n[-1] 0,255 -equalize[-1] 256
+    -sqrt[-1] -n[-1] 0,255 -equalize[-1]
   -endl -done -v +
 
 #@gmic drawing : _amplitude>=0
@@ -9151,7 +9152,7 @@ drawing : -skip ${1=200}
   -e[^-1] "Apply drawing effect on image$? with amplitude $1."
   -v - -repeat @# -l[$>] -split_opacity -l[0] -to_rgb
     -smooth $1,0.2,1,3,3 -b 2 -sharpen 1000 [0]
-    -r[0] 20,20,1,3,2 -equalize[0] 256 -index[1] [0],1,1
+    -r[0] 20,20,1,3,2 -equalize[0] -index[1] [0],1,1
     -nm[1] @{0,n},1 -rm[0]
   -endl -a c -endl -done -v +
 
@@ -9219,7 +9220,7 @@ fire_edges : -check "${1=0.7}>=0 && ${2=0.25}>=0 && $2<=1 && ${3=0.5}>=0 && ${4=
     -repeat {$5*(1+$7)+$6}
       @{0,w},@{0,h} -rand[-1] 0,255 -*[-1] [1]
       -b[-1] $3
-      -if $4 -ge[-1] $4% -else -equalize[-1] 256 -endif
+      -if $4 -ge[-1] $4% -else -equalize[-1] -endif
       -n[-1] 0,255
       -j[0] [-1],0,0,0,0,1,[1],1 -rm[-1]
       -correlate[0] [2]
@@ -9287,7 +9288,7 @@ hardsketchbw : -skip ${1=300},${2=50},${3=0.1},${4=20},${5=0}
       -i[-3] 1,{h} 1,{h} -a[-6--1] x
       -i[-2] ({'CImg3d'}) -i[-2] ({2*h},{h})
       1,{h},1,1,2 1,{h},1,1,2*y --+[-1] 1 -a[-3--1] x
-      3,{h} 1,{h},1,1,$3 -y[-6--1] y -a[-6--1] y
+      3,{h} 1,{h},1,1,$3 -y[-6--1] -a[-6--1] y
       $w,$h,1,1,255 -object3d[-1] [-2],0,0,0,1,1,0,0 -rm[-2]
     -nm $nm,1 -endl -done
   -endif -v +
@@ -9342,7 +9343,7 @@ houghsketchbw : -check "${1=8}>=0 && ${2=5}>=0 && ${3=80}>=0 && $3<=100 && ${4=0
     -i[-2] ({'CImg3d'}) -i[-2] ({2*h},{h})          # Header and size.
     1,{h},1,1,2 1,{h},1,1,2*y --+[-1] 1 -a[-3--1] x # Primitives.
     3,{h},1,1,0 1,{h},1,1,$4                        # Colors and opacities
-    -y[-6--1] y -a[-6--1] y
+    -y[-6--1] -a[-6--1] y
 
     # Render on a white image.
     $w,$h,1,1,255 -object3d[-1] [-2],0,0,0,1,1,0,0 -rm[-2]
@@ -9405,7 +9406,7 @@ old_photo :
 #@gmic : $ image.jpg --pencilbw ,
 pencilbw : -skip ${1=0.3},${2=60}
   -e[^-1] "Apply B&W pencil effect on image$?, with size $1 and amplitude $2."
-  -v - -repeat @# -l[$>] -split_opacity -l[0] -norm -b $1 -sharpen 4000 -smooth $2,0,1 -equalize 256 -sqrt -n 0,255 -endl -a c -endl -done -v +
+  -v - -repeat @# -l[$>] -split_opacity -l[0] -norm -b $1 -sharpen 4000 -smooth $2,0,1 -equalize -sqrt -n 0,255 -endl -a c -endl -done -v +
 
 #@gmic polaroid : _size1>=0,_size2>=0
 #@gmic : Create polaroid effect in selected images.
@@ -9495,7 +9496,7 @@ stars : -check "${1=10%}>=0 && ${2=1}>=0 && ${3=32}>0 && ${4=5}>=1 && ${5=0.38}>
     -repeat 4
       2,$N -rand[-1] -1,1 1,$N -rand[-1] 0,1 -a[-2,-1] x
       -i[-2] ({'CImg3d'}) -+[-2] 0.5 -i[-2] ($N;$N)
-      (1,0;1,{$N-1}) -r[-1] 2,$N,1,1,3 -round[-1] 4,$N,1,1,1 -y[-5,-3--1] y -a[-5--1] y
+      (1,0;1,{$N-1}) -r[-1] 2,$N,1,1,3 -round[-1] 4,$N,1,1,1 -y[-5,-3--1] -a[-5--1] y
       -rv[-2,-1] -sprites3d[-2,-1] -*3d[-1] {0.75*@{0,w}},{0.75*@{0,h}},{1000*$2}
       -object3d[0] [-1],50%,50%,0,$10,0,0,0 -rm[-1]
     -done
@@ -10411,7 +10412,7 @@ morph : -skip ${2=0.1},${3=5}
   -e[^-1] "Create morphing sequence between image$?, with $1 intra-frames, smoothness $2 and precision $3.\n"
   -v - -r[^0] [0],3 -i[0] (@#) --[0] 1 -repeat @0
    -v + -e[] "\r > Morph image "$>" to image "{$>+1}".    " -v -
-    --equalize[-2,-1] 256 -n[-2,-1] 0,255
+    --equalize[-2,-1] -n[-2,-1] 0,255
     --displacement[-1] [-2],$2,$3 --warp[-5] [-1],1,1,1,$1 -a[-$1--1] z -rm[-2]
     --displacement[-3] [-2],$2,$3 --warp[-5] [-1],1,1,1,$1 -a[-$1--1] z -rm[-7--4,-2]
     (1/0) -r[-1] [-2],3 -*[-3] [-1] -*[-2,-1] -mirror[-1] z -+[-2,-1] -s[-1] z
@@ -10424,9 +10425,9 @@ morph : -skip ${2=0.1},${3=5}
 #@gmic : $ image.jpg --rotate 20,1,1,50%,50% --register_nonrigid , -remove[-2]
 register_nonrigid : -skip ${1=0.2},${2=5},${3=0}
   -e[^-1] "Register image$? with non-rigid warp, smoothness $1, precision $2 and $3 scale(s)."
-  -v - --equalize[0] 256 -n[-1] 0,255 -mv[-1] 1
+  -v - --equalize[0] -n[-1] 0,255 -mv[-1] 1
   -repeat @# -if {$>>1}
-    --equalize[-1] 256 -n[-1] 0,255 --displacement[1] [-1],$1,$2,$3 -rm[-2]
+    --equalize[-1] -n[-1] 0,255 --displacement[1] [-1],$1,$2,$3 -rm[-2]
     -warp[-2] [-1],1,1,1 -rm[-1]
   -mv[-1] 2 -endif -done -rm[1] -v +
 
@@ -10436,9 +10437,9 @@ register_nonrigid : -skip ${1=0.2},${2=5},${3=0}
 #@gmic : $ image.jpg --shift 30,20 --register_rigid , -remove[-2]
 register_rigid : -skip ${1=1}
   -e[^-1] "Register image$? with rigid warp and smoothness $1."
-  -v - --equalize[0] 256 -b[-1] $1 -n[-1] 0,255 -mv[-1] 1
+  -v - --equalize[0] -b[-1] $1 -n[-1] 0,255 -mv[-1] 1
   -repeat @# -if {$>>1}
-    --equalize[-1] 256 -b[-1] $1 -n[-1] 0,255 --phase_correlation[1,-1] -rm[-2] -*[-1] -1 -round[-1] 1
+    --equalize[-1] -b[-1] $1 -n[-1] 0,255 --phase_correlation[1,-1] -rm[-2] -*[-1] -1 -round[-1] 1
     -shift[-2] @-1,0,1 -rm[-1]
   -mv[-1] 2 -endif -done -rm[1] -v +
 
@@ -11390,7 +11391,7 @@ x_metaballs3d :
     -f[3] 0 -repeat $M -j[3] [2],{${x$>}-@{2,w/2}},{${y$>}-@{2,h/2}},{${z$>}-@{2,d/2}},0,-1 -done
     --r[3] 24,24,24,1,2 -isosurface3d[-1] 0.4 --3d[-1] 12,12,12 -*3d[-1] 13 -rv3d[-1]
     -r3d[-1] 1,2,1,{100*@|}
-    N={i(0,7)} (255,255,150;200,96,164;50,150,230) -r[-1] 3,$N,1,1,3 -y[-1] y -j[-2] [-1],0,{@{-2,h}-4*$N} # Do some color tweaks.
+    N={i(0,7)} (255,255,150;200,96,164;50,150,230) -r[-1] 3,$N,1,1,3 -y[-1] -j[-2] [-1],0,{@{-2,h}-4*$N} # Do some color tweaks.
     -if {!$mode} -circles3d[-2] 4 -endif
     -if {!@{1,w}}
       0 -text[-1] ${s$mode},5,5,24,0.5,255,255,255 -b[-1] 0.7 -n[-1] 0,255
@@ -12104,12 +12105,12 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
 
     # Create and display visualization.
     -if {!narg($visu_3d)} # Update 3d vizualization.
-      ---[centroids] 2 --+[centroids] 2 -a[-2,-1] x -permute[-1] cxyz -y[-1] y --[-1] 128
+      ---[centroids] 2 --+[centroids] 2 -a[-2,-1] x -permute[-1] cxyz -y[-1] --[-1] 128
       -j[obj3d] [-1],0,8 -rm[-1]  # Update centroids position in 3d object.
       [obj3d]
       -if $clustering
         -if {@{colors,M}<256} --index[colors] [centroids] -*[-1] 256 -+[colors,-1] -endif # Estimate nearest centroids for all colors.
-        --channels[colors] 0 ->>[-1] 8 -map[-1] 2 -permute[-1] cxyz -y[-1] y -j[-2] [-1],0,{@{-2,h}-$_N-h} -rm[-1]
+        --channels[colors] 0 ->>[-1] 8 -map[-1] 2 -permute[-1] cxyz -y[-1] -j[-2] [-1],0,{@{-2,h}-$_N-h} -rm[-1]
       -endif
 
       -apply_pose3d[-1] @pose3d 300,300,1,3 -object3d[-1] [-2],50%,50%,100,1,2,0,0,300 -rm[-2]
@@ -12228,7 +12229,7 @@ x_reflection3d :
 
   # Create 3d objects.
   -torus3d 30,10 -col3d[-1] 255,200,0
-  -spherical3d 47,34,"80+20*abs(cos(2*theta))" -s3d[-1] -rm[-2] -i[-2] 3,{h},1,1,150,220,255,200,255,255 -y[-2] y -a[-6--1] y
+  -spherical3d 47,34,"80+20*abs(cos(2*theta))" -s3d[-1] -rm[-2] -i[-2] 3,{h},1,1,150,220,255,200,255,255 -y[-2] -a[-6--1] y
   -spherical3d 47,34,"100*abs(1+0.6*cos(3*phi)*sin(4*theta))"
   -r3d[-2,-1] 0,1,0,90 -db3d 0
 
@@ -12315,7 +12316,7 @@ x_shadebobs :
       {4+round(?(12))},1,1,3 -noise[0] 255,2 -r[0] 256,1,1,3,3 -*[0] 255 -shift[0] 1 -nm[-1] colormap
       (67.5;73.5;109.5;103.5;51.5;100.5;{2*$N};$N) 3,{2*$N},1,1,0
       1,$N,1,1,5 2,$N,1,1,'y+x*$N' -a[-2--1] x -z[-1] 0,5
-      4,$N,1,1,1 -y[-3--1] y -a[-4--1] y -nm[-1] obj3d
+      4,$N,1,1,1 -y[-3--1] -a[-4--1] y -nm[-1] obj3d
       @{!,w},@{!,h} -nm[-1] img
       -wait -1
     -endif
@@ -12326,7 +12327,7 @@ x_shadebobs :
     -+[-2] {360*sin($rz*$t)} -*[-2] {pi/180}
     --sin[-2,-1] -cos[-4,-3] -*[-4,-2] $r -*[-3,-1] $rcx -+[-4,-3] -+[-2,-1]
     -*[-2] {@{!,w}/2} -*[-1] {@{!,h}/2} -a[-2,-1] x
-    --+[-1] $R --[-2] $R -a[-2,-1] y -z[-1] 0,2 -y[-1] y -j[obj3d] [-1],0,8 -rm[-1]
+    --+[-1] $R --[-2] $R -a[-2,-1] y -z[-1] 0,2 -y[-1] -j[obj3d] [-1],0,8 -rm[-1]
 
     # Draw bobs, map colors and display.
     -object3d[img] [obj3d],50%,50%,0,-1,2,0,0
@@ -13334,7 +13335,7 @@ img2text : -skip "${1= }"
 #@gmic : Convert selected 8bits-valued vectors into their hexadecimal representations (ascii-encoded).
 img82hex :
   -e[^-1] "Convert 8bits-valued vector$? into hexadecimal representations (ascii-encoded)."
-  -v - -mod 256 -y y
+  -v - -mod 256 -y
   -repeat @#
     --f[$>] 'v=int(i)&15;v+if(v<10,48,87)'  # lower digit.
     -f[$>] 'v=int(i)>>4;v+if(v<10,48,87)'   # higher digit.
@@ -13575,7 +13576,7 @@ region_feature : -skip "${3=0}"
 #@gmic : Reset global parameters of the interpreter environment.
 reset :
   -e[^-1] "Reset global parameters of the interpreter environment."
-  -v - -db3d 1 -b3d -m3d 4 -md3d -1 -f3d 700 -l3d -sl3d 0.15 -ss3d 0.8 -v +
+  -v - -db3d -b3d -m3d 4 -md3d -1 -f3d 700 -l3d -sl3d 0.15 -ss3d 0.8 -v +
 
 #@gmic RGB
 #@gmic : Return a random int-valued RGB color.
@@ -13602,7 +13603,7 @@ str2hex :
 #@gmic stresc : val1,...,valN
 #@gmic : Return escaped string from specified ascii codes.
 stresc :
-  -v - ($*) -c[-1] 32,255 -y[-1] y [-1]
+  -v - ($*) -c[-1] 32,255 -y[-1] [-1]
   -f[-2] 'if(i==32||i==34||i==36||i==44||i==64||i==92||i==123||i==125,92,-1)' -a[-2,-1] x
   -discard[-1] -1 -u @{-1,t} -rm[-1] -v +
 
@@ -14008,7 +14009,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
       # Pie-chart of sessions ranks.
       -if {!$2}
         1,$row_height,1,3,0        # Separator
-        --rows[ranks] $p -histogram[-1] $max_players,1,$max_players -y[-1] y
+        --rows[ranks] $p -histogram[-1] $max_players,1,$max_players -y[-1]
         ip=@#
         (1,10,255,242,153)
         (2,10,222,222,222)
@@ -14291,7 +14292,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -load_gmic http://docgmic.tuxfamily.org/zonderr.gmic
 
   # Merge them together.
-  -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y y -a y -discard 13
+  -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y -a y -discard 13
   -s +,{'"#@gimp"'}
   -repeat {int((@#-1)/2)} -a[{$>+1},{$>+2}] y -done
   -nm[0] !header
@@ -14427,7 +14428,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
           balise="i"
         -done -rm
       -endl -endif
-      -if {narg($command)} name=@{0,n} -i[0] ({'$command'}) -y[0] y -a y -nm $name
+      -if {narg($command)} name=@{0,n} -i[0] ({'$command'}) -y[0] -a y -nm $name
       -endif
 
       path=$npath
@@ -15540,7 +15541,7 @@ gimp_charcoal :
     -compose_channels max
     w={w} h={h}
     -if $5 -resize[-1] 150%,150%,1,1,6 -endif
-    -if $4 -equalize[-1] 256 -n[-1] 0,255 -endif
+    -if $4 -equalize[-1] -n[-1] 0,255 -endif
     -sharpen {$1*3} -cut 0,255
     -if $6 --t2 $7,$8 -endif  # Add highlights layer if required.
     -t2[0] $2,$3
@@ -15916,7 +15917,7 @@ _gimp_channel_processing :
   -elif {$5==4} -t2[-1] $6%,$7% -*[-1] 255
   -endif
   -if {$8!=256} -quantize[-1] $8,1,0 -endif
-  -if $9 -equalize[-1] 256 -endif
+  -if $9 -equalize[-1] -endif
   -if $10 -negative[-1] -endif
 
 gimp_channel_processing :
@@ -19036,7 +19037,7 @@ gimp_lava :
   -norm -repeat @# -l[$>]
     100%,100% -plasma[-1] 1,1,{16-$1} -smooth[-1] $2,0,1,$3,$3,0.8,90 -*
     -gradient_norm -n 0,255
-    -equalize 256 -map 3
+    -equalize -map 3
     -sharpen $4
   -endl -done
 
@@ -19171,7 +19172,7 @@ gimp_stained_glass :
   -repeat @# -l[$>] -split_opacity -l[0]
     -stained_glass $1,$2,$3
     -n 0,255
-    -if $4 -equalize[-1] 256 -endif
+    -if $4 -equalize[-1] -endif
     -rgb2lab[-1] -sh[-1] 1,2 -*[-1] $5 -rm[-1] -lab2rgb[-1]
     -apply_gamma[-1] {10^$6} --[-1] 128 -*[-1] $7 -+[-1] {128+$8}
     -c[-1] 0,255
@@ -19710,7 +19711,7 @@ _gimp_elevation3d :
     -n[1] 0,$1 -b[1] $2
     -elevation3d[0] [1] -rm[1]
   -endl -done
-  -db3d 1
+  -db3d
 
 gimp_elevation3d :
   -_gimp_elevation3d ${1-2} -gimp_render3d ${3--1}
