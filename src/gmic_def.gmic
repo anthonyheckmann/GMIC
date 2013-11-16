@@ -2906,7 +2906,7 @@ compress_rle :
 
 #@gmic cumul
 #@gmic : Compute the cumulative function of specified image data.
-#@gmic : $ image.jpg --histogram 256 --cumul[-1] -display_graph[-2,-1] 400,300,3
+#@gmic : $ image.jpg --histogram --cumul[-1] -display_graph[-2,-1] 400,300,3
 cumul :
   -e[^-1] "Compute cumulative of function$?."
   -v - -repeat @# -l[$>]
@@ -3076,7 +3076,7 @@ norm :
 
 #@gmic normalize_sum
 #@gmic : Normalize selected images with a unitary sum.
-#@gmic : $ image.jpg --histogram[-1] 256 -normalize_sum[-1] -display_graph[-1] 400,300
+#@gmic : $ image.jpg --histogram[-1] -normalize_sum[-1] -display_graph[-1] 400,300
 normalize_sum :
   -e[^-1] "Normalize image$? with a unitary sum."
   -v - -repeat @# sum=@{$>,+} -if {$sum!=0} -/[$>] $sum -endif -done -v +
@@ -13576,7 +13576,7 @@ region_feature : -skip "${3=0}"
 #@gmic : Reset global parameters of the interpreter environment.
 reset :
   -e[^-1] "Reset global parameters of the interpreter environment."
-  -v - -db3d -b3d -m3d 4 -md3d -1 -f3d 700 -l3d -sl3d 0.15 -ss3d 0.8 -v +
+  -v - -db3d -b3d -m3d 4 -md3d -1 -f3d -l3d -sl3d 0.15 -ss3d 0.8 -v +
 
 #@gmic RGB
 #@gmic : Return a random int-valued RGB color.

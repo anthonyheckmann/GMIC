@@ -4869,8 +4869,10 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Set double-sided mode for 3d rendering.
           if (!std::strcmp("-double3d",item)) {
             gmic_substitute_args();
-            is_double3d = true;
-            if (!argument[1] && (*argument=='0' || *argument=='1')) { is_double3d = (*argument=='1'); ++position; }
+            bool value = true;
+            if (!argument[1] && (*argument=='0' || *argument=='1')) { value = (*argument=='1'); ++position; }
+            else value = true;
+            is_double3d = value;
             print(images,"%s double-sided mode for 3d rendering.",
                   is_double3d?"Enable":"Disable");
             continue;
@@ -5259,6 +5261,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   sep0=='%' && sep1=='%')) &&
                 nb_levels>=0.5) {
               nb_levels = cimg::round(nb_levels); ++position; }
+            else { nb_levels = 256; value0 = value1 = 0; sep = sep0 = sep1 = 0; }
             if (value0==value1 && value0==0) { value1 = 100; sep0 = sep1 = '%'; }
             print(images,"Equalize histogram of image%s, with %g%s levels in range [%g%s,%g%s].",
                   gmic_selection,
@@ -5525,14 +5528,13 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Set 3d focale.
           if (!std::strcmp("-focale3d",item)) {
             gmic_substitute_args();
-            float focale = 800;
-            if (std::sscanf(argument,"%f%c",
-                            &focale,&end)==1) {
-              focale3d = focale;
-              print(images,"Set 3d focale to %g.",
-                    focale);
-            } else arg_error("focale3d");
-            ++position; continue;
+            float value = 700;
+            if (std::sscanf(argument,"%f%c",&value,&end)==1) ++position;
+            else value = 700;
+            focale3d = value;
+            print(images,"Set 3d focale to %g.",
+                  focale3d);
+            continue;
           }
 
 #endif // #ifdef gmic_float
@@ -5772,31 +5774,30 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                  (std::sscanf(argument,"%f%c,%lf%c,%lf%c%c",
                               &nb_levels,&sep,&value0,&sep0,&value1,&sep1,&end)==6 && sep=='%' &&
                   sep0=='%' && sep1=='%')) &&
-                nb_levels>0) {
-              nb_levels = cimg::round(nb_levels);
-              if (value0==value1 && value0==0) { value1 = 100; sep0 = sep1 = '%'; }
-              print(images,"Compute histogram of image%s, using %g%s level%s in range [%g%s,%g%s].",
-                    gmic_selection,
-                    nb_levels,sep=='%'?"%":"",
-                    nb_levels>1?"s":"",
-                    value0,sep0=='%'?"%":"",
-                    value1,sep1=='%'?"%":"");
-              cimg_forY(selection,l) {
-                CImg<T> &img = gmic_check(images[selection[l]]);
-                double vmin = 0, vmax = 0, nvalue0 = value0, nvalue1 = value1;
-                if (sep0=='%' || sep1=='%') {
-                  if (img) vmax = (double)img.max_min(vmin);
-                  if (sep0=='%') nvalue0 = vmin + (vmax-vmin)*value0/100;
-                  if (sep1=='%') nvalue1 = vmin + (vmax-vmin)*value1/100;
-                }
-                const unsigned int
-                  _nb_levels = cimg::max(1U,(unsigned int)cimg::round(sep=='%'?
-                                                                      nb_levels*(1+nvalue1-nvalue0)/100:
-                                                                      nb_levels));
-                gmic_apply(images[selection[l]],histogram(_nb_levels,(T)nvalue0,(T)nvalue1));
+                nb_levels>0) { nb_levels = cimg::round(nb_levels); ++position; }
+            else { nb_levels = 256; value0 = value1 = 0; sep = sep0 = sep1 = 0; }
+            if (value0==value1 && value0==0) { value1 = 100; sep0 = sep1 = '%'; }
+            print(images,"Compute histogram of image%s, using %g%s level%s in range [%g%s,%g%s].",
+                  gmic_selection,
+                  nb_levels,sep=='%'?"%":"",
+                  nb_levels>1?"s":"",
+                  value0,sep0=='%'?"%":"",
+                  value1,sep1=='%'?"%":"");
+            cimg_forY(selection,l) {
+              CImg<T> &img = gmic_check(images[selection[l]]);
+              double vmin = 0, vmax = 0, nvalue0 = value0, nvalue1 = value1;
+              if (sep0=='%' || sep1=='%') {
+                if (img) vmax = (double)img.max_min(vmin);
+                if (sep0=='%') nvalue0 = vmin + (vmax-vmin)*value0/100;
+                if (sep1=='%') nvalue1 = vmin + (vmax-vmin)*value1/100;
               }
-            } else arg_error("histogram");
-            is_released = false; ++position; continue;
+              const unsigned int
+                _nb_levels = cimg::max(1U,(unsigned int)cimg::round(sep=='%'?
+                                                                    nb_levels*(1+nvalue1-nvalue0)/100:
+                                                                    nb_levels));
+              gmic_apply(images[selection[l]],histogram(_nb_levels,(T)nvalue0,(T)nvalue1));
+            }
+            is_released = false; continue;
           }
 
           // HSI to RGB.
