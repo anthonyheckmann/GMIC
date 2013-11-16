@@ -2450,13 +2450,13 @@ _update :
   -e[0--3] "Update commands from the latest definition file on the G'MIC server."
   -v - -m http://gmic.sourceforge.net/update@..gmic -v +
 
-#@gmic v : eq. to '-verbose.' : (*)
+#@gmic v : eq. to '-verbose'. : (*)
 
-#@gmic verbose : level : { + | - } : (*)
+#@gmic verbose : _level : { + | - } : (*)
 #@gmic : Set or increment/decrement the verbosity level.
 #@gmic : (eq. to '-v').
 #@gmic : When 'level'>=0, G'MIC log messages are displayed on the standard error (stderr).
-#@gmic : Default value for the verbosity level is 0.
+#@gmic : Default value: 'level=0'.
 
 #@gmic wait : delay : (no args) : (+)
 #@gmic : Wait for a given delay (in ms) or for a user event occuring on the selected instant window.
@@ -2551,7 +2551,7 @@ sort_str :
   -repeat {round(h/4,1,1)} y={4*$>}
     -repeat @# -l[$<]
       --rows $y,{$y+3} -f[1] 'if(i>=97&&i<=122,i-32,i)' --[-1] 32 -c[-1] 0,63 -s[-1] y -*[-2] 64 -*[-3] 4096 -*[-4] 262144 -+[-4--1]
-      -rv -a y -sort +,x --rows 0 -rows[0] 1,100% -label[1] 0 -%[1] 2
+      -rv -a y -sort +,x --rows 0 -rows[0] 1,100% -label[1] -%[1] 2
       -s[1] +,0 N={@#-1}
       x0=0 -repeat {@#-1} x1={$x0+@{{1+$>},h}} --z[0] $x0,{$x1-1} x0=$x1 -done
       -rm[0-$N]
@@ -5852,7 +5852,7 @@ watermark_fourier : -check ${2=32}>0
 #@gmic watershed : [priority_image],_fill_lines={ 0 | 1 } : (+)
 #@gmic : Compute the watershed transform of selected images.
 #@gmic : Default value: 'fill_lines=1'.
-#@gmic : $ 400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] 0 -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse
+#@gmic : $ 400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse
 
 #---------------------------------
 #
@@ -5954,11 +5954,11 @@ fftpolar :
     -fft -complex2polar -shift {-int(w/2)},{-int(h/2)},{-int(d/2)},0,2
   -endl -done -v +
 
-#@gmic histogram : nb_levels>0[%],_value0[%],_value1[%] : (+)
+#@gmic histogram : _nb_levels>0[%],_value0[%],_value1[%] : (+)
 #@gmic : Compute the histogram of selected images.
 #@gmic : If value range is set, the histogram is estimated only for pixels in the specified
 #@gmic : value range. Argument 'value1' must be specified if 'value0' is set.
-#@gmic : Default values: 'value0=0%' and 'value1=100%'.
+#@gmic : Default values: 'nb_levels=256', 'value0=0%' and 'value1=100%'.
 #@gmic : $ image.jpg --histogram 64 -display_graph[-1] 400,300,3
 
 #@gmic histogram3 : nb_levels>0[%],_value0[%],_value1[%]
@@ -6045,8 +6045,8 @@ isophotes : -skip ${1=64}
 #@gmic label : tolerance>=0,is_high_connectivity={ 0 | 1 } : (+)
 #@gmic : Label connected components in selected images.
 #@gmic : Default values: 'tolerance=0' and 'is_high_connectivity=0'.
-#@gmic : $ image.jpg -luminance -threshold 60% -label 0 -normalize 0,255 -map 0
-#@gmic : $ 400,400 -set 1,50%,50% -distance 1 -mod 16 -threshold 8 -label 0 -mod 255 -map 2
+#@gmic : $ image.jpg -luminance -threshold 60% -label -normalize 0,255 -map 0
+#@gmic : $ 400,400 -set 1,50%,50% -distance 1 -mod 16 -threshold 8 -label -mod 255 -map 2
 
 #@gmic label_fg : tolerance>=0,is_high_connectivity={ 0 | 1 }
 #@gmic : Label connected components for non-zero values (foreground) in selected images.
@@ -6059,7 +6059,7 @@ label_fg : -check "$1>=0" -skip ${2=0}
     -else --z -1,-1,{w-1},{h-1} -label[-1] $1,$2 -z[-1] 1,1,{w-1},{h-1}
     -endif
     -neq[-2] 0 -*
-    --histogram {1+iM} -neq[-1] 0 -*[-1] 'x' -rows[-1] -1,0 -label[-1] 0 -rows[-1] 1,1
+    --histogram {1+iM} -neq[-1] 0 -*[-1] 'x' -rows[-1] -1,0 -label[-1] -rows[-1] 1,1
     -map[-2] [-1] -rm[-1]
   -endl -done -v +
 
@@ -6740,11 +6740,11 @@ piechart : -check $1>=0
     -rm[-1]
   -endl -done -v +
 
-#@gmic plasma : alpha,_beta,_scale>=0 : (+)
+#@gmic plasma : _alpha,__beta,_scale>=0 : (+)
 #@gmic : Draw a random colored plasma fractal on selected images.
 #@gmic : This command implements the so-called 'Diamond-Square' algorithm.
-#@gmic : Default values: 'beta=1' and 'scale=8'.
-#@gmic : $ 400,400,1,3 -plasma 1
+#@gmic : Default values: 'alpha=1', 'beta=1' and 'scale=8'.
+#@gmic : $ 400,400,1,3 -plasma
 
 #@gmic point : x[%],y[%],_z[%],_opacity,_color1,.. : (+)
 #@gmic : Set specified colored pixel on selected images.
@@ -7780,19 +7780,21 @@ lissajous3d : -check ${1=1024}>1 -skip ${2=2},${3=0},${4=1},${5=0},${6=0},${7=0}
 
 #@gmic m3d : eq. to '-mode3d'. : (+)
 
-#@gmic mode3d : mode : (+)
+#@gmic mode3d : _mode : (+)
 #@gmic : Set static 3d rendering mode.
 #@gmic : (eq. to '-m3d').
 #@gmic : 'mode' can be { -1=bounding-box | 0=dots | 1=wireframe | 2=flat | 3=flat-shaded | 4=gouraud-shaded | 5=phong-shaded }.");
-#@gmic : Bounding-box mode ('mode==1') is active only for the interactive 3d viewer.
+#@gmic : Bounding-box mode ('mode==-1') is active only for the interactive 3d viewer.
+#@gmic : Default value: 'mode=4'.
 #@gmic : $ (0,1,2,3,4,5) -double3d 0 -repeat {w} -torus3d 100,30 -rotate3d[-1] 1,1,0,60 -mode3d @{0,$>} -snapshot3d[-1] 300 -done -remove[0]
 
 #@gmic md3d : eq. to '-moded3d'. : (+)
 
-#@gmic moded3d : mode : (+)
+#@gmic moded3d : _mode : (+)
 #@gmic : Set dynamic 3d rendering mode for interactive 3d viewer.
 #@gmic : (eq. to '-md3d').
 #@gmic : 'mode' can be { -1=bounding-box | 0=dots | 1=wireframe | 2=flat | 3=flat-shaded | 4=gouraud-shaded | 5=phong-shaded }.
+#@gmic : Default value: 'mode=-1'.
 
 #@gmic *3d : eq. to '-mul3d'. : (+)
 
@@ -7826,9 +7828,10 @@ _normalize3d :
 
 #@gmic o3d : eq. to '-opacity3d'. : (+)
 
-#@gmic opacity3d : opacity : (+)
+#@gmic opacity3d : _opacity : (+)
 #@gmic : Set opacity of selected 3d objects.
 #@gmic : (eq. to '-o3d').
+#@gmic : Default value: 'opacity=1'.
 #@gmic : $ -torus3d 100,10 -double3d 0 -repeat 7 --rotate3d[-1] 1,0,0,20 -opacity3d[-1] {?} -done -add3d
 
 #@gmic parametric3d : _x(a,b),_y(a,b),_z(a,b),_amin,_amax,_bmin,_bmax,_res_a>0,_res_b>0,_res_x>0,_res_y>0,_res_z>0,_smoothness>=0,_isovalue>=0
@@ -10221,12 +10224,12 @@ _blend_saturation :
 _blend_screen :
   -u "---[0] 255 --[1] 255 -*[1,2] -/[1] 255 -*[1] -1 -+[1] 255"
 _blend_shapeaverage :
-  -u "-norm[1] -label[1] 0 N={iM+1} "\
+  -u "-norm[1] -label[1] N={iM+1} "\
      "-repeat @{0,s} --channels[0] $> m={im} M={iM} -n[-1] 0,{1-1/256} -+[-1] [1] -histogram[-1] {$N*256},0,{$N-1/256} "\
      "-i[-2] 256,1,1,1,'x*($M-$m)/255+$m' -r[-2] [-1],0,2 -*[-2] [-1] -r[-2,-1] $N,1,1,1,2 -+[-1] 1e-8 -/[-2,-1] -done "\
      "-a[2--1] c -map[1] [2] -rm[2]"
 _blend_shapeaverage0 : # Same as shapeaverage except that background values (i.e. 0) are kept to black.
-  -u "-norm[1] --neq[1] 0 -label[1] 0 N=@{1,iM+1} "\
+  -u "-norm[1] --neq[1] 0 -label[1] N=@{1,iM+1} "\
      "-repeat @{0,s} --channels[0] $> m={im} M={iM} -n[-1] 0,{1-1/256} -+[-1] [1] -histogram[-1] {$N*256},0,{$N-1/256} "\
      "-i[-2] 256,1,1,1,'x*($M-$m)/255+$m' -r[-2] [-1],0,2 -*[-2] [-1] -r[-2,-1] $N,1,1,1,2 -+[-1] 1e-8 -/[-2,-1] -done "\
      "-a[3--1] c -map[1] [3] -rm[3] -*[1,2]"
@@ -13576,7 +13579,7 @@ region_feature : -skip "${3=0}"
 #@gmic : Reset global parameters of the interpreter environment.
 reset :
   -e[^-1] "Reset global parameters of the interpreter environment."
-  -v - -db3d -b3d -m3d 4 -md3d -1 -f3d -l3d -sl3d 0.15 -ss3d 0.8 -v +
+  -v - -db3d -b3d -m3d -md3d -f3d -l3d -sl3d -ss3d -v +
 
 #@gmic RGB
 #@gmic : Return a random int-valued RGB color.
@@ -13763,7 +13766,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
   #-------------------------
   --lt[scores] 0
   --l[-1] -s x -+ -endl --[-1] [first_game] # nb_absences since first played game.
-  -l[-2] -f 'if(i,i,-x)' -s y -label 0 -repeat @# n={@{$>,M}} -if $n -histogram[$>] $n,1,$n -else -f[$>] 0 -endif -done
+  -l[-2] -f 'if(i,i,-x)' -s y -label -repeat @# n={@{$>,M}} -if $n -histogram[$>] $n,1,$n -else -f[$>] 0 -endif -done
   -r 1,1,1,1,2 -a y -- 1 -max 0 -round -endl -*[-2,-1] -round[-1]
   -nm[-1] abs_malus
 
@@ -14589,7 +14592,7 @@ _gimp_no_preview :
 #@gimp_en : "}
 gimp_logo : -skip "${1=Plug-in for GIMP}"
   -if @# -k[0] -endif
-  -to_rgb 0 -t[-1] "G'MIC",0,0,57,1,1 -label[-1] 0
+  -to_rgb 0 -t[-1] "G'MIC",0,0,57,1,1 -label[-1]
   6,1,1,3 -rand[-1] 150,255 -point[-1] 0 -map[-2] [-1] -rm[-1]
   -expand_xy[-1] 10,0 -b[-1] 2 -r[-1] 200%,200%,1,3,6 -sqr[-1] -c[-1] 0,60% -n[-1] 0,255
   -warp_perspective[-1] 0.5,0,1,50,50,0 -shift[-1] 0,-10
@@ -19071,7 +19074,7 @@ gimp_marble :
 dt_mineral_mosaic :
   -repeat @# -l[$>] -to_rgb
     --b $3 -segment_watershed[-1] $1 --norm[-1]
-    -area[-1] 0 --le[-1] {$2^2} -inpaint[-2] [-1] -rm[-1] -label[-1] 0
+    -area[-1] 0 --le[-1] {$2^2} -inpaint[-2] [-1] -rm[-1] -label[-1]
     --f[0] 'if(c==0,x,y)' --blend[-2,-1] shapeaverage,1,1
     --[-2,-1] -rm[0,2] -channels[-1] 0,1
     alpha={$5*pi/180} -sh[-1] 0,0 -*[-1] {cos($alpha)} -rm[-1] -sh[-1] 1,1 -*[-1] {sin($alpha)} -rm[-1] -compose_channels[-1] +
@@ -20635,7 +20638,7 @@ gimp_text_pointcloud3d :
   W={w} H={h} M={round(1.5*max(w,h))} -rm
   -text_pointcloud3d "$2","$3",$4
   -col3d[-1] ${5-7} -*3d[-1] {0.7*$M}
-  -f3d 4000 -db3d 0 -m3d 4
+  -f3d 4000 -db3d 0 -m3d
   -repeat $1
     -rprogress {60*$>/$1}
     angle={$>*360/$1}

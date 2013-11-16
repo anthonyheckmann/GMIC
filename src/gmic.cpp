@@ -3466,22 +3466,18 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       }
 
       // Check for verbosity command, prior to the first output of a log message.
+      bool is_verbose_argument = false;
       if (!std::strcmp("-v",item) || !std::strcmp("-verbose",item)) {
-        const bool is_one_char = !argument[1];
-        if (*argument=='-' && is_one_char) --verbosity;       // Do a first fast check.
-        else if (*argument=='+' && is_one_char) ++verbosity;
+        if (*argument=='-' && !argument[1]) { --verbosity; is_verbose_argument = true; }  // Do a first fast check.
+        else if (*argument=='+' && !argument[1]) { ++verbosity; is_verbose_argument = true; }
         else {
           gmic_substitute_args();
-          const bool is_one_char = !argument[1];
-          if (*argument=='-' && is_one_char) --verbosity;
-          else if (*argument=='+' && is_one_char) ++verbosity;
+          if (*argument=='-' && !argument[1]) { --verbosity; is_verbose_argument = true; }
+          else if (*argument=='+' && !argument[1]) { ++verbosity; is_verbose_argument = true; }
           else {
             float level = 0;
-            if (std::sscanf(argument,"%f%c",&level,&end)==1) verbosity = (int)cimg::round(level);
-            else {
-              if (is_start) { print(images,"Start G'MIC parser."); is_start = false; }
-              arg_error("verbose");
-            }
+            if (std::sscanf(argument,"%f%c",&level,&end)==1) { verbosity = (int)cimg::round(level); is_verbose_argument = true; }
+            else verbosity = 0;
           }
         }
       }
@@ -6430,15 +6426,15 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             float tolerance = 0;
             if ((std::sscanf(argument,"%f%c",&tolerance,&end)==1 ||
                  std::sscanf(argument,"%f,%u%c",&tolerance,&is_high_connectivity,&end)==2) &&
-                tolerance>=0) {
-              print(images,
-                    "Label connected components on image%s, with tolerance %g and "
-                    "%s connectivity.",
-                    gmic_selection,tolerance,is_high_connectivity?"high":"low");
-              cimg_forY(selection,l)
-                gmic_apply(images[selection[l]],label((bool)is_high_connectivity,tolerance));
-            } else arg_error("label");
-            is_released = false; ++position; continue;
+                tolerance>=0) ++position;
+            else { tolerance = 0; is_high_connectivity = 0; }
+            print(images,
+                  "Label connected components on image%s, with tolerance %g and "
+                  "%s connectivity.",
+                  gmic_selection,tolerance,is_high_connectivity?"high":"low");
+            cimg_forY(selection,l)
+              gmic_apply(images[selection[l]],label((bool)is_high_connectivity,tolerance));
+            is_released = false; continue;
           }
 
           // Set 3d light position.
@@ -6628,34 +6624,34 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Set 3d rendering modes.
           if (!std::strcmp("-mode3d",item)) {
             gmic_substitute_args();
-            int value = 0;
+            int value = 4;
             if (std::sscanf(argument,"%d%c",
                             &value,&end)==1 &&
-                value>=-1 && value<=5) {
-              render3d = value;
-              print(images,"Set static 3d rendering mode to %s.",
-                    render3d==-1?"bounding-box":
-                    render3d==0?"pointwise":render3d==1?"linear":render3d==2?"flat":
-                    render3d==3?"flat-shaded":render3d==4?"Gouraud-shaded":
-                    render3d==5?"Phong-shaded":"none");
-            } else arg_error("mode3d");
-            ++position; continue;
+                value>=-1 && value<=5) ++position;
+            else value = 4;
+            render3d = value;
+            print(images,"Set static 3d rendering mode to %s.",
+                  render3d==-1?"bounding-box":
+                  render3d==0?"pointwise":render3d==1?"linear":render3d==2?"flat":
+                  render3d==3?"flat-shaded":render3d==4?"Gouraud-shaded":
+                  render3d==5?"Phong-shaded":"none");
+            continue;
           }
 
           if (!std::strcmp("-moded3d",item)) {
             gmic_substitute_args();
-            int value = 0;
+            int value = -1;
             if (std::sscanf(argument,"%d%c",
                             &value,&end)==1 &&
-                value>=-1 && value<=5) {
-              renderd3d = value;
-              print(images,"Set dynamic 3d rendering mode to %s.",
-                    renderd3d==-1?"bounding-box":
-                    renderd3d==0?"pointwise":renderd3d==1?"linear":renderd3d==2?"flat":
-                    renderd3d==3?"flat-shaded":renderd3d==4?"Gouraud-shaded":
-                    renderd3d==5?"Phong-shaded":"none");
-            } else arg_error("moded3d");
-            ++position; continue;
+                value>=-1 && value<=5) ++position;
+            else value = -1;
+            renderd3d = value;
+            print(images,"Set dynamic 3d rendering mode to %s.",
+                  renderd3d==-1?"bounding-box":
+                  renderd3d==0?"pointwise":renderd3d==1?"linear":renderd3d==2?"flat":
+                  renderd3d==3?"flat-shaded":renderd3d==4?"Gouraud-shaded":
+                  renderd3d==5?"Phong-shaded":"none");
+            continue;
           }
 
           // Map LUT.
@@ -7406,23 +7402,23 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Set 3d object opacity.
           if (!std::strcmp("-opacity3d",command)) {
             gmic_substitute_args();
-            float opacity = 1;
+            float value = 1;
             if (std::sscanf(argument,"%f%c",
-                            &opacity,&end)==1) {
-              print(images,"Set opacity of 3d object%s to %g.",
-                    gmic_selection,
-                    opacity);
-              cimg_forY(selection,l) {
-                const unsigned int ind = selection[l];
-                CImg<T>& img = gmic_check(images[ind]);
-                if (!img.is_CImg3d(true,message))
-                  error(images,"Command '-opacity3d': Invalid 3d object [%d], "
-                        "in selected image%s (%s).",
-                        ind,gmic_selection,message);
-                gmic_apply(img,color_CImg3d(0,0,0,opacity,false,true));
-              }
-            } else arg_error("opacity3d");
-            is_released = false; ++position; continue;
+                            &value,&end)==1) ++position;
+            else value = 1;
+            print(images,"Set opacity of 3d object%s to %g.",
+                  gmic_selection,
+                  value);
+            cimg_forY(selection,l) {
+              const unsigned int ind = selection[l];
+              CImg<T>& img = gmic_check(images[ind]);
+              if (!img.is_CImg3d(true,message))
+                error(images,"Command '-opacity3d': Invalid 3d object [%d], "
+                      "in selected image%s (%s).",
+                      ind,gmic_selection,message);
+              gmic_apply(img,color_CImg3d(0,0,0,value,false,true));
+            }
+            is_released = false; continue;
           }
 
 #endif // #ifdef gmic_float
@@ -7727,17 +7723,17 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                              &alpha,&beta,&end)==2 ||
                  std::sscanf(argument,"%f,%f,%f%c",
                              &alpha,&beta,&scale,&end)==3) &&
-                scale>=0) {
-              const unsigned int _scale = (unsigned int)cimg::round(scale);
-              print(images,"Draw plasma fractal on image%s, with alpha %g, beta %g and scale %u.",
-                    gmic_selection,
-                    alpha,
-                    beta,
-                    _scale);
-              cimg_forY(selection,l)
-                gmic_apply(images[selection[l]],draw_plasma(alpha,beta,_scale));
-            } else arg_error("plasma");
-            is_released = false; ++position; continue;
+                scale>=0) ++position;
+            else { alpha = beta = 1; scale = 8; }
+            const unsigned int _scale = (unsigned int)cimg::round(scale);
+            print(images,"Draw plasma fractal on image%s, with alpha %g, beta %g and scale %u.",
+                  gmic_selection,
+                  alpha,
+                  beta,
+                  _scale);
+            cimg_forY(selection,l)
+              gmic_apply(images[selection[l]],draw_plasma(alpha,beta,_scale));
+            is_released = false; continue;
           }
 
           // Set 3d pose.
@@ -9482,27 +9478,26 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Set 3d specular light parameters.
           if (!std::strcmp("-specl3d",item)) {
             gmic_substitute_args();
-            float value = 0;
+            float value = 0.15f;
             if (std::sscanf(argument,"%f%c",
-                            &value,&end)==1 && value>=0) {
-              specular_lightness3d = value;
-              print(images,"Set lightness of 3d specular light to %g.",
-                    specular_lightness3d);
-            } else arg_error("specl3d");
-            ++position; continue;
+                            &value,&end)==1 && value>=0) ++position;
+            else value = 0.15f;
+            specular_lightness3d = value;
+            print(images,"Set lightness of 3d specular light to %g.",
+                  specular_lightness3d);
+            continue;
           }
 
           if (!std::strcmp("-specs3d",item)) {
             gmic_substitute_args();
-            float value = 0;
+            float value = 0.8f;
             if (std::sscanf(argument,"%f%c",
-                            &value,&end)==1 && value>=0) {
-              specular_shininess3d = value;
-              print(images,"Set shininess of 3d specular light to %g.",
-                    specular_shininess3d);
-            }
-            else arg_error("specs3d");
-            ++position; continue;
+                            &value,&end)==1 && value>=0) ++position;
+            else value = 0.8f;
+            specular_shininess3d = value;
+            print(images,"Set shininess of 3d specular light to %g.",
+                  specular_shininess3d);
+            continue;
           }
 
           // Sine-cardinal.
@@ -9964,6 +9959,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             gmic_substitute_args();
             char axis = 'y';
             if (!argument[1] && (*argument=='x' || *argument=='y' || *argument=='z' || *argument=='c')) { axis = *argument; ++position; }
+            else axis = 'y';
             print(images,"Unroll image%s along the '%c'-axis.",
                   gmic_selection,
                   axis);
@@ -10019,16 +10015,16 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
           // Set verbosity (actually only display something, since it has already been processed before).
           if (!std::strcmp("-verbose",item)) {
-            const bool is_one_char = !argument[1];
-            if (*argument=='-' && is_one_char)
+            if (*argument=='-' && !argument[1])
               print(images,"Decrement verbosity level (set to %d).",
                     verbosity);
-            else if (*argument=='+' && is_one_char) {
+            else if (*argument=='+' && !argument[1]) {
               if (verbosity>0) print(images,"Increment verbosity level (set to %d).",
                                      verbosity);
             } else if (verbosity>0) print(images,"Set verbosity level to %d.",
                                           verbosity);
-            ++position; continue;
+            if (is_verbose_argument) ++position;
+            continue;
           }
 
           // Vanvliet filter.
