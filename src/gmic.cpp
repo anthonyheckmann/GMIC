@@ -8834,6 +8834,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   }
                 }
               }
+              ++position;
             } else if ((std::sscanf(argument,"%c,%c",
                                     &keep_values,&end)==2) &&
                        (keep_values=='+' || keep_values=='-')) {
@@ -8849,7 +8850,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 const CImg<T>& img = gmic_check(images[ind]);
                 if (img) {
                   CImg<char> name = images_names[ind].get_mark();
-                  CImgList<T> split = images[ind].get_split(values,keep_values=='+',false);
+                  CImgList<T> split = img.get_split(values,keep_values=='+',false);
                   if (is_get_version) {
                     if (split) {
                       images_names.insert(split.size(),name.copymark());
@@ -8867,8 +8868,36 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   }
                 }
               }
-            } else arg_error("split");
-            is_released = false; ++position; continue;
+              ++position;
+            } else {
+              print(images,"Split image%s into images of same values.",
+                    gmic_selection);
+              unsigned int off = 0;
+              cimg_forY(selection,l) {
+                const unsigned int ind = selection[l] + off;
+                const CImg<T>& img = gmic_check(images[ind]);
+                if (img) {
+                  CImg<char> name = images_names[ind].get_mark();
+                  CImgList<T> split = img.get_split(false);
+                  if (is_get_version) {
+                    if (split) {
+                      images_names.insert(split.size(),name.copymark());
+                      split.move_to(images,~0U);
+                    }
+                  } else {
+                    images.remove(ind);
+                    images_names.remove(ind);
+                    if (split) {
+                      off+=split.size() - 1;
+                      images_names.insert(split.size(),name.get_copymark(),ind);
+                      name.move_to(images_names[ind]);
+                      split.move_to(images,ind);
+                    }
+                  }
+                }
+              }
+            }
+            is_released = false; continue;
           }
 
           // Shared input.
