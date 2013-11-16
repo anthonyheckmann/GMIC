@@ -13579,7 +13579,7 @@ region_feature : -skip "${3=0}"
 #@gmic : Reset global parameters of the interpreter environment.
 reset :
   -e[^-1] "Reset global parameters of the interpreter environment."
-  -v - -db3d -b3d -m3d -md3d -f3d -l3d -sl3d -ss3d -v +
+  -v -1 -db3d -b3d -m3d -md3d -f3d -l3d -sl3d -ss3d -v
 
 #@gmic RGB
 #@gmic : Return a random int-valued RGB color.
