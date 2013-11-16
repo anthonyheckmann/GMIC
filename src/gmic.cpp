@@ -3467,6 +3467,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
       // Check for verbosity command, prior to the first output of a log message.
       bool is_verbose_argument = false;
+      const int old_verbosity = verbosity;
       if (!std::strcmp("-v",item) || !std::strcmp("-verbose",item)) {
         if (*argument=='-' && !argument[1]) { --verbosity; is_verbose_argument = true; }  // Do a first fast check.
         else if (*argument=='+' && !argument[1]) { ++verbosity; is_verbose_argument = true; }
@@ -10049,7 +10050,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         //----------------------------
         else if (command1=='v') {
 
-          // Set verbosity (actually only display something, since it has already been processed before).
+          // Set verbosity (actually only display a log message, since it has been already processed before).
           if (!std::strcmp("-verbose",item)) {
             if (*argument=='-' && !argument[1])
               print(images,"Decrement verbosity level (set to %d).",
@@ -10057,8 +10058,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             else if (*argument=='+' && !argument[1]) {
               if (verbosity>0) print(images,"Increment verbosity level (set to %d).",
                                      verbosity);
-            } else if (verbosity>0) print(images,"Set verbosity level to %d.",
-                                          verbosity);
+            } else if (verbosity>=0 && old_verbosity>=0)
+              print(images,"Set verbosity level to %d.",
+                    verbosity);
             if (is_verbose_argument) ++position;
             continue;
           }
