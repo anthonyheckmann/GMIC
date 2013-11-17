@@ -21817,9 +21817,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
-foo :
-  (1,0,1,0)
-  -compress_rle
-
-  -d
