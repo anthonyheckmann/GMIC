@@ -14409,7 +14409,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -done
 
   # Rebuild folder structure.
-  -v + -e[] "> Rebuild folder structure." -v -
+  -v + -e[] "\n> Rebuild folder structure." -v -
   -m "nb_levels : -l[] ({'$""1'}) -s -,{'/'} -u @# -rm -endl"  # Command to count number of folders in a given path.
 
   path=/
