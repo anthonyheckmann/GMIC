@@ -543,7 +543,7 @@ static CImg<T> append_CImg3d(const CImgList<T>& images) {
   unsigned long siz = 0;
   cimglist_for(images,l) {
     const CImg<T>& img = images[l];
-    if (!img.is_CImg3d(true)) return CImg<T>();
+    if (!img.is_CImg3d(false)) return CImg<T>();
     siz+=img.size() - 8;
     nbv+=cimg::float2uint((float)img[6]);
     nbp+=cimg::float2uint((float)img[7]);
@@ -3713,7 +3713,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                        (ind=selection2cimg(indices,images.size(),images_names,"-add3d",true,
                                            false,CImg<char>::empty())).height()==1) {
               const CImg<T> img0 = gmic_image_arg(*ind);
-              if (!img0.is_CImg3d(true,message))
+              if (!img0.is_CImg3d(false,message))
                 error(images,"Command '-add3d': Invalid 3d object [%u], in specified "
                       "argument '%s' (%s).",
                       *ind,argument_text,message);
@@ -3724,7 +3724,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               cimg_forY(selection,l) {
                 const unsigned int _ind = selection[l];
                 CImg<T>& img = gmic_check(images[_ind]);
-                if (!img.is_CImg3d(true,message))
+                if (!img.is_CImg3d(false,message))
                   error(images,
                         "Command '-add3d': Invalid 3d object [%d], in selected image%s (%s).",
                         _ind,gmic_selection,message);
@@ -3748,7 +3748,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 CImg<T> img = CImg<T>::append_CImg3d(subimages);
                 if (!img) cimg_forY(selection,l) {
                     const unsigned int ind = selection[l];
-                    if (!images[ind].is_CImg3d(true,message))
+                    if (!images[ind].is_CImg3d(false,message))
                       error(images,
                             "Command '-add3d': Invalid 3d object [%d], in selected image%s (%s).",
                             ind,gmic_selection,message);
@@ -4439,6 +4439,31 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             is_released = false; continue;
           }
 
+          // Check validity of 3d object.
+          if (!std::strcmp("-check3d",command)) {
+            if (verbosity>0 || is_debug)
+              print(images,"Check validity of 3d object%s",
+                    gmic_selection);
+            cimg_forY(selection,l) {
+              const unsigned int ind = selection[l];
+              CImg<T>& img = gmic_check(images[ind]);
+              if (!img.is_CImg3d(true,message)) {
+                if (verbosity>0 || is_debug) {
+                  std::fprintf(cimg::output()," -> invalid.");
+                  std::fflush(cimg::output());
+                }
+                error(images,
+                      "Command '-check3d': Invalid 3d object [%d], in selected image%s (%s).",
+                      ind,gmic_selection,message);
+              }
+            }
+            if (verbosity>0 || is_debug) {
+              std::fprintf(cimg::output()," -> valid.");
+              std::fflush(cimg::output());
+            }
+            continue;
+          }
+
 #ifdef gmic_float
 
           // Cut.
@@ -4662,7 +4687,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               cimg_forY(selection,l) {
                 const unsigned int ind = selection[l];
                 CImg<T>& img = gmic_check(images[ind]);
-                if (!img.is_CImg3d(true,message))
+                if (!img.is_CImg3d(false,message))
                   error(images,"Command '-color3d': Invalid 3d object [%d], "
                         "in selected image%s (%s).",
                         ind,gmic_selection,message);
@@ -6948,7 +6973,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 const unsigned int ind = selection[l];
                 const CImg<T>& img = gmic_check(images[ind]);
                 if (selection.height()!=1) cimg::number_filename(filename,l,6,nfilename);
-                if (!img.is_CImg3d(true,message))
+                if (!img.is_CImg3d(false,message))
                   error(images,
                         "Command '-output': 3d object file '%s', invalid 3d object [%u] "
                         "in selected image%s (%s).",
@@ -7335,7 +7360,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                  (std::sscanf(argy,"%f%c%c",&y,&sepy,&end)==2 && sepy=='%')) &&
                 _render3d<=5 && is_zbuffer<=1 && _is_double3d<=1) {
               const CImg<T> img0 = gmic_image_arg(*ind);
-              if (!img0.is_CImg3d(true,message))
+              if (!img0.is_CImg3d(false,message))
                 error(images,"Command '-object3d': Invalid 3d object [%u], specified "
                       "in argument '%s' (%s).",
                       *ind,argument_text,message);
@@ -7413,7 +7438,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             cimg_forY(selection,l) {
               const unsigned int ind = selection[l];
               CImg<T>& img = gmic_check(images[ind]);
-              if (!img.is_CImg3d(true,message))
+              if (!img.is_CImg3d(false,message))
                 error(images,"Command '-opacity3d': Invalid 3d object [%d], "
                       "in selected image%s (%s).",
                       ind,gmic_selection,message);
@@ -7773,7 +7798,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               cimg_forY(selection,l) {
                 const unsigned int ind = selection[l];
                 CImg<T> &img = gmic_check(images[ind]);
-                if (!img.is_CImg3d(true,message))
+                if (!img.is_CImg3d(false,message))
                   error(images,"Command '-primitives3d': Invalid 3d object [%d], "
                         "in selected image%s (%s).",
                         ind,gmic_selection,message);
@@ -8674,7 +8699,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             cimg_forY(selection,l) {
               const unsigned int ind = selection[l];
               CImg<T> &img = gmic_check(images[ind]);
-              if (!img.is_CImg3d(true,message))
+              if (!img.is_CImg3d(false,message))
                 error(images,"Command '-reverse3d': Invalid 3d object [%d], "
                       "in selected image%s (%s).",
                       ind,gmic_selection,message);
@@ -9401,7 +9426,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             cimg_forY(selection,l) {
               const unsigned int ind = selection[l] + off;
               CImg<T> &img = gmic_check(images[ind]);
-              if (!img.is_CImg3d(true,message))
+              if (!img.is_CImg3d(false,message))
                 error(images,
                       "Command '-split3d': Invalid 3d object [%d], in selected image%s (%s).",
                       ind-off,gmic_selection,message);
@@ -11627,7 +11652,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         if (input_images) {
           const unsigned int last = input_images.size() - 1;
           if (input_images.size()==1) {
-            if (input_images[0].is_CImg3d(true))
+            if (input_images[0].is_CImg3d(false))
               std::fprintf(cimg::output()," (%u vertices, %u primitives).",
                            cimg::float2uint(input_images(0,6)),
                            cimg::float2uint(input_images(0,7)));
@@ -11696,7 +11721,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       instant_window[0].assign();
 #endif
       cimglist_for(images,l) {
-        const bool is_3d = images[l].is_CImg3d(true);
+        const bool is_3d = images[l].is_CImg3d(false);
         if (!l) is_first3d = is_3d;
         CImg<unsigned int>::vector(l).move_to(is_3d?lselection3d:lselection);
       }

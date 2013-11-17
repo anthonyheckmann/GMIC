@@ -8492,6 +8492,10 @@ _apply_parallel_overlap16 :
 #@gmic : Evaluate specified expression and display an error message if evaluated to false.
 #@gmic : If 'expression' is not evaluable, it is regarded as a filename and checked if it exists.
 
+#@gmic check3d : (*)
+#@gmic : Check validity of selected 3d vector objects, and display an error message
+#@gmic : if one of the selected image is not a valid 3d vector object.
+
 #@gmic continue : (*)
 #@gmic : Go to end of current block 'repeat..done', 'do..while' or 'local..endlocal'.
 #@gmic : $ image.jpg -repeat 10 -blur 1 -if {1==1} -continue -endif -deform 10 -done
@@ -14393,6 +14397,16 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   # Sort filter code by lexicographical order.
   -v + -e[] "\n> Sort filters by lexicographic order." -v -
   -_update_gmic_gimp_sort 0,{@#-1}
+
+  # Remove duplicate filters.
+  -v + -e[] "\n> Remove duplicate filters." -v -
+  pname=@{-1,n}
+  -repeat {@#-1} cname=@{$<,n}
+    -if {$cname'=='$pname}
+      -v + -e[] "  "$<". Remove duplicate '"$cname"'." -v -
+      -rm[$<]
+    -else pname=$cname -endif
+  -done
 
   # Rebuild folder structure.
   -v + -e[] "> Rebuild folder structure." -v -
