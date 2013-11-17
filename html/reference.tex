@@ -953,12 +953,12 @@ tools 'curl' or 'wget'.
 
 \subsection{\emph{-verbose\index{-verbose}} (*)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{level}}~~~$|$\\
+{\small \texttt{\_level}}~~~$|$\\
 \hspace*{2.2cm}{\small \texttt{\{ + ~$|$~ - \}}}\\~\\
 Set or increment/decrement the verbosity level.
 ~\\(\emph{eq. to} {\small \texttt{'-v'}}).
 ~\\When 'level'$>$=0, G'MIC log messages are displayed on the standard error (stderr).
-~\\~\\Default value for the verbosity level is 0.
+~\\~\\\textbf{Default value}: {\small \texttt{'level=0'.}}
 
 
 \subsection{\emph{-wait\index{-wait}} (+)}\vspace*{-0.5em}
@@ -1594,7 +1594,7 @@ Compress selected images as 2xN data matrices, using RLE algorithm.
 \subsection{\emph{-cumul\index{-cumul}} }\vspace*{-0.5em}
 Compute the cumulative function of specified image data.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def124.jpg}\\
-{\footnotesize \textbf{Example 124~:} \texttt{image.jpg --histogram 256 --cumul[-1] -display\_graph[-2,-1] 400,300,3}}
+{\footnotesize \textbf{Example 124~:} \texttt{image.jpg --histogram --cumul[-1] -display\_graph[-2,-1] 400,300,3}}
 \end{center}
 
 \subsection{\emph{-cut\index{-cut}} (+)}\vspace*{-0.5em}
@@ -1634,9 +1634,9 @@ Reverse data endianness of selected images.
 Equalize histograms of selected images.
 ~\\If value range is specified, the equalization is done only for pixels in the specified
 value range.
-~\\~\\\textbf{Default values}: {\small \texttt{'value\_min=0\%'} and \texttt{'value\_max=100\%'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'nb\_levels=256', 'value\_min=0\%'} and \texttt{'value\_max=100\%'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def128.jpg}\\
-{\footnotesize \textbf{Example 128~:} \texttt{image.jpg --equalize 256}}
+{\footnotesize \textbf{Example 128~:} \texttt{image.jpg --equalize}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def129.jpg}\\
 {\footnotesize \textbf{Example 129~:} \texttt{image.jpg --equalize 4,0,128}}
 \end{center}
@@ -1746,7 +1746,7 @@ Linearly normalize values of selected images in specified range.
 \subsection{\emph{-normalize\_sum\index{-normalize\_sum}} }\vspace*{-0.5em}
 Normalize selected images with a unitary sum.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def145.jpg}\\
-{\footnotesize \textbf{Example 145~:} \texttt{image.jpg --histogram[-1] 256 -normalize\_sum[-1] -display\_graph[-1] 400,300}}
+{\footnotesize \textbf{Example 145~:} \texttt{image.jpg --histogram[-1] -normalize\_sum[-1] -display\_graph[-1] 400,300}}
 \end{center}
 
 \subsection{\emph{-orientation\index{-orientation}} }\vspace*{-0.5em}
@@ -1898,7 +1898,7 @@ Convert selected vector fields to corresponding diffusion tensor fields.
 Apply specified command on chosen normalized channels of each selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'normalize=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def163.jpg}\\
-{\footnotesize \textbf{Example 163~:} \texttt{image.jpg --apply\_channels "-equalize 256 -blur 2",5}}
+{\footnotesize \textbf{Example 163~:} \texttt{image.jpg --apply\_channels "-equalize -blur 2",5}}
 \end{center}
 
 \subsection{\emph{-autoindex\index{-autoindex}} }\vspace*{-0.5em}
@@ -1952,7 +1952,7 @@ Compute RGB representation of selected 2d direction fields.
 \subsection{\emph{-ditheredbw\index{-ditheredbw}} }\vspace*{-0.5em}
 Create dithered B\&W version of selected images.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def169.jpg}\\
-{\footnotesize \textbf{Example 169~:} \texttt{image.jpg --equalize 256 -ditheredbw[-1]}}
+{\footnotesize \textbf{Example 169~:} \texttt{image.jpg --equalize -ditheredbw[-1]}}
 \end{center}
 
 \subsection{\emph{-fill\_color\index{-fill\_color}} }\vspace*{-0.5em}
@@ -1970,7 +1970,7 @@ Fill selected images with specified color.
 Compute RGB representation of 2d gradient of selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'is\_orientation=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def171.jpg}\\
-{\footnotesize \textbf{Example 171~:} \texttt{image.jpg --gradient2rgb 0 -equalize[-1] 256}}
+{\footnotesize \textbf{Example 171~:} \texttt{image.jpg --gradient2rgb 0 -equalize[-1]}}
 \end{center}
 
 \subsection{\emph{-hsi2rgb\index{-hsi2rgb}} (+)}\vspace*{-0.5em}
@@ -2699,8 +2699,9 @@ of selected images.
 \subsection{\emph{-split\index{-split}} (*)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{\{ x ~$|$~ y ~$|$~ z ~$|$~ c \}..\{ x ~$|$~ y ~$|$~ z ~$|$~ c \},\_nb\_parts}}~~~$|$\\
-\hspace*{2.2cm}{\small \texttt{keep\_splitting\_values=\{ + ~$|$~ - \},value1,value2,...}}\\~\\
-Split selected images along specified axis, or sequence of scalar values.
+\hspace*{2.2cm}{\small \texttt{keep\_splitting\_values=\{ + ~$|$~ - \},value1,value2,...}}~~~$|$\\
+\hspace*{2.2cm}{\small \texttt{(no args)}}\\~\\
+Split selected images either along a specified axis, or regarding to a sequence of scalar values, or as a set of constant sub-vectors.
 ~\\(\emph{eq. to} {\small \texttt{'-s'}}).
 ~\\'nb\_parts' can be \{ 0=maximum split ~$|$~ $>$0=split in N parts ~$|$~ $<$0=split in parts of size -N \}.
 ~\\~\\\textbf{Default value}: {\small \texttt{'nb\_parts=0'.}}
@@ -2726,9 +2727,10 @@ Split selected images as a MxN array of tiles.
 
 \subsection{\emph{-unroll\index{-unroll}} (*)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{axis=\{ x ~$|$~ y ~$|$~ z ~$|$~ c \}}}\\~\\
+{\small \texttt{\_axis=\{ x ~$|$~ y ~$|$~ z ~$|$~ c \}}}\\~\\
 Unroll selected images along specified axis.
 ~\\(\emph{eq. to} {\small \texttt{'-y'}}).
+~\\~\\\textbf{Default value}: {\small \texttt{'axis=y'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def244.jpg}\\
 {\footnotesize \textbf{Example 244~:} \texttt{(1,2,3;4,5,6;7,8,9) --unroll y}}
 \end{center}
@@ -3117,7 +3119,7 @@ Compute N-d gradient orientation of selected images.
 \subsection{\emph{-gradient\_norm\index{-gradient\_norm}} }\vspace*{-0.5em}
 Compute gradient norm of selected images.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def288.jpg}\\
-{\footnotesize \textbf{Example 288~:} \texttt{image.jpg --gradient\_norm -equalize[-1] 256}}
+{\footnotesize \textbf{Example 288~:} \texttt{image.jpg --gradient\_norm -equalize[-1]}}
 \end{center}
 
 \subsection{\emph{-haar\index{-haar}} }\vspace*{-0.5em}
@@ -3446,7 +3448,7 @@ Add a textual watermark in the frequency domain of selected images.
 Compute the watershed transform of selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'fill\_lines=1'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def326.jpg}\\
-{\footnotesize \textbf{Example 326~:} \texttt{400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] 0 -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse}}
+{\footnotesize \textbf{Example 326~:} \texttt{400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse}}
 \end{center}
 \section{Features extraction}
 
@@ -3525,11 +3527,11 @@ Compute fourier transform of selected images, as centered magnitude/phase images
 
 \subsection{\emph{-histogram\index{-histogram}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{nb\_levels$>$0[\%],\_value0[\%],\_value1[\%]}}\\~\\
+{\small \texttt{\_nb\_levels$>$0[\%],\_value0[\%],\_value1[\%]}}\\~\\
 Compute the histogram of selected images.
 ~\\If value range is set, the histogram is estimated only for pixels in the specified
 value range. Argument 'value1' must be specified if 'value0' is set.
-~\\~\\\textbf{Default values}: {\small \texttt{'value0=0\%'} and \texttt{'value1=100\%'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'nb\_levels=256', 'value0=0\%'} and \texttt{'value1=100\%'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def335.jpg}\\
 {\footnotesize \textbf{Example 335~:} \texttt{image.jpg --histogram 64 -display\_graph[-1] 400,300,3}}
 \end{center}
@@ -3589,9 +3591,9 @@ Render isophotes of selected images on a transparent background.
 Label connected components in selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'tolerance=0'} and \texttt{'is\_high\_connectivity=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def339.jpg}\\
-{\footnotesize \textbf{Example 339~:} \texttt{image.jpg -luminance -threshold 60\% -label 0 -normalize 0,255 -map 0}}
+{\footnotesize \textbf{Example 339~:} \texttt{image.jpg -luminance -threshold 60\% -label -normalize 0,255 -map 0}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def340.jpg}\\
-{\footnotesize \textbf{Example 340~:} \texttt{400,400 -set 1,50\%,50\% -distance 1 -mod 16 -threshold 8 -label 0 -mod 255 -map 2}}
+{\footnotesize \textbf{Example 340~:} \texttt{400,400 -set 1,50\%,50\% -distance 1 -mod 16 -threshold 8 -label -mod 255 -map 2}}
 \end{center}
 
 \subsection{\emph{-label\_fg\index{-label\_fg}} }\vspace*{-0.5em}
@@ -3898,7 +3900,7 @@ Input maze according to size and shape of selected mask images.
 
 \subsection{\emph{-object3d\index{-object3d}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{[object3d],\_x[\%],\_y[\%],\_z,\_opacity,\_rendering\_mode,\_is\_double3d=\{ 0 ~$|$~ 1 \},\_is\_zbuffer=\{ 0 ~$|$~ 1 \},\_focale,\_light\_x,\_light\_y,\_light\_z,\_specular\_lightness,\_specular\_shininess}}\\~\\
+{\small \texttt{[object3d],\_x[\%],\_y[\%],\_z,\_opacity,\_rendering\_mode,\_is\_double\_sided=\{ 0 ~$|$~ 1 \},\_is\_zbuffer=\{ 0 ~$|$~ 1 \},\_focale,\_light\_x,\_light\_y,\_light\_z,\_specular\_lightness,\_specular\_shininess}}\\~\\
 Draw specified 3d object on selected images.
 ~\\'rendering\_mode' can be \{ 0=dots ~$|$~ 1=wireframe ~$|$~ 2=flat ~$|$~ 3=flat-shaded ~$|$~ 4=gouraud-shaded ~$|$~ 5=phong-shaded \}.
 ~\\~\\\textbf{Default values}: {\small \texttt{'x=y=z=0', 'opacity=1'} and \texttt{'is\_zbuffer=1'. All other arguments take their default values from the 3d environment variables.}}
@@ -3936,12 +3938,12 @@ Draw pie chart on selected (RGB) images.
 
 \subsection{\emph{-plasma\index{-plasma}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{alpha,\_beta,\_scale$>$=0}}\\~\\
+{\small \texttt{\_alpha,\_\_beta,\_scale$>$=0}}\\~\\
 Draw a random colored plasma fractal on selected images.
 ~\\This command implements the so-called 'Diamond-Square' algorithm.
-~\\~\\\textbf{Default values}: {\small \texttt{'beta=1'} and \texttt{'scale=8'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'alpha=1', 'beta=1'} and \texttt{'scale=8'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def376.jpg}\\
-{\footnotesize \textbf{Example 376~:} \texttt{400,400,1,3 -plasma 1}}
+{\footnotesize \textbf{Example 376~:} \texttt{400,400,1,3 -plasma}}
 \end{center}
 
 \subsection{\emph{-point\index{-point}} (+)}\vspace*{-0.5em}
@@ -4326,9 +4328,10 @@ factors.
 
 \subsection{\emph{-double3d\index{-double3d}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{is\_doubled=\{ 0 ~$|$~ 1 \}}}\\~\\
+{\small \texttt{\_is\_double\_sided=\{ 0 ~$|$~ 1 \}}}\\~\\
 Enable/disable double-sided mode for 3d rendering.
 ~\\(\emph{eq. to} {\small \texttt{'-db3d'}}).
+~\\~\\\textbf{Default value}: {\small \texttt{'is\_double\_sided=1'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def420.jpg}\\
 {\footnotesize \textbf{Example 420~:} \texttt{-mode3d 1 -repeat 2 -torus3d 100,30 -rotate3d[-1] 1,1,0,60 -double3d \$$>$ -snapshot3d[-1] 400 -done}}
 \end{center}
@@ -4519,21 +4522,23 @@ Input 3d lissajous curves (x(t)=sin(a*t+A*2*pi),y(t)=sin(b*t+B*2*pi),z(t)=sin(c*
 
 \subsection{\emph{-mode3d\index{-mode3d}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{mode}}\\~\\
+{\small \texttt{\_mode}}\\~\\
 Set static 3d rendering mode.
 ~\\(\emph{eq. to} {\small \texttt{'-m3d'}}).
 ~\\'mode' can be \{ -1=bounding-box ~$|$~ 0=dots ~$|$~ 1=wireframe ~$|$~ 2=flat ~$|$~ 3=flat-shaded ~$|$~ 4=gouraud-shaded ~$|$~ 5=phong-shaded \}.");
-~\\Bounding-box mode ('mode==1') is active only for the interactive 3d viewer.
+~\\Bounding-box mode ('mode==-1') is active only for the interactive 3d viewer.
+~\\~\\\textbf{Default value}: {\small \texttt{'mode=4'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def445.jpg}\\
 {\footnotesize \textbf{Example 445~:} \texttt{(0,1,2,3,4,5) -double3d 0 -repeat \{w\} -torus3d 100,30 -rotate3d[-1] 1,1,0,60 -mode3d @\{0,\$$>$\} -snapshot3d[-1] 300 -done -remove[0]}}
 \end{center}
 
 \subsection{\emph{-moded3d\index{-moded3d}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{mode}}\\~\\
+{\small \texttt{\_mode}}\\~\\
 Set dynamic 3d rendering mode for interactive 3d viewer.
 ~\\(\emph{eq. to} {\small \texttt{'-md3d'}}).
 ~\\'mode' can be \{ -1=bounding-box ~$|$~ 0=dots ~$|$~ 1=wireframe ~$|$~ 2=flat ~$|$~ 3=flat-shaded ~$|$~ 4=gouraud-shaded ~$|$~ 5=phong-shaded \}.
+~\\~\\\textbf{Default value}: {\small \texttt{'mode=-1'.}}
 
 
 \subsection{\emph{-mul3d\index{-mul3d}} (+)}\vspace*{-0.5em}
@@ -4556,9 +4561,10 @@ Normalize selected 3d objects to unit size.
 
 \subsection{\emph{-opacity3d\index{-opacity3d}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{opacity}}\\~\\
+{\small \texttt{\_opacity}}\\~\\
 Set opacity of selected 3d objects.
 ~\\(\emph{eq. to} {\small \texttt{'-o3d'}}).
+~\\~\\\textbf{Default value}: {\small \texttt{'opacity=1'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def448.jpg}\\
 {\footnotesize \textbf{Example 448~:} \texttt{-torus3d 100,10 -double3d 0 -repeat 7 --rotate3d[-1] 1,0,0,20 -opacity3d[-1] \{?\} -done -add3d}}
 \end{center}
@@ -6666,7 +6672,7 @@ $\bullet$~'\texttt{-ow}' ~is equivalent to~~'\texttt{-outputw}'.\\
 $\bullet$~'\texttt{-p}' (*)~is equivalent to~~'\texttt{-print}'.\\
 $\bullet$~'\texttt{-sh}' (*)~is equivalent to~~'\texttt{-shared}'.\\
 $\bullet$~'\texttt{-up}' ~is equivalent to~~'\texttt{-update}'.\\
-$\bullet$~'\texttt{-v}' (*)~is equivalent to~~'\texttt{-verbose.}'.\\
+$\bullet$~'\texttt{-v}' (*)~is equivalent to~~'\texttt{-verbose}'.\\
 $\bullet$~'\texttt{-w}' (+)~is equivalent to~~'\texttt{-window}'.\\
 $\bullet$~'\texttt{-k}' (*)~is equivalent to~~'\texttt{-keep}'.\\
 $\bullet$~'\texttt{-mv}' (*)~is equivalent to~~'\texttt{-move}'.\\

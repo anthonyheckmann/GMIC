@@ -868,14 +868,14 @@ nb_levels>=1,spectrum>=1
 <br/><i><font color="blue">(eq. to '-up').</font></i>
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-verbose (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-level |<br/>
+_level |<br/>
 { + | - }
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Set or increment/decrement the verbosity level.
 <br/><i><font color="blue">(eq. to '-v').</font></i>
 <br/>When 'level'>=0, G'MIC log messages are displayed on the standard error (stderr).
-<br/><br/>Default value for the verbosity level is 0.
+<br/><br/><b>Default value</b>: 'level=0'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-wait (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 delay |<br/>
@@ -1386,7 +1386,7 @@ _ref_color1,...
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-cumul</b>:</font>
 
 <p style="margin-left:100px"><tt>Compute the cumulative function of specified image data.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def124.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --histogram 256 --cumul[-1] -display_graph[-2,-1] 400,300,3</div></div></td><td><tt>image.jpg --histogram 256 --cumul[-1] -display_graph[-2,-1] 400,300,3</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def124.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --histogram --cumul[-1] -display_graph[-2,-1] 400,300,3</div></div></td><td><tt>image.jpg --histogram --cumul[-1] -display_graph[-2,-1] 400,300,3</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-cut (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 { value0[%] | [image0] },{ value1[%] | [image1] } |<br/>
@@ -1421,8 +1421,8 @@ _nb_levels>0[%],_value_min[%],_value_max[%]
 <p style="margin-left:100px"><tt>Equalize histograms of selected images.
 <br/>If value range is specified, the equalization is done only for pixels in the specified
 <br/>&nbsp;value range.
-<br/><br/><b>Default values</b>: 'value_min=0%' and 'value_max=100%'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def128.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --equalize 256</div></div></td><td><tt>image.jpg --equalize 256</tt></td></tr>
+<br/><br/><b>Default values</b>: 'nb_levels=256', 'value_min=0%' and 'value_max=100%'.
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def128.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --equalize</div></div></td><td><tt>image.jpg --equalize</tt></td></tr>
 <tr><td width="40"><div><a href="img/gmic_def129.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --equalize 4,0,128</div></div></td><td><tt>image.jpg --equalize 4,0,128</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fill (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -1508,7 +1508,7 @@ std_variation>=0[%],_noise_type
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-normalize_sum</b>:</font>
 
 <p style="margin-left:100px"><tt>Normalize selected images with a unitary sum.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def145.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --histogram[-1] 256 -normalize_sum[-1] -display_graph[-1] 400,300</div></div></td><td><tt>image.jpg --histogram[-1] 256 -normalize_sum[-1] -display_graph[-1] 400,300</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def145.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --histogram[-1] -normalize_sum[-1] -display_graph[-1] 400,300</div></div></td><td><tt>image.jpg --histogram[-1] -normalize_sum[-1] -display_graph[-1] 400,300</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-orientation</b>:</font>
 
 <p style="margin-left:100px"><tt>Compute the pointwise orientation of vector-valued pixels in selected images.
@@ -1636,7 +1636,7 @@ min[%],max[%]
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply specified command on chosen normalized channels of each selected images.
 <br/><br/><b>Default value</b>: 'normalize=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def163.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --apply_channels "-equalize 256 -blur 2",5</div></div></td><td><tt>image.jpg --apply_channels "-equalize 256 -blur 2",5</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def163.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --apply_channels "-equalize -blur 2",5</div></div></td><td><tt>image.jpg --apply_channels "-equalize -blur 2",5</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-autoindex</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 nb_colors>0,0<=_dithering<=1,_method={ 0=median-cut | 1=k-means }
@@ -1679,7 +1679,7 @@ nb_levels>=1,_method={ 0=median-cut | 1=k-means },_sort_vectors={ 0 | 1 }
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-ditheredbw</b>:</font>
 
 <p style="margin-left:100px"><tt>Create dithered B&W version of selected images.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def169.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --equalize 256 -ditheredbw[-1]</div></div></td><td><tt>image.jpg --equalize 256 -ditheredbw[-1]</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def169.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --equalize -ditheredbw[-1]</div></div></td><td><tt>image.jpg --equalize -ditheredbw[-1]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fill_color</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 col1,...,colN
@@ -1695,7 +1695,7 @@ _is_orientation={ 0 | 1 }
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Compute RGB representation of 2d gradient of selected images.
 <br/><br/><b>Default value</b>: 'is_orientation=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def171.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --gradient2rgb 0 -equalize[-1] 256</div></div></td><td><tt>image.jpg --gradient2rgb 0 -equalize[-1] 256</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def171.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --gradient2rgb 0 -equalize[-1]</div></div></td><td><tt>image.jpg --gradient2rgb 0 -equalize[-1]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-hsi2rgb (+)</b>:</font>
 
 <p style="margin-left:100px"><tt>Convert selected images from HSI to RGB colorbases.
@@ -2303,10 +2303,11 @@ _ordering={ + | - },_axis={ x | y | z | c }
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-split (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 { x | y | z | c }..{ x | y | z | c },_nb_parts |<br/>
-keep_splitting_values={ + | - },value1,value2,...
+keep_splitting_values={ + | - },value1,value2,... |<br/>
+(no args)
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Split selected images along specified axis, or sequence of scalar values.
+<p style="margin-left:100px"><tt>Split selected images either along a specified axis, or regarding to a sequence of scalar values, or as a set of constant sub-vectors.
 <br/><i><font color="blue">(eq. to '-s').</font></i>
 <br/>'nb_parts' can be { 0=maximum split | >0=split in N parts | <0=split in parts of size -N }.
 <br/><br/><b>Default value</b>: 'nb_parts=0'.
@@ -2325,11 +2326,12 @@ M!=0,_N!=0,_is_homogeneous={ 0 | 1 }
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def243.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --local -split_tiles 5,4 -blur 3,0 -sharpen 700 -append_tiles 4,5 -endlocal</div></div></td><td><tt>image.jpg --local -split_tiles 5,4 -blur 3,0 -sharpen 700 -append_tiles 4,5 -endlocal</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-unroll (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-axis={ x | y | z | c }
+_axis={ x | y | z | c }
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Unroll selected images along specified axis.
 <br/><i><font color="blue">(eq. to '-y').</font></i>
+<br/><br/><b>Default value</b>: 'axis=y'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def244.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">(1,2,3;4,5,6;7,8,9) --unroll y</div></div></td><td><tt>(1,2,3;4,5,6;7,8,9) --unroll y</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-upscale_smart</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -2664,7 +2666,7 @@ _dimension={1,2,3}
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-gradient_norm</b>:</font>
 
 <p style="margin-left:100px"><tt>Compute gradient norm of selected images.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def288.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --gradient_norm -equalize[-1] 256</div></div></td><td><tt>image.jpg --gradient_norm -equalize[-1] 256</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def288.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --gradient_norm -equalize[-1]</div></div></td><td><tt>image.jpg --gradient_norm -equalize[-1]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-haar</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 scale>0
@@ -2947,7 +2949,7 @@ text,_size>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Compute the watershed transform of selected images.
 <br/><br/><b>Default value</b>: 'fill_lines=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def326.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] 0 -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse</div></div></td><td><tt>400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] 0 -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def326.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse</div></div></td><td><tt>400,400 -noise 0.2,2 --distance 1 -mul[-1] -1 -label[-2] -watershed[-2] [-1] -mod[-2] 256 -map[-2] 0 -reverse</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection9"><font color="purple">** <u>Features extraction</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-area</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -3011,13 +3013,13 @@ isovalue[%],[metric],_method
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def334.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -fftpolar -ellipse 50%,50%,10,10,0,1,0 -ifftpolar</div></div></td><td><tt>image.jpg -fftpolar -ellipse 50%,50%,10,10,0,1,0 -ifftpolar</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-histogram (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-nb_levels>0[%],_value0[%],_value1[%]
+_nb_levels>0[%],_value0[%],_value1[%]
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Compute the histogram of selected images.
 <br/>If value range is set, the histogram is estimated only for pixels in the specified
 <br/>&nbsp;value range. Argument 'value1' must be specified if 'value0' is set.
-<br/><br/><b>Default values</b>: 'value0=0%' and 'value1=100%'.
+<br/><br/><b>Default values</b>: 'nb_levels=256', 'value0=0%' and 'value1=100%'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def335.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --histogram 64 -display_graph[-1] 400,300,3</div></div></td><td><tt>image.jpg --histogram 64 -display_graph[-1] 400,300,3</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-histogram3</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -3071,8 +3073,8 @@ tolerance>=0,is_high_connectivity={ 0 | 1 }
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Label connected components in selected images.
 <br/><br/><b>Default values</b>: 'tolerance=0' and 'is_high_connectivity=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def339.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -luminance -threshold 60% -label 0 -normalize 0,255 -map 0</div></div></td><td><tt>image.jpg -luminance -threshold 60% -label 0 -normalize 0,255 -map 0</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def340.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400 -set 1,50%,50% -distance 1 -mod 16 -threshold 8 -label 0 -mod 255 -map 2</div></div></td><td><tt>400,400 -set 1,50%,50% -distance 1 -mod 16 -threshold 8 -label 0 -mod 255 -map 2</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def339.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -luminance -threshold 60% -label -normalize 0,255 -map 0</div></div></td><td><tt>image.jpg -luminance -threshold 60% -label -normalize 0,255 -map 0</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def340.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400 -set 1,50%,50% -distance 1 -mod 16 -threshold 8 -label -mod 255 -map 2</div></div></td><td><tt>400,400 -set 1,50%,50% -distance 1 -mod 16 -threshold 8 -label -mod 255 -map 2</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-label_fg</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 tolerance>=0,is_high_connectivity={ 0 | 1 }
@@ -3340,7 +3342,7 @@ _cellsize>0
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def372.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">0 -text "G'MIC",0,0,57,1,1 -dilate 3 -autocrop 0 -frame 1,1,0 -maze_mask 8 -dilate 3 -negative -* 255</div></div></td><td><tt>0 -text "G'MIC",0,0,57,1,1 -dilate 3 -autocrop 0 -frame 1,1,0 -maze_mask 8 -dilate 3 -negative -* 255</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-object3d (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-[object3d],_x[%],_y[%],_z,_opacity,_rendering_mode,_is_double3d={ 0 | 1 },_is_zbuffer={ 0 | 1 },_focale,_light_x,_light_y,_light_z,_specular_lightness,_specular_shininess
+[object3d],_x[%],_y[%],_z,_opacity,_rendering_mode,_is_double_sided={ 0 | 1 },_is_zbuffer={ 0 | 1 },_focale,_light_x,_light_y,_light_z,_specular_lightness,_specular_shininess
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Draw specified 3d object on selected images.
@@ -3375,13 +3377,13 @@ label_height>=0,label_R,label_G,label_B,"label1",value1,R1,G1,B1,...,"labelN",va
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def375.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -piechart 25,0,0,0,"Red",55,255,0,0,"Green",40,0,255,0,"Blue",30,128,128,255,"Other",5,128,128,128</div></div></td><td><tt>image.jpg -piechart 25,0,0,0,"Red",55,255,0,0,"Green",40,0,255,0,"Blue",30,128,128,255,"Other",5,128,128,128</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-plasma (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-alpha,_beta,_scale>=0
+_alpha,__beta,_scale>=0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Draw a random colored plasma fractal on selected images.
 <br/>This command implements the so-called 'Diamond-Square' algorithm.
-<br/><br/><b>Default values</b>: 'beta=1' and 'scale=8'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def376.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400,1,3 -plasma 1</div></div></td><td><tt>400,400,1,3 -plasma 1</tt></td></tr>
+<br/><br/><b>Default values</b>: 'alpha=1', 'beta=1' and 'scale=8'.
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def376.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400,1,3 -plasma</div></div></td><td><tt>400,400,1,3 -plasma</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-point (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 x[%],y[%],_z[%],_opacity,_color1,..
@@ -3710,11 +3712,12 @@ factor_x,factor_y,_factor_z
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def419.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-torus3d 5,2 -repeat 5 --add3d[-1] 12,0,0 -div3d[-1] 1.2 -color3d[-1] @{-RGB} -done -add3d</div></div></td><td><tt>-torus3d 5,2 -repeat 5 --add3d[-1] 12,0,0 -div3d[-1] 1.2 -color3d[-1] @{-RGB} -done -add3d</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-double3d (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-is_doubled={ 0 | 1 }
+_is_double_sided={ 0 | 1 }
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Enable/disable double-sided mode for 3d rendering.
 <br/><i><font color="blue">(eq. to '-db3d').</font></i>
+<br/><br/><b>Default value</b>: 'is_double_sided=1'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def420.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-mode3d 1 -repeat 2 -torus3d 100,30 -rotate3d[-1] 1,1,0,60 -double3d $> -snapshot3d[-1] 400 -done</div></div></td><td><tt>-mode3d 1 -repeat 2 -torus3d 100,30 -rotate3d[-1] 1,1,0,60 -double3d $> -snapshot3d[-1] 400 -done</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-elevation3d (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -3871,22 +3874,24 @@ resolution>1,a,A,b,B,c,C
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def444.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-lissajous3d ,</div></div></td><td><tt>-lissajous3d ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-mode3d (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-mode
+_mode
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Set static 3d rendering mode.
 <br/><i><font color="blue">(eq. to '-m3d').</font></i>
 <br/>'mode' can be { -1=bounding-box | 0=dots | 1=wireframe | 2=flat | 3=flat-shaded | 4=gouraud-shaded | 5=phong-shaded }.");
-<br/>Bounding-box mode ('mode==1') is active only for the interactive 3d viewer.
+<br/>Bounding-box mode ('mode==-1') is active only for the interactive 3d viewer.
+<br/><br/><b>Default value</b>: 'mode=4'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def445.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">(0,1,2,3,4,5) -double3d 0 -repeat {w} -torus3d 100,30 -rotate3d[-1] 1,1,0,60 -mode3d @{0,$>} -snapshot3d[-1] 300 -done -remove[0]</div></div></td><td><tt>(0,1,2,3,4,5) -double3d 0 -repeat {w} -torus3d 100,30 -rotate3d[-1] 1,1,0,60 -mode3d @{0,$>} -snapshot3d[-1] 300 -done -remove[0]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-moded3d (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-mode
+_mode
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Set dynamic 3d rendering mode for interactive 3d viewer.
 <br/><i><font color="blue">(eq. to '-md3d').</font></i>
 <br/>'mode' can be { -1=bounding-box | 0=dots | 1=wireframe | 2=flat | 3=flat-shaded | 4=gouraud-shaded | 5=phong-shaded }.
+<br/><br/><b>Default value</b>: 'mode=-1'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-mul3d (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 factor |<br/>
@@ -3904,11 +3909,12 @@ factor_x,factor_y,_factor_z
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def447.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-repeat 100 -circle3d {?(3)},{?(3)},{?(3)},0.1 -done -add3d -color3d[-1] 255,0,0 --normalize3d[-1] -color3d[-1] 0,255,0 -add3d</div></div></td><td><tt>-repeat 100 -circle3d {?(3)},{?(3)},{?(3)},0.1 -done -add3d -color3d[-1] 255,0,0 --normalize3d[-1] -color3d[-1] 0,255,0 -add3d</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-opacity3d (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-opacity
+_opacity
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Set opacity of selected 3d objects.
 <br/><i><font color="blue">(eq. to '-o3d').</font></i>
+<br/><br/><b>Default value</b>: 'opacity=1'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def448.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-torus3d 100,10 -double3d 0 -repeat 7 --rotate3d[-1] 1,0,0,20 -opacity3d[-1] {?} -done -add3d</div></div></td><td><tt>-torus3d 100,10 -double3d 0 -repeat 7 --rotate3d[-1] 1,0,0,20 -opacity3d[-1] {?} -done -add3d</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-parametric3d</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -5782,7 +5788,7 @@ _scorefile,_number_of_sessions>=0
 <font color="green"><b>&nbsp;&nbsp;-up </b>:</font>
 <font color="blue"><i>eq. to '-update'</i></font><br/>
 <font color="green"><b>&nbsp;&nbsp;-v  (*)</b>:</font>
-<font color="blue"><i>eq. to '-verbose.'</i></font><br/>
+<font color="blue"><i>eq. to '-verbose'</i></font><br/>
 <font color="green"><b>&nbsp;&nbsp;-w  (+)</b>:</font>
 <font color="blue"><i>eq. to '-window'</i></font><br/>
 <font color="green"><b>&nbsp;&nbsp;-k  (*)</b>:</font>
