@@ -10268,12 +10268,12 @@ blend_edges : -check {$1>=0}
   -endl -done -r[^0] [0],0,0,0.5,0.5 -+ -s[-1] c -/[-4--2] [-1] -rm[-1] -a[-3--1] c -v + -endif
 
 #@gmic blend_fade
-#@gmic : Blend selected images togethers using a given fading pattern (defined as the latest image).
+#@gmic : Blend selected images together using a given fading pattern (defined as the latest image).
 #@gmic : $ image.jpg -testimage2d {w},{h} 100%,100%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend_fade
 blend_fade :
   -e[^-1] "Blend image$? using 'fade' mode."
-  -v - -r[^0] @{-max_whd},100%,3
-  -r[1--2] 100%,100%,100%,@{-max_s} -channels[-1] 0
+  -v - -r[^-1] @{-max_whds[^-1]},0
+  -r[-1] [-2],[-2],[-2],100%,1 -max[-1] 0 -min[-1] {@#-2}
   -repeat {@#-1} ---[-1] $> -abs[-1] --[-1] 1 -*[-1] -1 -max[-1] 0 -*[$>,-1] -done
   -rm[-1] -+ -v +
 
