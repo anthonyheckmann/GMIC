@@ -591,6 +591,7 @@ _gmic_def()
 	      -apply_parallel_channels --apply_parallel_channels\
 	      -apply_parallel_overlap --apply_parallel_overlap\
 	      -check --check\
+	      -check3d --check3d\
 	      -continue --continue\
 	      -break --break\
 	      -do --do\
@@ -1415,6 +1416,7 @@ _gmic_def()
 	      apply_parallel_channels\
 	      apply_parallel_overlap\
 	      check\
+	      check3d\
 	      continue\
 	      break\
 	      do\

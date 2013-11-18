@@ -4206,6 +4206,10 @@ expression
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Evaluate specified expression and display an error message if evaluated to false.
 <br/>If 'expression' is not evaluable, it is regarded as a filename and checked if it exists.
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-check3d (*)</b>:</font>
+
+<p style="margin-left:100px"><tt>Check validity of selected 3d vector objects, and display an error message
+<br/>&nbsp;if one of the selected image is not a valid 3d vector object.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-continue (*)</b>:</font>
 
 <p style="margin-left:100px"><tt>Go to end of current block 'repeat..done', 'do..while' or 'local..endlocal'.
@@ -5930,7 +5934,7 @@ _scorefile,_number_of_sessions>=0
 <font color="green"><b>&nbsp;&nbsp;-frame </b>:</font>
 <font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
 </p>
-<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 821 ]</b></font>
+<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 822 ]</b></font>
 <h2><a id="section13"><font color="brown"><u>Examples of use</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
 <pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
  The few examples below illustrate possible uses of this tool: 
