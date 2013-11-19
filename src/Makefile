@@ -88,7 +88,7 @@ MANDATORY_CFLAGS+= -Dcimg_use_vt100
 endif
 
 # Flags to enable debugging.
-DEBUG_CFLAGS = -Dcimg_verbosity=3 -g -pg
+DEBUG_CFLAGS = -Dcimg_verbosity=3 -g
 
 # Flags to enable optimizations.
 ifeq ($(CC),g++)
