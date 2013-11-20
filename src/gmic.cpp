@@ -877,61 +877,62 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
     float target_confidence = -1, target_priority = -1;
     int target_x = -1, target_y = -1;
     CImg_5x5(M,unsigned char);
-    cimg_for_in5x5(nmask,xm0,ym0,xm1,ym1,x,y,0,0,M,t) if (!Mcc && (Mcp || Mcn || Mpc || Mnc)) { // Found mask border point.
+    cimg_for_in5x5(nmask,xm0,ym0,xm1,ym1,x,y,0,0,M,unsigned char)
+      if (!Mcc && (Mcp || Mcn || Mpc || Mnc)) { // Found mask border point.
 
-      // Try to update bounding box coordinates.
-      if (x<(int)nxm0) nxm0 = (unsigned int)x;
-      if (x>(int)nxm1) nxm1 = (unsigned int)x;
-      if (y<(int)nym0) nym0 = (unsigned int)y;
-      if (y>(int)nym1) nym1 = (unsigned int)y;
+        // Try to update bounding box coordinates.
+        if (x<(int)nxm0) nxm0 = (unsigned int)x;
+        if (x>(int)nxm1) nxm1 = (unsigned int)x;
+        if (y<(int)nym0) nym0 = (unsigned int)y;
+        if (y>(int)nym1) nym1 = (unsigned int)y;
 
-      float confidence_term = -1, data_term = -1;
-      if (priorities(x,y)>=0) { // If priority has already been computed.
-        confidence_term = priorities(x,y,0);
-        data_term = priorities(x,y,1);
-      } else { // If priority must be computed/updated.
+        float confidence_term = -1, data_term = -1;
+        if (priorities(x,y)>=0) { // If priority has already been computed.
+          confidence_term = priorities(x,y,0);
+          data_term = priorities(x,y,1);
+        } else { // If priority must be computed/updated.
 
-        // Compute smoothed normal vector.
-        const float
-          Npc = (4.0f*Mpc + 2.0f*Mbc + 2.0f*Mcc + 2.0f*Mpp + 2.0f*Mpn + Mbp + Mbn + Mcp + Mcn)/16,  // N = smoothed 3x3 neighborhood of M.
-          Nnc = (4.0f*Mnc + 2.0f*Mac + 2.0f*Mcc + 2.0f*Mnp + 2.0f*Mnn + Map + Man + Mcp + Mcn)/16,
-          Ncp = (4.0f*Mcp + 2.0f*Mcb + 2.0f*Mcc + 2.0f*Mpp + 2.0f*Mnp + Mpb + Mnb + Mpc + Mnc)/16,
-          Ncn = (4.0f*Mcn + 2.0f*Mca + 2.0f*Mcc + 2.0f*Mpn + 2.0f*Mnn + Mpa + Mna + Mpc + Mnc)/16,
-          _nx = 0.5f*(Nnc - Npc),
-          _ny = 0.5f*(Ncn - Ncp),
-          nn = std::sqrt(1e-8f + _nx*_nx + _ny*_ny),
-          nx = _nx/nn,
-          ny = _ny/nn;
-
-        // Compute confidence term.
-        nmask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pM);
-        confidences._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
-        confidence_term = 0;
-        const unsigned char *ptrM = pM.data();
-        cimg_for(pC,ptrC,float) confidence_term+=*ptrC**(ptrM++);
-        confidence_term/=patch_size2;
-        priorities(x,y,0) = confidence_term;
-
-        // Compute data term.
-        _inpaint_patch_crop(ox+x-p1,oy+y-p1,ox+x+p2,oy+y+p2,2).move_to(pP);
-        float max_ix = 0, max_iy = 0, max_ng = 0;
-        CImg_3x3(I,T);
-        CImg_3x3(_M,unsigned char);
-        cimg_forC(pP,c) cimg_for3x3(pP,p,q,0,c,I,T) { // Compute max gradient norm inside patch.
-          cimg_get3x3(pM,p,q,0,0,_M,unsigned char);
+          // Compute smoothed normal vector.
           const float
-            ix = _Mnc*_Mcc*(Inc-Icc),
-            iy = _Mcn*_Mcc*(Icn-Icc),
-            ng = ix*ix + iy*iy;
-          if (ng>max_ng) { max_ix = ix; max_iy = iy; max_ng = ng; }
+            Npc = (4.0f*Mpc + 2.0f*Mbc + 2.0f*Mcc + 2.0f*Mpp + 2.0f*Mpn + Mbp + Mbn + Mcp + Mcn)/16,  // N = smoothed 3x3 neighborhood of M.
+            Nnc = (4.0f*Mnc + 2.0f*Mac + 2.0f*Mcc + 2.0f*Mnp + 2.0f*Mnn + Map + Man + Mcp + Mcn)/16,
+            Ncp = (4.0f*Mcp + 2.0f*Mcb + 2.0f*Mcc + 2.0f*Mpp + 2.0f*Mnp + Mpb + Mnb + Mpc + Mnc)/16,
+            Ncn = (4.0f*Mcn + 2.0f*Mca + 2.0f*Mcc + 2.0f*Mpn + 2.0f*Mnn + Mpa + Mna + Mpc + Mnc)/16,
+            _nx = 0.5f*(Nnc - Npc),
+            _ny = 0.5f*(Ncn - Ncp),
+            nn = std::sqrt(1e-8f + _nx*_nx + _ny*_ny),
+            nx = _nx/nn,
+            ny = _ny/nn;
+
+          // Compute confidence term.
+          nmask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pM);
+          confidences._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
+          confidence_term = 0;
+          const unsigned char *ptrM = pM.data();
+          cimg_for(pC,ptrC,float) confidence_term+=*ptrC**(ptrM++);
+          confidence_term/=patch_size2;
+          priorities(x,y,0) = confidence_term;
+
+          // Compute data term.
+          _inpaint_patch_crop(ox+x-p1,oy+y-p1,ox+x+p2,oy+y+p2,2).move_to(pP);
+          float max_ix = 0, max_iy = 0, max_ng = 0;
+          CImg_3x3(I,T);
+          CImg_3x3(_M,unsigned char);
+          cimg_forC(pP,c) cimg_for3x3(pP,p,q,0,c,I,T) { // Compute max gradient norm inside patch.
+            cimg_get3x3(pM,p,q,0,0,_M,unsigned char);
+            const float
+              ix = _Mnc*_Mcc*(Inc-Icc),
+              iy = _Mcn*_Mcc*(Icn-Icc),
+              ng = ix*ix + iy*iy;
+            if (ng>max_ng) { max_ix = ix; max_iy = iy; max_ng = ng; }
+          }
+          data_term = cimg::abs(-max_iy*nx + max_ix*ny);
+          priorities(x,y,1) = data_term;
         }
-        data_term = cimg::abs(-max_iy*nx + max_ix*ny);
-        priorities(x,y,1) = data_term;
+        const float priority = confidence_term*data_term;
+        if (priority>target_priority) { target_priority = priority; target_confidence = confidence_term; target_x = ox + x; target_y = oy + y; }
+        ++nb_border_points;
       }
-      const float priority = confidence_term*data_term;
-      if (priority>target_priority) { target_priority = priority; target_confidence = confidence_term; target_x = ox + x; target_y = oy + y; }
-      ++nb_border_points;
-    }
     if (!nb_border_points) break; // No more mask border points to inpaint!
     xm0 = nxm0; ym0 = nym0; xm1 = nxm1; ym1 = nym1; // Set new bounding box coordinates.
 
@@ -1117,7 +1118,7 @@ CImg<T> _inpaint_patch_crop(const int x0, const int y0, const int x1, const int 
   CImg<T> res(1U + nx1 - nx0,1U + ny1 - ny0,1,_spectrum);
   if (nx0<0 || nx1>=width() || ny0<0 || ny1>=height()) {
     if (boundary>=2) cimg_forXYZC(res,x,y,z,c) res(x,y,z,c) = _atXY(nx0+x,ny0+y,z,c);
-    else res.fill(boundary).draw_image(-nx0,-ny0,*this);
+    else res.fill((T)boundary).draw_image(-nx0,-ny0,*this);
   } else res.draw_image(-nx0,-ny0,*this);
   return res;
 }
@@ -11392,7 +11393,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             if (first_sep=='%') {
               const unsigned int
 		nb_frames = CImg<unsigned int>::get_load_ffmpeg(filename,0,0,0)[0];
-              first_frame = (unsigned int)cimg::round(first_frame*nb_frames/100.0f);
+              first_frame = cimg::round(first_frame*nb_frames/100.0f);
             }
             input_images.load_ffmpeg(filename,(unsigned int)first_frame,(unsigned int)first_frame);
           } else { // Read all frames

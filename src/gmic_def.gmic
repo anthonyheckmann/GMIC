@@ -4653,7 +4653,7 @@ _resize3dz : -check "$1>0 && ${2=3}>=0 && $2<=6 && ${3=0}>=0 && $3<=2 && ${4=0}>
 #@gmic : If resulting size of an image is too big, the image is replaced by a 1x1 image.
 #@gmic : Default values: 'max_size_factor=8'.
 rotate_tileable : -check ${2=8}>=0
-  -e[^-1] "Rotate image$? with angle $1° and make them tileable."
+  -e[^-1] "Rotate image$? with angle $1 deg. and make them tileable."
   -v -
 
   # Reduce angle to known fraction.
@@ -4873,7 +4873,7 @@ blur_angular : -skip ${2=0.5},${3=0.5}
 #@gmic : Default values: 'amplitude2=0', 'angle=0' and 'boundary=1'.
 #@gmic : $ image.jpg --blur_linear 10,0,45
 blur_linear : -skip ${2=0},${3=0},${4=1}
-  -e[^-1] "Apply linear blur on image$?, with angle $3° and amplitudes ($1,$2)."
+  -e[^-1] "Apply linear blur on image$?, with angle $3 deg. and amplitudes ($1,$2)."
   -v -
   std1={if(@{-is_percent\ $1},$1*max(w,h),$1)}
   std2={if(@{-is_percent\ $2},$2*max(w,h),$2)}
@@ -6307,7 +6307,7 @@ ball : -skip ${1=255},${2=$1},${3=$2}
 #@gmic : Default values: 'size2=size1', 'offset1=offset2=0', 'angle=0', 'opacity=1', 'color1=0' and 'color2=255'.
 #@gmic : $ image.jpg -chessboard 32,32,0,0,25,0.3,255,128,0,0,128,255
 chessboard : -check "$1>0 && ${2=$1}>0" -skip ${3=0},${4=0},${5=0},${6=1},${7=0},${8=255}
-  -e[^-1] "Draw chessboard on image$?, with sizes ($1,$2), offsets ($3,$4), angle $5°, opacity $6 and colors (${7--1})."
+  -e[^-1] "Draw chessboard on image$?, with sizes ($1,$2), offsets ($3,$4), angle $5 deg., opacity $6 and colors (${7--1})."
   -v - -i[0] (${7--1}) -r[0] {@{0,w}/2},1,1,2,-1 -permute[0] cyzx
   -repeat {@#-1}
     w={w} h={h} theta={$5*pi/180}
@@ -6396,7 +6396,7 @@ circle : -skip ${4=1},${5=0}
 #@gmic : Default values: 'sigma1=3', 'sigma2=sigma1' and 'angle=0'.
 #@gmic : $ 400,400 -gaussian 100,30,45
 gaussian : -skip ${1=3},${2=$1},${3=0}
-  -e[^-1] "Draw centered gaussian on image$? with standard deviations ($1,$2) and angle $3°."
+  -e[^-1] "Draw centered gaussian on image$? with standard deviations ($1,$2) and angle $3 deg."
   -v -
   u={cos($3*pi/180)}
   v={sin($3*pi/180)}
@@ -6505,7 +6505,7 @@ grid : -check "$1>=0 && $2>=0" -skip ${3=0},${4=0},${5=1},${6=0}
 #@gmic : 'alpha=0.6', 'sigma=1.1' and 'cut_low=cut_high=0'.
 #@gmic : $ image.jpg --marble ,
 marble : -skip ${1=0.2},${2=0.1},${3=45},${4=0},${5=0.4},${6=0.8},${7=0.6},${8=1.1},${9=0%},${10=100%}
-  -e[^-1] "Render marble like pattern on image$?, with image weight $1, pattern weight $2, angle $3°, amplitude $4, "\
+  -e[^-1] "Render marble like pattern on image$?, with image weight $1, pattern weight $2, angle $3 deg., amplitude $4, "\
           "sharpness $5, anisotropy $6, alpha $7, sigma $8, and cut ($9,$10)."
   -v - sx={$2*sin($3*pi/180)} sy={$2*cos($3*pi/180)} -f sin(x*$sx+y*$sy+i*$1)
   -if {$4} -smooth $4,$5,$6,$7,$8 -endif
@@ -6606,7 +6606,7 @@ maze_mask : -check "isint(${1=24}) && $1>0"
 #@gmic : Default values: 'nb_scales=5', 'min_scale=25', 'allow_rotation=3', 'spacing=1', 'precision=7' and 'max_iterations=256'.
 #@gmic : $ 512,512,1,3,"min(255,y*c/2)" 100%,100% -circle 50%,50%,100,1,255 -append c image.jpg -resize2dy[-1] 24 -to_rgba -pack_sprites 3,25
 pack_sprites : -check "isint(${1=5}) && $1>=0 && ${2=25}>=0 && $2<=100 && isint(${3=3}) && $3>=0 && $3<=3 && isint(${4=1}) && isint(${5=7}) && $5>=0 && isint(${6=256}) && $6>=0"
-  -e[^-1] "Randomly pack image$? with $1 scales, minimum scale $2%, "@{-arg\ 1+$3,no,180°,90°,any}" rotation, spacing $4, precision $5 and $6 maximum iterations."
+  -e[^-1] "Randomly pack image$? with $1 scales, minimum scale $2%, "@{-arg\ 1+$3,no,180\"\ \"deg.,90\"\ \"deg.,any}" rotation, spacing $4, precision $5 and $6 maximum iterations."
   -v - N={@#-1} is_first_time=1
   -repeat @# -r[$>] 100%,100%,1,{max(2,@{$>,s})} -done   # Ensure all images have a binary shape mask.
 
@@ -6665,14 +6665,14 @@ pack_sprites : -check "isint(${1=5}) && $1>=0 && ${2=25}>=0 && $2<=100 && isint(
           -if {$n>1} 4,{$n-1},1,1,-128,0,0,0 -endif
           --channels[-2] 100% -i[-2] (-128;{w};{h};{s})
           -if {$n>1} [-3] -endif
-        -elif {$3==1} # 180° rotation allowed.
+        -elif {$3==1} # 180 deg. rotation allowed.
           --rotate[-6] {round(?(1))*180} -i[-2] (-128;{w};{h};{s})
           -if {$n>1} --rotate[-1] 180 -i[-2] (-128;{w};{h};{s}) -endif
           -if {$n>2} 4,{$n-2},1,1,-128,0,0,0 1,100% -rand[-1] 0,1 -round[-1] 1 -j[-2] [-1],1 -rm[-1] -endif
           --channels[-4] 100% -i[-2] (-128;{w};{h};{s})
           -if {$n>1} --channels[-4] 100% -i[-2] (-128;{w};{h};{s}) -endif
           -if {$n>2} [-5] -endif
-        -else # 90° rotation (or more) allowed.
+        -else # 90 deg. rotation (or more) allowed.
           --rotate[-6] {round(?(3))*90} -i[-2] (-128;{w};{h};{s})
           -if {$n>1} --rotate[-1] 90 -i[-2] (-128;{w};{h};{s}) -endif
           -if {$n>2} --rotate[-1] 90 -i[-2] (-128;{w};{h};{s}) -endif
@@ -6757,7 +6757,7 @@ piechart : -check $1>=0
 #@gmic : Default values: 'density=20', 'offset1=offset2=50', 'angle=0', 'aliasing=10', 'shading=1', 'opacity=1' and 'color=255'.
 #@gmic : $ image.jpg -polka_dots 10,15,0,0,20,10,1,0.5,0,128,255
 polka_dots : -check $1>=0 -skip ${2=20},${3=50},${4=50},${5=0},${6=10},${7=1},${8=1},${9=255}
-  -e[^-1] "Draw polka dots on image$?, with diameter $1, density $2, angle $3°, shift ($4,$5), aliasing $6 and shading $7."
+  -e[^-1] "Draw polka dots on image$?, with diameter $1, density $2, angle $3 deg., shift ($4,$5), aliasing $6 and shading $7."
   -v - theta={$5*pi/180} ct={cos($theta)} st={sin($theta)} mid1={$1/2} mid2={$2/2}
   -i[0] (${9--1}) -y[0] c
   -repeat {@#-1}
@@ -7732,7 +7732,7 @@ label_points3d : -check ${1=13}>0 -skip ${2=0.8}
 #@gmic : Default values: 'resolution=128', 'smoothness=0.5%' and 'max_angle=361'.
 #@gmic : $ 300,300 -rand -1,1 -blur 40 -sign -normalize 0,255 -lathe3d ,
 lathe3d : -check "${1=128}>0 && ${2=0.5%}>=0 && ${3=361}>=0"
-  -e[^-1] "Generate lathed 3d object from XY-profile$?, with resolution $1, smoothness $2 and maximum angle $3°."
+  -e[^-1] "Generate lathed 3d object from XY-profile$?, with resolution $1, smoothness $2 and maximum angle $3 deg."
   -v - tmax={($3-180)*pi/180} -norm -n 0,1 -autocrop 0 -repeat @# -l[$>]
     wr={max(1,w2=2*w;if(w2>h,min($1,w2),min($1,h)*w2/h))}
     hr={max(1,w2=2*w;if(w2>h,min($1,w2)*h/w2,min($1,h)))}
@@ -8039,7 +8039,7 @@ quadrangle3d :
 #@gmic : Input 3x3 rotation matrix with specified axis and angle (in deg).
 #@gmic : $ -rotation3d 1,0,0,0 -rotation3d 1,0,0,90 -rotation3d 1,0,0,180
 rotation3d :
-  -e[^-1] "Input 3d rotation matrix around axis ($1,$2,$3) with angle $4°."
+  -e[^-1] "Input 3d rotation matrix around axis ($1,$2,$3) with angle $4 deg."
   -v -
   ($1^$2^$3^0) -orientation[-1] -y[-1] x -*[-1] {sin($4*pi/360)} -=[-1] {cos($4*pi/360)},3
   xx={i(0)*i(0)} xy={i(0)*i(1)} xz={i(0)*i(2)} xw={i(0)*i(3)}
@@ -8934,7 +8934,7 @@ quadratize_tiles : -check "$1>0 && ${2=$1}>0"
 #@gmic : Default values: 'M=8' and 'N=M'.
 #@gmic : $ image.jpg -to_rgba -rotate_tiles 10,8 -drop_shadow 10,10 -display_rgba
 rotate_tiles : -skip ${2=8},${3=$2}
-  -e[^-1] "Apply $2x$3 tiled-rotation effect on image$?, with angle $1°."
+  -e[^-1] "Apply $2x$3 tiled-rotation effect on image$?, with angle $1 deg."
   -v - -split_tiles $2,$3,1 -rotate $1 -append_tiles $2,$3 -v +
 
 #@gmic shift_tiles : M>0,_N>0,_amplitude
@@ -9089,7 +9089,7 @@ color_ellipses : -skip ${1=1400},${2=5},${3=0.1}
 #@gmic : Default values: 'density=50', 'thickness=10', 'max_angle=75', 'opacity=0.7' and 'smoothness=0'.
 #@gmic : $ image.jpg --cubism ,
 cubism : -check "${1=50}>=0 && ${2=10}>=0 && $2<=50 && ${5=0}>=0" -skip ${3=75},${4=0.7}
-  -e[^-1] "Apply cubism effect on image$?, with density $1, thickness $2, maximum angle $3°, opacity $4 and smoothness $5."
+  -e[^-1] "Apply cubism effect on image$?, with density $1, thickness $2, maximum angle $3 deg., opacity $4 and smoothness $5."
   -if {"!$1 || !$2 || !$3 || !$4"} -return -endif
   -v - -repeat @# -l[$>]
     w={w} h={h} s={s}
@@ -9643,7 +9643,7 @@ warhol : -skip ${1=3},${2=$1},${3=2},${4=20}
 weave : -check "${1=6}>=0 && ${2=65}>=0 && $2<=100 && ${3=40}>=0 && $3<=100 && ${4=0.5}>=0"
         -check "${5=0}>=0 && ${6=0}>=0 && ${7=0}>=0 && $7<=3 && ${8=0}>=-1 && $8<=1 && ${9=0}>=-1 && $9<=1"
   -e[^-1] "Apply weave effect to image$?, with $1 strips, thickness $2, shadow $3, shading $4, "\
-          "fibers amplitude $5 and fibers smoothness $6, angle "{$7*22.5}"° and curvatures ($8,$9)."
+          "fibers amplitude $5 and fibers smoothness $6, angle "{$7*22.5}" deg. and curvatures ($8,$9)."
   -v - -repeat @# -l[$>] -split_opacity -l[0]
     w={round(max(w,h)/$1,1,1)} h=$w s={(100-$3)*255%} p={max(0.01,$4)}
 
@@ -9724,7 +9724,7 @@ fisheye : -skip ${1=50},${2=50},${3=50},${4=1.2}
 #@gmic : Default values: 'amplitude=30', 'frequency=6', 'offset_r=0', 'angle=0', 'cx=cy=0.5' and 'boundary=2'.
 #@gmic : $ image.jpg -flower ,
 flower : -skip ${1=30},${2=6},${3=0},${4=0},${5=0.5},${6=0.5},${7=2}
-  -e[^-1] "Apply flower deformation on image$?, with amplitude $1, frequency $2, offset $3, angle $4° and center ($1,$2)."
+  -e[^-1] "Apply flower deformation on image$?, with amplitude $1, frequency $2, offset $3, angle $4 deg. and center ($1,$2)."
   -v - -repeat @# -l[$>]
     -euclidean2polar $5,$6,1,$7 -shift $3,0,0,0,2
     100%,100%,1,1,y -/[-1] {h} -*[-1] $2 ({$4/360}) -+[-2] @-1 -rm[-1] -*[-1] 6.2831853 -sin[-1]
@@ -9738,7 +9738,7 @@ flower : -skip ${1=30},${2=6},${3=0},${4=0},${5=0.5},${6=0.5},${7=2}
 #@gmic : Default values: 'cx=cy=0.5', 'radius=100', 'angle=30' and 'boundary=1'.
 #@gmic : $ image.jpg --kaleidoscope ,
 kaleidoscope : -skip ${1=0.5},${2=0.5},${3=100},${4=30},${5=1}
-  -e[^-1] "Create kaleidoscope effect from image$?, with center ($1,$2), radius $3, angle $4°."
+  -e[^-1] "Create kaleidoscope effect from image$?, with center ($1,$2), radius $3, angle $4 deg."
   -v - -euclidean2polar $1,$2,1,$5 -repeat @# -l[$>]
     --columns 0,$3% -rows[-1] 0,$4% -r[-1] [-2],0,2 -nm[1] @{0,n} -rm[0]
   -endl -done -polar2euclidean $1,$2,1,$5 -v +
@@ -9798,7 +9798,7 @@ raindrops : -check "${2=0.1}>=0 && ${3=1}>=0 && isint(${4=0}) && $4>=0" -skip ${
 #@gmic : Default values: 'amplitude=10', 'frequency=10', 'shape=2', 'angle=0' and 'offset=0'.
 #@gmic : $ image.jpg --ripple ,
 ripple : -skip ${1=10},${2=20},${3=2},${4=0},${5=0}
-  -e[^-1] "Apply ripple deformation on image$?, with amplitude $1, frequency $2, shape $3, angle $4° and offset $5."
+  -e[^-1] "Apply ripple deformation on image$?, with amplitude $1, frequency $2, shape $3, angle $4 deg. and offset $5."
   -v -
   theta={$4*pi/180} C={cos($theta)} S={-sin($theta)}
   -repeat @# -l[$>]
@@ -9830,7 +9830,7 @@ rotoidoscope : -skip ${1=50%},${2=50%},${5=1} -check "${3=10}>0 && ${4=1}>=0"
 #@gmic : Default values: 'x=y=50%', 'angle=90', 'boundary=1', 'is_antisymmetry=0' and 'swap_sides=0'.
 #@gmic : $ image.jpg --symmetrize 50%,50%,45 --symmetrize[-1] 50%,50%,-45
 symmetrize : -skip ${1=50%},${2=50%},${3=90},${4=1},${5=0},${6=0}
-  -e[^-1] "Symmetrize image$?, regarding axis ($1,$2,$3°)."
+  -e[^-1] "Symmetrize image$?, regarding axis ($1,$2,$3 deg.)."
   -v -
   theta={$3*pi/180} u={cos($theta)} v={sin($theta)}
   -if $6 symmetry_cond=A<0 -else symmetry_cond=A>0 -endif
@@ -9876,7 +9876,7 @@ twirl : -skip ${1=1},${2=0.5},${3=0.5},${4=1}
 #@gmic : Default values: 'x-angle=1.5', 'y-angle=0', 'zoom=1', 'x-center=y-center=50' and 'boundary=2'.
 #@gmic : $ image.jpg --warp_perspective ,
 warp_perspective : -skip ${1=1.5},${2=0},${3=1},${4=50},${5=50},${6=2}
-  -e[^-1] "Apply perspective warp on image$?, with angles ($1°,$2°), zoom $3 and offsets ($4,$5)."
+  -e[^-1] "Apply perspective warp on image$?, with angles ($1 deg.,$2 deg.), zoom $3 and offsets ($4,$5)."
   -v - -repeat @# -l[$>]
     (0,100) --[-1] $4 -/[-1] 100 (0;100) --[-1] $5 -/[-1] 100 -r[-2,-1] [-3],[-3],[-3],1,3
     --*[-2] $2 --*[-2] $1 -+[-2,-1] -+[-1] $3 -/[-3] [-1] -/[-2,-1]
@@ -10091,7 +10091,7 @@ vignette : -check "${1=100}>=0 && ${2=70}>=0 && $2<=100 && ${3=90}>=0 && $3<=100
 #@gmic : Default values: 'text=(c) G'MIC', 'opacity=0.3', 'size=57', 'angle=25', 'mode=1' and 'smoothness=0'.
 #@gmic : $ image.jpg --watermark_visible ,0.7
 watermark_visible : -skip "${1=\251\ G'MIC}" -check "${2=0.3}>0 && $2<1 && ${3=57}>0 && ${6=0.5}>=0" -skip ${4=25},${5=1}
-  -e[^-1] @{-arg\ 1+!$5,Add,Remove}" visible watermark '$1' on image$?, with opacity $2, size $3, angle $4°."
+  -e[^-1] @{-arg\ 1+!$5,Add,Remove}" visible watermark '$1' on image$?, with opacity $2, size $3, angle $4 deg."
   -v - -repeat @# -l[$>]
     0 -t[-1] "$1",0,0,$3,1,255 -rotate[-1] $4,0,0 -b[-1] $6 -n[-1] 0,255
     -r[-1] [-2],0,2 -+[-1] [-2] -c[-1] 0,255  # Generate opaque watermark image
@@ -10315,7 +10315,7 @@ fade_diamond : -skip ${1=70},${2=90}
 #@gmic : Default values: 'angle=45', 'start=30' and 'end=70'.
 #@gmic : $ image.jpg -testimage2d {w},{h} --fade_linear 45,48,52
 fade_linear : -skip ${1=45},${2=30},${3=70}
-  -e[^-1] "Create ($2%,$3%) linear fading from image$?, with angle $1°."
+  -e[^-1] "Create ($2%,$3%) linear fading from image$?, with angle $1 deg."
   -v - -repeat {int(@#/2)} -l[$>,{$>+1}]
      64,64,1,1,"x*cos($1*pi/180) + y*sin($1*pi/180)" -_fade $2,$3
   -endl -done -v +
@@ -21346,7 +21346,7 @@ gmicol_resize :
 
 #@gmicol Rotate : gmicol_rotate, gmicol_rotate
 #@gmicol : Angle = float(90,0,359)
-#@gmicol : Stick to nearest 90° = bool(1)
+#@gmicol : Stick to nearest 90 deg. = bool(1)
 #@gmicol : Boundary = choice("Transparent","Nearest","Repeat")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/23</i>.</small>")
 gmicol_rotate :
