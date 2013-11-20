@@ -4556,7 +4556,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                       if (!res)
                         disp.display((res=visu.get_cut((T)(vmin + percent0*(vmax-vmin)/100),
                                                        (T)(vmin + percent1*(vmax-vmin)/100)).
-                                      resize(disp).normalize(0,255)).
+                                      resize(disp).normalize((T)0,(T)255)).
                                      draw_text(0,0,"Cut [%g,%g] = [%.3g%%,%.3g%%]",
                                                white,black,0.7f,13,
                                                (double)(vmin + percent0*(vmax-vmin)/100),
