@@ -899,7 +899,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
           Ncn = (4.0f*Mcn + 2.0f*Mca + 2.0f*Mcc + 2.0f*Mpn + 2.0f*Mnn + Mpa + Mna + Mpc + Mnc)/16,
           _nx = 0.5f*(Nnc - Npc),
           _ny = 0.5f*(Ncn - Ncp),
-          nn = std::sqrt(1e-8 + _nx*_nx + _ny*_ny),
+          nn = std::sqrt(1e-8f + _nx*_nx + _ny*_ny),
           nx = _nx/nn,
           ny = _ny/nn;
 
@@ -1054,7 +1054,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
     cimg_forXY(blend_map,x,y) blend_map(x,y) = 1/(1+blend_decay*blend_map(x,y));
     blend_map.quantize(blend_scales+1,false);
     float bm, bM = blend_map.max_min(bm);
-    if (bm==bM) blend_map.fill(blend_scales);
+    if (bm==bM) blend_map.fill((float)blend_scales);
 
     // Generate blending scales.
     CImg<T> result = _inpaint_patch_crop(ox,oy,ox+dx-1,oy+dy-1,0);
@@ -1066,8 +1066,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       const int b2 = (int)blend_width/2, b1 = (int)blend_width - b2 - 1;
       CImg<floatT> blended = _inpaint_patch_crop(ox,oy,ox+dx-1,oy+dy-1,0), cumul(dx,dy,1,1), weights(blend_width,blend_width,1,1,0);
       const float one = 1;
-      weights.draw_gaussian(b1,b1,blend_width/4.0f,&one);
-      cimg_forXY(cumul,x,y) cumul(x,y) = mask(x+ox,y+oy)?0:1;
+      weights.draw_gaussian((float)b1,(float)b1,blend_width/4.0f,&one);
+      cimg_forXY(cumul,x,y) cumul(x,y) = mask(x+ox,y+oy)?0.0f:1.0f;
       blended.mul(cumul);
 
       unsigned int *ptr = saved_patches.data();
@@ -1908,7 +1908,8 @@ CImg<unsigned int> gmic::selection2cimg(const char *const string, const unsigned
         error("Command '%s': Invalid %s %c%s%c (contains ending indice '%d', "
               "not in range -%u..%u).",
               command,stype,ctypel,string,ctyper,iind1,indice_max,indice_max-1);
-      for (int l = uind0; l<=uind1; l+=step) is_selected[l] = true;
+      const int istep = (int)cimg::round(step);
+      for (int l = uind0; l<=uind1; l+=istep) is_selected[l] = true;
     }
   }
   unsigned int indice = 0;
@@ -11391,7 +11392,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             if (first_sep=='%') {
               const unsigned int
 		nb_frames = CImg<unsigned int>::get_load_ffmpeg(filename,0,0,0)[0];
-              first_frame = (unsigned int)cimg::round(first_frame*nb_frames/100);
+              first_frame = (unsigned int)cimg::round(first_frame*nb_frames/100.0f);
             }
             input_images.load_ffmpeg(filename,(unsigned int)first_frame,(unsigned int)first_frame);
           } else { // Read all frames
@@ -11460,7 +11461,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         } else if (!cimg::strcasecmp("yuv",ext)) {
 
           // YUV file.
-          float first_frame = 0, last_frame = ~0U, step = 1, dx = 0, dy = 1;
+          float first_frame = 0, last_frame = 0, step = 1, dx = 0, dy = 1;
           int err = 0;
           if ((err=std::sscanf(options,"%f,%f,%f,%f,%f",&dx,&dy,&first_frame,&last_frame,&step))>=1) {
             dx = cimg::round(dx);
@@ -11503,7 +11504,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         } else if (!cimg::strcasecmp("tif",ext) || !cimg::strcasecmp("tiff",ext)) {
 
           // TIFF file.
-          float first_frame = 0, last_frame = ~0U, step = 1;
+          float first_frame = 0, last_frame = 0, step = 1;
           int err = 0;
           if ((err=std::sscanf(options,"%f,%f,%f",&first_frame,&last_frame,&step))>0) {
             first_frame = cimg::round(first_frame);
