@@ -5072,7 +5072,7 @@ smoothness[%]>=0
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def588.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --blend_edges 0.8</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --blend_edges 0.8</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-blend_fade</b>:</font>
 
-<p style="margin-left:100px"><tt>Blend selected images togethers using a given fading pattern (defined as the latest image).
+<p style="margin-left:100px"><tt>Blend selected images together using a given fading pattern (defined as the latest image).
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def589.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} 100%,100%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend_fade</div></div></td><td><tt>image.jpg -testimage2d {w},{h} 100%,100%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend_fade</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-blend_median</b>:</font>
 

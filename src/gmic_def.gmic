@@ -17346,6 +17346,20 @@ gimp_euclidean2polar :
 gimp_flower :
   -flower $1,$2,$3%,$4,$5,$6,$7
 
+#@gimp Glass : gimp_glass, gimp_glass_preview(0)
+#@gimp : Amplitude = float(100,0,400)
+#@gimp : Smoothness = float(1,0,5)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/21</i>.</small>")
+gimp_glass :
+  -repeat @# -l[$>]
+    100%,100%,1,1 -rand[-1] 0,1 -b[-1] $2 -n[-1] -$1,$1 -g[-1] xy -a[-2,-1] c
+    -warp[-2] [-1],1,1 -rm[-1]
+  -endl -done
+
+gimp_glass_preview :
+  -gimp_split_preview "-gimp_glass $*",$-1
+
 #@gimp Kaleidoscope [blended] : gimp_rotoidoscope, gimp_rotoidoscope(1)
 #@gimp : X-center = float(0.5,0,1)
 #@gimp : Y-center = float(0.5,0,1)
@@ -21465,6 +21479,7 @@ gmicol_rotate :
 #@gmicol clone("Euclidean - polar")
 #@gmicol clone("Fish-eye")
 #@gmicol clone("Flower")
+#@gmicol clone("Glass")
 #@gmicol clone("Kaleidoscope [blended]")
 #@gmicol clone("Kaleidoscope [polar]")
 #@gmicol clone("Kaleidoscope [symmetry]")
