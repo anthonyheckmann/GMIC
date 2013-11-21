@@ -15513,14 +15513,15 @@ gimp_blackandwhite :
     -apply_gamma[-1] {10^$7}                                # Gamma correction
     --[-1] 128 -*[-1] $8 -+[-1] 128 -+[-1] $9 -c[-1] 0,255  # B&W contrast and brightness.
 
-    100%,100% [-1]x2                                        # Create noise for shadows, midtones and highlights.
-    -noise[-3] 100,$17 -b[-3] $16% -n[-3] -$12,$12          # Scaled grain on shadows.
-    -noise[-2] 100,$17 -b[-2] $16% -n[-2] -$13,$13          # Scaled grain on midtones.
-    -noise[-1] 100,$17 -b[-1] $16% -n[-1] -$14,$14          # Scaled grain on highlights.
-
-    --tones[-4] 3 -b[-3--1] $15%                            # Get smoothed tones.
-    -*[-6,-3] -*[-4,-2] -*[-2,-1]                           # Get noisy tones.
-    -+[-4--1] -c[-1] 0,255                                  # Compose them with the B&W image.
+    -if {$12||$13||$14}
+      100%,100% [-1]x2                                        # Create noise for shadows, midtones and highlights.
+      -noise[-3] 100,$17 -b[-3] $16% -n[-3] -$12,$12          # Scaled grain on shadows.
+      -noise[-2] 100,$17 -b[-2] $16% -n[-2] -$13,$13          # Scaled grain on midtones.
+      -noise[-1] 100,$17 -b[-1] $16% -n[-1] -$14,$14          # Scaled grain on highlights.
+      --tones[-4] 3 -b[-3--1] $15%                            # Get smoothed tones.
+      -*[-6,-3] -*[-4,-2] -*[-2,-1]                           # Get noisy tones.
+      -+[-4--1] -c[-1] 0,255                                  # Compose them with the B&W image.
+    -endif
 
     -if {$10||$11}
       -/[-1] 255
@@ -15932,10 +15933,10 @@ gimp_boost_fade_preview :
 #@gimp : Quantization = int(256,1,256)
 #@gimp : Equalization = bool(0)
 #@gimp : Negation = bool(0)
-#@gimp : note = note()
+#@gimp : sep = separator()
 #@gimp : Tones range = choice("All tones","Shadows","Mid-tones","Highlights")
 #@gimp : Tones smoothness = float(2,0,10)
-#@gimp : note = note()
+#@gimp : sep = separator()
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
@@ -17346,7 +17347,7 @@ gimp_euclidean2polar :
 gimp_flower :
   -flower $1,$2,$3%,$4,$5,$6,$7
 
-#@gimp Glass : gimp_glass, gimp_glass_preview(0)
+#@gimp Frosted glass : gimp_frosted_glass, gimp_frosted_glass_preview(0)
 #@gimp : X-amplitude = float(40,0,400)
 #@gimp : Y-amplitude = float(40,0,400)
 #@gimp : X-smoothness = float(1,0,5)
@@ -17355,7 +17356,7 @@ gimp_flower :
 #@gimp : Edge influence = float(2,0,10)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/21</i>.</small>")
-gimp_glass :
+gimp_frosted_glass :
   -repeat @# -l[$>]
     100%,100%,1,1 -rand[-1] 0,1
     -g[-1] xy
@@ -17370,8 +17371,8 @@ gimp_glass :
     -warp[-2] [-1],1,1 -rm[-1]
   -endl -done
 
-gimp_glass_preview :
-  -gimp_split_preview "-gimp_glass $*",$-1
+gimp_frosted_glass_preview :
+  -gimp_split_preview "-gimp_frosted_glass $*",$-1
 
 #@gimp Kaleidoscope [blended] : gimp_rotoidoscope, gimp_rotoidoscope(1)
 #@gimp : X-center = float(0.5,0,1)
@@ -17999,6 +18000,61 @@ _gimp_emulate_film_bw :
 
 gimp_emulate_film_bw_preview :
   -gimp_split_preview "-gimp_emulate_film_bw $*",$-1
+
+#@gimp Grain : gimp_grain, gimp_grain_preview(0)
+#@gimp : Amplitude = float(40,0,512)
+#@gimp : Tone smoothness = float(5,0,15)
+#@gimp : Grain type = choice("Gaussian","Uniform")
+#@gimp : Channel(s) = choice(2,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Shadows:</b></small>")
+#@gimp : Strength = float(0.8,0,1)
+#@gimp : Scale = float(0.5,0,2)
+#@gimp : Channel correlation = float(0.5,0,1)
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Mid-tones:</b></small>")
+#@gimp : Strength = float(1,0,1)
+#@gimp : Scale = float(0,0,2)
+#@gimp : Channel correlation = float(0.5,0,1)
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Highlights:</b></small>")
+#@gimp : Strength = float(0.6,0,1)
+#@gimp : Scale = float(0.2,0,2)
+#@gimp : Channel correlation = float(0.5,0,1)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/21</i>.</small>")
+gimp_grain :
+  -repeat @# -l[$>] -apply_channels "-_gimp_grain ${1-13}",$4,0 -endl -done
+
+_gimp_grain :
+  -if {!$1} -return -endif
+  s={s} --luminance
+
+  # Shadows.
+  -if $5
+    100%,100%,1,$s -noise[-1] 1,$3 -b[-1] $6 -*[-1] {(1-$7)/max(abs(im),abs(iM))}
+    100%,100%,1,1 -noise[-1] 1,$3 -b[-1] $6 -*[-1] {$7/max(abs(im),abs(iM))}
+    -+[-2,-1] --t2[1] 0,85 -b[-1] $2 -n[-1] 0,1 -*[-2,-1] -*[-1] $5
+  -endif
+
+  # Midlights.
+  -if $8
+    100%,100%,1,$s -noise[-1] 1,$3 -b[-1] $9 -*[-1] {(1-$10)/max(abs(im),abs(iM))}
+    100%,100%,1,1 -noise[-1] 1,$3 -b[-1] $9 -*[-1] {$10/max(abs(im),abs(iM))}
+    -+[-2,-1] --t2[1] 86,169 -b[-1] $2 -n[-1] 0,1 -*[-2,-1] -*[-1] $8
+  -endif
+
+  # Highlights.
+  -if $11
+    100%,100%,1,$s -noise[-1] 1,$3 -b[-1] $12 -*[-1] {(1-$13)/max(abs(im),abs(iM))}
+    100%,100%,1,1 -noise[-1] 1,$3 -b[-1] $12 -*[-1] {$13/max(abs(im),abs(iM))}
+    -+[-2,-1] --t2[1] 170,256 -b[-1] $2 -n[-1] 0,1 -*[-2,-1] -*[-1] $11
+  -endif
+
+  -rm[1] -+[-3--1] -n[-1] -$1,$1 -+ -c 0,255
+
+gimp_grain_preview :
+  -gimp_split_preview "-gimp_grain $*",$-1
 
 #@gimp Instant [consumer] : gimp_emulate_film_instant_consumer, gimp_emulate_film_instant_consumer_preview(1)
 #@gimp : Preset = choice{"None",
@@ -21492,7 +21548,7 @@ gmicol_rotate :
 #@gmicol clone("Euclidean - polar")
 #@gmicol clone("Fish-eye")
 #@gmicol clone("Flower")
-#@gmicol clone("Glass")
+#@gmicol clone("Frosted glass")
 #@gmicol clone("Kaleidoscope [blended]")
 #@gmicol clone("Kaleidoscope [polar]")
 #@gmicol clone("Kaleidoscope [symmetry]")
@@ -21551,6 +21607,7 @@ gmicol_rotate :
 #------------------------------
 
 #@gmicol clone("B&amp;W films")
+#@gmicol clone("Grain")
 #@gmicol clone("Instant [consumer]")
 #@gmicol clone("Instant [pro]")
 #@gmicol clone("Negative [color]")
