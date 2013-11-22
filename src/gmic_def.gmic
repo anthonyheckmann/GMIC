@@ -12735,8 +12735,7 @@ x_waves :
     -endl [4] -sprites3d[-2,-1] -+3d[-2,-1] -endif
     --3d[-1] {$w/2},{$w/2} -*3d[-1] @{0,0.9*max(w,h)/$w} # Center and scale 3d object.
     -r3d[-1] 0,0,1,{if(@{!,b}&2,-@{!,x}*360/@{!,w},@|*30)} -r3d[-1] 1,0,0,-120 # Get rotated 3d object.
-    --object3d[0] [-1],50%,65%,30,1,3,0,0
-    -w[-1] -rm[-2,-1] -wait 20 -w[] @{!,w},@{0,@{!,w}*h/w}
+    --object3d[0] [-1],50%,65%,30,1,3,0,0 -w[-1] -rm[-2,-1] -wait 20
     -if {@{!,b}&1||(@|-$time0)>1} ({?*$w};{?*$w};70;0) -a[5,-1] x time0={@|-?} -endif # Insert new ball.
     -if @{5,h} -l[5,-1] # Manage ball motion and collision.
       -sh[0] 2,2,0,0 -sh[0] 3,3,0,0 --[-2] [-1] -+[-1] 0.2 -rm[-2,-1]
