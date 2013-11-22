@@ -2384,8 +2384,8 @@ remove_empty :
 #@gmic shared : x0[%],x1[%],y[%],z[%],v[%] : y0[%],y1[%],z[%],v[%] : z0[%],z1[%],v[%] : v0[%],v1[%] : (no args) : (*)
 #@gmic : Insert shared buffers from (opt. points/rows/planes/channels of) selected images.
 #@gmic : (eq. to '-sh').
-#@gmic : $ image.jpg --shared 1,1 -blur[-1] 3 -remove[-1]
-#@gmic : $ image.jpg -repeat {s} --shared 25%,75%,0,$> -mirror[-1] x -remove[-1] -done
+#@gmic : $ image.jpg -shared 1,1 -blur[-1] 3 -remove[-1]
+#@gmic : $ image.jpg -repeat {s} -shared 25%,75%,0,$> -mirror[-1] x -remove[-1] -done
 
 #@gmic srand : value : (no args) : (*)
 #@gmic : Set random generator seed.
@@ -6647,7 +6647,7 @@ pack_sprites : -check "isint(${1=5}) && $1>=0 && ${2=25}>=0 && $2<=100 && isint(
       -if {$3==0} [$ind]
       -elif {$3==1} --rotate[$ind] {round(?)*180}
       -elif {$3==2} --rotate[$ind] {round(?(3))*90}
-      -else --rotate[$ind] {?*360} --sh[-1] 100%,100% -neq[-1] 0 area=@{-1,+} -rm[-1]
+      -else --rotate[$ind] {?*360} -sh[-1] 100%,100% -neq[-1] 0 area=@{-1,+} -rm[-1]
       -endif
 
       # Get binary map of possible locations.
@@ -10211,15 +10211,15 @@ _blend_hardlight :
 _blend_hardmix :
   -u "-+[1] [0] -ge[1] 255 -*[1] 255"
 _blend_hue :
-  -u "-to_color --sh 0,2 -rgb2hsv[2,3] -sh[2] 1,2 -j[1] [4],0,0,0,1 -rm[4] -hsv2rgb[2,3] -rm[2,3]"
+  -u "-to_color -sh 0,2 -rgb2hsv[2,3] -sh[2] 1,2 -j[1] [4],0,0,0,1 -rm[4] -hsv2rgb[2,3] -rm[2,3]"
 _blend_interpolation :
   -u "--*[0] {pi/255} -*[1] {pi/255} -cos[1,2] -+[1,2] --[1] 2 -*[1] -63.75 -c[1] 0,255"
 _blend_lighten :
   -u "-max[1] [0]"
 _blend_lightness :
-  -u "-to_color --sh 0,2 -rgb2lab[2,3] -sh[2] 1,2 -j[1] [4],0,0,0,1 -rm[4] -lab2rgb[2,3] -rm[2,3]"
+  -u "-to_color -sh 0,2 -rgb2lab[2,3] -sh[2] 1,2 -j[1] [4],0,0,0,1 -rm[4] -lab2rgb[2,3] -rm[2,3]"
 _blend_luminance :
-  -u "-to_color --sh 0,2 -rgb2ycbcr[2,3] -sh[2] 1,2 -j[1] [4],0,0,0,1 -rm[4] -ycbcr2rgb[2,3] -rm[2,3]"
+  -u "-to_color -sh 0,2 -rgb2ycbcr[2,3] -sh[2] 1,2 -j[1] [4],0,0,0,1 -rm[4] -ycbcr2rgb[2,3] -rm[2,3]"
 _blend_linearburn :
   -u "-+[1] [0] --[1] 255 -c[-1] 0,255"
 _blend_linearlight :
@@ -10240,7 +10240,7 @@ _blend_reflect :
 _blend_red :
   -u "-sh[0] 1,100% -j[1] [2],0,0,0,1 -rm[2]"
 _blend_saturation :
-  -u "-to_color --sh 0,2 -rgb2hsv[2,3] -shift[2,3] 0,0,0,-1,2 -sh[2] 1,2 -j[1] [4],0,0,0,1 -rm[4] -shift[2,3] 0,0,0,1,2 -hsv2rgb[2,3] -rm[2,3]"
+  -u "-to_color -sh 0,2 -rgb2hsv[2,3] -shift[2,3] 0,0,0,-1,2 -sh[2] 1,2 -j[1] [4],0,0,0,1 -rm[4] -shift[2,3] 0,0,0,1,2 -hsv2rgb[2,3] -rm[2,3]"
 _blend_screen :
   -u "---[0] 255 --[1] 255 -*[1,2] -/[1] 255 -*[1] -1 -+[1] 255"
 _blend_shapeaverage :
@@ -10266,7 +10266,7 @@ _blend_stamp :
 _blend_subtract :
   -u "--[1] [0] -*[1] -1 -c[1] 0,255"
 _blend_value :
-  -u "-to_color --sh 0,2 -rgb2hsv[2,3] -sh[2] 0,1 -j[1] [4] -rm[4] -hsv2rgb[2,3] -rm[2,3]"
+  -u "-to_color -sh 0,2 -rgb2hsv[2,3] -sh[2] 0,1 -j[1] [4] -rm[4] -hsv2rgb[2,3] -rm[2,3]"
 _blend_vividlight :
   -u "-*[1] 2 --blend burn --[1] 256 --blend[0,1] dodge -ge[1] 0 "\
      "-j[2] [3],0,0,0,0,1,[1] -rm[1,3]"
@@ -10303,7 +10303,7 @@ blend_median :
     -permute xycz -a c
     -repeat {s} # Perform simple bubble sort along the c-axis for each pixel.
       -repeat {s-1-$>}
-        -sh[-1] $>,$> --sh[-2] {$>+1},{$>+1} --gt[-2,-1]
+        -sh[-1] $>,$> -sh[-2] {$>+1},{$>+1} --gt[-2,-1]
         --j[-3] [-2],0,0,0,0,1,[-1] -j[-3] [-4],0,0,0,0,1,[-2] -j[-4] [-1] -rm[-4--1]
       -done
     -done
@@ -12718,7 +12718,7 @@ x_waves :
   -i[0] (20;80;0^20;80;0^20;80;0) -r[0] 400,300,1,3,3 -water[0] 100,2
   -w[0] @{0,w*1.5},@{0,h*1.5},0,0,"[G'MIC] Image waves"
   w={w} -elevation3d[-1] 0 -rv3d[-1]
-  --sh[-1] 8,{7+3*i(0,6)},0,0 -r[-1] 3,{h/3},1,1,-1
+  -sh[-1] 8,{7+3*i(0,6)},0,0 -r[-1] 3,{h/3},1,1,-1
   (0,1,0;1,0,1;0,1,0) -/[-1] 2
   20,20,1,3 -ball[-1] 200,255,128
   0 $w,$w [-1]
@@ -13061,11 +13061,11 @@ alert : -skip "${1=[G'MIC Alert]},${2=This is an alert box.},${3=OK}"
       --channels[-1] 0,2
       -if {$clicked>=0}
         x0=@{-3,($clicked,0)} y0=@{-3,($clicked,1)}
-        --sh[$clicked] 7,9
+        -sh[$clicked] 7,9
         -j[-2] [-1],$x0,$y0 -rm[-1]
       -elif {$selected>=0}
         x0=@{-3,($selected,0)} y0=@{-3,($selected,1)}
-        --sh[$selected] 4,6
+        -sh[$selected] 4,6
         -j[-2] [-1],$x0,$y0 -rm[-1]
       -endif
       -w$disp[-1] 100%,100%,0,0,"$1" -rm[-1] -wait

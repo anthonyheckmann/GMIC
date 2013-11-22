@@ -3433,14 +3433,14 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           selection.assign(); is_restriction = true;
         } else if (err==4 && sep1==']') {
           is_restriction = true;
-          if (!std::strcmp("-wait",command))
+          if (!std::strcmp("-wait",command) && !is_get_version)
             selection = selection2cimg(restriction,10,CImgList<char>::empty(),command,true,
                                        false,CImg<char>::empty());
-          else if (!std::strcmp("-i",command) || !std::strcmp("-input",command))
+          else if ((!std::strcmp("-i",command) || !std::strcmp("-input",command)) && !is_get_version)
             selection = selection2cimg(restriction,images.size()+1,images_names,command,true,
                                        true,new_name);
-          else if (!std::strcmp("-e",command) || !std::strcmp("-echo",command) ||
-                   !std::strcmp("-error",command) || !std::strcmp("-warn",command))
+          else if ((!std::strcmp("-e",command) || !std::strcmp("-echo",command) ||
+                    !std::strcmp("-error",command) || !std::strcmp("-warn",command)) && !is_get_version)
             selection = selection2cimg(restriction,scope.size(),CImgList<char>::empty(),
                                        command,true,false,CImg<char>::empty());
           else
@@ -3592,7 +3592,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         }
 
         // Check if new name has been requested for a command that does not allow that.
-        if (new_name && std::strcmp("-input",command))
+        if (new_name && std::strcmp("-input",command) && !is_get_version)
           error(images,"Item '%s %s': Unknow name '%s'.",
                 initial_item,initial_argument,new_name.data());
 
@@ -4442,7 +4442,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Check validity of 3d object.
-          if (!std::strcmp("-check3d",command)) {
+          if (!std::strcmp("-check3d",command) && !is_get_version) {
             if (verbosity>0 || is_debug)
               print(images,"Check validity of 3d object%s",
                     gmic_selection);
@@ -5050,7 +5050,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Display.
-          if (!std::strcmp("-display",command)) {
+          if (!std::strcmp("-display",command) && !is_get_version) {
             gmic_substitute_args();
             unsigned int X,Y,Z, XYZ[3];
             bool is_xyz = false;
@@ -5062,7 +5062,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Display 3d object.
-          if (!std::strcmp("-display3d",command)) {
+          if (!std::strcmp("-display3d",command) && !is_get_version) {
             display_objects3d(images,images_names,selection);
             is_released = true; continue;
           }
@@ -5116,7 +5116,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Echo.
-          if (!std::strcmp("-echo",command)) {
+          if (!std::strcmp("-echo",command) && !is_get_version) {
             if (verbosity>=0 || is_debug) {
               gmic_substitute_args();
               CImg<char> str(argument,std::strlen(argument)+1);
@@ -5150,7 +5150,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Error.
-          if (!std::strcmp("-error",command)) {
+          if (!std::strcmp("-error",command) && !is_get_version) {
             gmic_substitute_args();
             CImg<char> str(argument,std::strlen(argument)+1);
             cimg::strunescape(str);
@@ -6932,7 +6932,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         else if (command1=='o') {
 
           // Output.
-          if (!std::strcmp("-output",command)) {
+          if (!std::strcmp("-output",command) && !is_get_version) {
             gmic_substitute_args();
             char cext[8], _filename[4096], filename_tmp[512], options[256];
             *cext = *_filename = *filename_tmp = *options = 0;
@@ -7599,7 +7599,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Print.
-          if (!std::strcmp("-print",command)) {
+          if (!std::strcmp("-print",command) && !is_get_version) {
             print_images(images,images_names,selection);
             is_released = true; continue;
           }
@@ -8003,7 +8003,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Display as a graph plot.
-          if (!std::strcmp("-plot",command)) {
+          if (!std::strcmp("-plot",command) && !is_get_version) {
             gmic_substitute_args();
             double ymin = 0, ymax = 0, xmin = 0, xmax = 0;
             unsigned int plot_type = 1, vertex_type = 1;
@@ -10158,7 +10158,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Warning.
-          if (!std::strcmp("-warn",command)) {
+          if (!std::strcmp("-warn",command) && !is_get_version) {
             gmic_substitute_args();
             CImg<char> str(argument,std::strlen(argument)+1);
             cimg::strunescape(str);
@@ -10174,7 +10174,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if ((!std::strcmp("-window",command) ||
                std::sscanf(command,"-window%u%c",&wind,&end)==1 ||
                std::sscanf(command,"-w%u%c",&wind,&end)==1) &&
-              wind<10) {
+              wind<10 && !is_get_version) {
             gmic_substitute_args();
             *title = 0;
             int norm = -1, fullscreen = -1;
@@ -10370,7 +10370,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Wait for a given delay of for user events on instant window.
-          if (!std::strcmp("-wait",command)) {
+          if (!std::strcmp("-wait",command) && !is_get_version) {
             gmic_substitute_args();
             if (!is_restriction)
               CImg<unsigned int>::vector(0,1,2,3,4,5,6,7,8,9).move_to(selection);
@@ -11064,7 +11064,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       }
 
       // Input.
-      if (!std::strcmp("-input",command)) ++position;
+      if (!std::strcmp("-input",command) && !is_get_version) ++position;
       else { std::strcpy(command,"-input"); argument = item; *restriction = 0; }
       gmic_substitute_args();
       if (!is_restriction || !selection) selection.assign(1,1,1,1,images.size());
