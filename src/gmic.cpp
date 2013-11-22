@@ -6811,7 +6811,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         else if (command1=='n') {
 
           // Set image name.
-          if (!std::strcmp("-name",command)) {
+          if (!std::strcmp("-name",command) && !is_get_version) {
             gmic_substitute_args();
             const unsigned int l = std::strlen(argument);
             CImg<char> name(argument,l+1);
@@ -11593,7 +11593,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     "keep",
                     "local","le","lt","log","log2","log10","line","lab2rgb","label","light3d",
                     "move","mirror","mul","mutex","mod","max","min","mmul","mode3d","moded3d","map",
-                    "median","mdiv","mse","mandelbrot","mul3d"
+                    "median","mdiv","mse","mandelbrot","mul3d",
                     "name","normalize","neq","noise",
                     "output","onfail","object3d","or","opacity3d",
                     "parallel","permute","progress","print","pow","point","polygon","plasma","pose3d",
@@ -11613,18 +11613,19 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     "xor",0
                   };
                   const char *misspelled = 0;
+                  const unsigned int foff = filename[1]=='-'?2:1;
                   int dmin = 4;
                   for (unsigned int l = 0; native_commands_names[l]; ++l) {
                     // Look in native commands.
                     const char *const c = native_commands_names[l];
-                    const int d = gmic_levenshtein(c,filename+1);
+                    const int d = gmic_levenshtein(c,filename+foff);
                     if (d<dmin) { dmin = d; misspelled = native_commands_names[l]; }
                   }
                   for (unsigned int i = 0; i<256; ++i)
                     // Look in custom commands.
                     cimglist_for(commands_names[i],l) {
                       const char *const c = commands_names[i][l].data();
-                      const int d = gmic_levenshtein(c,filename+1);
+                      const int d = gmic_levenshtein(c,filename+foff);
                       if (d<dmin) { dmin = d; misspelled = commands_names[i][l].data(); }
                     }
                   if (misspelled)

@@ -12696,6 +12696,52 @@ _x_tictactoe5 : # Generate a ++ diagonal stroke and his mask.
 _x_tictactoe6 : # Generate a +- diagonal stroke and his mask.
   421,421,1,1,1 -line[-1] 10%,90%,90%,10%,1,0 -erode[-1] 6 -_x_tictactoe -__x_tictactoe 180,10,10
 
+#@gmic x_waves
+#@gmic : Launch the image waves demo.
+x_waves :
+  -e[] "\n
+------ Image waves demo -----------------\n
+----\n
+---- Left mouse button to drop balls.\n
+---- Right mouse button to rotate view.\n
+---- Keys 'ESC' or 'Q' to exit.\n
+----\n
+-----------------------------------------"
+  -v -
+  -if {!@#} -testimage2d 200 -r2dx 100 -else -k[0] -r[0] 100,100,1,3,2 -endif
+  -i[0] (32;80^0;120^64;255) -r[0] 400,300,1,3,3 -round[0]
+  -w[0] -1,-1,0,0,"[G'MIC] Image waves"
+  w={w} -elevation3d[-1] 0 -rv3d[-1]
+  --sh[-1] 8,{7+3*i(0,6)},0,0 -r[-1] 3,{h/3},1,1,-1
+  (0,1,0;1,0,1;0,1,0) -/[-1] 2
+  20,20,1,3 -ball[-1] 200,255,128
+  0 $w,$w [-1]
+  -l3d {$w/2},-200,-200 -f3d 500 alpha=0 count=0
+  -do
+    --convolve[-1] [3],1 --[-1] [-3] -rm[-3] -b[-1] 0.8 --[-1] {ia} # Update height map.
+    -r[-1] 1,{$w*$w},1,1,-1 -j[2] [-1],2,0 -r[-1] $w,$w,1,1,-1      # Set 3d object coordinates.
+    [1]
+    -if @{5,h} --l[5] -rows 0,2
+      nb={w}
+      -i[0] ({'CImg3d'}) -i[1] ($nb,$nb) -transpose[2]
+      (1,0;1,{$nb-1}) -r[-1] 2,$nb,1,1,3 -round[-1]
+      1,{4*$nb},1,1,1 -y -a y
+    -endl [4] -sprites3d[-2,-1] -+3d[-2,-1] -endif
+    --3d[-1] {$w/2},{$w/2} -*3d[-1] @{0,0.9*max(w,h)/$w} # Center and scale 3d object.
+    -r3d[-1] 0,0,1,$alpha -r3d[-1] 1,0,0,-120 # Get rotated 3d object.
+    --object3d[0] [-1],50%,65%,30,1,3,0,0 -w[-1] -rm[-2,-1] -wait 20
+    -if {@{!,b}&1||$count>10} ({?*$w};{?*$w};130;0) -a[5,-1] x count={?*8} -endif # Insert new ball.
+    -if {@{!,b}&2} alpha={@{!,x}*360/@{!,w}} -endif
+    -if @{5,h} -l[5,-1] # Manage ball motion and collision.
+      -sh[0] 2,2,0,0 -sh[0] 3,3,0,0 --[-2] [-1] -+[-1] 0.5 -rm[-2,-1]
+      -s[0] x -repeat {@#-1} -if {@{$<,2}<0} coords=@{$<,0-1} -=[-1] {80+@{-1,($coords)}},$coords -rm[$<] -endif -done
+      -if {@#==1} -i[0] 0 -else -a[0--2] x -endif
+      -endl
+    -endif
+    count={$count+1} alpha={$alpha+2}
+  -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
+  -rm -v +
+
 #@gmic x_whirl : _opacity>=0
 #@gmic : Launch fractal whirl demo.
 #@gmic : Default values: 'opacity=0.2'.
@@ -12706,7 +12752,6 @@ x_whirl : -check ${1=0.2}>=0
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 --------------------------------------------------"
-
   -v -
   5,5,1,3 256,256,1,3 [-1] -w[-1] 512,512,0,0,"[G'MIC] Fractal whirl demo"
   tangle=0 tzoom=0 xc={(w-@{-3,w})/2} yc={(h-@{-3,h})/2}
