@@ -12708,15 +12708,21 @@ x_waves :
 ----\n
 -----------------------------------------"
   -v -
-  -if {!@#} -testimage2d 200 -r2dx 100 -else -k[0] -r[0] 100,100,1,3,2 -endif
-  -i[0] (32;80^0;120^64;255) -r[0] 400,300,1,3,3 -round[0]
+  -if {!@#} -l[] # Generate fractal image
+    200,200 x={-1.06-?*0.1} y={-0.26-?*0.1}
+    -mandelbrot $x,$y,{$x+0.1},{$y+0.1},256
+    16,1,1,3,? -r[-1] 256,1,1,3,3 -shift[-1] 1
+    -map[0] [-1] -rm[-1] -r2dx 100
+    --mirror y --mirror x -+ -n 0,255
+  -endl -else -k[0] -r[0] 100,100,1,3,2 -endif
+  -i[0] (20;80;0^20;80;0^20;80;0) -r[0] 400,300,1,3,3 -water[0] 100,2
   -w[0] @{0,w*1.5},@{0,h*1.5},0,0,"[G'MIC] Image waves"
   w={w} -elevation3d[-1] 0 -rv3d[-1]
   --sh[-1] 8,{7+3*i(0,6)},0,0 -r[-1] 3,{h/3},1,1,-1
   (0,1,0;1,0,1;0,1,0) -/[-1] 2
   20,20,1,3 -ball[-1] 200,255,128
   0 $w,$w [-1]
-  -l3d {$w/2},-200,-200 -f3d 500 time0=@|
+  -l3d {$w/2},-200,-1000 -sl3d 0.4 -ss3d 0.8 -f3d 500 time0=@|
   -do
     --convolve[-1] [3],1 --[-1] [-3] -rm[-3] -b[-1] 0.8 --[-1] {ia} # Update height map.
     -r[-1] 1,{$w*$w},1,1,-1 -j[2] [-1],2,0 -r[-1] $w,$w,1,1,-1      # Set 3d object coordinates.
@@ -12729,7 +12735,8 @@ x_waves :
     -endl [4] -sprites3d[-2,-1] -+3d[-2,-1] -endif
     --3d[-1] {$w/2},{$w/2} -*3d[-1] @{0,0.9*max(w,h)/$w} # Center and scale 3d object.
     -r3d[-1] 0,0,1,{if(@{!,b}&2,-@{!,x}*360/@{!,w},@|*30)} -r3d[-1] 1,0,0,-120 # Get rotated 3d object.
-    --object3d[0] [-1],50%,65%,30,1,3,0,0 -w[-1] -rm[-2,-1] -wait 20
+    --object3d[0] [-1],50%,65%,30,1,3,0,0
+    -w[-1] -rm[-2,-1] -wait 20 -w[] @{!,w},@{0,@{!,w}*h/w}
     -if {@{!,b}&1||(@|-$time0)>1} ({?*$w};{?*$w};70;0) -a[5,-1] x time0={@|-?} -endif # Insert new ball.
     -if @{5,h} -l[5,-1] # Manage ball motion and collision.
       -sh[0] 2,2,0,0 -sh[0] 3,3,0,0 --[-2] [-1] -+[-1] 0.2 -rm[-2,-1]
@@ -21969,3 +21976,5 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands
+
+  foo :
