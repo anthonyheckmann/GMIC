@@ -12738,7 +12738,7 @@ x_waves :
       -endl
     -endif
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
-  -rm -v +
+  -rm -w 0 -v +
 
 #@gmic x_whirl : _opacity>=0
 #@gmic : Launch fractal whirl demo.
