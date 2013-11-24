@@ -3378,6 +3378,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     *const argz = _argz.fill(0).data(),
     *const argc = _argc.fill(0).data();
 
+#if defined(gmic_is_parallel) && cimg_OS!=2
+  pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,0);
+  pthread_setcancelstate(PTHREAD_CANCEL_ENABLE,0);
+#endif
+
 #ifdef gmic_float
   CImg<char> _color(4096);
   char *const color = _color.data();
@@ -3401,6 +3406,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     // Begin command line parsing.
     if (!commands_line && is_start) { print(images,"Start G'MIC parser."); is_start = false; }
     while (position<commands_line.size() && !is_quit && !is_return) {
+
+#if defined(gmic_is_parallel) && cimg_OS!=2
+      pthread_testcancel();
+#endif
+
       const char
         *const initial_item = commands_line[position].data(),
         *const initial_argument = position+1<commands_line.size()?commands_line[position+1].data():"";
@@ -11708,12 +11718,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #ifdef gmic_is_parallel
     cimglist_for(threads_data,i) cimg_forY(threads_data[i],l) {
 #if cimg_OS!=2
-      if (threads_data(i,l).wait_mode==2) pthread_join(threads_data(i,l).thread_id,0);
+      if (threads_data(i,l).wait_mode==0) pthread_cancel(threads_data(i,l).thread_id);
+      pthread_join(threads_data(i,l).thread_id,0);
 #else
-      if (threads_data(i,l).wait_mode==2) {
-        WaitForSingleObject(threads_data(i,l).thread_id,INFINITE);
-        CloseHandle(threads_data(i,l).thread_id);
-      }
+      if (threads_data(i,l).wait_mode==0) TerminateThread(threads_data(i,l).thread_id,0);
+      WaitForSingleObject(threads_data(i,l).thread_id,INFINITE);
+      CloseHandle(threads_data(i,l).thread_id);
 #endif // #if cimg_OS!=2
       is_released&=threads_data(i,l).gmic_instance.is_released;
   }
