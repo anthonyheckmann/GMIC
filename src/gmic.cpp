@@ -8857,8 +8857,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     images_names.insert(split.size(),name.copymark());
                     split.move_to(images,~0U);
                   } else {
-                    images.remove(ind);
-                    images_names.remove(ind);
+                    images.remove(ind); images_names.remove(ind);
                     off+=(int)split.size() - 1;
                     images_names.insert(split.size(),name.get_copymark(),ind);
                     name.move_to(images_names[ind]);
@@ -9481,11 +9480,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 images_names.insert(split.size(),name.copymark());
                 split.move_to(images,~0U);
               } else {
-                off+=split.size() - 1;
+                images.remove(ind);
                 images_names.remove(ind);
+                off+=split.size() - 1;
                 images_names.insert(split.size(),name.get_copymark(),ind);
                 name.move_to(images_names[ind]);
-                images.remove(ind); split.move_to(images,ind);
+                split.move_to(images,ind);
               }
             }
             is_released = false; continue;
