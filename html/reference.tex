@@ -888,9 +888,9 @@ Interactively select a feature from selected images (use the instant window [0] 
 Insert shared buffers from (opt. points/rows/planes/channels of) selected images.
 ~\\(\emph{eq. to} {\small \texttt{'-sh'}}).
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def23.jpg}\\
-{\footnotesize \textbf{Example 23~:} \texttt{image.jpg --shared 1,1 -blur[-1] 3 -remove[-1]}}
+{\footnotesize \textbf{Example 23~:} \texttt{image.jpg -shared 1,1 -blur[-1] 3 -remove[-1]}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def24.jpg}\\
-{\footnotesize \textbf{Example 24~:} \texttt{image.jpg -repeat \{s\} --shared 25\%,75\%,0,\$$>$ -mirror[-1] x -remove[-1] -done}}
+{\footnotesize \textbf{Example 24~:} \texttt{image.jpg -repeat \{s\} -shared 25\%,75\%,0,\$$>$ -mirror[-1] x -remove[-1] -done}}
 \end{center}
 
 \subsection{\emph{-srand\index{-srand}} (*)}\vspace*{-0.5em}
@@ -2514,7 +2514,7 @@ Resize selected images while preserving their aspect ratio.
 
 \subsection{\emph{-resize2dx\index{-resize2dx}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{width$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
+{\small \texttt{width[\%]$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
 Resize selected images along the x-axis, preserving 2d ratio.
 ~\\(\emph{eq. to} {\small \texttt{'-r2dx'}}).
 ~\\'interpolation' can be \{ -1=none (memory content) ~$|$~ 0=none ~$|$~ 1=nearest ~$|$~ 2=average ~$|$~ 3=linear ~$|$~ 4=grid ~$|$~ 5=bicubic ~$|$~ 6=lanczos \}.
@@ -2531,7 +2531,7 @@ Resize selected images along the x-axis, preserving 2d ratio.
 
 \subsection{\emph{-resize2dy\index{-resize2dy}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{height$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
+{\small \texttt{height[\%]$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
 Resize selected images along the y-axis, preserving 2d ratio.
 ~\\(\emph{eq. to} {\small \texttt{'-r2dy'}}).
 ~\\'interpolation' can be \{ -1=none (memory content) ~$|$~ 0=none ~$|$~ 1=nearest ~$|$~ 2=average ~$|$~ 3=linear ~$|$~ 4=grid ~$|$~ 5=bicubic ~$|$~ 6=lanczos \}.
@@ -2548,7 +2548,7 @@ Resize selected images along the y-axis, preserving 2d ratio.
 
 \subsection{\emph{-resize3dx\index{-resize3dx}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{width$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
+{\small \texttt{width[\%]$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
 Resize selected images along the x-axis, preserving 3d ratio.
 ~\\(\emph{eq. to} {\small \texttt{'-r3dx'}}).
 ~\\'interpolation' can be \{ -1=none (memory content) ~$|$~ 0=none ~$|$~ 1=nearest ~$|$~ 2=average ~$|$~ 3=linear ~$|$~ 4=grid ~$|$~ 5=bicubic ~$|$~ 6=lanczos \}.
@@ -2563,7 +2563,7 @@ Resize selected images along the x-axis, preserving 3d ratio.
 
 \subsection{\emph{-resize3dy\index{-resize3dy}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{height$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
+{\small \texttt{height[\%]$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
 Resize selected images along the y-axis, preserving 3d ratio.
 ~\\(\emph{eq. to} {\small \texttt{'-r3dy'}}).
 ~\\'interpolation' can be \{ -1=none (memory content) ~$|$~ 0=none ~$|$~ 1=nearest ~$|$~ 2=average ~$|$~ 3=linear ~$|$~ 4=grid ~$|$~ 5=bicubic ~$|$~ 6=lanczos \}.
@@ -2578,7 +2578,7 @@ Resize selected images along the y-axis, preserving 3d ratio.
 
 \subsection{\emph{-resize3dz\index{-resize3dz}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{depth$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
+{\small \texttt{depth[\%]$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
 Resize selected images along the z-axis, preserving 3d ratio.
 ~\\(\emph{eq. to} {\small \texttt{'-r3dz'}}).
 ~\\'interpolation' can be \{ -1=none (memory content) ~$|$~ 0=none ~$|$~ 1=nearest ~$|$~ 2=average ~$|$~ 3=linear ~$|$~ 4=grid ~$|$~ 5=bicubic ~$|$~ 6=lanczos \}.
@@ -6118,6 +6118,10 @@ Launch tetris game.
 
 \subsection{\emph{-x\_tictactoe\index{-x\_tictactoe}} }\vspace*{-0.5em}
 Launch tic-tac-toe game.
+
+
+\subsection{\emph{-x\_waves\index{-x\_waves}} }\vspace*{-0.5em}
+Launch the image waves demo.
 
 
 \subsection{\emph{-x\_whirl\index{-x\_whirl}} }\vspace*{-0.5em}

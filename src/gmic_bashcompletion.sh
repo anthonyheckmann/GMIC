@@ -748,6 +748,7 @@ _gmic_def()
 	      -x_spline --x_spline\
 	      -x_tetris --x_tetris\
 	      -x_tictactoe --x_tictactoe\
+	      -x_waves --x_waves\
 	      -x_whirl --x_whirl\
 	      -output_pink3d --output_pink3d\
 	      -pink --pink\
@@ -1573,6 +1574,7 @@ _gmic_def()
 	      x_spline\
 	      x_tetris\
 	      x_tictactoe\
+	      x_waves\
 	      x_whirl\
 	      output_pink3d\
 	      pink\
@@ -2137,23 +2139,23 @@ _gmic_def()
 		return 0
 		;;
 		"-resize2dx" | "--resize2dx")
-		COMPREPLY=( $(compgen -W "width>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "width[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-resize2dy" | "--resize2dy")
-		COMPREPLY=( $(compgen -W "height>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "height[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-resize3dx" | "--resize3dx")
-		COMPREPLY=( $(compgen -W "width>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "width[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-resize3dy" | "--resize3dy")
-		COMPREPLY=( $(compgen -W "height>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "height[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-resize3dz" | "--resize3dz")
-		COMPREPLY=( $(compgen -W "depth>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "depth[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-rotate" | "--rotate")
@@ -3809,23 +3811,23 @@ _gmic_def()
 		return 0
 		;;
 		"-r2dx" | "--r2dx")
-		COMPREPLY=( $(compgen -W "width>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "width[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-r2dy" | "--r2dy")
-		COMPREPLY=( $(compgen -W "height>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "height[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-r3dx" | "--r3dx")
-		COMPREPLY=( $(compgen -W "width>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "width[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-r3dy" | "--r3dy")
-		COMPREPLY=( $(compgen -W "height>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "height[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-r3dz" | "--r3dz")
-		COMPREPLY=( $(compgen -W "depth>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "depth[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-s" | "--s")
