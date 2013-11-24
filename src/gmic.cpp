@@ -1481,7 +1481,7 @@ struct st_gmic_parallel {
   gmic gmic_instance;
   CImgList<T> *images;
   CImgList<char> *images_names, commands_line;
-  unsigned int variables_sizes[256];
+  unsigned int variables_sizes[256], wait_mode;
   gmic_exception exception;
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
@@ -7469,8 +7469,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if (!std::strcmp("-parallel",item)) {
             gmic_substitute_args();
             const char *_arg = argument, *_arg_text = argument_text;
-            bool wait_threads = true;
-            if ((*_arg=='0' || *_arg=='1') && (_arg[1]==',' || !_arg[1])) { wait_threads = *_arg=='1'; _arg+=2; _arg_text+=2; }
+            unsigned int wait_mode = 1;
+            if ((*_arg=='0' || *_arg=='1' || *_arg=='2') && (_arg[1]==',' || !_arg[1])) { wait_mode = (unsigned int)(*_arg-'0'); _arg+=2; _arg_text+=2; }
             CImgList<char> arguments = CImg<char>::string(_arg).get_split(',',false,false);
             CImg<st_gmic_parallel<T> >(1,arguments.width()).move_to(threads_data);
             CImg<st_gmic_parallel<T> > &_threads_data = threads_data.back();
@@ -7478,10 +7478,10 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #ifdef gmic_is_parallel
             print(images,"Execute %d parallel commands '%s'%s.",
                   arguments.width(),_arg_text,
-                  wait_threads?" and wait for their termination.":"");
+                  wait_mode==1?" and blocks until they terminate":wait_mode==2?" and wait for their termination on parser return":"");
 #else
             print(images,"Execute %d parallel commands '%s' (run sequentially, parallel computing disabled).",
-              arguments.width(),_arg_text);
+                  arguments.width(),_arg_text);
 #endif // #ifdef gmic_is_parallel
 
             cimg_forY(_threads_data,l) {
@@ -7529,6 +7529,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               gi.reference_time = reference_time;
               _threads_data[l].images = &images;
               _threads_data[l].images_names = &images_names;
+              _threads_data[l].wait_mode = wait_mode;
 
               // Substitute special characters codes appearing outside strings.
               arguments[l].resize(1,arguments[l].height()+1,1,1,0);
@@ -7552,7 +7553,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #endif // #ifdef gmic_is_parallel
           }
 
-            if (wait_threads) {
+            if (wait_mode==1) {
               cimg_forY(_threads_data,l) {
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
@@ -11707,10 +11708,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #ifdef gmic_is_parallel
     cimglist_for(threads_data,i) cimg_forY(threads_data[i],l) {
 #if cimg_OS!=2
-      pthread_join(threads_data(i,l).thread_id,0);
+      if (threads_data(i,l).wait_mode==2) pthread_join(threads_data(i,l).thread_id,0);
 #else
-      WaitForSingleObject(threads_data(i,l).thread_id,INFINITE);
-      CloseHandle(threads_data(i,l).thread_id);
+      if (threads_data(i,l).wait_mode==2) {
+        WaitForSingleObject(threads_data(i,l).thread_id,INFINITE);
+        CloseHandle(threads_data(i,l).thread_id);
+      }
 #endif // #if cimg_OS!=2
       is_released&=threads_data(i,l).gmic_instance.is_released;
   }

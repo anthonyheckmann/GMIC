@@ -8581,9 +8581,10 @@ _apply_parallel_overlap16 :
 #@gmic : The status value is set with the corresponding error message.
 #@gmic : $ image.jpg --local -blur -3 -onfail -mirror x -endlocal
 
-#@gmic parallel : _wait_threads={ 0 | 1 },"command1","command2",... : (*)
+#@gmic parallel : _wait_threads,"command1","command2",... : (*)
 #@gmic : Execute specified commands in parallel, each in a different thread.
 #@gmic : All running threads share the current list of images.
+#@gmic : 'wait_threads' can be { 0=never | 1=immediately | 2=on parser return }.
 #@gmic : If 'wait_threads' is set to '1', the interpreter blocks until all threads have returned.
 #@gmic : Otherwise, it continues the execution flow while threads are running on the background.
 #@gmic : $ image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"
