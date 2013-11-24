@@ -1475,7 +1475,7 @@ inline const char* gmic_basename(const char *const s)  {
 }
 
 // Thread structure and routine for command '-parallel'.
-//-------------------------------------------------------
+//------------------------------------------------------
 template<typename T>
 struct st_gmic_parallel {
   gmic gmic_instance;
@@ -3365,6 +3365,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
   // Allocate string variables, widely used afterwards
   // (prevents stack overflow on recursive calls while remaining thread-safe).
+  CImgList<st_gmic_parallel<T> > threads_data;
   CImg<char> _formula(4096), _message(1024), _title(256), _indices(256),
     _argx(256), _argy(256), _argz(256), _argc(256);
   char
@@ -7467,35 +7468,38 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Run multiple commands in parallel.
           if (!std::strcmp("-parallel",item)) {
             gmic_substitute_args();
-            CImgList<char> arguments = CImg<char>::string(argument).get_split(',',false,false);
-            CImg<st_gmic_parallel<T> > thread_data(1,arguments.width());
+            const char *_arg = argument, *_arg_text = argument_text;
+            bool wait_threads = true;
+            if ((*_arg=='0' || *_arg=='1') && (_arg[1]==',' || !_arg[1])) { wait_threads = *_arg=='1'; _arg+=2; _arg_text+=2; }
+            CImgList<char> arguments = CImg<char>::string(_arg).get_split(',',false,false);
+            CImg<st_gmic_parallel<T> >(1,arguments.width()).move_to(threads_data);
+            CImg<st_gmic_parallel<T> > &_threads_data = threads_data.back();
+
 #ifdef gmic_is_parallel
-            print(images,"Execute %d parallel commands '%s'.",
-              arguments.width(),argument_text);
+            print(images,"Execute %d parallel commands '%s'%s.",
+                  arguments.width(),_arg_text,
+                  wait_threads?" and wait for their termination.":"");
 #else
             print(images,"Execute %d parallel commands '%s' (run sequentially, parallel computing disabled).",
-              arguments.width(),argument_text);
+              arguments.width(),_arg_text);
 #endif // #ifdef gmic_is_parallel
 
-            cimg_forY(thread_data,l) {
-
-              gmic &gi = thread_data[l].gmic_instance;
+            cimg_forY(_threads_data,l) {
+              gmic &gi = _threads_data[l].gmic_instance;
               for (unsigned int i = 0; i<256; ++i) {
                 gi.commands[i].assign(commands[i],true);
                 gi.commands_names[i].assign(commands_names[i],true);
                 gi.commands_has_arguments[i].assign(commands_has_arguments[i],true);
-                thread_data[l].variables_sizes[i] = 0;
+                _threads_data[l].variables_sizes[i] = 0;
               }
 
               // Copy global variables for new thread.
               gi.variables[255].assign(variables[255]);
               gi.variables_names[255].assign(variables_names[255]);
-              thread_data[l].variables_sizes[255] = variables_sizes[255];
-
+              _threads_data[l].variables_sizes[255] = variables_sizes[255];
               gi.scope.assign(scope);
               cimg_snprintf(title,_title.size(),"*thread%d",l);
               CImg<char>::string(title).move_to(gi.scope);
-
               gi.background3d.assign(background3d);
               gi.light3d.assign(light3d);
               gi.pose3d.assign(pose3d);
@@ -7523,8 +7527,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               gi.cancel = cancel;
               gi.nb_carriages = nb_carriages;
               gi.reference_time = reference_time;
-              thread_data[l].images = &images;
-              thread_data[l].images_names = &images_names;
+              _threads_data[l].images = &images;
+              _threads_data[l].images_names = &images_names;
 
               // Substitute special characters codes appearing outside strings.
               arguments[l].resize(1,arguments[l].height()+1,1,1,0);
@@ -7535,44 +7539,47 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 if (!is_dquoted) *s = c<' '?(c==_dollar?'$':c==_lbrace?'{':c==_rbrace?'}':
                                              c==_comma?',':c==_dquote?'\"':c==_arobace?'@':c):c;
               }
-
-              gi.commands_line_to_CImgList(arguments[l].data()).move_to(thread_data[l].commands_line);
+              gi.commands_line_to_CImgList(arguments[l].data()).move_to(_threads_data[l].commands_line);
 
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
-              pthread_create(&thread_data[l].thread_id,0,gmic_parallel<T>,(void*)&thread_data[l]);
+              pthread_create(&_threads_data[l].thread_id,0,gmic_parallel<T>,(void*)&_threads_data[l]);
 #else
-              thread_data[l].thread_id = CreateThread(0,0,gmic_parallel<T>,(void*)&thread_data[l],0,0);
+              _threads_data[l].thread_id = CreateThread(0,0,gmic_parallel<T>,(void*)&_threads_data[l],0,0);
 #endif // #if cimg_OS!=2
 #else
-              gmic_parallel<T>((void*)&thread_data[l]);
+              gmic_parallel<T>((void*)&_threads_data[l]);
 #endif // #ifdef gmic_is_parallel
           }
 
-            cimg_forY(thread_data,l) {
+            if (wait_threads) {
+              cimg_forY(_threads_data,l) {
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
-              pthread_join(thread_data[l].thread_id,0);
+                pthread_join(_threads_data[l].thread_id,0);
 #else
-              WaitForSingleObject(thread_data[l].thread_id,INFINITE);
-              CloseHandle(thread_data[l].thread_id);
+                WaitForSingleObject(_threads_data[l].thread_id,INFINITE);
+                CloseHandle(_threads_data[l].thread_id);
 #endif // #if cimg_OS!=2
 #endif // #ifdef gmic_is_parallel
-              is_released&=thread_data[l].gmic_instance.is_released;
+                is_released&=_threads_data[l].gmic_instance.is_released;
+              }
+
+              // Get back global variables and status modified by first thread.
+              _threads_data[0].gmic_instance.variables[255].move_to(variables[255]);
+              _threads_data[0].gmic_instance.variables_names[255].move_to(variables_names[255]);
+              variables_sizes[255] = _threads_data[0].variables_sizes[255];
+              _threads_data[0].gmic_instance.status.move_to(status);
+
+              // Check for possible exceptions thrown by threads.
+              cimg_forY(_threads_data,l) if (_threads_data[l].exception._message)
+                throw _threads_data[l].exception;
+
+              threads_data.remove();
             }
 
-            // Get back global variables and status modified by first thread.
-            thread_data[0].gmic_instance.variables[255].move_to(variables[255]);
-            thread_data[0].gmic_instance.variables_names[255].move_to(variables_names[255]);
-            variables_sizes[255] = thread_data[0].variables_sizes[255];
-            thread_data[0].gmic_instance.status.move_to(status);
-
-            // Check for possible exceptions thrown by threads.
-            cimg_forY(thread_data,l) if (thread_data[l].exception._message)
-              throw thread_data[l].exception;
-
             ++position; continue;
-      }
+          }
 
           // Permute axes.
           if (!std::strcmp("-permute",command)) {
@@ -11695,6 +11702,23 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       if (new_name) new_name.move_to(images_names[selection[0]]);
       is_released = false;
     }
+
+    // Wait for remaining threads to finish.
+#ifdef gmic_is_parallel
+    cimglist_for(threads_data,i) cimg_forY(threads_data[i],l) {
+#if cimg_OS!=2
+      pthread_join(threads_data(i,l).thread_id,0);
+#else
+      WaitForSingleObject(threads_data(i,l).thread_id,INFINITE);
+      CloseHandle(threads_data(i,l).thread_id);
+#endif // #if cimg_OS!=2
+      is_released&=threads_data(i,l).gmic_instance.is_released;
+  }
+    // Check for possible exceptions thrown by threads.
+    cimglist_for(threads_data,i) cimg_forY(threads_data[i],l)
+      if (threads_data(i,l).exception._message)
+        throw threads_data(i,l).exception;
+#endif // #ifdef gmic_is_parallel
 
     // Post-check global environment consistency.
     if (images_names.size()!=images.size())
