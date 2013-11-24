@@ -7468,7 +7468,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if (!std::strcmp("-parallel",item)) {
             gmic_substitute_args();
             CImgList<char> arguments = CImg<char>::string(argument).get_split(',',false,false);
-            CImg<st_gmic_parallel<T> > thread_data(arguments.width());
+            CImg<st_gmic_parallel<T> > thread_data(1,arguments.width());
 #ifdef gmic_is_parallel
             print(images,"Execute %d parallel commands '%s'.",
               arguments.width(),argument_text);
@@ -7477,7 +7477,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               arguments.width(),argument_text);
 #endif // #ifdef gmic_is_parallel
 
-            cimglist_for(arguments,l) {
+            cimg_forY(thread_data,l) {
 
               gmic &gi = thread_data[l].gmic_instance;
               for (unsigned int i = 0; i<256; ++i) {
@@ -7549,7 +7549,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #endif // #ifdef gmic_is_parallel
           }
 
-            cimglist_for(arguments,l) {
+            cimg_forY(thread_data,l) {
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
               pthread_join(thread_data[l].thread_id,0);
@@ -7568,7 +7568,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             thread_data[0].gmic_instance.status.move_to(status);
 
             // Check for possible exceptions thrown by threads.
-            cimglist_for(arguments,l) if (thread_data[l].exception._message)
+            cimg_forY(thread_data,l) if (thread_data[l].exception._message)
               throw thread_data[l].exception;
 
             ++position; continue;
