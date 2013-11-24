@@ -3003,7 +3003,7 @@ _gmic_def()
 		return 0
 		;;
 		"-parallel" | "--parallel")
-		COMPREPLY=( $(compgen -W ""command1","command2",... >") )
+		COMPREPLY=( $(compgen -W "_wait_threads,"command1","command2",... >") )
 		return 0
 		;;
 		"-progress" | "--progress")

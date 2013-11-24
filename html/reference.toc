@@ -535,16 +535,16 @@
 \contentsline {subsection}{\numberline {2.13.23}\emph {-repeat} (*)}{304}{subsection.2.13.23}
 \contentsline {subsection}{\numberline {2.13.24}\emph {-return} (*)}{305}{subsection.2.13.24}
 \contentsline {subsection}{\numberline {2.13.25}\emph {-rprogress} }{305}{subsection.2.13.25}
-\contentsline {subsection}{\numberline {2.13.26}\emph {-skip} (*)}{305}{subsection.2.13.26}
-\contentsline {subsection}{\numberline {2.13.27}\emph {-status} (*)}{305}{subsection.2.13.27}
+\contentsline {subsection}{\numberline {2.13.26}\emph {-skip} (*)}{306}{subsection.2.13.26}
+\contentsline {subsection}{\numberline {2.13.27}\emph {-status} (*)}{306}{subsection.2.13.27}
 \contentsline {subsection}{\numberline {2.13.28}\emph {-while} (*)}{306}{subsection.2.13.28}
-\contentsline {section}{\numberline {2.14}Arrays, tiles and frames}{306}{section.2.14}
-\contentsline {subsection}{\numberline {2.14.1}\emph {-array} }{306}{subsection.2.14.1}
+\contentsline {section}{\numberline {2.14}Arrays, tiles and frames}{307}{section.2.14}
+\contentsline {subsection}{\numberline {2.14.1}\emph {-array} }{307}{subsection.2.14.1}
 \contentsline {subsection}{\numberline {2.14.2}\emph {-array\_fade} }{307}{subsection.2.14.2}
 \contentsline {subsection}{\numberline {2.14.3}\emph {-array\_mirror} }{308}{subsection.2.14.3}
-\contentsline {subsection}{\numberline {2.14.4}\emph {-array\_random} }{308}{subsection.2.14.4}
+\contentsline {subsection}{\numberline {2.14.4}\emph {-array\_random} }{309}{subsection.2.14.4}
 \contentsline {subsection}{\numberline {2.14.5}\emph {-frame\_blur} }{309}{subsection.2.14.5}
-\contentsline {subsection}{\numberline {2.14.6}\emph {-frame\_cube} }{309}{subsection.2.14.6}
+\contentsline {subsection}{\numberline {2.14.6}\emph {-frame\_cube} }{310}{subsection.2.14.6}
 \contentsline {subsection}{\numberline {2.14.7}\emph {-frame\_fuzzy} }{310}{subsection.2.14.7}
 \contentsline {subsection}{\numberline {2.14.8}\emph {-frame\_painting} }{311}{subsection.2.14.8}
 \contentsline {subsection}{\numberline {2.14.9}\emph {-frame\_pattern} }{312}{subsection.2.14.9}

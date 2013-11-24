@@ -5002,9 +5002,13 @@ Execute following commands when an error is encountered in the body of the 'loca
 
 \subsection{\emph{-parallel\index{-parallel}} (*)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{"command1","command2",...}}\\~\\
+{\small \texttt{\_wait\_threads,"command1","command2",...}}\\~\\
 Execute specified commands in parallel, each in a different thread.
 ~\\All running threads share the current list of images.
+~\\'wait\_threads' can be \{ 0=never ~$|$~ 1=on parser return ~$|$~ 1=immediately \}.
+~\\If 'wait\_threads' is set to '2', the interpreter blocks until all threads have returned.
+~\\Otherwise, it continues the execution flow while threads are running on the background.
+~\\~\\\textbf{Default values}: {\small \texttt{'wait\_threads=2'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def491.jpg}\\
 {\footnotesize \textbf{Example 491~:} \texttt{image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"}}
 \end{center}
