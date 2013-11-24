@@ -1483,6 +1483,13 @@ struct st_gmic_parallel {
   CImgList<char> *images_names, commands_line;
   unsigned int variables_sizes[256];
   gmic_exception exception;
+#ifdef gmic_is_parallel
+#if cimg_OS!=2
+  pthread_t thread_id;
+#else
+  HANDLE thread_id;
+#endif // #if cimg_OS!=2
+#endif // #ifdef gmic_parallel
 };
 
 template<typename T>
@@ -7460,23 +7467,17 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Run multiple commands in parallel.
           if (!std::strcmp("-parallel",item)) {
             gmic_substitute_args();
-            CImgList<char> args = CImg<char>::string(argument).get_split(',',false,false);
-            CImg<st_gmic_parallel<T> > thread_data(args.width());
+            CImgList<char> arguments = CImg<char>::string(argument).get_split(',',false,false);
+            CImg<st_gmic_parallel<T> > thread_data(arguments.width());
 #ifdef gmic_is_parallel
-#if cimg_OS!=2
-            CImg<pthread_t> thread_id(args.width());
-#else
-            CImg<HANDLE> thread_id(args.width());
-#endif // #if cimg_OS!=2
             print(images,"Execute %d parallel commands '%s'.",
-                  args.width(),argument_text);
+              arguments.width(),argument_text);
 #else
             print(images,"Execute %d parallel commands '%s' (run sequentially, parallel computing disabled).",
-                  args.width(),argument_text);
+              arguments.width(),argument_text);
 #endif // #ifdef gmic_is_parallel
 
-            cimglist_for(args,l) {
-              args[l].resize(1,args[l].height()+1,1,1,0);
+            cimglist_for(arguments,l) {
 
               gmic &gi = thread_data[l].gmic_instance;
               for (unsigned int i = 0; i<256; ++i) {
@@ -7526,34 +7527,35 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               thread_data[l].images_names = &images_names;
 
               // Substitute special characters codes appearing outside strings.
+              arguments[l].resize(1,arguments[l].height()+1,1,1,0);
               bool is_dquoted = false;
-              for (char *s = args[l].data(); *s; ++s) {
+              for (char *s = arguments[l].data(); *s; ++s) {
                 const char c = *s;
                 if (c=='\"') is_dquoted = !is_dquoted;
                 if (!is_dquoted) *s = c<' '?(c==_dollar?'$':c==_lbrace?'{':c==_rbrace?'}':
                                              c==_comma?',':c==_dquote?'\"':c==_arobace?'@':c):c;
               }
 
-              gi.commands_line_to_CImgList(args[l].data()).move_to(thread_data[l].commands_line);
+              gi.commands_line_to_CImgList(arguments[l].data()).move_to(thread_data[l].commands_line);
 
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
-              pthread_create(&thread_id[l],0,gmic_parallel<T>,(void*)&thread_data[l]);
+              pthread_create(&thread_data[l].thread_id,0,gmic_parallel<T>,(void*)&thread_data[l]);
 #else
-              thread_id[l] = CreateThread(0,0,gmic_parallel<T>,(void*)&thread_data[l],0,0);
+              thread_data[l].thread_id = CreateThread(0,0,gmic_parallel<T>,(void*)&thread_data[l],0,0);
 #endif // #if cimg_OS!=2
 #else
               gmic_parallel<T>((void*)&thread_data[l]);
 #endif // #ifdef gmic_is_parallel
-            }
+          }
 
-            cimglist_for(args,l) {
+            cimglist_for(arguments,l) {
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
-              pthread_join(thread_id[l],0);
+              pthread_join(thread_data[l].thread_id,0);
 #else
-              WaitForSingleObject(thread_id[l],INFINITE);
-              CloseHandle(thread_id[l]);
+              WaitForSingleObject(thread_data[l].thread_id,INFINITE);
+              CloseHandle(thread_data[l].thread_id);
 #endif // #if cimg_OS!=2
 #endif // #ifdef gmic_is_parallel
               is_released&=thread_data[l].gmic_instance.is_released;
@@ -7566,11 +7568,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             thread_data[0].gmic_instance.status.move_to(status);
 
             // Check for possible exceptions thrown by threads.
-            cimglist_for(args,l) if (thread_data[l].exception._message)
+            cimglist_for(arguments,l) if (thread_data[l].exception._message)
               throw thread_data[l].exception;
 
             ++position; continue;
-          }
+      }
 
           // Permute axes.
           if (!std::strcmp("-permute",command)) {
