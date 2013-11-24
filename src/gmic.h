@@ -113,6 +113,7 @@ namespace cimg_library {
     // Use to allocate a new image with specified dimension.
     CImg<T>& assign(const unsigned int w, const unsigned int h=1,
                     const unsigned int d=1, const unsigned int s=1);
+    static CImg<T>& empty();
   };
 
   // Define the G'MIC image list structure.
@@ -291,8 +292,9 @@ struct gmic {
 
   template<typename T>
   gmic& remove_images(gmic_list<T>& images, gmic_list<char>& images_names,
-                      const gmic_image<unsigned int>& selection,
-                      const unsigned int start, const unsigned int end);
+                      const unsigned int start, const unsigned int end,
+                      const gmic_image<unsigned int>& selection=gmic_image<unsigned int>::empty());
+
   template<typename T>
   gmic& parse(const gmic_list<char>& commands_line,
 	      gmic_list<T> &images, gmic_list<char> &images_names) {
