@@ -11715,7 +11715,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     // Wait for remaining threads to finish.
 #ifdef gmic_is_parallel
     cimglist_for(threads_data,i) cimg_forY(threads_data[i],l) {
-      if (threads_data(i,l).wait_mode==0) *(threads_data(i,l).gmic_instance.cancel) = 1;
+      if (threads_data(i,l).wait_mode==0) {
+        cimg::mutex(15);
+        *(threads_data(i,l).gmic_instance.cancel) = 1;
+        cimg::mutex(15,0);
+      }
 #if cimg_OS!=2
       pthread_join(threads_data(i,l).thread_id,0);
 #else
