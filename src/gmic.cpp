@@ -1426,7 +1426,7 @@ inline const char *gmic_ellipsize_arg(const char *const argument, CImg<char>& ar
        for (unsigned int l = 1; l<(unsigned int)selection.height(); ++l) \
          img0.function2(gmic_check(images[selection[l]])); \
        images_names[ind0].mark(); \
-       remove_images(images,images_names,1,selection.height()-1,selection); \
+       remove_images(images,images_names,selection,1,selection.height()-1); \
        }}} is_released = false; continue; \
    }
 
@@ -2278,17 +2278,16 @@ const CImg<T>& gmic::check_image(const CImgList<T>& list, const CImg<T>& img) {
 //---------------------------------------
 template<typename T>
 gmic& gmic::remove_images(CImgList<T> &images, CImgList<char> &images_names,
-                          const unsigned int start, const unsigned int end,
-                          const CImg<unsigned int>& selection) {
+                          const CImg<unsigned int>& selection,
+                          const unsigned int start, const unsigned int end) {
   if (start==0 && end==(unsigned int)selection.height()-1 && selection.height()==images.width()) {
     images.assign();
     images_names.assign();
-  } else if (selection) for (int l = (int)end; l>=(int)start; ) {
+  } else for (int l = (int)end; l>=(int)start; ) {
       unsigned int eind = selection[l--], ind = eind;
       while (l>=(int)start && selection[l]==ind-1) ind = selection[l--];
       images.remove(ind,eind); images_names.remove(ind,eind);
     }
-  else { images.remove(start,end); images_names.remove(start,end); }
   return *this;
 }
 
@@ -3633,7 +3632,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   img.move_to(images);
                   images_names.insert(name.copymark());
                 } else if (selection.height()>=2) {
-                  remove_images(images,images_names,1,selection.height()-1,selection);
+                  remove_images(images,images_names,selection,1,selection.height()-1);
                   img.move_to(images[selection[0]].assign());
                   name.move_to(images_names[selection[0]]);
                 }
@@ -3768,7 +3767,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   img.move_to(images);
                   images_names.insert(name.copymark());
                 } else if (selection.height()>=2) {
-                  remove_images(images,images_names,1,selection.height()-1,selection);
+                  remove_images(images,images_names,selection,1,selection.height()-1);
                   img.move_to(images[selection[0]].assign());
                   name.move_to(images_names[selection[0]]);
                 }
@@ -6344,10 +6343,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   } else images[selection[i]].swap(nimages[i]);
                   images_names[selection[i]].swap(nimages_names[i]);
                 }
-                remove_images(nimages,nimages_names,0,nb-1);
+                nimages.remove(0,nb-1);
+                nimages_names.remove(0,nb-1);
               }
               if (nb<(unsigned int)selection.height())
-                remove_images(images,images_names,nb,selection.height()-1,selection);
+                remove_images(images,images_names,selection,nb,selection.height()-1);
               else if (nimages) {
                 const unsigned int ind0 = selection?selection.back()+1:images.size();
                 images.insert(nimages,ind0);
@@ -6764,7 +6764,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 img.move_to(images);
                 name.move_to(images_names);
               } else {
-                remove_images(images,images_names,1,selection.height()-1,selection);
+                remove_images(images,images_names,selection,1,selection.height()-1);
                 img.move_to(images[selection[0]].assign());
                 name.move_to(images_names[selection[0]]);
               }
@@ -8141,7 +8141,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             CImgList<T> _images;
             CImgList<char> _images_names;
             if (is_get_version) { _images.assign(images); _images_names.assign(images_names); }
-            remove_images(images,images_names,0,selection.height()-1,selection);
+            remove_images(images,images_names,selection,0,selection.height()-1);
             if (is_get_version) {
               _images.move_to(images,0);
               _images_names.move_to(images_names,0);
@@ -11017,10 +11017,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   } else images[selection[i]].swap(nimages[i]);
                   images_names[selection[i]].swap(nimages_names[i]);
                 }
-                remove_images(nimages,nimages_names,0,nb-1);
+                nimages.remove(0,nb-1);
+                nimages_names.remove(0,nb-1);
               }
               if (nb<(unsigned int)selection.height())
-                remove_images(images,images_names,nb,selection.height()-1,selection);
+                remove_images(images,images_names,selection,nb,selection.height()-1);
               else if (nimages) {
                 const unsigned int ind0 = selection?selection.back()+1:images.size();
                 nimages_names.move_to(images_names,ind0);
