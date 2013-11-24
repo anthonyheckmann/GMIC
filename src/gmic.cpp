@@ -5156,9 +5156,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   argument_text);
             CImg<char> arg_exec(argument,std::strlen(argument)+1);
             gmic_strreplace(arg_exec);
-            cimg::mutex(15);
+            cimg::mutex(31);
             const int errcode = cimg::system(arg_exec);
-            cimg::mutex(15,0);
+            cimg::mutex(31,0);
             cimg_snprintf(title,_title.size(),"%d",errcode);
             CImg<char>::string(title).move_to(status);
             if (errcode) print(images,"Command '-exec' returned error code '%d'.",
@@ -11716,9 +11716,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #ifdef gmic_is_parallel
     cimglist_for(threads_data,i) cimg_forY(threads_data[i],l) {
       if (threads_data(i,l).wait_mode==0) {
-        cimg::mutex(15);
+        cimg::mutex(30);
         *(threads_data(i,l).gmic_instance.cancel) = 1;
-        cimg::mutex(15,0);
+        cimg::mutex(30,0);
       }
 #if cimg_OS!=2
       pthread_join(threads_data(i,l).thread_id,0);
