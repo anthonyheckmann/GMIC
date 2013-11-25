@@ -2358,12 +2358,16 @@ void gmic::_gmic(const char *const commands_line, CImgList<T>& images, CImgList<
   if (include_default_commands)
     add_commands(data_gmic_def,commands_names,commands,commands_has_arguments);
   add_commands(custom_commands,commands_names,commands,commands_has_arguments);
-  for (unsigned int l = 0; l<256; ++l) { variables[l].assign(); variables_names[l].assign(); }
+
+  for (unsigned int l = 0; l<256; ++l) {
+    variables[l] = &_variables[l];
+    variables_names[l] = &_variables_names[l];
+  }
 #if gmic_is_beta==1
   const char *const s_gmic_is_beta = "_gmic_is_beta";
   const unsigned int hashcode = gmic_hashcode(s_gmic_is_beta,true);
-  CImg<char>::string(s_gmic_is_beta).move_to(variables_names[hashcode]);
-  CImg<char>::string("1").move_to(variables[hashcode]);
+  CImg<char>::string(s_gmic_is_beta).move_to(*variables_names[hashcode]);
+  CImg<char>::string("1").move_to(*variables[hashcode]);
 #endif // #if gmic_is_beta==1
 
   // Seek for a '-debug' option on the commands line.
@@ -3019,18 +3023,20 @@ CImg<char> gmic::substitute_item(const char *const source,
                  (*substr<'0' || *substr>'9')) {
         const CImg<char>& name = is_braces?inbraces:substr;
         const unsigned int sind = gmic_hashcode(name,true);
-	const int lind = *name=='_'?0:(int)variables_sizes[sind];
+        const bool is_global = *name=='_';
+	const int lind = is_global?0:(int)variables_sizes[sind];
+        if (is_global) cimg::mutex(29);
         const CImgList<char>
-          &_variables = variables[sind],
-          &_variables_names = variables_names[sind];
+          &__variables = *variables[sind],
+          &__variables_names = *variables_names[sind];
         bool is_name_found = false;
-	for (int l = _variables.width()-1; l>=lind; --l)
-          if (!std::strcmp(_variables_names[l],name)) {
+	for (int l = __variables.width()-1; l>=lind; --l)
+          if (!std::strcmp(__variables_names[l],name)) {
             is_name_found = true; ind = l; break;
           }
         if (is_name_found) {
-          if (_variables[ind].size()>1)
-            CImg<char>(_variables[ind].data(),_variables[ind].size()-1).
+          if (__variables[ind].size()>1)
+            CImg<char>(__variables[ind].data(),__variables[ind].size()-1).
               move_to(substituted_items);
         } else {
 	  for (int l = images.width()-1; l>=0; --l)
@@ -3046,6 +3052,7 @@ CImg<char> gmic::substitute_item(const char *const source,
             if (s_env) CImg<char>(s_env,std::strlen(s_env)).move_to(substituted_items);
           }
         }
+        if (is_global) cimg::mutex(29,0);
         nsource+=is_braces?l_inbraces + 3:std::strlen(substr)+1;
 
         // Substitute '@ind', '@{ind}' and '@{ind,argument}' -> image values or feature.
@@ -3335,11 +3342,11 @@ CImg<char> gmic::substitute_item(const char *const source,
           unsigned int nposition = 0;
           CImg<char>::string("*substitute").move_to(scope);
 	  unsigned int nvariables_sizes[256];
-	  for (unsigned int l = 0; l<256; ++l) nvariables_sizes[l] = variables[l].size();
+	  for (unsigned int l = 0; l<256; ++l) nvariables_sizes[l] = variables[l]->size();
           _parse(ncommands_line,nposition,images,images_names,nvariables_sizes);
-	  for (unsigned int l = 0; l<255; ++l) if (variables[l].size()>nvariables_sizes[l]) {
-	      variables_names[l].remove(nvariables_sizes[l],variables[l].size()-1);
-	      variables[l].remove(nvariables_sizes[l],variables[l].size()-1);
+	  for (unsigned int l = 0; l<255; ++l) if (variables[l]->size()>nvariables_sizes[l]) {
+	      variables_names[l]->remove(nvariables_sizes[l],variables[l]->size()-1);
+	      variables[l]->remove(nvariables_sizes[l],variables[l]->size()-1);
 	    }
           scope.remove();
           is_return = false;
@@ -7501,13 +7508,16 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 gi.commands[i].assign(commands[i],true);
                 gi.commands_names[i].assign(commands_names[i],true);
                 gi.commands_has_arguments[i].assign(commands_has_arguments[i],true);
+                gi.variables[i] = &gi._variables[i];
+                gi.variables_names[i] = &gi._variables_names[i];
                 _threads_data[l].variables_sizes[i] = 0;
               }
 
-              // Copy global variables for new thread.
-              gi.variables[255].assign(variables[255]);
-              gi.variables_names[255].assign(variables_names[255]);
+              // Share global variables with all new threads.
+              gi.variables[255] = variables[255];
+              gi.variables_names[255] = variables_names[255];
               _threads_data[l].variables_sizes[255] = variables_sizes[255];
+
               gi.scope.assign(scope);
               cimg_snprintf(title,_title.size(),"*thread%d",l);
               CImg<char>::string(title).move_to(gi.scope);
@@ -7577,10 +7587,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 is_released&=_threads_data[l].gmic_instance.is_released;
               }
 
-              // Get back global variables and status modified by first thread.
-              _threads_data[0].gmic_instance.variables[255].move_to(variables[255]);
-              _threads_data[0].gmic_instance.variables_names[255].move_to(variables_names[255]);
-              variables_sizes[255] = _threads_data[0].variables_sizes[255];
+              // Get status modified by first thread.
               _threads_data[0].gmic_instance.status.move_to(status);
 
               // Check for possible exceptions thrown by threads.
@@ -11002,7 +11009,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             const CImgList<char>
 	      ncommands_line = commands_line_to_CImgList(substituted_command.data());
 	    unsigned int nvariables_sizes[256];
-	    for (unsigned int l = 0; l<256; ++l) nvariables_sizes[l] = variables[l].size();
+	    for (unsigned int l = 0; l<256; ++l) nvariables_sizes[l] = variables[l]->size();
             CImgList<char> nimages_names(selection.height());
             CImgList<T> nimages(selection.height());
             unsigned int nposition = 0;
@@ -11044,9 +11051,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 nimages.move_to(images,ind0);
               }
             }
-	    for (unsigned int l = 0; l<255; ++l) if (variables[l].size()>nvariables_sizes[l]) {
-		variables_names[l].remove(nvariables_sizes[l],variables[l].size()-1);
-		variables[l].remove(nvariables_sizes[l],variables[l].size()-1);
+	    for (unsigned int l = 0; l<255; ++l) if (variables[l]->size()>nvariables_sizes[l]) {
+		variables_names[l]->remove(nvariables_sizes[l],variables[l]->size()-1);
+		variables[l]->remove(nvariables_sizes[l],variables[l]->size()-1);
 	      }
             scope.remove();
             is_return = false;
@@ -11064,20 +11071,23 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           name(title,std::strlen(title)+1),
           value = CImg<char>::string(item+name.width());
         int ind = 0; bool is_name_found = false;
+        const bool is_global = *name=='_';
         const unsigned int sind = gmic_hashcode(name,true);
-	const int lind = *name=='_'?0:variables_sizes[sind];
+	const int lind = is_global?0:variables_sizes[sind];
+        if (is_global) cimg::mutex(29);
         CImgList<char>
-	  &_variables = variables[sind],
-	  &_variables_names = variables_names[sind];
-	for (int l = _variables.size()-1; l>=lind; --l)
-	  if (!std::strcmp(_variables_names[l],name)) {
+	  &__variables = *variables[sind],
+	  &__variables_names = *variables_names[sind];
+	for (int l = __variables.size()-1; l>=lind; --l)
+	  if (!std::strcmp(__variables_names[l],name)) {
 	    is_name_found = true; ind = l; break;
 	  }
         print(images,"Set %s variable %s='%s'.",
               *name=='_'?"global":"local",
               name.data(),value.data());
-        if (is_name_found) value.move_to(_variables[ind]);
-        else { name.move_to(_variables_names); value.move_to(_variables); }
+        if (is_name_found) value.move_to(__variables[ind]);
+        else { name.move_to(__variables_names); value.move_to(__variables); }
+        if (is_global) cimg::mutex(29,0);
         continue;
       }
 

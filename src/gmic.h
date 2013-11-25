@@ -352,7 +352,8 @@ struct gmic {
   gmic_display instant_window[10];
 #endif // #if cimg_display!=0
   gmic_list<char> commands[256], commands_names[256], commands_has_arguments[256],
-    variables[256], variables_names[256], scope;
+    _variables[256], _variables_names[256], *variables[256], *variables_names[256],
+    scope;
   gmic_list<unsigned int> dowhiles, repeatdones;
   gmic_image<unsigned char> background3d, light3d;
   gmic_image<float> pose3d;
