@@ -7493,8 +7493,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             CImg<st_gmic_parallel<T> > &_threads_data = threads_data.back();
 
 #ifdef gmic_is_parallel
-            print(images,"Execute %d parallel commands '%s'%s.",
-                  arguments.width(),_arg_text,
+            print(images,"Execute %d parallel command%s '%s'%s.",
+                  arguments.width(),arguments.width()>1?"s":"",_arg_text,
                   wait_mode==2?(arguments.width()>1?" and wait until they finish":" and wait until it finishes"):
                   wait_mode==1?" and will wait for thread termination at return point":"");
 #else
