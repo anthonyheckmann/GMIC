@@ -965,9 +965,13 @@ Set or increment/decrement the verbosity level.
 ~\\\textbf{Arguments: } 
 {\small \texttt{delay}}~~~$|$\\
 \hspace*{2.2cm}{\small \texttt{(no args)}}\\~\\
-Wait for a given delay (in ms) or for a user event occuring on the selected instant window.
-~\\'delay' can be \{ $<$0=delay+flush ~$|$~  0=event ~$|$~ $>$0=delay \}.
+Wait for a given delay (in ms) since last call, or sleep during a specified delay,
+or wait for a user event occuring on the selected instant window.
+~\\'delay' can be \{ $<$0=delay+flush ~$|$~ 0=event ~$|$~ $>$0=delay \}.
 ~\\Command subset (if any) stands for instant window indices instead of image indices.
+~\\If no window indices are specified and if 'delay' is negative, the command results
+in a hard sleep during specified delay.
+~\\~\\\textbf{Default value}: {\small \texttt{'delay=0'.}}
 
 
 \subsection{\emph{-warn\index{-warn}} (*)}\vspace*{-0.5em}
@@ -6014,6 +6018,10 @@ Create 3d transition sequence between selected consecutive images.
 \section{Interactive demos}
 
 
+\subsection{\emph{-demo\index{-demo}} }\vspace*{-0.5em}
+Show a menu to select and view all G'MIC interactive demos.
+
+
 \subsection{\emph{-x\_blobs\index{-x\_blobs}} }\vspace*{-0.5em}
 Launch the blobs editor.
 
@@ -6023,7 +6031,7 @@ Launch the bouncing balls demo.
 
 
 \subsection{\emph{-x\_fire\index{-x\_fire}} }\vspace*{-0.5em}
-Launch the fire demo.
+Launch the fire effect demo.
 
 
 \subsection{\emph{-x\_fireworks\index{-x\_fireworks}} }\vspace*{-0.5em}
@@ -6031,19 +6039,19 @@ Launch the fireworks demo.
 
 
 \subsection{\emph{-x\_fisheye\index{-x\_fisheye}} }\vspace*{-0.5em}
-Launch fish-eye demo.
+Launch the fish-eye effect demo.
 
 
 \subsection{\emph{-x\_fourier\index{-x\_fourier}} }\vspace*{-0.5em}
-Launch fourier filtering demo.
+Launch the fourier filtering demo.
 
 
 \subsection{\emph{-x\_histogram\index{-x\_histogram}} }\vspace*{-0.5em}
-Launch histogram demo.
+Launch the histogram demo.
 
 
 \subsection{\emph{-x\_hough\index{-x\_hough}} }\vspace*{-0.5em}
-Launch hough transform demo.
+Launch the hough transform demo.
 
 
 \subsection{\emph{-x\_jawbreaker\index{-x\_jawbreaker}} }\vspace*{-0.5em}
@@ -6057,7 +6065,7 @@ Launch the game of life.
 
 
 \subsection{\emph{-x\_light\index{-x\_light}} }\vspace*{-0.5em}
-Launch the light demo.
+Launch the light effect demo.
 
 
 \subsection{\emph{-x\_mandelbrot\index{-x\_mandelbrot}} }\vspace*{-0.5em}
@@ -6089,13 +6097,13 @@ Launch the interactive painter.
 
 
 \subsection{\emph{-x\_plasma\index{-x\_plasma}} }\vspace*{-0.5em}
-Launch the plasma demo.
+Launch the plasma effect demo.
 
 
 \subsection{\emph{-x\_quantize\_rgb\index{-x\_quantize\_rgb}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_nbcolors$>$=2}}\\~\\
-Launch RGB colors quantization demo.
+Launch the RGB color quantization demo.
 
 
 \subsection{\emph{-x\_reflection3d\index{-x\_reflection3d}} }\vspace*{-0.5em}
@@ -6103,7 +6111,7 @@ Launch the 3d reflection demo.
 
 
 \subsection{\emph{-x\_rubber3d\index{-x\_rubber3d}} }\vspace*{-0.5em}
-Launch the 3d rubber demo.
+Launch the 3d rubber object demo.
 
 
 \subsection{\emph{-x\_shadebobs\index{-x\_shadebobs}} }\vspace*{-0.5em}
@@ -6129,7 +6137,7 @@ Launch the image waves demo.
 \subsection{\emph{-x\_whirl\index{-x\_whirl}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_opacity$>$=0}}\\~\\
-Launch fractal whirl demo.
+Launch the fractal whirl demo.
 ~\\~\\\textbf{Default values}: {\small \texttt{'opacity=0.2'.}}
 
 \section{PINK-library operators}
@@ -6809,8 +6817,7 @@ $\bullet$~'\texttt{-frame}' ~is equivalent to~~'\texttt{-frame\_xy}'.\\
      gmic -apply_camera \"--mirror x --mirror y -+ -/ 4\" 
  
   - Launch a set of G'MIC interactive demos: 
-     gmic -x_fisheye -x_fire G\'MIC -x_tictactoe -rm -x_spline -x_mandelbrot 0 -x_light \ 
-          -x_whirl , -x_life -x_jawbreaker , -x_blobs -x_tetris 
+     gmic -demo 
 
 \end{lstlisting}
 \normalsize

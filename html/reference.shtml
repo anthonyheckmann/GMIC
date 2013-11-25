@@ -882,9 +882,13 @@ delay |<br/>
 (no args)
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Wait for a given delay (in ms) or for a user event occuring on the selected instant window.
-<br/>'delay' can be { <0=delay+flush |  0=event | >0=delay }.
+<p style="margin-left:100px"><tt>Wait for a given delay (in ms) since last call, or sleep during a specified delay,
+<br/>&nbsp;or wait for a user event occuring on the selected instant window.
+<br/>'delay' can be { <0=delay+flush | 0=event | >0=delay }.
 <br/>Command subset (if any) stands for instant window indices instead of image indices.
+<br/>If no window indices are specified and if 'delay' is negative, the command results
+<br/>&nbsp;in a hard sleep during specified delay.
+<br/><br/><b>Default value</b>: 'delay=0'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-warn (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 message
@@ -5180,7 +5184,10 @@ _nb_frames>=2,_nb_xtiles>0,_nb_ytiles>0,_axis_x,_axis_y,_axis_z,_is_antialias
 <br/><br/><b>Default values</b>: 'nb_frames=10', 'nb_xtiles=nb_ytiles=3', 'axis_x=1', 'axis_y=1', 'axis_z=0' and 'is_antialias=1'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def601.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 5 -transition3d 9 -drgba</div></div></td><td><tt>image.jpg --blur 5 -transition3d 9 -drgba</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection20"><font color="purple">** <u>Interactive demos</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
-<p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_blobs</b>:</font>
+<p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-demo</b>:</font>
+
+<p style="margin-left:100px"><tt>Show a menu to select and view all G'MIC interactive demos.
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_blobs</b>:</font>
 
 <p style="margin-left:100px"><tt>Launch the blobs editor.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_bouncing</b>:</font>
@@ -5188,22 +5195,22 @@ _nb_frames>=2,_nb_xtiles>0,_nb_ytiles>0,_axis_x,_axis_y,_axis_z,_is_antialias
 <p style="margin-left:100px"><tt>Launch the bouncing balls demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_fire</b>:</font>
 
-<p style="margin-left:100px"><tt>Launch the fire demo.
+<p style="margin-left:100px"><tt>Launch the fire effect demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_fireworks</b>:</font>
 
 <p style="margin-left:100px"><tt>Launch the fireworks demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_fisheye</b>:</font>
 
-<p style="margin-left:100px"><tt>Launch fish-eye demo.
+<p style="margin-left:100px"><tt>Launch the fish-eye effect demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_fourier</b>:</font>
 
-<p style="margin-left:100px"><tt>Launch fourier filtering demo.
+<p style="margin-left:100px"><tt>Launch the fourier filtering demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_histogram</b>:</font>
 
-<p style="margin-left:100px"><tt>Launch histogram demo.
+<p style="margin-left:100px"><tt>Launch the histogram demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_hough</b>:</font>
 
-<p style="margin-left:100px"><tt>Launch hough transform demo.
+<p style="margin-left:100px"><tt>Launch the hough transform demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_jawbreaker</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 0<_width<20,0<_height<20,0<_balls<=8
@@ -5215,7 +5222,7 @@ _nb_frames>=2,_nb_xtiles>0,_nb_ytiles>0,_axis_x,_axis_y,_axis_z,_is_antialias
 <p style="margin-left:100px"><tt>Launch the game of life.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_light</b>:</font>
 
-<p style="margin-left:100px"><tt>Launch the light demo.
+<p style="margin-left:100px"><tt>Launch the light effect demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_mandelbrot</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _julia={ 0 | 1 },_c0r,_c0i
@@ -5242,19 +5249,19 @@ _julia={ 0 | 1 },_c0r,_c0i
 <p style="margin-left:100px"><tt>Launch the interactive painter.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_plasma</b>:</font>
 
-<p style="margin-left:100px"><tt>Launch the plasma demo.
+<p style="margin-left:100px"><tt>Launch the plasma effect demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_quantize_rgb</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _nbcolors>=2
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Launch RGB colors quantization demo.
+<p style="margin-left:100px"><tt>Launch the RGB color quantization demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_reflection3d</b>:</font>
 
 <p style="margin-left:100px"><tt>Launch the 3d reflection demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_rubber3d</b>:</font>
 
-<p style="margin-left:100px"><tt>Launch the 3d rubber demo.
+<p style="margin-left:100px"><tt>Launch the 3d rubber object demo.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_shadebobs</b>:</font>
 
 <p style="margin-left:100px"><tt>Launch the shade bobs demo.
@@ -5275,7 +5282,7 @@ _nbcolors>=2
 _opacity>=0
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Launch fractal whirl demo.
+<p style="margin-left:100px"><tt>Launch the fractal whirl demo.
 <br/><br/><b>Default values</b>: 'opacity=0.2'.
 </tt></p><br/><h3><a id="subsection21"><font color="purple">** <u>PINK-library operators</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-output_pink3d</b>:</font>
@@ -5939,7 +5946,7 @@ _scorefile,_number_of_sessions>=0
 <font color="green"><b>&nbsp;&nbsp;-frame </b>:</font>
 <font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
 </p>
-<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 823 ]</b></font>
+<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 824 ]</b></font>
 <h2><a id="section13"><font color="brown"><u>Examples of use</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
 <pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
  The few examples below illustrate possible uses of this tool: 
@@ -5993,8 +6000,7 @@ _scorefile,_number_of_sessions>=0
      gmic -apply_camera \"--mirror x --mirror y -+ -/ 4\" 
  
   - Launch a set of G'MIC interactive demos: 
-     gmic -x_fisheye -x_fire G\'MIC -x_tictactoe -rm -x_spline -x_mandelbrot 0 -x_light \ 
-          -x_whirl , -x_life -x_jawbreaker , -x_blobs -x_tetris 
+     gmic -demo 
 </pre>
  
 <br/><b><font color="brown">** G'MIC comes with ABSOLUTELY NO WARRANTY; for details visit <a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net **</a></font></b> 
