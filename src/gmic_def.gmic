@@ -10600,8 +10600,9 @@ demo :
   0 -text[-1] "G'MIC "@{-strver}" demos",2,2,24,1,1,1,1 -b[-1] 0.5 -n[-1] 0,1
   (32;255^255;255^0;0) -r[-1] [-2],[-2],1,3,3 -*[-2,-1] -round[-1] 1,-1 --neq[-1] 0 -channels[-1] 1
   -j[-3] [-2],20,18,0,0,1,[-1] -rm[-2,-1] --channels[-1] 1 -dilate[-1] 5
-  (80;255;80^0;255;0^0;0;0) -r[-1] [-2],13,1,3,3 -polygon[-1] 3,1,1,1,11,10,6,1,255,255,255 --mirror[-1] x -max[-2,-1]
-  (10;255;10^0;100;0^0;0;0) -r[-1] [-2],13,1,3,3 -polygon[-1] 3,1,1,1,11,10,6,1,255,255,255 --mirror[-1] x -max[-2,-1]
+  (80;255;80^0;255;0^0;0;0) (10;255;10^0;100;0^0;0;0)
+  -r[-2,-1] [-3],13,1,3,3 -polygon[-2,-1] 3,1,1,1,11,10,6,1,255,255,255 --mirror[-2,-1] x
+  -max[-4,-2] -max[-2,-1]
 
   # Pre-compute 3d objects.
   32,32 -ball[-1] 200,100,64 -n[-1] 0,230 -s[-1] c,-3 -rgb2hsv[-2] -a[-2,-1] c
@@ -10610,7 +10611,7 @@ demo :
     ({'CImg3d'}) (5,5) 3,5 (1,0;1,4) -r[-1] 2,5,1,1,3 -round[-1] 4,5 -y[-5--1] -a[-5--1] y
     -rv[-2,-1] -sprites3d[-2,-1] -rv[-2,-1]
   -done -rm[-1] -+3d[-6--1]
-  cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-3} is_selected=0 -f3d 400
+  cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-3} selected=-1 -f3d 400
 
   # Start main loop.
   -w[0] -1,-1,0,0,"[G'MIC] Demos menu"
@@ -10629,15 +10630,16 @@ demo :
 
     # Manage mouse events.
     y=@{!,y}
-    -if {$y>=0} y={max(0,min(26,int(($y-$y0)/13)))} -j[0] [{if($is_selected,5,4)}],0,{$y0+13*$y},0,0,0.2 -endif # Menu location.
+    -if {$y>=0} y={max(0,min(26,int(($y-$y0)/13)))} -j[0] [{if($selected>=0,5,4)}],0,{$y0+13*$y},0,0,0.2 -endif # Menu location.
 
     -w[0] @{0,w},@{0,h} -wait 20
 
-    -if {@{!,b}&1} is_selected=1 # Selection
-    -elif $is_selected
-      -wait -1 com=@{-arg\ {1+$y},$commands}
-      -m "com : -v 0 "$com -parallel 1,"-l[] -com -v -1 -rm -endl" -uncommand com
-      is_selected=0
+    -if {(@{!,b}&1)&&$selected<0} selected=$y # Selection
+    -elif {!@{!,b}}
+      -if {$selected>=0&&$y==$selected}
+        -m "com : -v 0 "@{-arg\ {1+$y},$commands} -parallel 1,"-l[] -com -v -1 -rm -endl" -uncommand com
+      -endif
+      selected=-1
     -endif
 
     # Manage ball animation.
