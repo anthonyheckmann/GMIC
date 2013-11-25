@@ -2458,9 +2458,13 @@ _update :
 #@gmic : Default value: 'level=0'.
 
 #@gmic wait : delay : (no args) : (+)
-#@gmic : Wait for a given delay (in ms) or for a user event occuring on the selected instant window.
-#@gmic : 'delay' can be { <0=delay+flush |  0=event | >0=delay }.
+#@gmic : Wait for a given delay (in ms) since last call, or sleep during a specified delay,
+#@gmic : or wait for a user event occuring on the selected instant window.
+#@gmic : 'delay' can be { <0=delay+flush | 0=event | >0=delay }.
 #@gmic : Command subset (if any) stands for instant window indices instead of image indices.
+#@gmic : If no window indices are specified and if 'delay' is negative, the command results
+#@gmic : in a hard sleep during specified delay.
+#@gmic : Default value: 'delay=0'.
 
 #@gmic warn : message : (*)
 #@gmic : Print specified warning message, on the standard error (stderr).

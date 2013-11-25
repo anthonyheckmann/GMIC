@@ -10413,10 +10413,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     gmic_selection);
             else {
               print(images,
-                    "Wait for %g milliseconds according to instant window%s.",
-                    delay,
+                    "%s for %g milliseconds according to instant window%s.",
+                    delay<0?"Sleep":"Wait",delay,
                     gmic_selection);
-              cimg::wait((unsigned int)(delay<0?-delay:delay));
+              if (delay<0) cimg::sleep((unsigned int)-delay);
+              else cimg::wait((unsigned int)delay);
             }
 #else // #if cimg_display==0
             if (!delay) {
@@ -10462,7 +10463,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               cimg_forY(selection,l) instant_window[selection[l]].flush();
               if (selection && instant_window[selection[0]])
                 instant_window[selection[0]].wait((unsigned int)-delay);
-              else cimg::wait((unsigned int)-delay);
+              else cimg::sleep((unsigned int)-delay);
             } else {
               print(images,"Wait for %g milliseconds according to instant window%s",
                     delay,
