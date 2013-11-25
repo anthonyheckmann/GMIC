@@ -10601,6 +10601,7 @@ demo :
   (32;255^255;255^0;0) -r[-1] [-2],[-2],1,3,3 -*[-2,-1] -round[-1] 1,-1 --neq[-1] 0 -channels[-1] 1
   -j[-3] [-2],20,18,0,0,1,[-1] -rm[-2,-1] --channels[-1] 1 -dilate[-1] 5
   (80;255;80^0;255;0^0;0;0) -r[-1] [-2],13,1,3,3 -polygon[-1] 3,1,1,1,11,10,6,1,255,255,255 --mirror[-1] x -max[-2,-1]
+  (10;255;10^0;100;0^0;0;0) -r[-1] [-2],13,1,3,3 -polygon[-1] 3,1,1,1,11,10,6,1,255,255,255 --mirror[-1] x -max[-2,-1]
 
   # Pre-compute 3d objects.
   32,32 -ball[-1] 200,100,64 -n[-1] 0,230 -s[-1] c,-3 -rgb2hsv[-2] -a[-2,-1] c
@@ -10609,7 +10610,7 @@ demo :
     ({'CImg3d'}) (5,5) 3,5 (1,0;1,4) -r[-1] 2,5,1,1,3 -round[-1] 4,5 -y[-5--1] -a[-5--1] y
     -rv[-2,-1] -sprites3d[-2,-1] -rv[-2,-1]
   -done -rm[-1] -+3d[-6--1]
-  cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-3} -f3d 400
+  cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-3} is_selected=0 -f3d 400
 
   # Start main loop.
   -w[0] -1,-1,0,0,"[G'MIC] Demos menu"
@@ -10621,20 +10622,22 @@ demo :
     1,30,1,1,'(1-$alpha)*sin($cfy*y+$t)+$alpha*sin($nfy*y+$t)'
     1,30,1,1,'(1-$alpha)*sin($cfz*y+$t)+$alpha*sin($nfz*y+$t)'
     -a[-3--1] x -s[-1] y,5 -a[-5--1] x -y[-1]
-    -j[5] [-1],0,8 -rm[-1] -*3d[5] @{0,w/2-30},@{0,h/2-30},300 -+3d[5] 0,0,200
+    -j[6] [-1],0,8 -rm[-1] -*3d[6] @{0,w/2-30},@{0,h/2-30},300 -+3d[6] 0,0,200
 
     # Render image.
-    -*[0] 0.85 -+[0] [1] -object3d[0] [5],50%,50%,0,1,0,0,0 -j[0] [2],0,0,0,0,1,[3],255
+    -*[0] 0.85 -+[0] [1] -object3d[0] [6],50%,50%,0,1,0,0,0 -j[0] [2],0,0,0,0,1,[3],255
 
     # Manage mouse events.
     y=@{!,y}
-    -if {$y>=0} y={max(0,min(26,int(($y-$y0)/13)))} -j[0] [4],0,{$y0+13*$y},0,0,0.2 -endif # Menu location.
+    -if {$y>=0} y={max(0,min(26,int(($y-$y0)/13)))} -j[0] [{if($is_selected,5,4)}],0,{$y0+13*$y},0,0,0.2 -endif # Menu location.
 
     -w[0] @{0,w},@{0,h} -wait 20
 
-    -if {@{!,b}&1} # Selection
+    -if {@{!,b}&1} is_selected=1 # Selection
+    -elif $is_selected
       -wait -1 com=@{-arg\ {1+$y},$commands}
-      -m "com : -v 0 "$com -parallel 1,-com[] -uncommand com
+      -m "com : -v 0 "$com -parallel 1,"-l[] -com -v -1 -rm -endl" -uncommand com
+      is_selected=0
     -endif
 
     # Manage ball animation.
