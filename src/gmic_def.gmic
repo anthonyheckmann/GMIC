@@ -6311,7 +6311,7 @@ topographic_map : -check "isint(${1=16}) && $1>0" -skip ${2=2}
 #@gmic ball : _size>0, _R,_G,_B
 #@gmic : Input a 2d RGBA colored ball sprite.
 #@gmic : Default values: 'size=64', 'R=255', 'G=R' and 'B=R'.
-#@gmic : $ -repeat 12 -ball {1.5^($>+2)},@{-RGB} -done -append x
+#@gmic : $ -repeat 9 -ball {1.5^($>+2)},@{-RGB} -done -append x
 ball : -check "${1=64}>0" -skip ${2=255},${3=$2},${4=$3}
   -e[^-1] "Input $1x$1 ball with color (${2-4})."
   -v - -l[]
