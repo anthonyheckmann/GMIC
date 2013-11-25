@@ -10554,7 +10554,7 @@ transition3d : -check "isint(${1=10}) && $1>=2 && isint(${2=3}) && $2>0 && isint
 #@gmic : Show a menu to select and view all G'MIC interactive demos.
 demo :
   -e[] "\n
------- G'MIC demo menu ------------------\n
+------ G'MIC demos menu -----------------\n
 ----\n
 ---- Mouse button to select a demo.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
