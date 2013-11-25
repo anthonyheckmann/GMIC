@@ -21977,21 +21977,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
-
-foo :
-  -parallel -foo1,-foo2
-
-foo1 :
-  -v -
-  -repeat 10
-    _toto=$>
-    -wait 400
-  -done
-
-foo2 :
-  -v -
-  -do
-    -v + -e[] "toto = "$_toto -v -
-#    -wait 100
-  -while 1
