@@ -12174,7 +12174,7 @@ x_plasma :
     -j[-3] [-1],0,0,0,0,1,[-2],255 -rm[-1]
     -j[-2] [-1],-2,-2,0,0,1,[-1],255 -rm[-1]
 
-    tt={$tt+(@|-$tic)*100} # Animate scrolling.
+    tt={$tt+(@|-$tic)*250} # Animate scrolling.
     -if {$tt>=$M} tt={-1.5*@{0,w}} -endif
 
     # Display rendered frame.
