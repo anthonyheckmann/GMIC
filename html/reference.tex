@@ -5004,7 +5004,7 @@ Execute following commands when an error is encountered in the body of the 'loca
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_wait\_threads,"command1","command2",...}}\\~\\
 Execute specified commands in parallel, each in a different thread.
-~\\All running threads share the current list of images.
+~\\All running threads share the current list of images and the global variables.
 ~\\'wait\_threads' can be \{ 0=never ~$|$~ 1=at return point ~$|$~ 2=immediately \}.
 ~\\~\\\textbf{Default value}: {\small \texttt{'wait\_threads=2'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def491.jpg}\\

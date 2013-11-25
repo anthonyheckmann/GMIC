@@ -938,8 +938,7 @@ _help_examples :
 \n     gmic -apply_camera \\\"--mirror x --mirror y -+ -/ 4\\\"
 \n
 \n  - Launch a set of G'MIC interactive demos:
-\n     gmic -x_fisheye -x_fire G\\'MIC -x_tictactoe -rm -x_spline -x_mandelbrot 0 -x_light \\
-\n          -x_whirl , -x_life -x_jawbreaker , -x_blobs -x_tetris
+\n     gmic -demo
 \n"
 
 #@gmic version
@@ -10547,6 +10546,99 @@ transition3d : -check "isint(${1=10}) && $1>=2 && isint(${2=3}) && $2>0 && isint
 #
 #-----------------------------
 
+#@gmic demo
+#@gmic : Show a menu to select and view all G'MIC interactive demos.
+demo :
+  -e[] "\n
+------ G'MIC demo menu ------------------\n
+----\n
+---- Mouse button to select a demo.\n
+---- Keys 'ESC' or 'Q' to exit.\n
+----\n
+-----------------------------------------"
+  -v - -l[]
+  230,420,1,3 --plasma[-1] 1,1,5 -n[-1] 0,170 -sh[-1] 0,1 -/[-1] 2.2 -rm[-1] -water[-1] 100 -*[-1] 0.15
+  100%,100%,1,3
+  0 -text[-1] "1- Blobs editor\n"\
+              "2- Bouncing balls\n"\
+              "3- Fire effect\n"\
+              "4- Fireworks\n"\
+              "5- Fish-eye effect\n"\
+              "6- Fourier filtering\n"\
+              "7- Histogram demo\n"\
+              "8- Hough transform\n"\
+              "9- Jawbreaker\n"\
+              "10- The game of life\n"\
+              "11- Light effect\n"\
+              "12- Mandelbrot explorer\n"\
+              "13- 3d metaballs\n"\
+              "14- Minesweeper\n"\
+              "15- Minimal path\n"\
+              "16- Pacman\n"\
+              "17- Paint\n"\
+              "18- Plasma effect\n"\
+              "19- RGB quantization\n"\
+              "20- 3d reflection\n"\
+              "21- 3d rubber object\n"\
+              "22- Shade bobs\n"\
+              "23- Spline editor\n"\
+              "24- Tetris\n"\
+              "25- Tic-tac-toe\n"\
+              "26- Image waves\n"\
+              "27- Fractal whirls",0,0,13,1,255,255,255
+  commands=-x_blobs,-x_bouncing,-x_fire,-x_fireworks,-x_fisheye,-x_fourier,-x_histogram,-x_hough,\
+           -x_jawbreaker,-x_life,-x_light,-x_mandelbrot,-x_metaballs3d,-x_minesweeper,-x_minimal_path,\
+           -x_pacman,-x_paint,-x_plasma,-x_quantize_rgb,-x_reflection3d,-x_rubber3d,-x_shadebobs,\
+           -x_spline,-x_tetris,-x_tictactoe,-x_waves,-x_whirl
+  y0=59
+  -j[-2] [-1],20,$y0,0,0 -rm[-1]
+  -rectangle[-1] 0,16,100%,44,1,120,120,32
+  0 -text[-1] "G'MIC "@{-strver}" demos",2,2,24,1,1,1,1 -b[-1] 0.5 -n[-1] 0,1
+  (32;255^255;255^0;0) -r[-1] [-2],[-2],1,3,3 -*[-2,-1] -round[-1] 1,-1 --neq[-1] 0 -channels[-1] 1
+  -j[-3] [-2],20,18,0,0,1,[-1] -rm[-2,-1] --channels[-1] 1 -dilate[-1] 5
+  (80;255;80^0;255;0^0;0;0) -r[-1] [-2],13,1,3,3 -polygon[-1] 3,1,1,1,11,10,6,1,255,255,255 --mirror[-1] x -max[-2,-1]
+
+  # Pre-compute 3d objects.
+  32,32 -ball[-1] 128,100,64 -n[-1] 0,230 -s[-1] c,-3 -rgb2hsv[-2] -a[-2,-1] c
+  -repeat 6
+    -sh[-1] 0,0 -f[-1] {$>*360/6} -rm[-1] --s[-1] c,-3 -hsv2rgb[-2] -a[-2,-1] c
+    ({'CImg3d'}) (5,5) 3,5 (1,0;1,4) -r[-1] 2,5,1,1,3 -round[-1] 4,5 -y[-5--1] -a[-5--1] y
+    -rv[-2,-1] -sprites3d[-2,-1] -rv[-2,-1]
+  -done -rm[-1] -+3d[-6--1]
+  cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-3} -f3d 400
+
+  # Start main loop.
+  -w[0] -1,-1,0,0,"[G'MIC] Demos menu"
+  -do
+
+    # Set 3d coordinates for object.
+    t={2*@|}
+    1,30,1,1,'(1-$alpha)*cos($cfx*y+$t)+$alpha*cos($nfx*y+$t)'
+    1,30,1,1,'(1-$alpha)*sin($cfy*y+$t)+$alpha*sin($nfy*y+$t)'
+    1,30,1,1,'(1-$alpha)*sin($cfz*y+$t)+$alpha*sin($nfz*y+$t)'
+    -a[-3--1] x -s[-1] y,5 -a[-5--1] x -y[-1]
+    -j[5] [-1],0,8 -rm[-1] -*3d[5] @{0,w/2-30},@{0,h/2-30},300 -+3d[5] 0,0,200
+
+    # Render image.
+    -*[0] 0.85 -+[0] [1] -object3d[0] [5],50%,50%,0,1,0,0,0 -j[0] [2],0,0,0,0,1,[3],255
+
+    # Manage mouse events.
+    y=@{!,y}
+    -if {$y>=0} y={max(0,min(26,int(($y-$y0)/13)))} -j[0] [4],0,{$y0+13*$y},0,0,0.2 -endif # Menu location.
+
+    -w[0] @{0,w},@{0,h} -wait 20
+
+    -if {@{!,b}&1} # Selection
+      -wait -1 com=@{-arg\ {1+$y},$commands}
+      -m "com : -v 0 "$com -parallel 1,-com[] -uncommand com
+    -endif
+
+    # Manage ball animation.
+    -if {@|-$time0>5} alpha={$alpha+0.03} -endif
+    -if {$alpha>1} alpha={$alpha-1} cfx=$nfx cfy=$nfy cfz=$nfz nfx={g} nfy={g} nfz={g} time0={@|-?*3} -endif
+  -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
+  -rm -w 0 -endl -v 0 -e[] ""
+
 #@gmic x_blobs
 #@gmic : Launch the blobs editor.
 x_blobs :
@@ -10618,7 +10710,7 @@ x_blobs :
 #@gmic : Launch the bouncing balls demo.
 x_bouncing :
   -e[] "\n
------- Bouncing balls demo -------------------------\n
+------ Bouncing balls ------------------------------\n
 ----\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
@@ -10662,10 +10754,10 @@ x_bouncing :
   -w 0 -rm -endl -v +
 
 #@gmic x_fire
-#@gmic : Launch the fire demo.
+#@gmic : Launch the fire effect demo.
 x_fire : -skip "${1=G'MIC}"
   -e[] "\n
------- Fire demo ------------------------\n
+------ Fire effect ----------------------\n
 ----\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
@@ -10673,7 +10765,7 @@ x_fire : -skip "${1=G'MIC}"
   -v -
 
   # Init image data.
-  -i[0] 100,32 -w[0] 600,300,0,0,"[G'MIC] Fire demo"
+  -i[0] 100,32 -w[0] 600,300,0,0,"[G'MIC] Fire effect"
   -i[1] (0,255,255,255,255^0,0,255,255,255^0,0,0,128,255) -r[1] 256,1,1,3,3
   -i[2] (0,0,0;0,0,0;1,1,1;0,1,0) -*[2] 0.21
   -text3d "$1",34,3,1 -mv[-1] 3 -c3d[3] -n3d[3] -*3d[3] 320 -col3d[3] 255,205,130 -db3d 0 -f3d 300
@@ -10701,7 +10793,7 @@ x_fire : -skip "${1=G'MIC}"
 #@gmic : Launch the fireworks demo.
 x_fireworks :
   -e[] "\n
------- Fireworks demo -------------------\n
+------ Fireworks -----------------------\n
 ----\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
@@ -10710,7 +10802,7 @@ x_fireworks :
   time=0
   (0;64^0;32^128;0) -r 256,128,1,3,3          # [-2] = Background (color gradient).
   [-1]                                        # [-1] = Rendered image.
-  -w[-1] 512,256,0,0,"[G'MIC] Fireworks demo" # Display window.
+  -w[-1] 512,256,0,0,"[G'MIC] Fireworks"      # Display window.
   -do                                         # Start animation loop.
     time={$time-1}
     -if {@#==2\ ||\ $time<0} # Insert new rocket.
@@ -10749,10 +10841,10 @@ x_fireworks :
   -endl -k[-1] -w[] 0 -v +
 
 #@gmic x_fisheye
-#@gmic : Launch fish-eye demo.
+#@gmic : Launch the fish-eye effect demo.
 x_fisheye :
   -e[] "\n
------- Fish-eye demo --------------------\n
+------ Fish-eye effect ------------------\n
 ----\n
 ---- Mouse pointer moves fish-eye center.\n
 ---- Mouse buttons set fish-eye size.\n
@@ -10763,13 +10855,13 @@ x_fisheye :
   -v -
   -if {@#>0} -a x -n 0,255 -r2dy 220 -else
   120,90,1,3 -rand[-1] 0,255 -plasma[-1] 0.3,3 -n 0,255
-  -t "  G'MIC\nFISH-EYE\n  DEMO",15,13,24,1,255 -scale2x -b 5 -sharpen 1000
+  -t "  G'MIC\nFISH-EYE\n EFFECT",15,13,24,1,255 -scale2x -b 5 -sharpen 1000
   -f i+150-4*abs(y-h/2) -c[-1] 0,255 -frame_fuzzy[-1] 15,10,15,1.5,0 -to_rgb[-1]
   -endif
   -torus3d 20,6 -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} --r3d[-1] 1,0,0,90
   -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} -+3d[-1] 15 -+3d[-2,-1] -db3d 0 -c3d[-1]
   R=30
-  -w[-2] {2*@{-2,w}},{2*@{-2,h}},0,0,"[G'MIC] Fish-Eye Demo"
+  -w[-2] {2*@{-2,w}},{2*@{-2,h}},0,0,"[G'MIC] Fish-eye effect"
   -do
     -wait 40
     -if {@{!,b}==1} R={min(80,$R+8)} -endif
@@ -10786,10 +10878,10 @@ x_fisheye :
   -while 1
 
 #@gmic x_fourier
-#@gmic : Launch fourier filtering demo.
+#@gmic : Launch the fourier filtering demo.
 x_fourier :
   -e[] "\n
------- Fourier-filtering demo -----------------------------------\n
+------ Fourier-filtering ----------------------------------------\n
 ----\n
 ---- Mouse buttons on the right image to set min/max frequencies.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
@@ -10816,10 +10908,10 @@ x_fourier :
     -n[-1] 0,255 -shift[-1] 50%,50%,0,0,2 -to_colormode[-1] @{-2,s}
     -nm[-1] logmag
 
-    -w[0,-1] -1,-1,0,0,"[G'MIC] Fourier Filtering Demo"
+    -w[0,-1] -1,-1,0,0,"[G'MIC] Fourier filtering"
 
     -if {!narg($first_time)} --l[-1] -r2dy 128 -frame 1,1,0
-    -alert "[G'MIC Fourier Filtering Demo]",\
+    -alert "[G'MIC Fourier filtering]",\
            "The G'MIC Fourier filtering demo illustrates the effect\n"\
            "of bandpass frequency filtering on an image. Use your mouse\n"\
            "buttons to select low and high bounds for the frequencies\n"\
@@ -10853,7 +10945,7 @@ x_fourier :
         -rv[-2,-1]
         -if @! -r[-2,-1] {@{!,w}/2},@{!,h} -endif
         -t[-1] "Freq. Min/Max = "{int($freqmin)}"% / "{int($freqmax)}"%",5,5,13,1,255
-        -w[-2,-1] #-1,-1,0,0,"[G'MIC] Fourier Filtering Demo"
+        -w[-2,-1] #-1,-1,0,0,"[G'MIC] Fourier filtering"
         -rm[-2,-1]
         need_update=0
 
@@ -10881,7 +10973,7 @@ x_fourier :
   -endl -done -w 0 -rm -v +
 
 #@gmic x_histogram
-#@gmic : Launch histogram demo.
+#@gmic : Launch the histogram demo.
 x_histogram :
   -e[] "\n
 ------ Histogram demo -------------------------------\n
@@ -10977,10 +11069,10 @@ _x_histogram :
   -r[-1] {w+2},{h+2},1,3,0,0,0.5,0.5
 
 #@gmic x_hough
-#@gmic : Launch hough transform demo.
+#@gmic : Launch the hough transform demo.
 x_hough :
   -e[] "\n
------- Hough-transform demo -----------------------------------\n
+------ Hough-transform -----------------------------------------\n
 ----\n
 ---- Mouse buttons on the vote image to draw corresponding line.\n
 ---- Mouse buttons on the image to vote for all lines crossing.\n
@@ -10998,7 +11090,7 @@ x_hough :
 
     rhomax={sqrt(w^2+h^2)/2}
     --b[-1] 1.5 -hough[-1] 512,400 -b[-1] 0.5 -+[-1] 1 -log[-1] -n[-1] 0,255
-    -w[-2] -1,-1,0,0,"[G'MIC] Image" -w1[-1] -1,-1,0,0,"[G'MIC] Hough Transform"
+    -w[-2] -1,-1,0,0,"[G'MIC] Image" -w1[-1] -1,-1,0,0,"[G'MIC] Hough transform"
     -if {!narg($first_time)} --l[0] -r2dy 128 -frame 1,1,0
     -alert "[G'MIC Hough Transform]",\
            "The G'MIC Hough transform demo illustrates the application\n"\
@@ -11286,10 +11378,10 @@ x_life :
   -rm[0-3] -w 0 -v +
 
 #@gmic x_light
-#@gmic : Launch the light demo.
+#@gmic : Launch the light effect demo.
 x_light :
   -e[] "\n
------- Light demo ------------------------\n
+------ Light effect ----------------------\n
 ----\n
 ---- Move light position with mouse.\n
 ---- Mouse buttons fade light in/out.\n
@@ -11299,14 +11391,14 @@ x_light :
   -v -
 
   # Create warping and color images.
-  0 -t[-1] "   G'MIC\nLight Demo",0,0,57,1,255 -expand_xy[-1] 15,0 -b[-1] 3
+  0 -t[-1] "    G'MIC\nLight effect",0,0,57,1,255 -expand_xy[-1] 15,0 -b[-1] 3
   [-1] -n[-2] 0,1 -r[-2] 100%,100%,1,3
   -sh[-2] 0,0 -*[-1] 120 -rm[-1]
   -sh[-2] 1,1 -*[-1] 70 -rm[-1]
   -sh[-2] 0,50%,0,2 -*[-1] 120 -rm[-1]
   25%,25%,1,1 -rand[-1] -20,20 -smooth[-1] 10,0,1,1,4 -r[-1] [-2],3 -b[-1] 3 -n[-1] -60,60
   -+[-2,-1] -g[-1] xy -a[-2,-1] c -n[-1] -150,150
-  -w[] {2*@{-2,w}},{2*@{-2,h}},0,0,"[G'MIC] Light Demo"  # Init display window.
+  -w[] {2*@{-2,w}},{2*@{-2,h}},0,0,"[G'MIC] Light effect"  # Init display window.
 
   # Create a large light image.
   light=70
@@ -11392,7 +11484,7 @@ _x_mandelbrot_palette :
 #@gmic : Launch the 3d metaballs demo.
 x_metaballs3d :
   -e[] "\n
------- 3d metaballs demo ----------------------------------\n
+------ 3d metaballs ---------------------------------------\n
 ----\n
 ---- Mouse button or 'SPACE' key to switch rendering mode.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
@@ -11526,7 +11618,7 @@ x_minesweeper : -check "${1=20}>=8 && $1<=30 && ${2=$1}>=8 && $2<=30"
 #@gmic : Launch the minimal path demo.
 x_minimal_path :
   -e[] "\n
------- Minimal path demo -------------------------------------\n
+------ Minimal path ------------------------------------------\n
 ----\n
 ---- Click on two points to compute and display the minimal\n
 ---- path between those points. The ending point is then\n
@@ -11541,8 +11633,8 @@ x_minimal_path :
   -repeat @# -l[$>]
     -w[0] -1,-1,0,0,"[G'MIC] Select starting point P0"
     -if {!narg($first_time)} --l[0] -r2dy 128 -frame 1,1,0
-    -alert "[G'MIC Minimal Path Demo]",\
-           "The G'MIC Minimal Path demo illustrates how minimal paths\n"\
+    -alert "[G'MIC Minimal path]",\
+           "The G'MIC minimal path demo illustrates how minimal paths\n"\
            "can be computed in images to detect and track edge points.\n"\
            "Use your mouse to select desired starting and ending points,\n"\
            "and see what is the minimal path computed between these points.",\
@@ -12023,10 +12115,10 @@ x_paint :
   -w1[] 0 -w2[] 0 -w3[] 0 -rm[-2,-1] -v +
 
 #@gmic x_plasma
-#@gmic : Launch the plasma demo.
+#@gmic : Launch the plasma effect demo.
 x_plasma :
   -e[] "\n
------- Plasma demo ----------------------\n
+------ Plasma effect --------------------\n
 ----\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
@@ -12047,7 +12139,7 @@ x_plasma :
   M={w}
 
   # Start animation loop.
-  -w[] {2*@{0,w}},{2*@{0,h}},0,0,"[G'MIC] Plasma demo"
+  -w[] {2*@{0,w}},{2*@{0,h}},0,0,"[G'MIC] Plasma effect"
   t=0 tt={-1.5*@{0,w}}
   -do
     tic=@|
@@ -12082,7 +12174,7 @@ x_plasma :
   -rm[{-2*$N-2}--1] -w[] 0 -endl -v +
 
 #@gmic x_quantize_rgb : _nbcolors>=2
-#@gmic : Launch RGB colors quantization demo.
+#@gmic : Launch the RGB color quantization demo.
 x_quantize_rgb : -check "isint(${1=16}) && $1>1"
   -e[] "\n
 ------ RGB Quantization --------------------------------------\n
@@ -12154,7 +12246,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
       0 -text[-1] "Colors: "@{centroids,w},2,0,13,1,255,255,255 --dilate[-1] 3 -j[-3] [-2],2,2,0,0,1,[-1],255
       -rm[-2,-1] -nm[-1] visu_centroids -j[visu] [visu_centroids],5,310
     -endif
-    -w[visu] -1,-1,0,0,"[G'MIC] RGB quantization demo"
+    -w[visu] -1,-1,0,0,"[G'MIC] RGB quantization"
 
     # Check for user's interactions.
     x={int(@{!,x}*@{visu,w}/@{!,w})}
@@ -12222,7 +12314,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
 
   -if {!@!" || "@{!,Q}" || "@{!,ESC}} -break -endif
   -done
-  -rm -v +
+  -rm -w 0 -v +
 
  _x_quantize_rgb_3d :
   -if $obj3d -rm[obj3d] -endif
@@ -12239,7 +12331,7 @@ _x_quantize_rgb_text :
 #@gmic : Launch the 3d reflection demo.
 x_reflection3d :
   -e[] "\n
------- 3d reflection demo ---------------\n
+------ 3d reflection --------------------\n
 ----\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
@@ -12260,7 +12352,7 @@ x_reflection3d :
 
   # Start animation loop.
   xb=0 xl=0 anim=0
-  -w[] 400,400,0,0,"[G'MIC] 3d reflection demo"
+  -w[] 400,400,0,0,"[G'MIC] 3d reflection"
   -do
 
     tic=@|
@@ -12294,10 +12386,10 @@ x_reflection3d :
   -rm[-5--1] -w[] 0 -v +
 
 #@gmic x_rubber3d
-#@gmic : Launch the 3d rubber demo.
+#@gmic : Launch the 3d rubber object demo.
 x_rubber3d :
   -e[] "\n
------- 3d rubber demo -------------------\n
+------ 3d rubber object -----------------\n
 ----\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
@@ -12314,7 +12406,7 @@ x_rubber3d :
     {w},{h},1,3 -fc[-1] 16,32,32 -object3d[-1] [0],50%,50%,0,1,3,0,0 -j[1] [-1],0,0,$frame -rm[-1]
     -r3d[0] 0.1,1,0.6,{3*cos(@|*1.25)} -r3d[0] 1,0.2,0.6,-1
     --warp[1] [2],0,0 -*[3] 0.8 -*[-1] 0.2 -+[3,-1]
-    -w[-1] {1.2*w},{1.2*h},0,0,"Rubber 3d" -wait 20
+    -w[-1] {1.2*w},{1.2*h},0,0,"3d rubber object" -wait 20
     -sh[2] 2,2 --[-1] 1 -and[-1] {@{1,d}-1} -rm[-1]
     frame={($frame-1)%@{1,d}}
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
@@ -12324,7 +12416,7 @@ x_rubber3d :
 #@gmic : Launch the shade bobs demo.
 x_shadebobs :
   -e[] "\n
------- Shade bobs demo --------------------------\n
+------ Shade bobs -------------------------------\n
 ----\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
@@ -12702,7 +12794,7 @@ _x_tictactoe6 : # Generate a +- diagonal stroke and his mask.
 #@gmic : Launch the image waves demo.
 x_waves :
   -e[] "\n
------- Image waves demo -----------------\n
+------ Image waves ----------------------\n
 ----\n
 ---- Left mouse button to drop balls.\n
 ---- Right mouse button to rotate view.\n
@@ -12749,17 +12841,17 @@ x_waves :
   -rm -w 0 -v +
 
 #@gmic x_whirl : _opacity>=0
-#@gmic : Launch fractal whirl demo.
+#@gmic : Launch the fractal whirl demo.
 #@gmic : Default values: 'opacity=0.2'.
 x_whirl : -check ${1=0.2}>=0
   -e[] "\n
------- Fractal whirl demo ------------------------\n
+------ Fractal whirl -----------------------------\n
 ----\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 --------------------------------------------------"
   -v -
-  5,5,1,3 256,256,1,3 [-1] -w[-1] 512,512,0,0,"[G'MIC] Fractal whirl demo"
+  5,5,1,3 256,256,1,3 [-1] -w[-1] 512,512,0,0,"[G'MIC] Fractal whirl"
   tangle=0 tzoom=0 xc={(w-@{-3,w})/2} yc={(h-@{-3,h})/2}
   -do
     -rand[-3] 0,255 -j[-2] [-3],$xc,$yc,0,0

@@ -4296,7 +4296,7 @@ _wait_threads,"command1","command2",...
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Execute specified commands in parallel, each in a different thread.
-<br/>All running threads share the current list of images.
+<br/>All running threads share the current list of images and the global variables.
 <br/>'wait_threads' can be { 0=never | 1=at return point | 2=immediately }.
 <br/><br/><b>Default value</b>: 'wait_threads=2'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def491.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"</div></div></td><td><tt>image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"</tt></td></tr>
