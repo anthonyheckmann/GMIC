@@ -8583,7 +8583,7 @@ _apply_parallel_overlap16 :
 
 #@gmic parallel : _wait_threads,"command1","command2",... : (*)
 #@gmic : Execute specified commands in parallel, each in a different thread.
-#@gmic : All running threads share the current list of images.
+#@gmic : All running threads share the current list of images and the global variables.
 #@gmic : 'wait_threads' can be { 0=never | 1=at return point | 2=immediately }.
 #@gmic : Default value: 'wait_threads=2'.
 #@gmic : $ image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"
