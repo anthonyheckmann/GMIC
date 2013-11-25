@@ -10563,7 +10563,7 @@ demo :
 ----\n
 -----------------------------------------"
   -v - -l[]
-  230,420,1,3 --plasma[-1] 1,1,5 -n[-1] 0,230 -sh[-1] 0,1 -/[-1] 2.2 -rm[-1] -water[-1] 100 -*[-1] 0.15
+  300,420,1,3 --plasma[-1] 1,1,5 -n[-1] 0,230 -sh[-1] 0,1 -/[-1] 2.2 -rm[-1] -water[-1] 100 -*[-1] 0.15
   100%,100%,1,3
   0 -text[-1] "1- Blobs editor\n"\
               "2- Bouncing balls\n"\
@@ -10607,7 +10607,7 @@ demo :
   -max[-4,-2] -max[-2,-1]
 
   # Pre-compute 3d objects.
-  -ball[] 32,200,100,64 -n[-1] 0,230 -s[-1] c,-3 -rgb2hsv[-2] -a[-2,-1] c
+  -ball[] 64,200,100,64 -n[-1] 0,230 -s[-1] c,-3 -rgb2hsv[-2] -a[-2,-1] c
   -repeat 6
     -sh[-1] 0,0 -f[-1] {$>*360/6} -rm[-1] --s[-1] c,-3 -hsv2rgb[-2] -a[-2,-1] c
     ({'CImg3d'}) (5,5) 3,5 (1,0;1,4) -r[-1] 2,5,1,1,3 -round[-1] 4,5 -y[-5--1] -a[-5--1] y
@@ -10620,7 +10620,7 @@ demo :
   -do
 
     # Set 3d coordinates for object.
-    t={2*@|}
+    t={1.5*@|}
     1,30,1,1,'(1-$alpha)*cos($cfx*y+$t)+$alpha*cos($nfx*y+$t)'
     1,30,1,1,'(1-$alpha)*sin($cfy*y+$t)+$alpha*sin($nfy*y+$t)'
     1,30,1,1,'(1-$alpha)*sin($cfz*y+$t)+$alpha*sin($nfz*y+$t)'
@@ -10639,7 +10639,7 @@ demo :
     -if {(@{!,b}&1)&&$selected<0} selected=$y # Selection
     -elif {!@{!,b}}
       -if {$selected>=0&&$y==$selected}
-        -m "com : -v 0 "@{-arg\ {1+$y},$commands} -parallel 1,"-l[] -com -v -1 -rm -endl" -uncommand com
+      -m "com : -v 0 "@{-arg\ {1+$y},$commands} -parallel 1,"-l[] -com -v -1 -rm -endl" -uncommand com
       -endif
       selected=-1
     -endif
