@@ -11319,7 +11319,7 @@ x_life :
   score=0                                                       # Current score.
   bestscore=0                                                   # Best score.
   stock=500                                                     # Remaining cells.
-  -w[0] 400,400,0,0,"[G'MIC] The Game of Life"                  # Initialize display window.
+  -w[0] 400,400,0,0,"[G'MIC] The game of life"                  # Initialize display window.
 
   # Start user-event loop.
   -do
