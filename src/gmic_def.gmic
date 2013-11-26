@@ -10112,7 +10112,7 @@ vignette : -check "${1=100}>=0 && ${2=70}>=0 && $2<=100 && ${3=90}>=0 && $3<=100
 #@gmic : Add or remove a visible watermark on selected images (value range must be [0,255]).
 #@gmic : Default values: 'text=(c) G'MIC', 'opacity=0.3', 'size=57', 'angle=25', 'mode=1' and 'smoothness=0'.
 #@gmic : $ image.jpg --watermark_visible ,0.7
-watermark_visible : -skip "${1=\251\ G'MIC}" -check "${2=0.3}>0 && $2<1 && ${3=57}>0 && ${6=0.5}>=0" -skip ${4=25},${5=1}
+watermark_visible : -skip "${1=\251\ G\'MIC}" -check "${2=0.3}>0 && $2<1 && ${3=57}>0 && ${6=0.5}>=0" -skip ${4=25},${5=1}
   -e[^-1] @{-arg\ 1+!$5,Add,Remove}" visible watermark '$1' on image$?, with opacity $2, size $3, angle $4 deg."
   -v - -repeat @# -l[$>]
     0 -t[-1] "$1",0,0,$3,1,255 -rotate[-1] $4,0,0 -b[-1] $6 -n[-1] 0,255
@@ -10607,7 +10607,7 @@ demo :
   -max[-4,-2] -max[-2,-1]
 
   # Pre-compute 3d objects.
-  -ball[] 64,200,100,64 -n[-1] 0,230 -s[-1] c,-3 -rgb2hsv[-2] -a[-2,-1] c
+  -ball[] 64,200,100,64 -n[-1] 0,230 -s[-1] c,-3 -rgb2hsv[-2] -*[-1] 0.5 -a[-2,-1] c
   -repeat 6
     -sh[-1] 0,0 -f[-1] {$>*360/6} -rm[-1] --s[-1] c,-3 -hsv2rgb[-2] -a[-2,-1] c
     ({'CImg3d'}) (5,5) 3,5 (1,0;1,4) -r[-1] 2,5,1,1,3 -round[-1] 4,5 -y[-5--1] -a[-5--1] y
