@@ -3210,12 +3210,12 @@ x0,x1,y0,y1,_font_height>=0,_opacity,_pattern,_color1,..
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def356.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">400,400,1,3,255 -axes -1,1,1,-1</div></div></td><td><tt>400,400,1,3,255 -axes -1,1,1,-1</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-ball</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_R,_G,_B
+_size>0, _R,_G,_B
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Draw a colored RGBA ball sprite on selected images.
-<br/><br/><b>Default values</b>: 'R=255', 'G=R' and 'B=R'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def357.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">32,32 64,64 200,200 256,256 -ball 255,164,100</div></div></td><td><tt>32,32 64,64 200,200 256,256 -ball 255,164,100</tt></td></tr>
+<p style="margin-left:100px"><tt>Input a 2d RGBA colored ball sprite.
+<br/><br/><b>Default values</b>: 'size=64', 'R=255', 'G=R' and 'B=R'.
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def357.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-repeat 9 -ball {1.5^($>+2)},@{-RGB} -done -append x</div></div></td><td><tt>-repeat 9 -ball {1.5^($>+2)},@{-RGB} -done -append x</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-chessboard</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 size1>0,_size2>0,_offset1,_offset2,_angle,_opacity,_color1,..,_color2,..

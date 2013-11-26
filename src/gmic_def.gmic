@@ -2472,12 +2472,14 @@ _update :
 
 #@gmic w : eq. to '-window'. : (+)
 
-#@gmic window : _width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_title : (+)
+#@gmic window : _width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_pos_x[%],_pos_y[%],_title : (+)
 #@gmic : Display selected images into an instant window with specified size, normalization type,
 #@gmic : fullscreen mode and title.
 #@gmic : (eq. to '-w').
 #@gmic : If 'width' or 'height' is set to -1, the corresponding dimension is adjusted to the window
 #@gmic : or image size.
+#@gmic : When optional arguments 'pos_x' and 'pos_y' are specified, the window is moved to
+#@gmic : the specified coordinates.
 #@gmic : 'width'=0 or 'height'=0 closes the instant window.
 #@gmic : 'normalization' can be { -1=keep same | 0=none | 1=always | 2=1st-time | 3=auto }.
 #@gmic : 'fullscreen' can be { -1=keep same | 0=no | 1=yes }.
@@ -10616,7 +10618,7 @@ demo :
   cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-4} selected=-1 -f3d 400
 
   # Start main loop.
-  -w[0] -1,-1,0,0,"[G'MIC] Demos menu"
+  -w[0] -1,-1,0,0,50%,50%,"[G'MIC] Demos menu"
   -do
 
     # Set 3d coordinates for object.
