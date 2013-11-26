@@ -10235,7 +10235,6 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 (dimh>=0 || dimh==-1) &&
                 norm>=-1 && norm<=3) ++position;
             else { dimw = dimh = -1; norm = fullscreen = -1; posx = posy = cimg::type<float>::max(); sepw = seph = 0; }
-            const bool is_move = posx!=cimg::type<float>::max() && posy!=cimg::type<float>::max();
             if (dimh==0) dimw = 0;
             gmic_strreplace(title);
             cimg::strunescape(title);
@@ -10262,6 +10261,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   gmic_selection,
                   wind);
 #else // #if cimg_display==0
+            const bool is_move = posx!=cimg::type<float>::max() && posy!=cimg::type<float>::max();
             bool is_available_display = false;
             try {
               is_available_display = (bool)CImgDisplay::screen_width();
