@@ -723,6 +723,7 @@ _gmic_def()
 	      -register_rigid --register_rigid\
 	      -transition_plasma --transition_plasma\
 	      -transition3d --transition3d\
+	      -demo --demo\
 	      -x_blobs --x_blobs\
 	      -x_bouncing --x_bouncing\
 	      -x_fire --x_fire\
@@ -1549,6 +1550,7 @@ _gmic_def()
 	      register_rigid\
 	      transition_plasma\
 	      transition3d\
+	      demo\
 	      x_blobs\
 	      x_bouncing\
 	      x_fire\
