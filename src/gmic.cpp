@@ -3523,8 +3523,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           command4 = command3?command[4]:0, command5 = command4?command[5]:0;
 
         if (!command2) switch (command1) {  // One-char shortcuts.
-          case 'm' : if (!is_get_version) { std::strcpy(item=_item,"-command"); command1 = 'c'; }
-            break;
+          case 'm' : if (!is_get_version && !is_restriction) {
+              std::strcpy(item=_item,"-command"); command1 = 'c';
+            } break;
           case 'd' : std::strcpy(command,"-display"); break;
           case 'e' : std::strcpy(command,"-echo"); break;
           case 'i' : std::strcpy(command,"-input"); break;
@@ -7483,7 +7484,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         else if (command1=='p') {
 
           // Run multiple commands in parallel.
-          if (!std::strcmp("-parallel",item) && !is_get_version) {
+          if (!std::strcmp("-parallel",item)) {
             gmic_substitute_args();
             const char *_arg = argument, *_arg_text = argument_text;
             unsigned int wait_mode = 2;
