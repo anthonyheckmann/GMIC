@@ -4284,6 +4284,7 @@ yuv82rgb :
 #@gmic : Default values: 'M=0', 'N=0', 'x_alignment=y_alignment=0.5'.
 #@gmic : $ image.jpg -split xy,4 -append_tiles ,
 append_tiles : -check "isint(${1=0}) && isint(${2=0}) && ${3=0.5}>=0 && $3<=1 && ${4=$3}>=0 && $4<=1"
+  -if {!@#} -e[0--3] "Append image$? as a 0x0-tiled image." -return -endif
   -if {!$1&&!$2} # auto-mode
     -v - N={int(sqrt(@#))} M={round(@#/$N,1,1)}
     -v + -e[0--3] "Append image$? as a "${M}x${N}"-tiled image (auto-mode)." -v -
@@ -4302,7 +4303,6 @@ append_tiles : -check "isint(${1=0}) && isint(${2=0}) && ${3=0.5}>=0 && $3<=1 &&
     -e[0--3] "Append image$?, as $1x$2-tiled images." -v -
     M=$1 N=$2
   -endif
-  -if {!@#} -v + -return -endif
 
   MN={$M*$N}
   -repeat {int(@#/$MN)} -l[$>-{$>+$MN-1}]
