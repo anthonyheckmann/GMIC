@@ -7483,7 +7483,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         else if (command1=='p') {
 
           // Run multiple commands in parallel.
-          if (!std::strcmp("-parallel",item)) {
+          if (!std::strcmp("-parallel",item) && !is_get_version) {
             gmic_substitute_args();
             const char *_arg = argument, *_arg_text = argument_text;
             unsigned int wait_mode = 2;
@@ -7495,12 +7495,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             CImg<st_gmic_parallel<T> > &_threads_data = threads_data.back();
 
 #ifdef gmic_is_parallel
-            print(images,"Execute %d parallel command%s '%s'%s.",
+            print(images,"Execute %d command%s '%s' in parallel%s.",
                   arguments.width(),arguments.width()>1?"s":"",_arg_text,
-                  wait_mode==2?(arguments.width()>1?" and wait until they finish":" and wait until it finishes"):
-                  wait_mode==1?" and will wait for thread termination at return point":"");
+                  wait_mode==2?(arguments.width()>1?" and wait immediately they finish":" and wait immediately it finishes"):
+                  wait_mode==1?" and defer thread waiting at return point":"");
 #else
-            print(images,"Execute %d parallel commands '%s' (run sequentially, parallel computing disabled).",
+            print(images,"Execute %d commands '%s' (run sequentially, parallel computing disabled).",
                   arguments.width(),_arg_text);
 #endif // #ifdef gmic_is_parallel
 

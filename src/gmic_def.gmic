@@ -8593,12 +8593,12 @@ _apply_parallel_overlap16 :
 #@gmic : Default value: 'wait_threads=2'.
 #@gmic : $ image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"
 
-# The implementation of '-parallel' below may replace the native command for older versions of G'MIC (<1.5.7.0).
+# The implementation below allows to use parallel as a regular command with selections.
 parallel :
-  -v - $=arg -repeat $# -_parallel ${arg{1+$>}} -done -v +
-
-_parallel :
-  $*
+  -if {$1==0||$1==1||$1==2} -e[0--3] "Execute "{$#-1}" commands '${2--1}' in parallel on image$?."
+  -else -e[0--3] "Execute "$#" commands '$*' in parallel on image$?."
+  -endif
+  -v - -parallel $"*" -v +
 
 #@gmic progress : 0<=value<=100 : -1 : (*)
 #@gmic : Set the progress indice of the current processing pipeline.
