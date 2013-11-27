@@ -11801,7 +11801,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     cimglist_for(images,l) gmic_check(images[l]);
 
     // Display or print result, if not 'released' before.
-#if defined(gmic_float)
+#if defined(gmic_float) && cimg_display!=0
 
     if (!is_released && scope.size()==1 && images) {
       CImgList<unsigned int> lselection, lselection3d;
