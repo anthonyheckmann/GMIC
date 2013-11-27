@@ -10216,6 +10216,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                              argx,argy,&norm,&end)==3 ||
                  std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%d,%d%c",
                              argx,argy,&norm,&fullscreen,&end)==4 ||
+                 std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%d,%d,%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
+                             argx,argy,&norm,&fullscreen,argz,argc,&end)==6 ||
                  std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%d,%d,%255[0-9.eE%+-],%255[0-9.eE%+-],%255[^\n,]",
                              argx,argy,&norm,&fullscreen,argz,argc,title)==7 ||
                  std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%d,%d,%255[^\n]",
@@ -10301,7 +10303,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   if (is_move) {
                     if (sepx=='%') posx*=(CImgDisplay::screen_width()-instant_window[wind].window_width())/100.0f;
                     if (sepy=='%') posy*=(CImgDisplay::screen_height()-instant_window[wind].window_height())/100.0f;
-                    instant_window[wind].move((int)posx,(int)posy).show();
+                    instant_window[wind].move((int)posx,(int)posy);
                   }
                   if (norm==2) {
                     if (subimages)
