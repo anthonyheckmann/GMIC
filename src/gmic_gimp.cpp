@@ -2092,7 +2092,9 @@ void process_image(const char *const commands_line) {
     // Transfer the output layers back into GIMP.
     GimpPixelRgn region;
     gint x1, y1, x2, y2;
-    const unsigned int output_mode = get_output_mode();
+    const unsigned int
+      _output_mode = get_output_mode(),
+      output_mode = get_input_mode()==0?cimg::max(1U,_output_mode):_output_mode;
     switch (output_mode) {
     case 0 : { // Output in 'Replace' mode.
       gimp_image_undo_group_start(image_id);
