@@ -10296,11 +10296,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   instant_window[wind].assign(dimw>0?(int)dimw:optw,
                                               dimh>0?(int)dimh:opth,
                                               title,norm<0?3:norm,
-                                              fullscreen<0?false:(bool)fullscreen);
+                                              fullscreen<0?false:(bool)fullscreen,
+                                              is_move);
                   if (is_move) {
                     if (sepx=='%') posx*=(CImgDisplay::screen_width()-instant_window[wind].window_width())/100.0f;
                     if (sepy=='%') posy*=(CImgDisplay::screen_height()-instant_window[wind].window_height())/100.0f;
-                    instant_window[wind].move((int)posx,(int)posy);
+                    instant_window[wind].move((int)posx,(int)posy).show();
                   }
                   if (norm==2) {
                     if (subimages)

@@ -22081,3 +22081,12 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands
+
+foo :
+  -e[] "" -v - ({'"$2"'}) -autocrop 32  -replace 32,{','}
+  -m "_foo : $""=_file _nb_files=$""#" -_foo @{-1,t} -rm
+  -repeat $_nb_files
+    -v + -e[] "\r - Frame "$> -v -
+    -i ${_file{$>+1}} -+ --/ {1+$>} -o[-1] "$1"/mean_${_file{$>+1}}
+    -w[-1] -1,-1,0,0,"Frame "$> -rm[-1]
+  -done -rm -v +
