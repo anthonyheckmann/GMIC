@@ -898,7 +898,7 @@ message
 <br/>Command subset (if any) stands for displayed scope indices instead of image indices.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-window (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_title
+_width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_pos_x[%],_pos_y[%],_title
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Display selected images into an instant window with specified size, normalization type,
@@ -906,6 +906,8 @@ _width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_title
 <br/><i><font color="blue">(eq. to '-w').</font></i>
 <br/>If 'width' or 'height' is set to -1, the corresponding dimension is adjusted to the window
 <br/>&nbsp;or image size.
+<br/>When optional arguments 'pos_x' and 'pos_y' are specified, the window is moved to
+<br/>&nbsp;the specified coordinates.
 <br/>'width'=0 or 'height'=0 closes the instant window.
 <br/>'normalization' can be { -1=keep same | 0=none | 1=always | 2=1st-time | 3=auto }.
 <br/>'fullscreen' can be { -1=keep same | 0=no | 1=yes }.

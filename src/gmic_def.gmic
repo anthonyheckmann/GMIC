@@ -21860,6 +21860,7 @@ gmicol_rotate :
 #@gmicol clone("3d image object")
 #@gmicol clone("3d lathing")
 #@gmicol clone("3d random objects")
+#@gmicol clone("Ball")
 #@gmicol clone("Cupid")
 #@gmicol clone("Equation plot [parametric]")
 #@gmicol clone("Equation plot [y=f(x)]")

@@ -1801,7 +1801,7 @@ _gmic_def()
 		return 0
 		;;
 		"-window" | "--window")
-		COMPREPLY=( $(compgen -W "_width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_title >") )
+		COMPREPLY=( $(compgen -W "_width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_pos_x[%],_pos_y[%],_title >") )
 		return 0
 		;;
 		"-move" | "--move")
@@ -3697,7 +3697,7 @@ _gmic_def()
 		return 0
 		;;
 		"-w" | "--w")
-		COMPREPLY=( $(compgen -W "_width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_title >") )
+		COMPREPLY=( $(compgen -W "_width[%]>=-1,_height[%]>=-1,_normalization,_fullscreen,_pos_x[%],_pos_y[%],_title >") )
 		return 0
 		;;
 		"-mv" | "--mv")

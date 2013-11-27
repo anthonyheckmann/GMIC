@@ -983,12 +983,14 @@ Print specified warning message, on the standard error (stderr).
 
 \subsection{\emph{-window\index{-window}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_width[\%]$>$=-1,\_height[\%]$>$=-1,\_normalization,\_fullscreen,\_title}}\\~\\
+{\small \texttt{\_width[\%]$>$=-1,\_height[\%]$>$=-1,\_normalization,\_fullscreen,\_pos\_x[\%],\_pos\_y[\%],\_title}}\\~\\
 Display selected images into an instant window with specified size, normalization type,
 fullscreen mode and title.
 ~\\(\emph{eq. to} {\small \texttt{'-w'}}).
 ~\\If 'width' or 'height' is set to -1, the corresponding dimension is adjusted to the window
 or image size.
+~\\When optional arguments 'pos\_x' and 'pos\_y' are specified, the window is moved to
+the specified coordinates.
 ~\\'width'=0 or 'height'=0 closes the instant window.
 ~\\'normalization' can be \{ -1=keep same ~$|$~ 0=none ~$|$~ 1=always ~$|$~ 2=1st-time ~$|$~ 3=auto \}.
 ~\\'fullscreen' can be \{ -1=keep same ~$|$~ 0=no ~$|$~ 1=yes \}.
