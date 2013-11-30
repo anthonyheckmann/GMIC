@@ -8204,8 +8204,6 @@ spherical3d : -check "${1=64}>=3 && ${2=$1}>=3" -skip "${3=abs(1+0.5*cos(3*phi)*
   -a[-5--1] y -nm[-1] "[3d spherical surface '$3']"
   -v +
 
-#@gmic s3d : eq. to '-split3d'. : (+)
-
 #@gmic spline3d : x0[%],y0[%],z0[%],u0[%],v0[%],w0[%],x1[%],y1[%],z1[%],u1[%],v1[%],w1[%],_nb_vertices>=2
 #@gmic : Input 3d spline with specified geometry.
 #@gmic : Default values: 'nb_vertices=128'.
@@ -8226,11 +8224,14 @@ spline3d : -check ${13=128}>=2
   -y[-3,-4,-6] -a[-6--1] y
   -v +
 
-#@gmic split3d : (+)
+#@gmic s3d : eq. to '-split3d'. : (+)
+
+#@gmic split3d : _keep_shared_data={ 0 | 1 } : (+)
 #@gmic : Split selected 3d objects into 6 feature vectors :
 #@gmic : { header, sizes, vertices, primitives, colors, opacities }.
 #@gmic : (eq. to '-s3d').
 #@gmic : To recreate the 3d object, append these 6 images along the y-axis.
+#@gmic : Default value: 'keep_shared_data=1'.
 #@gmic : $ -box3d 100 --split3d
 
 #@gmic sprite3d
