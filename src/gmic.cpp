@@ -747,6 +747,29 @@ CImg<T> get_scale_CImg3d(const float sx, const float sy, const float sz) const {
   return (+*this).scale_CImg3d(sx,sy,sz);
 }
 
+CImg<T>& reverse_CImg3d() {
+  if (is_empty()) return *this;
+  T *p = _data + 6;
+  const unsigned int nbv = (unsigned int)*(p++), nbp = (unsigned int)*(p++);
+  p+=3*nbv;
+  for (unsigned int i = 0; i<nbp; ++i) {
+    const unsigned int nb = *(p++);
+    switch(nb) {
+    case 2: case 3: cimg::swap(p[0],p[1]); break;
+    case 6: cimg::swap(p[0],p[1],p[2],p[4],p[3],p[5]); break;
+    case 9: cimg::swap(p[0],p[1],p[3],p[5],p[4],p[6]); break;
+    case 4: cimg::swap(p[0],p[1],p[2],p[3]); break;
+    case 12: cimg::swap(p[0],p[1],p[2],p[3],p[4],p[6],p[5],p[7],p[8],p[10],p[9],p[11]); break;
+    }
+    p+=nb;
+  }
+  return *this;
+}
+
+CImg<T> get_reverse_CImg3d() const {
+  return (+*this).get_reverse_CImg3d();
+}
+
 CImg<T>& color_CImg3d(const float R, const float G, const float B, const float opacity,
                       const bool set_RGB, const bool set_opacity) {
   T *ptrd = data() + 6;
@@ -7034,7 +7057,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 const unsigned int ind = selection[l];
                 const CImg<T>& img = gmic_check(images[ind]);
                 if (selection.height()!=1) cimg::number_filename(filename,l,6,nfilename);
-                if (!img.is_CImg3d(true,message))
+                if (!img.is_CImg3d(false,message))
                   error(images,
                         "Command '-output': 3d object file '%s', invalid 3d object [%u] "
                         "in selected image%s (%s).",
@@ -8766,20 +8789,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 error(images,"Command '-reverse3d': Invalid 3d object [%d], "
                       "in selected image%s (%s).",
                       ind,gmic_selection,message);
-              CImgList<unsigned int> primitives;
-              CImgList<float> colors, opacities;
-              CImg<T> vertices;
-              if (is_get_version) vertices.assign(img); else img.move_to(vertices);
-              vertices.CImg3dtoobject3d(primitives,colors,opacities,false);
-              primitives.reverse_object3d();
-              vertices.object3dtoCImg3d(primitives,colors,opacities,false);
-              if (is_get_version) {
-                images_names.insert(images_names[selection[l]].get_mark().copymark());
-                vertices.move_to(images);
-              } else {
-                images_names[selection[l]].mark();
-                vertices.move_to(images[selection[l]].assign());
-              }
+              gmic_apply(img,reverse_CImg3d());
             }
             is_released = false; continue;
           }
