@@ -533,8 +533,17 @@ const CImg<T>& gmic_symmetric_eigen(CImg<t>& val, CImg<t>& vec) const {
   return *this;
 }
 
-// Append a list of 3d objects.
-//-----------------------------
+CImgList<T> split_CImg3d() {
+  if (is_empty()) return CImgList<T>::empty();
+  CImgList<T> res;
+  get_rows(0,5).move_to(res);  // Header.
+  const unsigned int nbv = _data[6], nbp = _data[7];
+  CImg<T>::vector((T)nbv,(T)nbp).move_to(res);  // Nb vertices and primitives.
+  get_rows(6,6+3*nbv-1).move_to(res); // Vertices.
+
+  return res;
+}
+
 static CImg<T> append_CImg3d(const CImgList<T>& images) {
   if (!images) return CImg<T>();
   if (images.size()==1) return +images[0];
