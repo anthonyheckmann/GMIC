@@ -3753,9 +3753,9 @@ even if a color is specified.
 
 \subsection{\emph{-ball\index{-ball}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_size$>$0, \_R,\_G,\_B}}\\~\\
+{\small \texttt{\_size$>$0, \_R,\_G,\_B,0$<$=\_specular\_light$<$=8,0$<$=\_specular\_size$<$=8,\_shadow$>$=0}}\\~\\
 Input a 2d RGBA colored ball sprite.
-~\\~\\\textbf{Default values}: {\small \texttt{'size=64', 'R=255', 'G=R'} and \texttt{'B=R'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'size=64', 'R=255', 'G=R', 'B=R', 'specular\_light=0.8', 'specular\_size=1'} and \texttt{'shading=1.5'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def357.jpg}\\
 {\footnotesize \textbf{Example 357~:} \texttt{-repeat 9 -ball \{1.5\textasciicircum (\$$>$+2)\},@\{-RGB\} -done -append x}}
 \end{center}
