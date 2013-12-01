@@ -3891,7 +3891,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 catch (CImgException &e) {
                   cimg_forY(selection,l) {
                     const unsigned int ind = selection[l];
-                    if (!images[ind].is_CImg3d(false,message))
+                    if (!images[ind].is_CImg3d(true,message))
                       error(images,
                             "Command '-add3d': Invalid 3d object [%d], in selected image%s (%s).",
                             ind,gmic_selection,message);
