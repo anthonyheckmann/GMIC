@@ -21833,7 +21833,6 @@ gmicol_rotate :
 #@gmicol clone("Canvas")
 #@gmicol clone("Canvas texture")
 #@gmicol clone("Cracks")
-#@gmicol clone("Denim texture")
 #@gmicol clone("Dots")
 #@gmicol clone("Halftone")
 #@gmicol clone("Hearts")
