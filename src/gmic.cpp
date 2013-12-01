@@ -43,8 +43,10 @@
 */
 
 // Add G'MIC-specific methods to the CImg library.
-//-------------------------------------------------
+//------------------------------------------------
 #ifdef cimg_plugin
+
+// Additional arithmetic/boolean operators.
 
 template<typename t>
 CImg<T>& operator_eq(const t val) {
@@ -331,6 +333,33 @@ CImg<T> get_gmic_ror(const float n) const {
 }
 
 template<typename t>
+const CImg<T>& gmic_symmetric_eigen(CImg<t>& val, CImg<t>& vec) const {
+  if (spectrum()!=3 && spectrum()!=6) return symmetric_eigen(val,vec);
+  val.assign(width(),height(),depth(),spectrum()==3?2:3);
+  vec.assign(width(),height(),depth(),spectrum()==3?2:6);
+  CImg<t> _val, _vec;
+  cimg_forXYZ(*this,x,y,z) {
+    get_tensor_at(x,y,z).symmetric_eigen(_val,_vec);
+    val.set_vector_at(_val,x,y,z);
+    if (spectrum()==3) {
+      vec(x,y,z,0) = _vec(0,0);
+      vec(x,y,z,1) = _vec(0,1);
+    } else {
+      vec(x,y,z,0) = _vec(0,0);
+      vec(x,y,z,1) = _vec(0,1);
+      vec(x,y,z,2) = _vec(0,2);
+
+      vec(x,y,z,3) = _vec(1,0);
+      vec(x,y,z,4) = _vec(1,1);
+      vec(x,y,z,5) = _vec(1,2);
+    }
+  }
+  return *this;
+}
+
+// Additional geometric and drawing operators.
+
+template<typename t>
 CImg<T>& replace(CImg<t>& img) {
   return img.move_to(*this);
 }
@@ -508,30 +537,7 @@ CImg<T> get_draw_object3d(const float x0, const float y0, const float z0,
                                 specular_shine,zbuffer);
 }
 
-template<typename t>
-const CImg<T>& gmic_symmetric_eigen(CImg<t>& val, CImg<t>& vec) const {
-  if (spectrum()!=3 && spectrum()!=6) return symmetric_eigen(val,vec);
-  val.assign(width(),height(),depth(),spectrum()==3?2:3);
-  vec.assign(width(),height(),depth(),spectrum()==3?2:6);
-  CImg<t> _val, _vec;
-  cimg_forXYZ(*this,x,y,z) {
-    get_tensor_at(x,y,z).symmetric_eigen(_val,_vec);
-    val.set_vector_at(_val,x,y,z);
-    if (spectrum()==3) {
-      vec(x,y,z,0) = _vec(0,0);
-      vec(x,y,z,1) = _vec(0,1);
-    } else {
-      vec(x,y,z,0) = _vec(0,0);
-      vec(x,y,z,1) = _vec(0,1);
-      vec(x,y,z,2) = _vec(0,2);
-
-      vec(x,y,z,3) = _vec(1,0);
-      vec(x,y,z,4) = _vec(1,1);
-      vec(x,y,z,5) = _vec(1,2);
-    }
-  }
-  return *this;
-}
+// Additional 3d objects operators.
 
 CImgList<T> get_split_CImg3d() const {
   if (is_empty()) return CImgList<T>::empty();
@@ -818,6 +824,8 @@ CImg<T> get_texturize_CImg3d(const CImg<T>& texture, const CImg<T>& coords) cons
   points.texturize_object3d(primitives,colors,texture,coords);
   return points.get_object3dtoCImg3d(primitives,colors,opacities,false);
 }
+
+// Additional filters.
 
 template<typename t>
 CImg<T>& inpaint(const CImg<t>& mask) {
@@ -1189,6 +1197,8 @@ CImg<T> get_inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                                 blend_size,blend_threshold,blend_decay,blend_scales,is_blend_outer);
 }
 
+// Additional convenience functions.
+
 CImg<T>& mark() {
   unsigned int siz = _width;
   if (siz<2) assign(siz=2,1,1,1,0); else if (_data[siz-2]) resize(++siz,1,1,1,0);
@@ -1228,7 +1238,6 @@ CImg<T> get_copymark() const {
   return res;
 }
 
-//! Display informations about an image data (special formatting for G'MIC).
 const CImg<T>& gmic_print(const char *const title, const bool is_debug, const bool is_valid) const {
   CImg<doubleT> st;
   if (is_valid && !is_empty()) st = get_stats();
