@@ -22097,7 +22097,7 @@ gmicol_animate_imageobject3d_preview :
 #
 # (End of G'MIC custom commands
 
-foo :
+average_movie :
   -e[] "" -v - ({'"$2"'}) -autocrop 32  -replace 32,{','}
   -m "_foo : $""=_file _nb_files=$""#" -_foo @{-1,t} -rm
   -repeat $_nb_files
@@ -22105,3 +22105,28 @@ foo :
     -i ${_file{$>+1}} -+ --/ {1+$>} -o[-1] "$1"/mean_${_file{$>+1}}
     -w[-1] -1,-1,0,0,"Frame "$> -rm[-1]
   -done -rm -v +
+
+foo :
+
+  -v -  -repeat @# -l[$>]
+    --b 3% -gradient_norm[-1] -gradient[-1] -a[-2,-1] c -channels[-1] 0,2
+    -plane3d 1,1,{w/8-1},{h/8-1} -*3d[-1] @{0,w-1},@{0,h-1},1
+    -l[-1] -s3d -rm[-2] -i[-2] (0;{h-1}) -r[-2] 3,{h},1,1,3 -round[-2] -y -a y -endl
+
+    -repeat 300
+      --l[2] -s3d -k[2] -r 3,{h/3},1,1,-1 -z 0,1 -permute yzcx -endl
+      --warp[1] [-1],0,0 -permute[-1] cxyz -y[-1]
+      -j[2] [-1],0,8,0,0,-1 -rm[-2,-1]
+      --object3d[0] [2],0,0,0,1,1,0,0 -w[-1] -rm[-1]
+    -done
+    -rm[1]
+
+    [0],[0] -object3d[-1] [1],0,0,0,1,2 -blend[0,-1] shapeaverage
+
+    -rm[1]
+
+  -endl -done -v +
+
+  --area[-1] 0,1 -ge[-1] 32 -+[-2] 1 -*[-2] [-1] -distance[-1] 1 -*[-1] -1 -watershed[-2] [-1] -rm[-1]
+
+  --gradient[-1] xy,1 -neq[-2,-1] 0 -or[-2,-1] -eq[-1] 0 -*
