@@ -885,6 +885,203 @@ CImg<T> get_texturize_CImg3d(const CImg<T>& texture, const CImg<T>& coords) cons
   return points.get_object3dtoCImg3d(primitives,colors,opacities,false);
 }
 
+CImg<T>& convert_primitives_CImg3d(const unsigned int mode) {
+  char error_message[1024] = { 0 };
+  if (!is_CImg3d(false,error_message))
+    throw CImgInstanceException(_cimg_instance
+                                "convert_primitives_CImg3d(): image instance is not a CImg3d (%s).",
+                                cimg_instance,error_message);
+  CImgList<uintT> primitives;
+  CImgList<floatT> colors, opacities;
+  CImg3dtoobject3d(primitives,colors,opacities,false);
+  const unsigned int psiz = primitives.size();
+  CImg<uintT> P;
+  CImg<floatT> C, O;
+  for (unsigned int p = 0; p<psiz; ++p) {
+    primitives[p].move_to(P);
+    colors[p].move_to(C);
+    opacities[p].move_to(O);
+    switch (P.size()) {
+    case 1 : // Point.
+      P.move_to(primitives);
+      if (mode==2) {
+        if (C.size()==3) C.move_to(colors);
+        else C.get_vector_at(C.width()/2,C.height()/2).move_to(colors);
+        if (O.size()==1) O.move_to(opacities);
+        else O.get_vector_at(O.width()/2,O.height()/2).move_to(opacities);
+      } else { C.move_to(colors); O.move_to(opacities); }
+      break;
+    case 2 : // Colored segment.
+      if (mode) { P.move_to(primitives); C.move_to(colors); O.move_to(opacities); }
+      else {
+        CImg<uintT>::vector(P[0]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[1]).move_to(primitives);
+        C.move_to(colors); O.move_to(opacities);
+      }
+      break;
+    case 3 : // Colored triangle.
+      if (mode==2) {
+        P.move_to(primitives); C.move_to(colors); O.move_to(opacities);
+      } else if (mode==1) {
+        CImg<uintT>::vector(P[0],P[1]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[1],P[2]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[2],P[0]).move_to(primitives);
+        C.move_to(colors); O.move_to(opacities);
+      } else {
+        CImg<uintT>::vector(P[0]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[1]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[2]).move_to(primitives);
+        C.move_to(colors); O.move_to(opacities);
+      }
+      break;
+    case 4 : // Colored quadrangle.
+      if (mode==2) {
+        P.move_to(primitives); C.move_to(colors); O.move_to(opacities);
+      } else if (mode==1) {
+        CImg<uintT>::vector(P[0],P[1]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[1],P[2]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[2],P[3]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[3],P[0]).move_to(primitives);
+        C.move_to(colors); O.move_to(opacities);
+      } else {
+        CImg<uintT>::vector(P[0]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[1]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[2]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[3]).move_to(primitives);
+        C.move_to(colors); O.move_to(opacities);
+      }
+      break;
+    case 5 : // Sphere.
+      if (mode==2) {
+        P.move_to(primitives); C.move_to(colors); O.move_to(opacities);
+      } else if (mode==1) {
+        CImg<uintT>::vector(P[0],P[1]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+      } else {
+        CImg<uintT>::vector(P[0]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+        CImg<uintT>::vector(P[1]).move_to(primitives);
+        colors.insert(C); opacities.insert(O);
+      }
+      break;
+    case 6 : // Textured segment.
+      if (mode==2) {
+        CImg<uintT>::vector(P[0],P[1]).move_to(primitives);
+        C.get_vector_at(P[2],P[3]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[2],P[3])).move_to(opacities);
+        else O.move_to(opacities);
+      } else if (mode==1) {
+        P.move_to(primitives); C.move_to(colors); O.move_to(opacities);
+      } else {
+        CImg<uintT>::vector(P[0]).move_to(primitives);
+        C.get_vector_at(P[2],P[3]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[2],P[3])).move_to(opacities);
+        else opacities.insert(O);
+        CImg<uintT>::vector(P[1]).move_to(primitives);
+        C.get_vector_at(P[4],P[5]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[4],P[5])).move_to(opacities);
+        else O.move_to(opacities);
+      }
+      break;
+    case 9 : // Textured triangle.
+      if (mode==2) {
+        CImg<uintT>::vector(P[0],P[1],P[2]).move_to(primitives);
+        C.get_vector_at(P[3],P[4]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[3],P[4])).move_to(opacities);
+        else O.move_to(opacities);
+      } else if (mode==1) {
+        CImg<uintT>::vector(P[0],P[1],P[3],P[4],P[5],P[6]).
+          move_to(primitives);
+        C.move_to(colors); opacities.insert(O);
+        CImg<uintT>::vector(P[1],P[2],P[3],P[4],P[7],P[8]).
+          move_to(primitives);
+        colors.insert(colors.back(),~0U,true); opacities.insert(O);
+        CImg<uintT>::vector(P[2],P[0],P[7],P[8],P[1],P[3]).
+          move_to(primitives);
+        colors.insert(colors.back(),~0U,true); O.move_to(opacities);
+      } else {
+        CImg<uintT>::vector(P[0]).move_to(primitives);
+        C.get_vector_at(P[3],P[4]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[3],P[4])).move_to(opacities);
+        else opacities.insert(O);
+        CImg<uintT>::vector(P[1]).move_to(primitives);
+        C.get_vector_at(P[5],P[6]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[5],P[6])).move_to(opacities);
+        else opacities.insert(O);
+        CImg<uintT>::vector(P[2]).move_to(primitives);
+        C.get_vector_at(P[7],P[8]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[7],P[8])).move_to(opacities);
+        else O.move_to(opacities);
+      }
+      break;
+    case 12 : // Textured quadrangle.
+      if (mode==2) {
+        CImg<uintT>::vector(P[0],P[1],P[2],P[3]).move_to(primitives);
+        C.get_vector_at(P[4],P[5]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[4],P[5])).move_to(opacities);
+        else O.move_to(opacities);
+      } else if (mode==1) {
+        CImg<uintT>::vector(P[0],P[1],P[4],P[5],P[6],P[7]).
+          move_to(primitives);
+        C.move_to(colors); opacities.insert(O);
+        CImg<uintT>::vector(P[1],P[2],P[6],P[7],P[8],P[9]).
+          move_to(primitives);
+        colors.insert(colors.back(),~0U,true); opacities.insert(O);
+        CImg<uintT>::vector(P[2],P[3],P[8],P[9],P[10],P[11]).
+          move_to(primitives);
+        colors.insert(colors.back(),~0U,true); opacities.insert(O);
+        CImg<uintT>::vector(P[3],P[0],P[10],P[11],P[4],P[5]).
+          move_to(primitives);
+        colors.insert(colors.back(),~0U,true); O.move_to(opacities);
+      } else {
+        CImg<uintT>::vector(P[0]).move_to(primitives);
+        C.get_vector_at(P[4],P[5]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[4],P[5])).move_to(opacities);
+        else opacities.insert(O);
+        CImg<uintT>::vector(P[1]).move_to(primitives);
+        C.get_vector_at(P[6],P[7]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[6],P[7])).move_to(opacities);
+        else opacities.insert(O);
+        CImg<uintT>::vector(P[2]).move_to(primitives);
+        C.get_vector_at(P[8],P[9]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[8],P[9])).move_to(opacities);
+        else opacities.insert(O);
+        CImg<uintT>::vector(P[3]).move_to(primitives);
+        C.get_vector_at(P[10],P[11]).move_to(colors);
+        if (O.size()!=1) CImg<floatT>::vector(O(P[10],P[11])).move_to(opacities);
+        else O.move_to(opacities);
+      }
+      break;
+    default : // Other primitives.
+      P.move_to(primitives);
+      C.move_to(colors);
+      O.move_to(opacities);
+    }
+  }
+  if (psiz) {
+    primitives.remove(0,psiz-1);
+    colors.remove(0,psiz-1);
+    opacities.remove(0,psiz-1);
+  }
+  object3dtoCImg3d(primitives,colors,opacities,false);
+  return *this;
+}
+
+CImg<T> get_convert_primitives_CImg3d(const unsigned int mode) const {
+  return (+*this).convert_primitives_CImg3d(mode);
+}
+
 // Additional filters.
 
 template<typename t>
@@ -8044,202 +8241,13 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               cimg_forY(selection,l) {
                 const unsigned int ind = selection[l];
                 CImg<T> &img = gmic_check(images[ind]);
-                if (!img.is_CImg3d(false,message))
-                  error(images,"Command '-primitives3d': Invalid 3d object [%d], "
-                        "in selected image%s (%s).",
-                        ind,gmic_selection,message);
-                CImgList<unsigned int> primitives;
-                CImgList<float> colors, opacities;
-                CImg<T> vertices;
-                if (is_get_version) vertices.assign(img); else img.move_to(vertices);
-                vertices.CImg3dtoobject3d(primitives,colors,opacities,false);
-                const unsigned int psiz = primitives.size();
-                CImg<unsigned int> P;
-                CImg<float> C, O;
-                for (unsigned int p = 0; p<psiz; ++p) {
-                  primitives[p].move_to(P);
-                  colors[p].move_to(C);
-                  opacities[p].move_to(O);
-                  switch (P.size()) {
-                  case 1 : // Point.
-                    P.move_to(primitives);
-                    if (mode==2) {
-                      if (C.size()==3) C.move_to(colors);
-                      else C.get_vector_at(C.width()/2,C.height()/2).move_to(colors);
-                      if (O.size()==1) O.move_to(opacities);
-                      else O.get_vector_at(O.width()/2,O.height()/2).move_to(opacities);
-                    } else { C.move_to(colors); O.move_to(opacities); }
-                    break;
-                  case 2 : // Colored segment.
-                    if (mode) { P.move_to(primitives); C.move_to(colors); O.move_to(opacities); }
-                    else {
-                      CImg<unsigned int>::vector(P[0]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1]).move_to(primitives);
-                      C.move_to(colors); O.move_to(opacities);
-                    }
-                    break;
-                  case 3 : // Colored triangle.
-                    if (mode==2) {
-                      P.move_to(primitives); C.move_to(colors); O.move_to(opacities);
-                    } else if (mode==1) {
-                      CImg<unsigned int>::vector(P[0],P[1]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1],P[2]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[2],P[0]).move_to(primitives);
-                      C.move_to(colors); O.move_to(opacities);
-                    } else {
-                      CImg<unsigned int>::vector(P[0]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[2]).move_to(primitives);
-                      C.move_to(colors); O.move_to(opacities);
-                    }
-                    break;
-                  case 4 : // Colored quadrangle.
-                    if (mode==2) {
-                      P.move_to(primitives); C.move_to(colors); O.move_to(opacities);
-                    } else if (mode==1) {
-                      CImg<unsigned int>::vector(P[0],P[1]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1],P[2]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[2],P[3]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[3],P[0]).move_to(primitives);
-                      C.move_to(colors); O.move_to(opacities);
-                    } else {
-                      CImg<unsigned int>::vector(P[0]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[2]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[3]).move_to(primitives);
-                      C.move_to(colors); O.move_to(opacities);
-                    }
-                    break;
-                  case 5 : // Sphere.
-                    if (mode==2) {
-                      P.move_to(primitives); C.move_to(colors); O.move_to(opacities);
-                    } else if (mode==1) {
-                      CImg<unsigned int>::vector(P[0],P[1]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                    } else {
-                      CImg<unsigned int>::vector(P[0]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1]).move_to(primitives);
-                      colors.insert(C); opacities.insert(O);
-                    }
-                    break;
-                  case 6 : // Textured segment.
-                    if (mode==2) {
-                      CImg<unsigned int>::vector(P[0],P[1]).move_to(primitives);
-                      C.get_vector_at(P[2],P[3]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[2],P[3])).move_to(opacities);
-                      else O.move_to(opacities);
-                    } else if (mode==1) {
-                      P.move_to(primitives); C.move_to(colors); O.move_to(opacities);
-                    } else {
-                      CImg<unsigned int>::vector(P[0]).move_to(primitives);
-                      C.get_vector_at(P[2],P[3]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[2],P[3])).move_to(opacities);
-                      else opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1]).move_to(primitives);
-                      C.get_vector_at(P[4],P[5]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[4],P[5])).move_to(opacities);
-                      else O.move_to(opacities);
-                    }
-                    break;
-                  case 9 : // Textured triangle.
-                    if (mode==2) {
-                      CImg<unsigned int>::vector(P[0],P[1],P[2]).move_to(primitives);
-                      C.get_vector_at(P[3],P[4]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[3],P[4])).move_to(opacities);
-                      else O.move_to(opacities);
-                    } else if (mode==1) {
-                      CImg<unsigned int>::vector(P[0],P[1],P[3],P[4],P[5],P[6]).
-                        move_to(primitives);
-                      C.move_to(colors); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1],P[2],P[3],P[4],P[7],P[8]).
-                        move_to(primitives);
-                      colors.insert(colors.back(),~0U,true); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[2],P[0],P[7],P[8],P[1],P[3]).
-                        move_to(primitives);
-                      colors.insert(colors.back(),~0U,true); O.move_to(opacities);
-                    } else {
-                      CImg<unsigned int>::vector(P[0]).move_to(primitives);
-                      C.get_vector_at(P[3],P[4]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[3],P[4])).move_to(opacities);
-                      else opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1]).move_to(primitives);
-                      C.get_vector_at(P[5],P[6]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[5],P[6])).move_to(opacities);
-                      else opacities.insert(O);
-                      CImg<unsigned int>::vector(P[2]).move_to(primitives);
-                      C.get_vector_at(P[7],P[8]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[7],P[8])).move_to(opacities);
-                      else O.move_to(opacities);
-                    }
-                    break;
-                  case 12 : // Textured quadrangle.
-                    if (mode==2) {
-                      CImg<unsigned int>::vector(P[0],P[1],P[2],P[3]).move_to(primitives);
-                      C.get_vector_at(P[4],P[5]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[4],P[5])).move_to(opacities);
-                      else O.move_to(opacities);
-                    } else if (mode==1) {
-                      CImg<unsigned int>::vector(P[0],P[1],P[4],P[5],P[6],P[7]).
-                        move_to(primitives);
-                      C.move_to(colors); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1],P[2],P[6],P[7],P[8],P[9]).
-                        move_to(primitives);
-                      colors.insert(colors.back(),~0U,true); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[2],P[3],P[8],P[9],P[10],P[11]).
-                        move_to(primitives);
-                      colors.insert(colors.back(),~0U,true); opacities.insert(O);
-                      CImg<unsigned int>::vector(P[3],P[0],P[10],P[11],P[4],P[5]).
-                        move_to(primitives);
-                      colors.insert(colors.back(),~0U,true); O.move_to(opacities);
-                    } else {
-                      CImg<unsigned int>::vector(P[0]).move_to(primitives);
-                      C.get_vector_at(P[4],P[5]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[4],P[5])).move_to(opacities);
-                      else opacities.insert(O);
-                      CImg<unsigned int>::vector(P[1]).move_to(primitives);
-                      C.get_vector_at(P[6],P[7]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[6],P[7])).move_to(opacities);
-                      else opacities.insert(O);
-                      CImg<unsigned int>::vector(P[2]).move_to(primitives);
-                      C.get_vector_at(P[8],P[9]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[8],P[9])).move_to(opacities);
-                      else opacities.insert(O);
-                      CImg<unsigned int>::vector(P[3]).move_to(primitives);
-                      C.get_vector_at(P[10],P[11]).move_to(colors);
-                      if (O.size()!=1) CImg<float>::vector(O(P[10],P[11])).move_to(opacities);
-                      else O.move_to(opacities);
-                    }
-                    break;
-                  default : // Other primitives.
-                    P.move_to(primitives);
-                    C.move_to(colors);
-                    O.move_to(opacities);
-                  }
-                }
-                if (psiz) {
-                  primitives.remove(0,psiz-1);
-                  colors.remove(0,psiz-1);
-                  opacities.remove(0,psiz-1);
-                }
-                vertices.object3dtoCImg3d(primitives,colors,opacities,false);
-                if (is_get_version) {
-                  images_names.insert(images_names[selection[l]].get_mark().copymark());
-                  vertices.move_to(images);
-                } else {
-                  images_names[selection[l]].mark();
-                  vertices.move_to(images[selection[l]].assign());
+                try { gmic_apply(img,convert_primitives_CImg3d(mode)); }
+                catch (CImgException &e) {
+                  if (!img.is_CImg3d(true,message))
+                    error(images,"Command '-primitives3d': Invalid 3d object [%d], "
+                          "in selected image%s (%s).",
+                          ind,gmic_selection,message);
+                  else throw e;
                 }
               }
             } else arg_error("primitives3d");
