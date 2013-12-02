@@ -4075,11 +4075,15 @@ x0[%],y0[%],z0[%],u0[%],v0[%],w0[%],x1[%],y1[%],z1[%],u1[%],v1[%],w1[%],_nb_vert
 <br/><br/><b>Default values</b>: 'nb_vertices=128'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def466.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-repeat 100 -spline3d {?},{?},{?},{?},{?},{?},{?},{?},{?},{?},{?},{?},128 -color3d[-1] @{-RGB} -done -box3d 1 -primitives3d[-1] 1 -+3d</div></div></td><td><tt>-repeat 100 -spline3d {?},{?},{?},{?},{?},{?},{?},{?},{?},{?},{?},{?},128 -color3d[-1] @{-RGB} -done -box3d 1 -primitives3d[-1] 1 -+3d</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-split3d (+)</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+_keep_shared_data={ 0 | 1 }
 
+</font></i></tt></p>
 <p style="margin-left:100px"><tt>Split selected 3d objects into 6 feature vectors :
 <br/>&nbsp;{ header, sizes, vertices, primitives, colors, opacities }.
 <br/><i><font color="blue">(eq. to '-s3d').</font></i>
 <br/>To recreate the 3d object, append these 6 images along the y-axis.
+<br/><br/><b>Default value</b>: 'keep_shared_data=1'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def467.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-box3d 100 --split3d</div></div></td><td><tt>-box3d 100 --split3d</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-sprite3d</b>:</font>
 

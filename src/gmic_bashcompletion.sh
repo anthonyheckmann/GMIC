@@ -569,8 +569,8 @@ _gmic_def()
 	      -specs3d --specs3d\
 	      -sphere3d --sphere3d\
 	      -spherical3d --spherical3d\
-	      -s3d --s3d\
 	      -spline3d --spline3d\
+	      -s3d --s3d\
 	      -split3d --split3d\
 	      -sprite3d --sprite3d\
 	      -sprites3d --sprites3d\
@@ -1396,8 +1396,8 @@ _gmic_def()
 	      specs3d\
 	      sphere3d\
 	      spherical3d\
-	      s3d\
 	      spline3d\
+	      s3d\
 	      split3d\
 	      sprite3d\
 	      sprites3d\
@@ -2928,6 +2928,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "x0[%],y0[%],z0[%],u0[%],v0[%],w0[%],x1[%],y1[%],z1[%],u1[%],v1[%],w1[%],_nb_vertices>=2 >") )
 		return 0
 		;;
+		"-split3d" | "--split3d")
+		COMPREPLY=( $(compgen -W "_keep_shared_data={0|1} >") )
+		return 0
+		;;
 		"-star3d" | "--star3d")
 		COMPREPLY=( $(compgen -W "nb_branches>0,0<=thickness<=1 >") )
 		return 0
@@ -3914,6 +3918,10 @@ _gmic_def()
 		;;
 		"-ss3d" | "--ss3d")
 		COMPREPLY=( $(compgen -W "value>=0 >") )
+		return 0
+		;;
+		"-s3d" | "--s3d")
+		COMPREPLY=( $(compgen -W "_keep_shared_data={0|1} >") )
 		return 0
 		;;
 		"--3d" | "---3d")

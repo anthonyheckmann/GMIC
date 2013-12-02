@@ -4748,10 +4748,13 @@ Input 3d spline with specified geometry.
 \end{center}
 
 \subsection{\emph{-split3d\index{-split3d}} (+)}\vspace*{-0.5em}
+~\\\textbf{Arguments: } 
+{\small \texttt{\_keep\_shared\_data=\{ 0 ~$|$~ 1 \}}}\\~\\
 Split selected 3d objects into 6 feature vectors :
 \{ header, sizes, vertices, primitives, colors, opacities \}.
 ~\\(\emph{eq. to} {\small \texttt{'-s3d'}}).
 ~\\To recreate the 3d object, append these 6 images along the y-axis.
+~\\~\\\textbf{Default value}: {\small \texttt{'keep\_shared\_data=1'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def467.jpg}\\
 {\footnotesize \textbf{Example 467~:} \texttt{-box3d 100 --split3d}}
 \end{center}
