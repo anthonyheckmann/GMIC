@@ -19,6 +19,7 @@ _gmic_def()
 	      -help --help\
 	      -version --version\
 	      -apply_camera --apply_camera\
+	      -apply_files --apply_files\
 	      -camera --camera\
 	      -m --m\
 	      -command --command\
@@ -664,6 +665,7 @@ _gmic_def()
 	      -old_photo --old_photo\
 	      -pencilbw --pencilbw\
 	      -polaroid --polaroid\
+	      -polygonize --polygonize\
 	      -poster_edges --poster_edges\
 	      -poster_hope --poster_hope\
 	      -rodilius --rodilius\
@@ -846,6 +848,7 @@ _gmic_def()
 	      help\
 	      version\
 	      apply_camera\
+	      apply_files\
 	      camera\
 	      m\
 	      command\
@@ -1491,6 +1494,7 @@ _gmic_def()
 	      old_photo\
 	      pencilbw\
 	      polaroid\
+	      polygonize\
 	      poster_edges\
 	      poster_hope\
 	      rodilius\
@@ -1674,6 +1678,10 @@ _gmic_def()
 		;;
 		"-apply_camera" | "--apply_camera")
 		COMPREPLY=( $(compgen -W "_command,_camera_index>=0,_skip_frames>=0,_output_filename >") )
+		return 0
+		;;
+		"-apply_files" | "--apply_files")
+		COMPREPLY=( $(compgen -W ""command",list_of_filenames,_output_prefix,_view_window={0|1} >") )
 		return 0
 		;;
 		"-camera" | "--camera")
@@ -3202,6 +3210,10 @@ _gmic_def()
 		;;
 		"-polaroid" | "--polaroid")
 		COMPREPLY=( $(compgen -W "_size1>=0,_size2>=0 >") )
+		return 0
+		;;
+		"-polygonize" | "--polygonize")
+		COMPREPLY=( $(compgen -W "_warp_amplitude>=0,_smoothness[%]>=0,_min_area[%]>=0,_resolution_x[%]>0,_resolution_y[%]>0 >") )
 		return 0
 		;;
 		"-poster_edges" | "--poster_edges")
