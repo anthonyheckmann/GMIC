@@ -960,7 +960,7 @@ version :
 apply_camera : -skip "${1=},${4=}" -check "${2=0}>=0 && ${3=0}>=0"
   -e[^-1] "Apply command '$1' on camera stream \#$2, with $3 frames skip and filename '$4'." -v -
   -l[] frame=0 -do
-    -camera $2,1,$3 $1 -w[-1] -1,-1,-1,-1,"(Camera "$stream", "{w}x{h}")"
+    -camera $2,1,$3 $1 -w[-1] -1,-1,"(Camera "$stream", "{w}x{h}")"
     -if {narg("$4")} -o[-1] @{-filename\ "$4",$frame} frame={$frame+1} -endif
     -if @{!,S} -o[-1] gmic_camera.png -endif
     -if {(@{!,CTRLLEFT}" || "@{!,CTRLRIGHT})" && "@{!,D}} -w[] {@{!,w}*1.5},{@{!,h}*1.5} -wait -1 -endif # Increase window size.
@@ -988,7 +988,7 @@ apply_files : -skip "${3=gmic_}",${4=0}
     -v + -e[] "\r - Image "{1+$>}/$_nb_files" ["$_file"]        " -v -
     $file -_apply_files
     -o "$3"$_file
-    -if $4 -w[-1] @{-fitscreen\ {w},{h},{d}},1,0,$_file -endif
+    -if $4 -w[-1] @{-fitscreen\ {w},{h},{d}},1,0,-1,-1,$_file -endif
     -rm
   -onfail -v + -e[] "\n - Error occured on file '"$file"'.\n" -v -
   -endl -done -uncommand _apply_files -v +
@@ -1038,9 +1038,9 @@ _display0 :
   -v -
   w=0 h=0 d=0 s=0
   -repeat @# -l[$>] w={$w+w} h={max($h,h)} d={max($d,d)} s={max($s,s)} -endl -done
-  -if {@#==1} -w -1,-1,0,0,@{0,n}\ ($wx$hx$dx$s)
-  -elif {@#==2} -w -1,-1,0,0,@{0,n},@{-1,n}\ ($wx$hx$dx$s)
-  -else -w -1,-1,0,0,@{0,n},..,@{-1,n}\ ($wx$hx$dx$s)
+  -if {@#==1} -w -1,-1,0,0,-1,-1,@{0,n}\ ($wx$hx$dx$s)
+  -elif {@#==2} -w -1,-1,0,0,-1,-1,@{0,n},@{-1,n}\ ($wx$hx$dx$s)
+  -else -w -1,-1,0,0,-1,-1,@{0,n},..,@{-1,n}\ ($wx$hx$dx$s)
   -endif
   -v + -d
   -v - -w[] 0 -v +
@@ -1086,7 +1086,7 @@ _display_array : -check ${1=13}>0" && "${2=$1}>0
     x2=-1 y2=-1 c2=0 ox2=-1 oy2=-1 oc2=-1
     x3=-1 y3=-1 c3=0 ox3=-1 oy3=-1 oc3=-1
     c0=0 oxm=-1 oym=-1
-    -w[-1] -1,-1,0,0,@{-2,b}.@{-2,x}
+    -w[-1] -1,-1,0,0,-1,-1,@{-2,b}.@{-2,x}
     -do  # Enter event loop.
 
       # Manage user interactions.
@@ -1105,7 +1105,7 @@ _display_array : -check ${1=13}>0" && "${2=$1}>0
       -if {$xm>=0" && "@{!,b}&4} x3=$xm y3=$ym -endif
 
       # Generate main image view.
-      -if {$xm>=0" && "($oxm!=$xm" || "$oym!=$ym)} -w[] -1,-1,-1,-1,@{-2,b}.@{-2,x}" - ("$xm,$ym")" -endif
+      -if {$xm>=0" && "($oxm!=$xm" || "$oym!=$ym)} -w[] -1,-1,-1,-1,-1,-1,@{-2,b}.@{-2,x}" - ("$xm,$ym")" -endif
       -if {$x1!=$ox1" || "$y1!=$oy1" || "$x2!=$ox2" || "$y2!=$oy2" || "$x3!=$ox3" || "$y3!=$oy3}
         [-1]
         -if {$x1>=0}
@@ -1131,21 +1131,21 @@ _display_array : -check ${1=13}>0" && "${2=$1}>0
         --z[-2] {$x1-$dxb},{$y1-$dyb},0,$c1,{$x1+$dxf},{$y1+$dyf},0,$c1
         --z[-2] {$x1-$dxb},{$y1-$dyb},0,{$x1+$dxf},{$y1+$dyf},0
         -__display_array[-2,-1] $1,$2,0,255,255
-        -w1[-1] {w},{h},0,0,@{-3,b}" - ("$x1,$y1,c=$c1")"
+        -w1[-1] {w},{h},0,0,-1,-1,@{-3,b}" - ("$x1,$y1,c=$c1")"
         -rm[-1] ox1=$x1 oy1=$y1 oc1=$c1
       -endif
       -if {$x2>=0" && "($ox2!=$x2" || "$oy2!=$y2" || "$oc2!=$c2)}
         --z[-2] {$x2-$dxb},{$y2-$dyb},0,$c2,{$x2+$dxf},{$y2+$dyf},0,$c2
         --z[-2] {$x2-$dxb},{$y2-$dyb},0,{$x2+$dxf},{$y2+$dyf},0
         -__display_array[-2,-1] $1,$2,255,32,255
-        -w2[-1] {w},{h},0,0,@{-3,b}" - ("$x2,$y2,c=$c2")"
+        -w2[-1] {w},{h},0,0,-1,-1,@{-3,b}" - ("$x2,$y2,c=$c2")"
         -rm[-1] ox2=$x2 oy2=$y2 oc2=$c2
       -endif
       -if {$x3>=0" && "($ox3!=$x3" || "$oy3!=$y3" || "$oc3!=$c3)}
         --z[-2] {$x3-$dxb},{$y3-$dyb},0,$c3,{$x3+$dxf},{$y3+$dyf},0,$c3
         --z[-2] {$x3-$dxb},{$y3-$dyb},0,{$x3+$dxf},{$y3+$dyf},0
         -__display_array[-2,-1] $1,$2,255,255,0
-        -w3[-1] {w},{h},0,0,@{-3,b}" - ("$x3,$y3,c=$c3")"
+        -w3[-1] {w},{h},0,0,-1,-1,@{-3,b}" - ("$x3,$y3,c=$c3")"
         -rm[-1] ox3=$x3 oy3=$y3 oc3=$c3
       -endif
     -while {@!" && "\
@@ -2503,7 +2503,7 @@ _update :
 #@gmic : (eq. to '-w').
 #@gmic : If 'width' or 'height' is set to -1, the corresponding dimension is adjusted to the window
 #@gmic : or image size.
-#@gmic : When optional arguments 'pos_x' and 'pos_y' are specified, the window is moved to
+#@gmic : When arguments 'pos_x' and 'pos_y' are both different than -1, the window is moved to
 #@gmic : the specified coordinates.
 #@gmic : 'width'=0 or 'height'=0 closes the instant window.
 #@gmic : 'normalization' can be { -1=keep same | 0=none | 1=always | 2=1st-time | 3=auto }.
@@ -7128,7 +7128,7 @@ animate3d : -skip ${1=640},${2=480},${3=0},${4=10},${5=0},"${7=""}" -check ${6=1
        -else
          -replace[-1] -1,64
        -endif
-       -w[-1] {w},{h},0,0,@{0,n} -wait 20 -k[0]
+       -w[-1] {w},{h},0,0,-1,-1,@{0,n} -wait 20 -k[0]
     -while {@!" && "!@{!,ESC}" && "!@{!,Q}} -rm -w 0
   -endl -done -v +
 
@@ -10449,7 +10449,7 @@ animate : -skip ${1=30},${2=0},${3=""},${4=0},${5=1},"${6=}"
     direction=1 # Animation direction.
     frame=0     # Current frame.
     -do
-      -w[$frame] -1,-1,1,0,@{$frame,b}.@{$frame,x}
+      -w[$frame] -1,-1,1,0,-1,-1,@{$frame,b}.@{$frame,x}
       frame={$frame+$direction}
       -if $2
         -if {$frame==-1} frame=0 direction=1
@@ -10784,7 +10784,7 @@ x_bouncing :
     -ball[] {round(?(32,80))},@{-RGB}
     t$>={?(200)} x$>=@{0,?(10,w-10)} h$>={?(150,300)} vx$>={if(?<0.5,1,-1)*?(1,8)}
   -done
-  -mv[0] @# -w[-1] -1,-1,0,0,"[G'MIC] Bouncing balls"
+  -mv[0] @# -w[-1] -1,-1,0,"[G'MIC] Bouncing balls"
   (0;0.7;1) -r[-1] @{-2,w},70,1,1,3
 
   -do
@@ -10826,7 +10826,7 @@ x_fire : -skip "${1=G'MIC}"
   -v -
 
   # Init image data.
-  -i[0] 100,32 -w[0] 450,200,0,0,"[G'MIC] Fire effect"
+  -i[0] 100,32 -w[0] 450,200,0,"[G'MIC] Fire effect"
   -i[1] (0,255,255,255,255^0,0,255,255,255^0,0,0,128,255) -r[1] 256,1,1,3,3
   -i[2] (0,0,0;0,0,0;1,1,1;0,1,0) -*[2] 0.21
   -text3d "$1",34,3,1 -mv[-1] 3 -c3d[3] -n3d[3] -*3d[3] 320 -col3d[3] 255,205,130 -db3d 0 -f3d 300
@@ -10863,7 +10863,7 @@ x_fireworks :
   time=0
   (0;64^0;32^128;0) -r 256,128,1,3,3          # [-2] = Background (color gradient).
   [-1]                                        # [-1] = Rendered image.
-  -w[-1] 512,256,0,0,"[G'MIC] Fireworks"      # Display window.
+  -w[-1] 512,256,0,"[G'MIC] Fireworks"        # Display window.
   -do                                         # Start animation loop.
     time={$time-1}
     -if {@#==2\ ||\ $time<0} # Insert new rocket.
@@ -10922,7 +10922,7 @@ x_fisheye :
   -torus3d 20,6 -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} --r3d[-1] 1,0,0,90
   -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} -+3d[-1] 15 -+3d[-2,-1] -db3d 0 -c3d[-1]
   R=30
-  -w[-2] {2*@{-2,w}},{2*@{-2,h}},0,0,"[G'MIC] Fish-eye effect"
+  -w[-2] {2*@{-2,w}},{2*@{-2,h}},0,"[G'MIC] Fish-eye effect"
   -do
     -wait 40
     -if {@{!,b}==1} R={min(80,$R+8)} -endif
@@ -10969,7 +10969,7 @@ x_fourier :
     -n[-1] 0,255 -shift[-1] 50%,50%,0,0,2 -to_colormode[-1] @{-2,s}
     -nm[-1] logmag
 
-    -w[0,-1] -1,-1,0,0,"[G'MIC] Fourier filtering"
+    -w[0,-1] -1,-1,0,"[G'MIC] Fourier filtering"
 
     -if {!narg($first_time)} --l[-1] -r2dy 128 -frame 1,1,0
     -alert "[G'MIC Fourier filtering]",\
@@ -11006,8 +11006,7 @@ x_fourier :
         -rv[-2,-1]
         -if @! -r[-2,-1] {@{!,w}/2},@{!,h} -endif
         -t[-1] "Freq. Min/Max = "{int($freqmin)}"% / "{int($freqmax)}"%",5,5,13,1,255
-        -w[-2,-1] #-1,-1,0,0,"[G'MIC] Fourier filtering"
-        -rm[-2,-1]
+        -w[-2,-1] -rm[-2,-1]
         need_update=0
 
       -endif
@@ -11099,7 +11098,7 @@ x_histogram :
     -j[-2] [-1],5,317 -rm[-1]
 
     # Display rendering.
-    -w[-1] {w},{h},0,0,"[G'MIC] Histogram demo" -rm[-1]
+    -w[-1] {w},{h},0,"[G'MIC] Histogram demo" -rm[-1]
     -wait
 
     # Manage user interactions.
@@ -11151,7 +11150,7 @@ x_hough :
 
     rhomax={sqrt(w^2+h^2)/2}
     --b[-1] 1.5 -hough[-1] 512,400 -b[-1] 0.5 -+[-1] 1 -log[-1] -n[-1] 0,255
-    -w[-2] -1,-1,0,0,"[G'MIC] Image" -w1[-1] -1,-1,0,0,"[G'MIC] Hough transform"
+    -w[-2] -1,-1,0,"[G'MIC] Image" -w1[-1] -1,-1,0,"[G'MIC] Hough transform"
     -if {!narg($first_time)} --l[0] -r2dy 128 -frame 1,1,0
     -alert "[G'MIC Hough Transform]",\
            "The G'MIC Hough transform demo illustrates the application\n"\
@@ -11198,7 +11197,7 @@ x_hough :
 
       -elif {@{!,SPACE}" || "@{!1,SPACE}}
         -rm[-1] --b[-1] 1.5 -hough[-1] 512,400 -b[-1] 0.5 -+[-1] 1 -log[-1] -n[-1] 0,255
-        -w1[-1] -1,-1,0,0,"Hough Transform"
+        -w1[-1] -1,-1,0,"Hough Transform"
 
       -elif @{!,r} -w[-2]
       -elif @{!1,r} -w1[-1]
@@ -11254,7 +11253,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
      --abs[board] --[-1] 1 -*[-1] {360/$3} --ge[board] 0 -*[-1] 0.9 -r[-2,-1] [balls] [balls] -a[-3--1] c -hsv2rgb[-1]
       --compose_channels[-1] + -gt[-1] 0 -dilate[-1] 3
       -j[visu] [back] -j[visu] [-2],0,0,0,0,1,[-1] -rm[-2,-1]
-      -if {!$shapescorey} -w[visu] @{back,w},@{back,h},0,0,"[G'MIC] Jawbreaker (score : "$score")" -endif
+      -if {!$shapescorey} -w[visu] @{back,w},@{back,h},0,"[G'MIC] Jawbreaker (score : "$score")" -endif
       render_board=0
     -endif
 
@@ -11262,7 +11261,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
     -if $shapescorey
       --t[visu] "+"$shapescore,@{!,x},{@{!,y}-64+$shapescorey},32,{($shapescorey-1)/31},255
       shapescorey={max(0,$shapescorey-1)}
-      -w[-1] @{back,w},@{back,h},0,0,"[G'MIC] Jawbreaker (score : "$score")" -rm[-1] -wait 25
+      -w[-1] @{back,w},@{back,h},0,"[G'MIC] Jawbreaker (score : "$score")" -rm[-1] -wait 25
     -else -wait -endif
 
     # Check for the end of the game.
@@ -11325,7 +11324,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
 
   # Game over.
   -if {@!" && "!@{!,ESC}}
-    -w[] @{visu,w},@{visu,h},0,0,"[G'MIC] Jawbreaker (final score : "$score")"
+    -w[] @{visu,w},@{visu,h},0,"[G'MIC] Jawbreaker (final score : "$score")"
     -i[gameover] 230,85 -t[-1] "Game Over!",3,0,57,1,1 -t[-1] "Score : "$score,24,54,32,1,1
     --dilate[-1] 5 -nm[-1] "mgameover" -*[-2] 255 -r[-2] 100%,100%,1,3
     -repeat 25
@@ -11380,7 +11379,7 @@ x_life :
   score=0                                                       # Current score.
   bestscore=0                                                   # Best score.
   stock=500                                                     # Remaining cells.
-  -w[0] 400,400,0,0,"[G'MIC] The game of life"                  # Initialize display window.
+  -w[0] 400,400,0,"[G'MIC] The game of life"                    # Initialize display window.
 
   # Start user-event loop.
   -do
@@ -11459,7 +11458,7 @@ x_light :
   -sh[-2] 0,50%,0,2 -*[-1] 120 -rm[-1]
   25%,25%,1,1 -rand[-1] -20,20 -smooth[-1] 10,0,1,1,4 -r[-1] [-2],3 -b[-1] 3 -n[-1] -60,60
   -+[-2,-1] -g[-1] xy -a[-2,-1] c -n[-1] -150,150
-  -w[] {1.5*@{-2,w}},{1.5*@{-2,h}},0,0,"[G'MIC] Light effect"  # Init display window.
+  -w[] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G'MIC] Light effect"  # Init display window.
 
   # Create a large light image.
   light=70
@@ -11505,14 +11504,14 @@ x_mandelbrot : -skip ${1=0},${2=0.317},${3=0.03}
 
   # Init variables and display.
   -v -
-  -rm -w 512,512,0,0 -_x_mandelbrot_coords $1 -_x_mandelbrot_palette
+  -rm -w 512,512,0 -_x_mandelbrot_coords $1 -_x_mandelbrot_palette
 
   # Start event loop.
   -do
     siz={min(@{!,w},@{!,h})}                                                                      # Desired window dimension.
     $siz,$siz -mandelbrot[-1] @0,256,$1,{if($1,$2,0)},{if($1,$3,0)} -map[-1] [1]                  # Render fractal.
-    -if $1 -w[-1] $siz,$siz,0,0,"[G'MIC] Julia set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}"), c0=($2,$3)" # Display on window.
-    -else -w[-1] $siz,$siz,0,0,"[G'MIC] Mandelbrot set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}")" -endif
+    -if $1 -w[-1] $siz,$siz,0,"[G'MIC] Julia set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}"), c0=($2,$3)" # Display on window.
+    -else -w[-1] $siz,$siz,0,"[G'MIC] Mandelbrot set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}")" -endif
     w={w} h={h} -select[-1] 2                                                                     # Get the user selection.
 
     -if {@{-1,0}>0}                                                                               # If valid selection found.
@@ -11559,7 +11558,7 @@ x_metaballs3d :
   72,72,72 M=8 mode=5
   s0=Dots s1=Wireframe s2=Flat s3=Flat-shaded s4=Gouraud-shaded s5=Phong-shaded
   -repeat $M fx$>={g*1.5} fy$>={g*1.5} fz$>={g*1.5} -done
-  -w[0] -1,-1,0,0,"[G'MIC] 3d metaballs"
+  -w[0] -1,-1,0,"[G'MIC] 3d metaballs"
   -do
     -repeat $M
       x$>={w/2+0.5*(w-@{2,w}-4)*cos(${fx$>}*@|)}
@@ -11653,7 +11652,7 @@ x_minesweeper : -check "${1=20}>=8 && $1<=30 && ${2=$1}>=8 && $2<=30"
         -negative[-1] -j[canvas] [-1],0,3 -rm[-1]
         -wait 50
         x={int((@{!,x}-24)/24)} y={int((@{!,y}-24)/24)} b=@{!,b}
-        -w[canvas] {w},{h},0,0,"[G'MIC] Minesweeper"
+        -w[canvas] {w},{h},0,"[G'MIC] Minesweeper"
       -while {@!" && "!@{!,ESC}" && "!@{!,Q}" && "!$b}
     -endif
 
@@ -11692,7 +11691,7 @@ x_minimal_path :
   -if {!@#} -testimage2d 400 -endif
   -n 0,200 -round 1
   -repeat @# -l[$>]
-    -w[0] -1,-1,0,0,"[G'MIC] Select starting point P0"
+    -w[0] -1,-1,0,"[G'MIC] Select starting point P0"
     -if {!narg($first_time)} --l[0] -r2dy 128 -frame 1,1,0
     -alert "[G'MIC Minimal path]",\
            "The G'MIC minimal path demo illustrates how minimal paths\n"\
@@ -11709,7 +11708,7 @@ x_minimal_path :
     -if {min($P0)>=0}
       p=1
       -do
-        -w[0] -1,-1,0,0,"[G'MIC] Select ending point P"$p
+        -w[0] -1,-1,0,"[G'MIC] Select ending point P"$p
         --select[0] 0
         -if {@{!,S}}
           -rm[-1]
@@ -11814,7 +11813,7 @@ x_pacman :
     -t[-1] "Lives :",10,0,23,1,255 -t[-1] "Score :",{w-140},0,23,1,255
     -if $lives --r[pacman_2] 12,12,1,4,2 -r[-1] {100*$lives}%,100%,1,4,0,2 -j[-2] [-1],90,7 -rm[-1] -endif
     -nm[-1] visu
-    -w[visu] -1,-1,0,0,"[G'MIC] Pacman"
+    -w[visu] -1,-1,0,"[G'MIC] Pacman"
     0 -t[-1] "Level "$level,0,0,57,1,1 -autocrop[-1] 0 -expand_xy[-1] 4,0 (0,255^0,255^0,0) --map[-2] [-1] -rm[-2] -dilate[-2] 8
     -nm[-1] level_N -nm[-2] levelm_N
 
@@ -12079,7 +12078,7 @@ x_paint :
       {w},16,1,3 -t[-1] "Selected color",4,2,13,1,255
       -rectangle[-1] 80,3,100,13,1,$color
       -rectangle[-1] 80,3,100,13,1,0xFFFFFFFF,255,255,255
-      -a[-2,-1] y -w2[-1] {w},{h},0,0,"Palette" -mv[-1] -2
+      -a[-2,-1] y -w2[-1] {w},{h},0,"Palette" -mv[-1] -2
       refresh_palette=0
     -endif
 
@@ -12104,13 +12103,13 @@ x_paint :
       -line[-1] 20%,{$by-16},80%,{$by-16},1,255 -line[-1] 80%,{$by-16},80%,{$by+16},1,255
       -line[-1] 20%,{$by-16},20%,{$by+16},1,64 -line[-1] 20%,{$by+16},80%,{$by+16},1,64
       -a[-2,-1] x
-      -w3[-1] {w},{h},0,0,"Brush"
+      -w3[-1] {w},{h},0,"Brush"
       refresh_brush=0
     -endif
 
     # Open/refresh image window.
     -if $refresh_image
-      -w1[$image] @{$image,w},@{$image,h},0,0,"Image "#$image" : "@{$image,b}.@{$image,x}
+      -w1[$image] @{$image,w},@{$image,h},0,"Image "#$image" : "@{$image,b}.@{$image,x}
       refresh_image=0
     -endif
 
@@ -12200,7 +12199,7 @@ x_plasma :
   M={w}
 
   # Start animation loop.
-  -w[] {2*@{0,w}},{2*@{0,h}},0,0,"[G'MIC] Plasma effect"
+  -w[] {2*@{0,w}},{2*@{0,h}},0,"[G'MIC] Plasma effect"
   t=0 tt={-1.5*@{0,w}}
   -do
     tic=@|
@@ -12307,7 +12306,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
       0 -text[-1] "Colors: "@{centroids,w},2,0,13,1,255,255,255 --dilate[-1] 3 -j[-3] [-2],2,2,0,0,1,[-1],255
       -rm[-2,-1] -nm[-1] visu_centroids -j[visu] [visu_centroids],5,310
     -endif
-    -w[visu] -1,-1,0,0,"[G'MIC] RGB quantization"
+    -w[visu] -1,-1,0,"[G'MIC] RGB quantization"
 
     # Check for user's interactions.
     x={int(@{!,x}*@{visu,w}/@{!,w})}
@@ -12413,7 +12412,7 @@ x_reflection3d :
 
   # Start animation loop.
   xb=0 xl=0 anim=0
-  -w[] 300,300,0,0,"[G'MIC] 3d reflection"
+  -w[] 300,300,0,"[G'MIC] 3d reflection"
   -do
 
     tic=@|
@@ -12467,7 +12466,7 @@ x_rubber3d :
     {w},{h},1,3 -fc[-1] 16,32,32 -object3d[-1] [0],50%,50%,0,1,3,0,0 -j[1] [-1],0,0,$frame -rm[-1]
     -r3d[0] 0.1,1,0.6,{3*cos(@|*1.25)} -r3d[0] 1,0.2,0.6,-1
     --warp[1] [2],0,0 -*[3] 0.8 -*[-1] 0.2 -+[3,-1]
-    -w[-1] {1.2*w},{1.2*h},0,0,"3d rubber object" -wait 20
+    -w[-1] {1.2*w},{1.2*h},0,"[G'MIC] 3d rubber object" -wait 20
     -sh[2] 2,2 --[-1] 1 -and[-1] {@{1,d}-1} -rm[-1]
     frame={($frame-1)%@{1,d}}
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
@@ -12482,7 +12481,7 @@ x_shadebobs :
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -------------------------------------------------"
-  -v - -rm t=100 -w 512,512,0,0,"[G'MIC] Shade bobs"
+  -v - -rm t=100 -w 512,512,0,"[G'MIC] Shade bobs"
 
   # Start animation loop.
   -do
@@ -12535,7 +12534,7 @@ x_spline :
   # Init display and variables.
   -v -
   -if @# -a x -n 0,255 -to_rgb -else (0;0^0;128^0;0) -r[-1] 512,512,1,3,3 -name[-1] "[G'MIC] Spline Editor" -endif
-  -w[0] @{0,w},@{0,h},0,0,@{-1,n} -r[0] @{!,w},@{!,h},1,3,1
+  -w[0] @{0,w},@{0,h},0,0,-1,-1,@{-1,n} -r[0] @{!,w},@{!,h},1,3,1
   -i[1] 1        # Point coordinates
   roundness=0.5  # Curve roundness
   visuflags=23   # Visualisation flags
@@ -12715,7 +12714,7 @@ x_tetris :
 
     --shift[background] 0,{-13*@|*1.04^$score},0,0,2
     -j[-1] [curr_render],0,0,0,0,1,[curr_render_mask],255
-    -w[-1] {2*w},{2*h},0,0,"[G'MIC] Tetris" -rm[-1]
+    -w[-1] {2*w},{2*h},0,"[G'MIC] Tetris" -rm[-1]
 
     # Manage user interactions.
     -if @{!,SPACE} fall_mode=1 -endif
@@ -12763,7 +12762,7 @@ x_tictactoe :
   tmp2=0                          # [-2] : Temporary variable 2.
   tmp1=0                          # [-1] : Temporary variable 1.
   -_x_tictactoe2                  # Generate board.
-  -w[-1] -1,-1,0,0," "            # Init display window.
+  -w[-1] -1,-1,0," "              # Init display window.
 
   # Start main loop.
   -do
@@ -12775,7 +12774,7 @@ x_tictactoe :
 
     # Select position by the user.
     -do                                                                       # Enter event loop.
-      -w[] {w},{h},0,0,"[G'MIC] "$message -wait                               # Wait for events and force window size if necessary.
+      -w[] {w},{h},0,"[G'MIC] "$message -wait                                 # Wait for events and force window size if necessary.
       -if {!@!} -w[] 0 -rm -v + -return -endif                                # Quit properly if window has been closed.
       -if {@{!,b}&1" && "@{!,x}>20" && "@{!,y}>20" && "@{!,x}<400" && "@{!,y}<400} # If mouse button has been pressed on the board area.
         tmp3={int((@{!,x}-15)/130)}                                                # Get x-coord of the selected position (0,1 or 2).
@@ -12802,10 +12801,10 @@ x_tictactoe :
       tmp1=@{-1,$>}                                                           # Save the current configuration code (used several times).
       -if {($state&$tmp1)==$tmp1||($state&(2*$tmp1))==2*$tmp1}                # If a winner has been found.
         -_x_tictactoe@{-1,($>,3)}                                               # Generate the stroke symbol and his mask.
-        -j[-4] [-2],{130*@{-3,($>,1)}+?(-5,5)},\                            # And display it on the board at its position.
+        -j[-4] [-2],{130*@{-3,($>,1)}+?(-5,5)},\                              # And display it on the board at its position.
                         {130*@{-3,($>,2)}+?(-5,5)},0,0,1,[-1] -rm[-2--1]
-        -if {($state&$tmp1)==$tmp1} -w[-2] -1,-1,0,0,"Tic-Tac-Toe (X won!)"
-        -else -w[-2] -1,-1,0,0,"Tic-Tac-Toe (O won!)"                          # Update display window.
+        -if {($state&$tmp1)==$tmp1} -w[-2] -1,-1,0,"Tic-Tac-Toe (X won!)"
+        -else -w[-2] -1,-1,0,"Tic-Tac-Toe (O won!)"                           # Update display window.
         -endif
         -do -wait -w[] @{!,w},@{!,h} -while @!                                  # Wait for the window to be closed.
         -rm -w[] 0 -v + -return                                                 # And return properly.
@@ -12871,7 +12870,7 @@ x_waves :
     --mirror y --mirror x -+ -n 0,255
   -endl -else -k[0] -r[0] 100,100,1,3,2 -endif
   -i[0] (20;80;0^20;80;0^20;80;0) -r[0] 400,300,1,3,3 -water[0] 100,2
-  -w[0] @{0,w*1.25},@{0,h*1.25},0,0,"[G'MIC] Image waves"
+  -w[0] @{0,w*1.25},@{0,h*1.25},0,"[G'MIC] Image waves"
   w={w} -elevation3d[-1] 0 -rv3d[-1]
   -sh[-1] 8,{7+3*i(0,6)},0,0 -r[-1] 3,{h/3},1,1,-1
   (0,1,0;1,0,1;0,1,0) -/[-1] 2
@@ -12912,7 +12911,7 @@ x_whirl : -check ${1=0.2}>=0
 ----\n
 --------------------------------------------------"
   -v -
-  5,5,1,3 256,256,1,3 [-1] -w[-1] 480,480,0,0,"[G'MIC] Fractal whirl"
+  5,5,1,3 256,256,1,3 [-1] -w[-1] 480,480,0,"[G'MIC] Fractal whirl"
   tangle=0 tzoom=0 xc={(w-@{-3,w})/2} yc={(h-@{-3,h})/2}
   -do
     -rand[-3] 0,255 -j[-2] [-3],$xc,$yc,0,0
@@ -13223,7 +13222,7 @@ alert : -skip "${1=[G'MIC Alert]},${2=This is an alert box.},${3=OK}"
         -sh[$selected] 4,6
         -j[-2] [-1],$x0,$y0 -rm[-1]
       -endif
-      -w$disp[-1] 100%,100%,0,0,"$1" -rm[-1] -wait
+      -w$disp[-1] 100%,100%,0,"$1" -rm[-1] -wait
 
       # Handle user interactions.
       xm=@{!$disp,x} ym=@{!$disp,y} bm={@{!$disp,b}&1} val={i($xm,$ym,0,3)}

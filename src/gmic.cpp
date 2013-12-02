@@ -10416,7 +10416,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               wind<10 && !is_get_version) {
             gmic_substitute_args();
             int norm = -1, fullscreen = -1;
-            float dimw = -1, dimh = -1, posx = cimg::type<float>::max(), posy = posx;
+            float dimw = -1, dimh = -1, posx = -1, posy = -1;
             char sepw = 0, seph = 0, sepx = 0, sepy = 0;
             *argx = *argy = *argz = *argc = *title = 0;
             if ((std::sscanf(argument,"%255[0-9.eE%+-]%c",
@@ -10436,7 +10436,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                              "%255[0-9.eE%+-],%255[^\n,]",
                              argx,argy,&norm,&fullscreen,argz,argc,title)==7 ||
                  std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%d,%d,%255[^\n]",
-                             &(*argx=*argz=*argc=0),argy,&norm,&fullscreen,title)==5) &&
+                             &(*argx=*argz=*argc=0),argy,&norm,&fullscreen,title)==5 ||
+                 std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%d,%255[^\n]",
+                             argx,argy,&(norm=fullscreen=-1),title)==4 ||
+                 (norm=fullscreen=-1,std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[^\n]",
+                                                 argx,argy,title))==3) &&
                 (std::sscanf(argx,"%f%c",&dimw,&end)==1 ||
                  (std::sscanf(argx,"%f%c%c",&dimw,&sepw,&end)==2 && sepw=='%')) &&
                 (!*argy ||
@@ -10454,7 +10458,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             else {
               dimw = dimh = -1;
               norm = fullscreen = -1;
-              posx = posy = cimg::type<float>::max();
+              posx = posy = -1;
               sepw = seph = 0;
             }
             if (dimh==0) dimw = 0;
@@ -10483,7 +10487,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   gmic_selection,
                   wind);
 #else // #if cimg_display==0
-            const bool is_move = posx!=cimg::type<float>::max() && posy!=cimg::type<float>::max();
+            const bool is_move = posx!=-1 || posy!=-1;
             bool is_available_display = false;
             try {
               is_available_display = (bool)CImgDisplay::screen_width();
