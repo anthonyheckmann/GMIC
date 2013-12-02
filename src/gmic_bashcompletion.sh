@@ -2577,7 +2577,7 @@ _gmic_def()
 		return 0
 		;;
 		"-ball" | "--ball")
-		COMPREPLY=( $(compgen -W "_size>0,_R,_G,_B >") )
+		COMPREPLY=( $(compgen -W "_size>0,_R,_G,_B,0<=_specular_light<=8,0<=_specular_size<=8,_shadow>=0 >") )
 		return 0
 		;;
 		"-chessboard" | "--chessboard")
