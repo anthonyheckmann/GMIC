@@ -972,7 +972,8 @@ apply_camera : -skip "${1=},${4=}" -check "${2=0}>=0 && ${3=0}>=0"
 #@gmic apply_files : "command",list_of_filenames,_output_prefix,_view_window={ 0 | 1 }
 #@gmic : Apply specified command on all specified image files, by reading them one by one,
 #@gmic : and save result by appending 'output_prefix' to each original filename.
-#@gmic : Specified filenames should have no spaces in it.
+#@gmic : 'list_of_filenames' must be the list of filenames, separated by space.
+#@gmic : Thus, a specified filename cannot contain a spaces.
 #@gmic : Default value: 'output_prefix=gmic_' and 'view_window=0'.
 apply_files : -skip "${3=gmic_}",${4=0}
   -v -
