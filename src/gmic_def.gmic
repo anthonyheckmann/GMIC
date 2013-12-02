@@ -9449,6 +9449,29 @@ polaroid : -check "${1=10}>=0 && ${2=20}>=0"
   -e[^-1] "Create polaroid effect in image$?, with borders sizes $1 and $2."
   -v - -- 255 -r {100+$1}%,{100+$1}%,1,100%,0,0,0.5,0.5 -r 100%,{100+$2}%,1,100%,0,0,0 -+ 255 -v +
 
+#@gmic polygonize : _warp_amplitude>=0,_smoothness[%]>=0,_min_area[%]>=0,_resolution_x[%]>0,_resolution_y[%]>0
+#@gmic : Apply polygon effect on selected images.
+#@gmic : Default values: 'warp_amplitude=300', 'smoothness=2%', 'min_area=0.1%', 'resolution_x=resolution_y=10%'.
+#@gmic : $ image.jpg --polygonize ,
+polygonize : -check "${1=300}>=0 && ${2=2%}>=0 && ${3=0.1%}>=0 && ${4=10%}>0 && ${5=$4}>0"
+  -e[^-1] "Polygonize image$? with warp amplitude $1, smoothness $2, minimal area $3 and resolutions ($4,$5)."
+  -v -  -repeat @# -l[$>]
+    --b $2 -gradient_norm[-1] -gradient[-1] -a[-2,-1] c -channels[-1] 0,2 -*[-1] {1/0.1+max(abs(im),abs(iM))}
+    resx={max(1,round(if(@{-is_percent\ $4},w*$4,w/$4)-1))}
+    resy={max(1,round(if(@{-is_percent\ $5},h*$5,h/$5)-1))}
+    -plane3d 1,1,$resx,$resy -*3d[-1] @{0,w-1},@{0,h-1},1
+    -s3d[-1] -rm[-2] -i[-2] (0;{h-1}) -r[-2] 3,{h},1,1,3 -round[-2] -y[-2]
+    [-4] -a[-7--2] y -r[-1] 3,{h/3},1,1,-1 -z[-1] 0,1 -permute[-1] yzcx
+    -repeat $1 --warp[1] [-1],0,0 -+[-2,-1] -done
+    -permute[-1] cxyz -z[-1] 0,2 -y[-1] -j[2] [-1],0,8 -rm[-3,-1]
+    [0],[0] -object3d[-1] [1],0,0,0,1,2 -rm[1]
+    -if {$3>0}
+      min_area=@{0,if(@{-is_percent\ $3},$3*w*h,$3)}
+      --area[-1] 0,1 -ge[-1] $min_area -+[-2] 1 -*[-2] [-1] -distance[-1] 1 -*[-1] -1 -watershed[-2] [-1] -rm[-1]
+    -endif
+    -blend[0,-1] shapeaverage
+  -endl -done -v +
+
 #@gmic poster_edges : 0<=_edge_threshold<=100,0<=_edge_shade<=100,_edge_thickness>=0,_edge_antialiasing>=0,0<=_posterization_level<=15,_posterization_antialiasing>=0
 #@gmic : Apply poster edges effect on selected images.
 #@gmic : Default values: 'edge_threshold=40', 'edge_shade=5', 'edge_thickness=0.5', 'edge_antialiasing=10', 'posterization_level=12' and 'posterization_antialiasing=0'.
@@ -15495,6 +15518,26 @@ gimp_pen_drawing :
 gimp_pen_drawing_preview :
   -gimp_split_preview "-gimp_pen_drawing $*",$-1
 
+#@gimp Polygonize : gimp_polygonize, gimp_polygonize_preview(0)
+#@gimp : Amplitude = int(300,0,2000)
+#@gimp : Smoothness = float(10,0,100)
+#@gimp : Minimal area = float(10,0,100)
+#@gimp : X-resolution = float(10,1,256)
+#@gimp : Y-resolution = float(10,1,256)
+#@gimp : Outline color = color(0,0,0,255)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/02</i>.</small>")
+gimp_polygonize :
+  -polygonize $1,$2,{$3^2},$4,$5
+  -if $9 -repeat @# -l[$>]  # has outline.
+    --norm -gradient[-1] xy,1 -neq[-2,-1] 0 -or[-2,-1] -r[-1] 100%,100%,1,4
+    -replace_color[-1] 0,0,1,1,1,1,$6,$7,$8,$9
+    -blend alpha
+  -endl -done -endif
+
+gimp_polygonize_preview :
+  -gimp_split_preview "-gimp_polygonize $*",$-1
+
 #@gimp Poster edges : gimp_poster_edges, gimp_poster_edges_preview(0)
 #@gimp : Image smoothness = float(20,0,100)
 #@gimp : Edge threshold = float(60,0,100)
@@ -21520,6 +21563,7 @@ gmicol_logo_en :
 #@gmicol clone("Lylejk's painting")
 #@gmicol clone("Painting")
 #@gmicol clone("Pen drawing")
+#@gmicol clone("Polygonize")
 #@gmicol clone("Poster edges")
 #@gmicol clone("Rodilius")
 #@gmicol clone("Warhol")
@@ -22105,28 +22149,3 @@ average_movie :
     -i ${_file{$>+1}} -+ --/ {1+$>} -o[-1] "$1"/mean_${_file{$>+1}}
     -w[-1] -1,-1,0,0,"Frame "$> -rm[-1]
   -done -rm -v +
-
-foo :
-
-  -v -  -repeat @# -l[$>]
-    --b 3% -gradient_norm[-1] -gradient[-1] -a[-2,-1] c -channels[-1] 0,2
-    -plane3d 1,1,{w/8-1},{h/8-1} -*3d[-1] @{0,w-1},@{0,h-1},1
-    -l[-1] -s3d -rm[-2] -i[-2] (0;{h-1}) -r[-2] 3,{h},1,1,3 -round[-2] -y -a y -endl
-
-    -repeat 300
-      --l[2] -s3d -k[2] -r 3,{h/3},1,1,-1 -z 0,1 -permute yzcx -endl
-      --warp[1] [-1],0,0 -permute[-1] cxyz -y[-1]
-      -j[2] [-1],0,8,0,0,-1 -rm[-2,-1]
-      --object3d[0] [2],0,0,0,1,1,0,0 -w[-1] -rm[-1]
-    -done
-    -rm[1]
-
-    [0],[0] -object3d[-1] [1],0,0,0,1,2 -blend[0,-1] shapeaverage
-
-    -rm[1]
-
-  -endl -done -v +
-
-  --area[-1] 0,1 -ge[-1] 32 -+[-2] 1 -*[-2] [-1] -distance[-1] 1 -*[-1] -1 -watershed[-2] [-1] -rm[-1]
-
-  --gradient[-1] xy,1 -neq[-2,-1] 0 -or[-2,-1] -eq[-1] 0 -*
