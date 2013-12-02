@@ -19695,7 +19695,7 @@ gimp_solidify :
 gimp_solidify_preview :
   -gimp_split_preview "-gimp_solidify $*",$-1
 
-#@gimp Red-Eye attenuation : red_eye, red_eye
+#@gimp Red-eye attenuation : red_eye, red_eye
 #@gimp : Threshold = float(75,0,100)
 #@gimp : Smoothness = float(3.5,0,20)
 #@gimp : Factor = float(0.1,0,1)
@@ -21981,7 +21981,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol clone("Inpaint [diffusion]")
 #@gmicol clone("Inpaint [patch-based]")
 #@gmicol clone("Inpaint [solidify]")
-#@gmicol clone("Red-Eye attenuation")
+#@gmicol clone("Red-eye attenuation")
 #@gmicol clone("Remove hot pixels")
 #@gmicol clone("Smooth [anisotropic]")
 #@gmicol clone("Smooth [bilateral]")
