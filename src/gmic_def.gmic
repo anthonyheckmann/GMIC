@@ -972,7 +972,8 @@ apply_camera : -skip "${1=},${4=}" -check "${2=0}>=0 && ${3=0}>=0"
 #@gmic apply_files : "command",list_of_filenames,_output_prefix,_view_window={ 0 | 1 }
 #@gmic : Apply specified command on all specified image files, by reading them one by one,
 #@gmic : and save result by appending 'output_prefix' to each original filename.
-#@gmic : Specified filenames should have no spaces in it.
+#@gmic : 'list_of_filenames' must be the list of filenames, separated by space.
+#@gmic : Thus, a specified filename cannot contain a spaces.
 #@gmic : Default value: 'output_prefix=gmic_' and 'view_window=0'.
 apply_files : -skip "${3=gmic_}",${4=0}
   -v -
@@ -19695,7 +19696,7 @@ gimp_solidify :
 gimp_solidify_preview :
   -gimp_split_preview "-gimp_solidify $*",$-1
 
-#@gimp Red-Eye attenuation : red_eye, red_eye
+#@gimp Red-eye attenuation : red_eye, red_eye
 #@gimp : Threshold = float(75,0,100)
 #@gimp : Smoothness = float(3.5,0,20)
 #@gimp : Factor = float(0.1,0,1)
@@ -20843,7 +20844,7 @@ gimp_animate_preview : -skip ${4=1},${5=0},${6=$5}
     -text_outline[-1] "Start",1,0,13,1,1,255 -text_outline[-1] "End",{w-23},{h-16},13,1,1,255
   -mv[-1] 0 -done
 
-#@gimp 3d elevation : gimp_animate_elevation3d, gimp_animate_elevation3d_preview(1)
+#@gimp 3d elevation [animated] : gimp_animate_elevation3d, gimp_animate_elevation3d_preview(1)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output as frames = _bool(1)
 #@gimp : Output as files = _bool(0)
@@ -20889,7 +20890,7 @@ gimp_animate_elevation3d_preview :
   -gimp_animate_preview gimp_render3d,$w","$h",${10-19},$9",\
                                       $w","$h",${20-29},$9",0,$w,$h
 
-#@gimp 3d extrusion : gimp_animate_extrude3d, gimp_animate_extrude3d_preview(1)
+#@gimp 3d extrusion [animated] : gimp_animate_extrude3d, gimp_animate_extrude3d_preview(1)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output as frames = _bool(1)
 #@gimp : Output as files = _bool(0)
@@ -20936,7 +20937,7 @@ gimp_animate_extrude3d_preview :
   -gimp_animate_preview gimp_render3d,$w","$h",${11-20},$10",\
                                       $w","$h",${21-30},$10",0,$w,$h
 
-#@gimp 3d image object : gimp_animate_imageobject3d, gimp_animate_imageobject3d_preview(1)
+#@gimp 3d image object [animated] : gimp_animate_imageobject3d, gimp_animate_imageobject3d_preview(1)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output as frames = _bool(1)
 #@gimp : Output as files = _bool(0)
@@ -21061,7 +21062,7 @@ gimp_transition_plasma_preview :
   -if {@#==1} -return -endif
   -k[0,1] -transition_plasma 6,$2,$3% -k[1--2] -frame 1,1,0 -append_tiles ,
 
-#@gimp B&amp;W pencil : gimp_animate_pencilbw, gimp_animate_pencilbw_preview(0)
+#@gimp B&amp;W pencil [animated] : gimp_animate_pencilbw, gimp_animate_pencilbw_preview(0)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output frames = _bool(1)
 #@gimp : Output files = _bool(0)
@@ -21082,7 +21083,7 @@ gimp_animate_pencilbw_preview :
   -gimp_animate_preview pencilbw,"${5-6}",\
                                  "${7-8}"
 
-#@gimp B&amp;W stencil : gimp_animate_stencilbw, gimp_animate_stencilbw_preview(1)
+#@gimp B&amp;W stencil [animated] : gimp_animate_stencilbw, gimp_animate_stencilbw_preview(1)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output frames = _bool(1)
 #@gimp : Output files = _bool(0)
@@ -21103,7 +21104,7 @@ gimp_animate_stencilbw_preview :
   -gimp_animate_preview stencilbw,"${5-6}",\
                                   "${7-8}"
 
-#@gimp Cartoon : gimp_animate_cartoon, gimp_animate_cartoon_preview(0)
+#@gimp Cartoon [animated] : gimp_animate_cartoon, gimp_animate_cartoon_preview(0)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output frames = _bool(1)
 #@gimp : Output files = _bool(0)
@@ -21132,7 +21133,7 @@ gimp_animate_cartoon_preview :
   -gimp_animate_preview cartoon,"${6-10},$5",\
                                 "${11-15},$5"
 
-#@gimp Edges : gimp_animate_edges, gimp_animate_edges_preview(0)
+#@gimp Edges [animated] : gimp_animate_edges, gimp_animate_edges_preview(0)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output frames = _bool(1)
 #@gimp : Output files = _bool(0)
@@ -21199,7 +21200,7 @@ gimp_lavalampbw :
 gimp_lavalampbw_preview :
   -gimp_lavalampbw 2,2,1,$4,$5,$6,$7 -k[0]
 
-#@gimp Lissajous : gimp_animate_lissajous, gimp_animate_lissajous_preview(1)
+#@gimp Lissajous [animated] : gimp_animate_lissajous, gimp_animate_lissajous_preview(1)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output as frames = _bool(1)
 #@gimp : Output as files = _bool(0)
@@ -21248,7 +21249,7 @@ gimp_animate_lissajous_preview :
   -gimp_animate_preview gimp_lissajous,"${5-22}",\
                                        "${23-40}",0
 
-#@gimp Morphological filter : gimp_animate_morpho, gimp_animate_morpho_preview(0)
+#@gimp Morphological filter [animated] : gimp_animate_morpho, gimp_animate_morpho_preview(0)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output as frames = _bool(1)
 #@gimp : Output as files = _bool(0)
@@ -21272,7 +21273,7 @@ gimp_animate_morpho_preview :
   -gimp_animate_preview gimp_morpho,"$5,$8,$6,$7,0,1",\
                                     "$5,$9,$6,$7,0,1"
 
-#@gimp Rodilius : gimp_animate_rodilius, gimp_animate_rodilius_preview(1)
+#@gimp Rodilius [animated] : gimp_animate_rodilius, gimp_animate_rodilius_preview(1)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output as frames = _bool(1)
 #@gimp : Output as files = _bool(0)
@@ -21300,7 +21301,7 @@ gimp_animate_rodilius_preview :
   -gimp_animate_preview rodilius,"${6-10},$5",\
                                  "${11-15},$5"
 
-#@gimp Soft glow : gimp_animate_glow, gimp_animate_glow_preview(1)
+#@gimp Soft glow [animated] : gimp_animate_glow, gimp_animate_glow_preview(1)
 #@gimp : Frames = _int(10,2,100)
 #@gimp : Output as frames = _bool(1)
 #@gimp : Output as files = _bool(0)
@@ -21981,7 +21982,7 @@ gmicol_rgb_distribution_preview :
 #@gmicol clone("Inpaint [diffusion]")
 #@gmicol clone("Inpaint [patch-based]")
 #@gmicol clone("Inpaint [solidify]")
-#@gmicol clone("Red-Eye attenuation")
+#@gmicol clone("Red-eye attenuation")
 #@gmicol clone("Remove hot pixels")
 #@gmicol clone("Smooth [anisotropic]")
 #@gmicol clone("Smooth [bilateral]")
