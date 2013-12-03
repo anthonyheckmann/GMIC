@@ -792,6 +792,9 @@ _help_usage :
 \n            x, y, z, c and 0.
 \n         . 'j(_dx,_dy,_dz,_dc,_interpolation,_boundary)': does the same for the pixel located
 \n            at position (x+dx,y+dy,z+dz,c+dc).
+\n         . 'i[offset]': return the value of the pixel located at specified offset in the associated
+\n            image buffer.
+\n         . 'j[offset]': does the same for an offset relative to the current pixel (x,y,z,c).
 \n            For instance command '-fill 0.5*(i(x+1)-i(x-1))' will estimate the X-derivative
 \n            of an image with a classical finite difference scheme.
 \n         . If specified formula starts with '>' or '<', the operators 'i(..)' and 'j(..)' will return

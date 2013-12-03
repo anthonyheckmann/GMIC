@@ -60,7 +60,8 @@ CImg<T>& operator_eq(const char *const expression) {
   try {
     const CImg<T>
       _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j("))?+*this:CImg<T>(),
+      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
+       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_eq");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -104,7 +105,8 @@ CImg<T>& operator_neq(const char *const expression) {
   try {
     const CImg<T>
       _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j("))?+*this:CImg<T>(),
+      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
+       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_neq");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -148,7 +150,8 @@ CImg<T>& operator_gt(const char *const expression) {
   try {
     const CImg<T>
       _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j("))?+*this:CImg<T>(),
+      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
+       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_gt");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -192,7 +195,8 @@ CImg<T>& operator_ge(const char *const expression) {
   try {
     const CImg<T>
       _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j("))?+*this:CImg<T>(),
+      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
+       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_ge");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -236,7 +240,8 @@ CImg<T>& operator_lt(const char *const expression) {
   try {
     const CImg<T>
       _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j("))?+*this:CImg<T>(),
+      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
+       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_lt");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -280,7 +285,8 @@ CImg<T>& operator_le(const char *const expression) {
   try {
     const CImg<T>
       _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j("))?+*this:CImg<T>(),
+      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
+       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_le");
     T *ptrd = *expression=='<'?end()-1:_data;
