@@ -828,7 +828,7 @@ CImg<T>& reverse_CImg3d() {
 }
 
 CImg<T> get_reverse_CImg3d() const {
-  return (+*this).get_reverse_CImg3d();
+  return (+*this).reverse_CImg3d();
 }
 
 CImg<T>& color_CImg3d(const float R, const float G, const float B, const float opacity,
