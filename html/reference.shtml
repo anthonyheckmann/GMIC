@@ -540,7 +540,8 @@ _command,_camera_index>=0,_skip_frames>=0,_output_filename
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply specified command on all specified image files, by reading them one by one,
 <br/>&nbsp;and save result by appending 'output_prefix' to each original filename.
-<br/>Specified filenames should have no spaces in it.
+<br/>'list_of_filenames' must be the list of filenames, separated by space.
+<br/>Thus, a specified filename cannot contain a spaces.
 <br/><br/><b>Default value</b>: 'output_prefix=gmic_' and 'view_window=0'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-camera (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
