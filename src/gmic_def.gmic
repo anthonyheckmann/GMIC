@@ -812,7 +812,7 @@ _help_usage :
 \n    . CTRL+S: Save current window snapshot as numbered file 'gmic_xxxx.bmp'.
 \n    . CTRL+O: Save current instance of the viewed data, as numbered file 'gmic_xxxx.cimgz'.
 \n  - Shortcuts specific to the 1d/2d/3d image viewer are:
-\n    . CTRL+A: Show/hide axes.
+\n    . CTRL+A: Switch cursor mode.
 \n    . CTRL+P: Play z-stack of frames as a movie (for volumetric 3d images).
 \n    . CTRL+V: Show/hide 3D view (for volumetric 3d images).
 \n    . CTRL+(mousewheel): Zoom in/out.
