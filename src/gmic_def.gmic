@@ -1021,6 +1021,11 @@ cupid : -check "${1=480}>=1"
     -nm "[Cupid binary mask]"
   -endl -v +
 
+#@gmic cursor : _mode = { 0=hide | 1=show } : (+)
+#@gmic : Show or hide mouse cursor for selected instant windows.
+#@gmic : Command subset (if any) stands for instant window indices instead of image indices.
+#@gmic : Default value: 'mode=1'.
+
 #@gmic d : eq. to '-display'. : (+)
 
 #@gmic display : _X,_Y,_Z : (+)

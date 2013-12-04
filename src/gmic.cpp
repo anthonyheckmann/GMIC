@@ -3791,7 +3791,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           selection.assign(); is_restriction = true;
         } else if (err==4 && sep1==']') {
           is_restriction = true;
-          if (!std::strcmp("-wait",command) && !is_get_version)
+          if ((!std::strcmp("-wait",command) || !std::strcmp("-cursor",command)) && !is_get_version)
             selection = selection2cimg(restriction,10,CImgList<char>::empty(),command,true,
                                        false,CImg<char>::empty());
           else if ((!std::strcmp("-i",command) || !std::strcmp("-input",command)) &&
@@ -5098,17 +5098,19 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Show/hide mouse cursor.
-          if (!std::strcmp("-cursor",item)) {
+          if (!std::strcmp("-cursor",command) && !is_get_version) {
             gmic_substitute_args();
+            if (!is_restriction)
+              CImg<unsigned int>::vector(0,1,2,3,4,5,6,7,8,9).move_to(selection);
             bool value = true;
             if (!argument[1] && (*argument=='0' || *argument=='1')) {
-              value = (*argument=='1');
-              ++position;
+              value = (*argument=='1'); ++position;
             } else value = true;
-            if (value) instant_window[0].show_mouse();
-            else instant_window[0].hide_mouse();
-            print(images,"%s mouse cursor.",
-                  value?"Show":"Hide");
+            print(images,"%s mouse cursor for instant window%s.",
+                  value?"Show":"Hide",
+                  gmic_selection);
+            if (value) cimg_forY(selection,l) instant_window[selection[l]].show_mouse();
+            else cimg_forY(selection,l) instant_window[selection[l]].hide_mouse();
             continue;
           }
 
@@ -10734,7 +10736,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 instant_window[selection[0]].wait((unsigned int)-delay);
               else cimg::sleep((unsigned int)-delay);
             } else {
-              print(images,"Wait for %g milliseconds according to instant window%s",
+              print(images,"Wait for %g milliseconds according to instant window%s.",
                     delay,
                     gmic_selection);
               if (selection && instant_window[selection[0]])
@@ -11894,7 +11896,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     "axes",
                     "blur","bsr","bsl","bilateral","background3d","break",
                     "check","check3d","crop","channels","columns","command","camera","cut","cos",
-                    "convolve","correlate","color3d","col3d","cosh","continue",
+                    "convolve","correlate","color3d","col3d","cosh","continue","cursor",
                     "done","do","debug","divide","distance","dilate","double3d","denoise",
                     "deriche","dijkstra","displacement","display","display3d",
                     "endif","else","elif","endlocal","endl","echo","exec","error","endian","exp",
