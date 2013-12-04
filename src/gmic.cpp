@@ -5106,11 +5106,24 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             if (!argument[1] && (*argument=='0' || *argument=='1')) {
               value = (*argument=='1'); ++position;
             } else value = true;
-            print(images,"%s mouse cursor for instant window%s.",
+
+#if cimg_display==0
+            print(images,"%s mouse cursor for instant window%s (skipped, no display support).",
                   value?"Show":"Hide",
                   gmic_selection);
-            if (value) cimg_forY(selection,l) instant_window[selection[l]].show_mouse();
-            else cimg_forY(selection,l) instant_window[selection[l]].hide_mouse();
+#else
+            try {
+              if (value) cimg_forY(selection,l) instant_window[selection[l]].show_mouse();
+              else cimg_forY(selection,l) instant_window[selection[l]].hide_mouse();
+              print(images,"%s mouse cursor for instant window%s.",
+                    value?"Show":"Hide",
+                    gmic_selection);
+            } catch (CImgDisplayException&) {
+              print(images,"%s mouse cursor for instant window%s (skipped, no display available).",
+                    value?"Show":"Hide",
+                    gmic_selection);
+            }
+#endif
             continue;
           }
 
