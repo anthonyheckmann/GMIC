@@ -14927,7 +14927,7 @@ gimp_logo_ca :
 #@gimp : to the list of available ones."}
 #@gimp : note = note{"
 #@gimp : Existing filters are already defined this way.
-#@gimp : Writing a filter from scratch in <b>G'MIC</b> require some skills, but
+#@gimp : Writing a filter from scratch in <b>G'MIC</b> requires some skills, but
 #@gimp : can be generally done in very few lines.\n\n
 #@gimp : <span foreground="purple" underline="single">Example of a valid <i>.gmic</i> entry :</span>"}
 #@gimp : note = note{"<tt>#@gimp My effect : my_effect, my_effect</tt>"}

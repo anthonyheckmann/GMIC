@@ -24,6 +24,7 @@ _gmic_def()
 	      -m --m\
 	      -command --command\
 	      -cupid --cupid\
+	      -cursor --cursor\
 	      -d --d\
 	      -display --display\
 	      -d0 --d0\
@@ -853,6 +854,7 @@ _gmic_def()
 	      m\
 	      command\
 	      cupid\
+	      cursor\
 	      d\
 	      display\
 	      d0\
@@ -1690,6 +1692,10 @@ _gmic_def()
 		;;
 		"-cupid" | "--cupid")
 		COMPREPLY=( $(compgen -W "_size>0 >") )
+		return 0
+		;;
+		"-cursor" | "--cursor")
+		COMPREPLY=( $(compgen -W "_mode={0=hide|1=show} >") )
 		return 0
 		;;
 		"-display" | "--display")

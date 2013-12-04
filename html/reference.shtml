@@ -572,7 +572,15 @@ _size>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Input cupid binary mask with specified size.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def2.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-cupid ,</div></div></td><td><tt>-cupid ,</tt></td></tr>
-</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-display (+)</b>:</font>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-cursor (+)</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+_mode = { 0=hide | 1=show }
+
+</font></i></tt></p>
+<p style="margin-left:100px"><tt>Show or hide mouse cursor for selected instant windows.
+<br/>Command subset (if any) stands for instant window indices instead of image indices.
+<br/><br/><b>Default value</b>: 'mode=1'.
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-display (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _X,_Y,_Z
 
@@ -5974,7 +5982,7 @@ _scorefile,_number_of_sessions>=0
 <font color="green"><b>&nbsp;&nbsp;-frame </b>:</font>
 <font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
 </p>
-<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 826 ]</b></font>
+<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 827 ]</b></font>
 <h2><a id="section13"><font color="brown"><u>Examples of use</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
 <pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
  The few examples below illustrate possible uses of this tool: 
