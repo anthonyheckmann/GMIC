@@ -10451,7 +10451,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                              argx,argy,&norm,&fullscreen,argz,argc,&end)==6 ||
                  std::sscanf(argument,
                              "%255[0-9.eE%+-],%255[0-9.eE%+-],%d,%d,%255[0-9.eE%+-],"
-                             "%255[0-9.eE%+-],%255[^\n,]",
+                             "%255[0-9.eE%+-],%255[^\n]",
                              argx,argy,&norm,&fullscreen,argz,argc,title)==7 ||
                  std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%d,%d,%255[^\n]",
                              &(*argx=*argz=*argc=0),argy,&norm,&fullscreen,title)==5 ||
