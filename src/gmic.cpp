@@ -58,10 +58,7 @@ CImg<T>& operator_eq(const char *const expression) {
   const unsigned int omode = cimg::exception_mode();
   cimg::exception_mode() = 0;
   try {
-    const CImg<T>
-      _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
-       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
+    const CImg<T> _base = cimg::_is_self_expr(expression)?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_eq");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -103,10 +100,7 @@ CImg<T>& operator_neq(const char *const expression) {
   const unsigned int omode = cimg::exception_mode();
   cimg::exception_mode() = 0;
   try {
-    const CImg<T>
-      _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
-       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
+    const CImg<T> _base = cimg::_is_self_expr(expression)?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_neq");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -148,10 +142,7 @@ CImg<T>& operator_gt(const char *const expression) {
   const unsigned int omode = cimg::exception_mode();
   cimg::exception_mode() = 0;
   try {
-    const CImg<T>
-      _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
-       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
+    const CImg<T> _base = cimg::_is_self_expr(expression)?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_gt");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -193,10 +184,7 @@ CImg<T>& operator_ge(const char *const expression) {
   const unsigned int omode = cimg::exception_mode();
   cimg::exception_mode() = 0;
   try {
-    const CImg<T>
-      _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
-       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
+    const CImg<T> _base = cimg::_is_self_expr(expression)?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_ge");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -238,10 +226,7 @@ CImg<T>& operator_lt(const char *const expression) {
   const unsigned int omode = cimg::exception_mode();
   cimg::exception_mode() = 0;
   try {
-    const CImg<T>
-      _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
-       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
+    const CImg<T> _base = cimg::_is_self_expr(expression)?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_lt");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -283,10 +268,7 @@ CImg<T>& operator_le(const char *const expression) {
   const unsigned int omode = cimg::exception_mode();
   cimg::exception_mode() = 0;
   try {
-    const CImg<T>
-      _base = *expression!='>' && *expression!='<' &&
-      (std::strstr(expression,"i(") || std::strstr(expression,"j(") ||
-       std::strstr(expression,"i[") || std::strstr(expression,"j["))?+*this:CImg<T>(),
+    const CImg<T> _base = cimg::_is_self_expr(expression)?+*this:CImg<T>(),
       &base = _base?_base:*this;
     _cimg_math_parser mp(base,expression+(*expression=='>' || *expression=='<'?1:0),"operator_le");
     T *ptrd = *expression=='<'?end()-1:_data;
@@ -5113,6 +5095,21 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               }
             } else arg_error("color3d");
             is_released = false; ++position; continue;
+          }
+
+          // Show/hide mouse cursor.
+          if (!std::strcmp("-cursor",item)) {
+            gmic_substitute_args();
+            bool value = true;
+            if (!argument[1] && (*argument=='0' || *argument=='1')) {
+              value = (*argument=='1');
+              ++position;
+            } else value = true;
+            if (value) instant_window[0].show_mouse();
+            else instant_window[0].hide_mouse();
+            print(images,"%s mouse cursor.",
+                  value?"Show":"Hide");
+            continue;
           }
 
           // Hyperbolic cosine.
