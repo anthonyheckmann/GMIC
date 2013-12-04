@@ -10676,7 +10676,7 @@ demo :
   cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-4} selected=-1 -f3d 400
 
   # Start main loop.
-  -w[0] -1,-1,0,0,50%,50%,"[G'MIC] Demos menu" -cursor[0] 0
+  -w[0] -1,-1,0,0,50%,50%,"[G'MIC] Demos menu"
   -do
 
     # Set 3d coordinates for object.
