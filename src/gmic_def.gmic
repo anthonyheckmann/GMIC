@@ -21880,7 +21880,10 @@ gmicol_rotate :
 
 #@gmicol clone("Droste")
 #@gmicol clone("Frame [cube]")
+
 #@gmicol clone("Frame [fuzzy]")
+#@gmicol : thumbnail_parameters = 60,60,10,1,255,255,255,255
+
 #@gmicol clone("Frame [painting]")
 #@gmicol clone("Frame [pattern]")
 #@gmicol clone("Frame [regular]")

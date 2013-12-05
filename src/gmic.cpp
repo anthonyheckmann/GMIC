@@ -11640,14 +11640,95 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
           // 3d object .off file.
           print(images,"Input 3d object '%s' at position%s",
-                _filename0,
-                gmic_selection);
+                _filename0,gmic_selection);
           CImgList<unsigned int> primitives;
           CImgList<float> colors;
           CImg<float> vertices = CImg<float>::get_load_off(primitives,colors,filename);
           const CImg<float> opacities(1,primitives.size(),1,1,1);
           vertices.object3dtoCImg3d(primitives,colors,opacities,false).move_to(input_images);
           input_images_names.insert(__filename0);
+        } else if (!cimg::strcasecmp(ext,"cimg") && *options) {
+
+          // .cimg file (non-compressed).
+          float
+            n0 = -1, x0 = -1, y0 = -1, z0 = -1, c0 = -1,
+            n1 = -1, x1 = -1, y1 = -1, z1 = -1, c1 = -1;
+          if ((std::sscanf(options,"%f,%f%c",
+                           &n0,&n1,&end)==2 ||
+               std::sscanf(options,"%f,%f,%f,%f%c",
+                           &n0,&n1,&x0,&x1,&end)==4 ||
+               std::sscanf(options,"%f,%f,%f,%f,%f,%f%c",
+                           &n0,&n1,&x0,&y0,&x1,&y1,&end)==6 ||
+               std::sscanf(options,"%f,%f,%f,%f,%f,%f,%f,%f%c",
+                           &n0,&n1,&x0,&y0,&z0,&x1,&y1,&z1,&end)==8 ||
+               std::sscanf(options,"%f,%f,%f,%f,%f,%f,%f,%f,%f,%f%c",
+                           &n0,&n1,&x0,&y0,&z0,&c0,&x1,&y1,&z1,&c1,&end)==10) &&
+              (n0==-1 || n0>=0) && (n1==-1 || n1>=0) &&
+              (x0==-1 || x0>=0) && (x1==-1 || x1>=0) &&
+              (y0==-1 || y0>=0) && (y1==-1 || y1>=0) &&
+              (z0==-1 || z0>=0) && (z1==-1 || z1>=0) &&
+              (c0==-1 || c0>=0) && (c1==-1 || c1>=0)) {
+            n0 = cimg::round(n0); n1 = cimg::round(n1);
+            x0 = cimg::round(x0); x1 = cimg::round(x1);
+            y0 = cimg::round(y0); y1 = cimg::round(y1);
+            z0 = cimg::round(z0); z1 = cimg::round(z1);
+            c0 = cimg::round(c0); c1 = cimg::round(c1);
+            if (c0==-1 && c1==-1) {
+              if (z0==-1 && z1==-1) {
+                if (y0==-1 && y1==-1) {
+                  if (x0==-1 && x1==-1) {
+                    print(images,"Input crop [%d] -> [%d] of file '%s' at position%s",
+                          (int)n0,(int)n1,
+                          _filename0,gmic_selection);
+                    input_images.load_cimg(filename,
+                                           (unsigned int)n0,(unsigned int)n1,
+                                           0U,0U,0U,0U,~0U,~0U,~0U,~0U);
+                  } else {
+                    print(images,"Input crop [%d](%d) -> [%d](%d) of file '%s' at position%s",
+                          (int)n0,(int)x0,(int)n1,(int)x1,
+                          _filename0,gmic_selection);
+                    input_images.load_cimg(filename,
+                                           (unsigned int)n0,(unsigned int)n1,
+                                           (unsigned int)x0,0U,0U,0U,
+                                           (unsigned int)x1,~0U,~0U,~0U);
+                  }
+                } else {
+                  print(images,"Input crop [%d](%d,%d) -> [%d](%d,%d) of file '%s' at position%s",
+                        (int)n0,(int)n1,(int)x0,(int)y0,(int)x1,(int)y1,
+                        _filename0,gmic_selection);
+                  input_images.load_cimg(filename,
+                                         (unsigned int)n0,(unsigned int)n1,
+                                         (unsigned int)x0,(unsigned int)y0,0U,0U,
+                                         (unsigned int)x1,(unsigned int)y1,~0U,~0U);
+                }
+              } else {
+                print(images,"Input crop [%d](%d,%d,%d) -> [%d](%d,%d,%d) of file '%s' at position%s",
+                      (int)n0,(int)n1,(int)x0,(int)y0,(int)z0,(int)x1,(int)y1,(int)z1,
+                      _filename0,gmic_selection);
+                input_images.load_cimg(filename,
+                                       (unsigned int)n0,(unsigned int)n1,
+                                       (unsigned int)x0,(unsigned int)y0,(unsigned int)z0,0U,
+                                       (unsigned int)x1,(unsigned int)y1,(unsigned int)z1,~0U);
+              }
+            } else {
+                print(images,"Input crop [%d](%d,%d,%d,%d) -> [%d](%d,%d,%d,%d) of file '%s' at position%s",
+                      (int)n0,(int)n1,(int)x0,(int)y0,(int)z0,(int)c0,(int)x1,(int)y1,(int)z1,(int)c1,
+                      _filename0,gmic_selection);
+                input_images.load_cimg(filename,
+                                       (unsigned int)n0,(unsigned int)n1,
+                                       (unsigned int)x0,(unsigned int)y0,(unsigned int)z0,(unsigned int)c0,
+                                       (unsigned int)x1,(unsigned int)y1,(unsigned int)z1,(unsigned int)c1);
+            }
+
+            if (input_images) {
+              input_images_names.insert(__filename0);
+              if (input_images.size()>1)
+                input_images_names.insert(input_images.size()-1,__filename0.copymark());
+            }
+          } else
+            error(images,"Command '-input': .cimg file '%s', invalid file options '%s'.",
+                  _filename0,options);
+
         } else if (!cimg::strcasecmp(ext,"avi") ||
                    !cimg::strcasecmp(ext,"mov") ||
                    !cimg::strcasecmp(ext,"asf") ||
