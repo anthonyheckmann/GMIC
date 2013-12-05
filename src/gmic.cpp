@@ -11818,17 +11818,20 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
           // Raw file.
           float dx = 0, dy = 1, dz = 1, dc = 1;
+          unsigned long offset = 0;
           *argx = 0;
           if (!*options ||
               std::sscanf(options,"%f%c",&dx,&end)==1 ||
               std::sscanf(options,"%f,%f%c",&dx,&dy,&end)==2 ||
               std::sscanf(options,"%f,%f,%f%c",&dx,&dy,&dz,&end)==3 ||
               std::sscanf(options,"%f,%f,%f,%f%c",&dx,&dy,&dz,&dc,&end)==4 ||
+              std::sscanf(options,"%f,%f,%f,%f,%lu%c",&dx,&dy,&dz,&dc,&offset,&end)==5 ||
               std::sscanf(options,"%255[a-zA-Z]%c",argx,&end)==1 ||
               std::sscanf(options,"%255[a-zA-Z],%f%c",argx,&dx,&end)==2 ||
               std::sscanf(options,"%255[a-zA-Z],%f,%f%c",argx,&dx,&dy,&end)==3 ||
               std::sscanf(options,"%255[a-zA-Z],%f,%f,%f%c",argx,&dx,&dy,&dz,&end)==4 ||
-              std::sscanf(options,"%255[a-zA-Z],%f,%f,%f,%f%c",argx,&dx,&dy,&dz,&dc,&end)==5) {
+              std::sscanf(options,"%255[a-zA-Z],%f,%f,%f,%f%c",argx,&dx,&dy,&dz,&dc,&end)==5 ||
+              std::sscanf(options,"%255[a-zA-Z],%f,%f,%f,%f,%lu%c",argx,&dx,&dy,&dz,&dc,&offset,&end)==6) {
             const char *const stype = *argx?argx:cimg::type<T>::string();
             dx = cimg::round(dx);
             dy = cimg::round(dy);
@@ -11838,14 +11841,14 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               error(images,"Command '-input': raw file '%s', invalid specified "
 		    "dimensions %gx%gx%gx%g.",
                     _filename0,dx,dy,dz,dc);
-            print(images,"Input raw file '%s' with type '%s' at position%s",
-                  _filename0,stype,
+            print(images,"Input raw file '%s' (offset: %lu) with type '%s' at position%s",
+                  _filename0,offset,stype,
                   gmic_selection);
 
 #define gmic_load_raw(value_type,svalue_type) \
             if (!cimg::strcasecmp(stype,svalue_type)) \
               CImg<value_type>::get_load_raw(filename,(unsigned int)dx,(unsigned int)dy,\
-                                             (unsigned int)dz,(unsigned int)dc).\
+                                             (unsigned int)dz,(unsigned int)dc,false,false,offset). \
                 move_to(input_images);
             gmic_load_raw(bool,"bool")
             else gmic_load_raw(unsigned char,"uchar")
