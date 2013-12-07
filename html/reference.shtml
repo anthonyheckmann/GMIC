@@ -57,7 +57,7 @@
 <a id="section0"><h2><font color="brown"><u>Version</u></font></h2></a> 
 <pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing. 
  
-       Version 1.5.8.0 (beta), Copyright (c) 2008-2013, David Tschumperle 
+       Version 1.5.8.0, Copyright (c) 2008-2013, David Tschumperle 
        (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>) 
 </pre> 
 <h2><a id="section1"><font color="brown"><u>Usage</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
@@ -4244,9 +4244,14 @@ expression
 <p style="margin-left:100px"><tt>Evaluate specified expression and display an error message if evaluated to false.
 <br/>If 'expression' is not evaluable, it is regarded as a filename and checked if it exists.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-check3d (*)</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+_is_full_check={ 0 | 1 }
 
+</font></i></tt></p>
 <p style="margin-left:100px"><tt>Check validity of selected 3d vector objects, and display an error message
 <br/>&nbsp;if one of the selected image is not a valid 3d vector object.
+<br/>Full 3d object check is slower but more precise.
+<br/><br/><b>Default value</b>: 'is_full_check=1'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-continue (*)</b>:</font>
 
 <p style="margin-left:100px"><tt>Go to end of current block 'repeat..done', 'do..while' or 'local..endlocal'.

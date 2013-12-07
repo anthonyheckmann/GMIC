@@ -14961,11 +14961,10 @@ gimp_logo_ca :
 #@gimp : - <b>2013/03/08</b> : version <i>1.5.5.0</i>.\n
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
-#@gimp : - <span foreground="purple"><b>2013/10/28</b> : version <i>1.5.7.2</i> (Current stable).</span>\n
-#@gimp : - <b>2013/11/04</b> : version <i>1.5.8.0</i> (Current beta).\n
+#@gimp : - <span foreground="purple"><b>2013/12/07</b> : version <i>1.5.8.0</i> (Current stable).</span>\n
 #@gimp : "}
-#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157636080337636/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/09/17</i>.</small>")
+#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157638437852944/")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/07</i>.</small>")
 
 #@gimp Contributors : _none_, _none_
 #@gimp : note = note{"
@@ -19425,6 +19424,25 @@ gimp_marble :
     -marble $1/10,$2/10,$3,$4,$5,$6,$7,$8,$9%,$10%
   -endl -a c -endl -done
 
+#@gimp Maze : gimp_maze, gimp_maze
+#@gimp : Cell size = int(24,1,256)
+#@gimp : Thickness = int(1,1,10)
+#@gimp : Masking = choice("None","Render on dark areas","Render on white areas")
+#@gimp : Preserve image dimension = bool(1)
+#@gimp : Maze type = choice("Dark walls","White walls")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/09/02</i>.</small>")
+gimp_maze :
+  -repeat @#
+    w={w} h={h}
+    -r[-1] {100/$1}%,{100/$1}%,1,100%,2
+    -if {$3==0} -f[-1] 1
+    -elif {$3==1} -negative[-1]
+    -endif
+    -maze_mask[-1] $1 -dilate[-1] $2 -*[-1] 255
+    -if {!$5} -negative[-1] -endif
+    -if $4 -r[-1] $w,$h,100%,100% -endif
+  -mv[-1] 0 -done
+
 #@gimp Mineral mosaic : dt_mineral_mosaic,dt_mineral_mosaic(0)
 #@gimp : Density = float(1,0,3)
 #@gimp : Area = float(2,0,32)
@@ -19509,6 +19527,74 @@ gimp_plaid_texture :
     -/ $2
   -endl -done
 
+#@gimp Plasma : gimp_plasma, gimp_plasma(0)
+#@gimp : Alpha = float(0.5,0,5)
+#@gimp : Beta = float(0,0,100)
+#@gimp : Scale = int(8,2,10)
+#@gimp : Randomize = bool(0)
+#@gimp : Transparency = bool(0)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/20</i>.</small>")
+gimp_plasma : -skip ${4=0},${5=0}
+  -if $5 -to_rgba -else -to_rgb -endif
+  -if $4 -rand 0,255 -endif
+  -plasma $1,$2,$3 -n 0,255
+
+#@gimp Polka dots : gimp_polka_dots, gimp_polka_dots(1)
+#@gimp : Size = float(80,0,100)
+#@gimp : Density = float(20,0.1,100)
+#@gimp : First offset = float(50,0,100)
+#@gimp : Second offset = float(50,0,100)
+#@gimp : Angle = float(0,0,180)
+#@gimp : Aliasing = float(0.5,0.1,1)
+#@gimp : Shading = float(0.1,0.1,1)
+#@gimp : Opacity = float(1,0,1)
+#@gimp : Color = color(255,0,0,255)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
+gimp_polka_dots :
+  -to_rgba -polka_dots {$1*$2/100},${2--1}
+
+#@gimp Random color ellipses : gimp_color_ellipses, gimp_color_ellipses(1)
+#@gimp : Density = int(400,0,3000)
+#@gimp : Radius = float(8,0,30)
+#@gimp : Opacity = float(0.1,0.01,0.5)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
+gimp_color_ellipses :
+  -color_ellipses $1,$2,$3
+
+#@gimp Rorschach : gimp_rorschach, gimp_rorschach
+#@gimp : Scale = float(3,0,10)
+#@gimp : Mirror = choice(1,"None","x-axis","y-axis","xy-axes")
+#@gimp : Stencil type = choice(2,"Black & White","RGB","Color")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/12</i>.</small>")
+gimp_rorschach :
+  -repeat @# -remove_opacity -l[$>]
+    -if {$3==0} -norm -rorschach $1%,$2 -* 255
+    -elif {$3==1} -to_rgb -rorschach $1%,$2 -* 255
+    -else --norm -rorschach[-1] $1%,$2 -blend shapeaverage0
+    -endif
+  -endl -done
+
+#@gimp Seamless turbulence : gimp_seamless_turbulence, gimp_seamless_turbulence(0)
+#@gimp : Amplitude = float(15,0,30)
+#@gimp : Smoothness = float(20,0,40)
+#@gimp : Orientation = float(0,0,180)
+#@gimp : Deviation = float(1,0,1)
+#@gimp : Contrast = float(3,0,4)
+#@gimp : Color rendering = bool(0)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/04/02</i>.</small>")
+gimp_seamless_turbulence :
+  -repeat @# -l[$>]
+    wh={w},{h} -rm
+    $wh,1,{if($6,3,1)} -rand[-1] 0,255
+    $wh -rand[-1] {$3*pi/180-$4*10*pi},{$3*pi/180+$4*10*pi} --sin[-1] -cos[-2] -a[-2,-1] c
+    -r[-2,-1] 130%,130%,1,100%,0,2,0.5,0.5 -b[-1] $2 -orientation[-1]
+    -vector2tensor[-1]
+    -smooth[-2] [-1],$1,0.5,20 -rm[-1]
+    -r[-1] $wh,1,100%,0,0,0.5,0.5
+    -if {$5!=1} ia={ia} -- $ia -* $5 -+ $ia -endif
+  -endl -done
+  -c 0,255 -n 0,255
+
 #@gimp Sponge : gimp_sponge, gimp_sponge_preview(0)
 #@gimp : Size = int(13,3,21)
 #@gimp : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
@@ -19545,6 +19631,20 @@ gimp_stained_glass :
 gimp_stained_glass_preview :
   -gimp_split_preview "-gimp_stained_glass $*",$-1
 
+#@gimp Stars : gimp_stars, gimp_stars(0)
+#@gimp : Density = float(10,0,200)
+#@gimp : Depth = float(0,0,5)
+#@gimp : Size = int(32,8,128)
+#@gimp : Branches = int(5,2,16)
+#@gimp : Thickness = float(0.38,0.1,1)
+#@gimp : Smoothness = float(0,0,10)
+#@gimp : Color = color(200,200,200,200)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/01</i>.</small>")
+gimp_stars :
+  -repeat @# -l[$>] -split_opacity -rv
+    -stars $1%,$2,$3,$4,$5,$6%,${7-9},{$10/255}
+  -rv -a c -endl -done
+
 #@gimp Stencil : gimp_stencil, gimp_stencil_preview(0)
 #@gimp : Radius = float(3,0,10)
 #@gimp : Smoothness = float(0,0,30)
@@ -19572,6 +19672,20 @@ gimp_stencil_preview :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_tetris :
   -tetris $1
+
+#@gimp Truchet : gimp_truchet, gimp_truchet(0)
+#@gimp : Scale = int(32,1,256)
+#@gimp : Radius = int(5,1,64)
+#@gimp : Smoothness = float(1,0,10)
+#@gimp : Type = choice(1,"Straight","Curved")
+#@gimp : Colorize randomly = bool(0)
+#@gimp : Transparency = bool(0)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/10/26</i>.</small>")
+gimp_truchet :
+  -if $6 -to_a -else -remove_opacity -endif
+  -truchet $1,$2,$4
+  -if $5 -repeat @# -channels[-1] 0 -label[-1] 0,1 {iM+1},1,1,3 -rand[-1] 0,255 -map[-2] [-1] -rm[-1] -mv[-1] 0 -done -endif
+  -b $3 -n 0,255
 
 #@gimp Turbulence : gimp_turbulence, gimp_turbulence
 #@gimp : Radius = float(128,1,1024)
@@ -20583,51 +20697,6 @@ gimp_mandelbrot_preview :
   -line 0,50%,100%,50%,0.5,255
   -line 50%,0,50%,100%,0.5,255
 
-#@gimp Maze : gimp_maze, gimp_maze
-#@gimp : Cell size = int(24,1,256)
-#@gimp : Thickness = int(1,1,10)
-#@gimp : Masking = choice("None","Render on dark areas","Render on white areas")
-#@gimp : Preserve image dimension = bool(1)
-#@gimp : Maze type = choice("Dark walls","White walls")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/09/02</i>.</small>")
-gimp_maze :
-  -repeat @#
-    w={w} h={h}
-    -r[-1] {100/$1}%,{100/$1}%,1,100%,2
-    -if {$3==0} -f[-1] 1
-    -elif {$3==1} -negative[-1]
-    -endif
-    -maze_mask[-1] $1 -dilate[-1] $2 -*[-1] 255
-    -if {!$5} -negative[-1] -endif
-    -if $4 -r[-1] $w,$h,100%,100% -endif
-  -mv[-1] 0 -done
-
-#@gimp Plasma : gimp_plasma, gimp_plasma(0)
-#@gimp : Alpha = float(0.5,0,5)
-#@gimp : Beta = float(0,0,100)
-#@gimp : Scale = int(8,2,10)
-#@gimp : Randomize = bool(0)
-#@gimp : Transparency = bool(0)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/20</i>.</small>")
-gimp_plasma : -skip ${4=0},${5=0}
-  -if $5 -to_rgba -else -to_rgb -endif
-  -if $4 -rand 0,255 -endif
-  -plasma $1,$2,$3 -n 0,255
-
-#@gimp Polka dots : gimp_polka_dots, gimp_polka_dots(1)
-#@gimp : Size = float(80,0,100)
-#@gimp : Density = float(20,0.1,100)
-#@gimp : First offset = float(50,0,100)
-#@gimp : Second offset = float(50,0,100)
-#@gimp : Angle = float(0,0,180)
-#@gimp : Aliasing = float(0.5,0.1,1)
-#@gimp : Shading = float(0.1,0.1,1)
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Color = color(255,0,0,255)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
-gimp_polka_dots :
-  -to_rgba -polka_dots {$1*$2/100},${2--1}
-
 #@gimp Quick copyright : gimp_quick_copyright, gimp_quick_copyright(0)
 #@gimp : Text = text{"(c) G'MIC"}
 #@gimp : Size = int(24,13,128)
@@ -20668,48 +20737,6 @@ gimp_rainbow :
     -if {$6<100} -sh[-1] 3,3 -*[-1] {$6/100} -rm[-1] -endif
     -blend alpha
   -endl -done
-
-#@gimp Random color ellipses : gimp_color_ellipses, gimp_color_ellipses(1)
-#@gimp : Density = int(400,0,3000)
-#@gimp : Radius = float(8,0,30)
-#@gimp : Opacity = float(0.1,0.01,0.5)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
-gimp_color_ellipses :
-  -color_ellipses $1,$2,$3
-
-#@gimp Rorschach : gimp_rorschach, gimp_rorschach
-#@gimp : Scale = float(3,0,10)
-#@gimp : Mirror = choice(1,"None","x-axis","y-axis","xy-axes")
-#@gimp : Stencil type = choice(2,"Black & White","RGB","Color")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/12</i>.</small>")
-gimp_rorschach :
-  -repeat @# -remove_opacity -l[$>]
-    -if {$3==0} -norm -rorschach $1%,$2 -* 255
-    -elif {$3==1} -to_rgb -rorschach $1%,$2 -* 255
-    -else --norm -rorschach[-1] $1%,$2 -blend shapeaverage0
-    -endif
-  -endl -done
-
-#@gimp Seamless turbulence : gimp_seamless_turbulence, gimp_seamless_turbulence(0)
-#@gimp : Amplitude = float(15,0,30)
-#@gimp : Smoothness = float(20,0,40)
-#@gimp : Orientation = float(0,0,180)
-#@gimp : Deviation = float(1,0,1)
-#@gimp : Contrast = float(3,0,4)
-#@gimp : Color rendering = bool(0)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/04/02</i>.</small>")
-gimp_seamless_turbulence :
-  -repeat @# -l[$>]
-    wh={w},{h} -rm
-    $wh,1,{if($6,3,1)} -rand[-1] 0,255
-    $wh -rand[-1] {$3*pi/180-$4*10*pi},{$3*pi/180+$4*10*pi} --sin[-1] -cos[-2] -a[-2,-1] c
-    -r[-2,-1] 130%,130%,1,100%,0,2,0.5,0.5 -b[-1] $2 -orientation[-1]
-    -vector2tensor[-1]
-    -smooth[-2] [-1],$1,0.5,20 -rm[-1]
-    -r[-1] $wh,1,100%,0,0,0.5,0.5
-    -if {$5!=1} ia={ia} -- $ia -* $5 -+ $ia -endif
-  -endl -done
-  -c 0,255 -n 0,255
 
 #@gimp Shade bobs : gimp_shadebobs, gimp_shadebobs
 #@gimp : note = note("<small>Bobs parameters :</small>")
@@ -20777,20 +20804,6 @@ gimp_snowflake :
     -snowflake ${1-11}
   -endl -a c -endl -done
 
-#@gimp Stars : gimp_stars, gimp_stars(0)
-#@gimp : Density = float(10,0,200)
-#@gimp : Depth = float(0,0,5)
-#@gimp : Size = int(32,8,128)
-#@gimp : Branches = int(5,2,16)
-#@gimp : Thickness = float(0.38,0.1,1)
-#@gimp : Smoothness = float(0,0,10)
-#@gimp : Color = color(200,200,200,200)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/01</i>.</small>")
-gimp_stars :
-  -repeat @# -l[$>] -split_opacity -rv
-    -stars $1%,$2,$3,$4,$5,$6%,${7-9},{$10/255}
-  -rv -a c -endl -done
-
 #@gimp Superformula : gimp_superformula, gimp_superformula(1)
 #@gimp : Resolution = int(4096,2,8192)
 #@gimp : sep = separator()
@@ -20825,20 +20838,6 @@ gimp_superformula :
     -sh[-1] 3,3 -*[-1] $15 -rm[-1]
     -+[-2,-1]
   -endl -done
-
-#@gimp Truchet : gimp_truchet, gimp_truchet(0)
-#@gimp : Scale = int(32,1,256)
-#@gimp : Radius = int(5,1,64)
-#@gimp : Smoothness = float(1,0,10)
-#@gimp : Type = choice(1,"Straight","Curved")
-#@gimp : Colorize randomly = bool(0)
-#@gimp : Transparency = bool(0)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/10/26</i>.</small>")
-gimp_truchet :
-  -if $6 -to_a -else -remove_opacity -endif
-  -truchet $1,$2,$4
-  -if $5 -repeat @# -channels[-1] 0 -label[-1] 0,1 {iM+1},1,1,3 -rand[-1] 0,255 -map[-2] [-1] -rm[-1] -mv[-1] 0 -done -endif
-  -b $3 -n 0,255
 
 #@gimp _<b>Sequences</b>
 #-----------------------

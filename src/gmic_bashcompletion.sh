@@ -3002,6 +3002,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "expression >") )
 		return 0
 		;;
+		"-check3d" | "--check3d")
+		COMPREPLY=( $(compgen -W "_is_full_check={0|1} >") )
+		return 0
+		;;
 		"-elif" | "--elif")
 		COMPREPLY=( $(compgen -W "boolean filename") )
 		return 0
