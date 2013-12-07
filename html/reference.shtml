@@ -226,6 +226,11 @@
        expression 'filename.ext,[first_frame[%][,last_frame[%][,step]]]'. 
        Output framerate and bitrate (in Kb/s) can be also set by using the output expression 
        'file.mpg,_fps,_bitrate'. 
+    . .cimg files : Only crops and sub-images of .cimg files can be loaded, using the input 
+      expressions 'filename.cimg,N0,N1', 'filename.cimg,N0,N1,x0,x1', 
+      'filename.cimg,N0,N1,x0,y0,x1,y1', 'filename.cimg,N0,N1,x0,y0,z0,x1,y1,z1', 
+      'filename.cimg,N0,N1,x0,y0,z0,c0,x1,y1,z1,c1'. 
+      Specifying '-1' for one coordinates stands for the maximum possible value. 
     . .raw binary files: Image dimensions and input pixel type may be specified when loading 
        .raw files with input expresssion 'filename.raw[,type][,width][,height[,depth[,dim]]]]'. 
        If no dimensions are specified, the resulting image is a one-column vector with 
@@ -235,7 +240,7 @@
     . .yuv files: Image dimensions must be specified, and only sub-frames of an image 
        sequence may be loaded, using the input expression 
       'filename.yuv,width,height[,first_frame[,last_frame[,step]]]'. 
-    . tiff files: Only sub-images of multi-pages tiff files can be loaded, using the input 
+    . .tiff files: Only sub-images of multi-pages tiff files can be loaded, using the input 
        expression 'filename.tif,[first_frame,[last_frame,[step]]]'. 
     . .gif files: Animated gif files can be saved, using the input expression 
       'filename.gif,fps,nb_loops'. 
