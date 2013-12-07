@@ -2127,7 +2127,7 @@ complete -F _"$_name" -o filenames gmic"
 # Generate a single image from a list of images, for the reference documentation.
 _document_gmic :
   -repeat @# -l[$>] W$>={w} H$>={h} D$>={d} S$>={s} IS_3D$>=@{-is_3d} -endl -done
-  -repeat @# -l[$>] -if @{-is_3d} -+3d 0 -r3d 1,1,0,-80 -r3d 0,1,0,80 -snapshot3d 400 -else -n 0,255 -endif -endl -done
+  -repeat @# -l[$>] -if @{-is_3d} -r3d 1,1,0,-80 -r3d 0,1,0,80 -snapshot3d 400 -else -n 0,255 -endif -endl -done
   --append_tiles , -if {w>900} r={round(900*100/w,0.1)} -r[^-1] $r%,$r%,1,100%,2 -endif -rm[-1]
   -repeat @# -l[$>]
     -if {s==1} -r {w},{h},1,3 -else -r {w},{h},1,3,0 -endif
@@ -7271,7 +7271,7 @@ center3d :
 
 _center3d :
   -e[0--3] "Center 3d object$?."
-  -v - -repeat @# -l[$>]
+  -v - -check3d 0 -repeat @# -l[$>]
     n={i[6]}
     -if {$n>0}
       -sh 8,{7+3*$n},0,0 -r[-1] 3,{h/3},1,1,-1 -s[-1] x
@@ -7879,7 +7879,7 @@ normalize3d :
 
 _normalize3d :
   -e[0--3] "Normalize size of 3d object$?."
-  -v - -repeat @# -l[$>]
+  -v - -check3d 0 -repeat @# -l[$>]
     n={i[6]}
     -if {$n>0}
       -sh 8,{7+3*$n},0,0 -r[-1] 3,{h/3},1,1,-1 -s[-1] x
@@ -8555,9 +8555,11 @@ _apply_parallel_overlap16 :
 #@gmic : Evaluate specified expression and display an error message if evaluated to false.
 #@gmic : If 'expression' is not evaluable, it is regarded as a filename and checked if it exists.
 
-#@gmic check3d : (*)
+#@gmic check3d : _is_full_check={ 0 | 1 } : (*)
 #@gmic : Check validity of selected 3d vector objects, and display an error message
 #@gmic : if one of the selected image is not a valid 3d vector object.
+#@gmic : Full 3d object check is slower but more precise.
+#@gmic : Default value: 'is_full_check=1'.
 
 #@gmic continue : (*)
 #@gmic : Go to end of current block 'repeat..done', 'do..while' or 'local..endlocal'.
@@ -13595,9 +13597,7 @@ hex2img8 :
 #@gmic is_3d
 #@gmic : Return 1 if all of the selected image are 3d objects, 0 otherwise.
 is_3d :
-  -v - res=0
-  -if @# res=1 -repeat @# -l[$>] -+3d 0 -onfail res=0 -endl -done -endif
-  -u $res -v +
+  -v - -u 1 -l -check3d 1 -onfail -u 0 -endl -v +
 
 #@gmic is_percent : string
 #@gmic : Return 1 if specified string ends with a '%', 0 otherwise.

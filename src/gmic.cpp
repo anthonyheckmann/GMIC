@@ -676,62 +676,6 @@ static CImg<T> append_CImg3d(const CImgList<T>& images) {
   return res;
 }
 
-CImg<T>& center_CImg3d() {
-  char error_message[1024] = { 0 };
-  if (!is_CImg3d(false,error_message))
-    throw CImgInstanceException(_cimg_instance
-                                "center_CImg3d(): image instance is not a CImg3d (%s).",
-                                cimg_instance,error_message);
-  const unsigned int nbv = cimg::float2uint((float)(*this)[6]);
-  const T *ptrs = data() + 8;
-  float
-    xm = cimg::type<float>::max(), ym = xm, zm = xm,
-    xM = cimg::type<float>::min(), yM = xM, zM = xM;
-  for (unsigned int i = 0; i<nbv; ++i) {
-    const float x = (float)*(ptrs++), y = (float)*(ptrs++), z = (float)*(ptrs++);
-    if (x<xm) xm = x; if (x>xM) xM = x;
-    if (y<ym) ym = y; if (y>yM) yM = y;
-    if (z<zm) zm = z; if (z>zM) zM = z;
-  }
-  const float xc = (xm + xM)/2, yc = (ym + yM)/2, zc = (zm + zM)/2;
-  T *ptrd = data() + 8;
-  for (unsigned int i = 0; i<nbv; ++i) { *(ptrd++)-=(T)xc; *(ptrd++)-=(T)yc; *(ptrd++)-=(T)zc; }
-  return *this;
-}
-
-CImg<T> get_center_CImg3d() const {
-  return (+*this).center_CImg3d();
-}
-
-CImg<T>& normalize_CImg3d() {
-  char error_message[1024] = { 0 };
-  if (!is_CImg3d(false,error_message))
-    throw CImgInstanceException(_cimg_instance
-                                "normalize_CImg3d(): image instance is not a CImg3d (%s).",
-                                cimg_instance,error_message);
-  const unsigned int nbv = cimg::float2uint((float)(*this)[6]);
-  const T *ptrs = data() + 8;
-  float
-    xm = cimg::type<float>::max(), ym = xm, zm = xm,
-    xM = cimg::type<float>::min(), yM = xM, zM = xM;
-  for (unsigned int i = 0; i<nbv; ++i) {
-    const float x = (float)*(ptrs++), y = (float)*(ptrs++), z = (float)*(ptrs++);
-    if (x<xm) xm = x; if (x>xM) xM = x;
-    if (y<ym) ym = y; if (y>yM) yM = y;
-    if (z<zm) zm = z; if (z>zM) zM = z;
-  }
-  const float delta = cimg::max(xM-xm,yM-ym,zM-zm);
-  if (delta>0) {
-    T *ptrd = data() + 8;
-    for (unsigned int i = 0; i<3*nbv; ++i) *(ptrd++)/=(T)delta;
-  }
-  return *this;
-}
-
-CImg<T> get_normalize_CImg3d() const {
-  return (+*this).normalize_CImg3d();
-}
-
 template<typename t>
 CImg<T>& rotate_CImg3d(const CImg<t>& rot) {
   char error_message[1024] = { 0 };
@@ -1803,8 +1747,8 @@ inline bool gmic_command_has_arguments(const char *const command) {
   return false;
 }
 
-// Compute the basename of an image name.
-//---------------------------------------
+// Compute the basename of a filename.
+//------------------------------------
 inline const char* gmic_basename(const char *const s)  {
   if (!s) return s;
   const unsigned int l = (unsigned int)std::strlen(s);
@@ -3315,7 +3259,7 @@ CImg<char> gmic::substitute_item(const char *const source,
         if (subset) cimg_foroff(subset,i)
                       substituted_items.insert(scope[subset[i]]).back().back() = '/';
 
-        // Substitute '$/' -> name of the current command.
+        // Substitute '$/' -> current scope.
       } else if (*nsource=='$' && nsource[1]=='/') {
         cimg_snprintf(substr,substr.width(),"%s",scope.back().data());
         CImg<char>(substr.data(),std::strlen(substr)).move_to(substituted_items);
@@ -4836,13 +4780,20 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
           // Check validity of 3d object.
           if (!std::strcmp("-check3d",command) && !is_get_version) {
+            gmic_substitute_args();
+            bool is_full_check = true;
+            if (!argument[1] && (*argument=='0' || *argument=='1')) {
+              is_full_check = (*argument=='1');
+              ++position;
+            } else is_full_check = true;
             if (verbosity>0 || is_debug)
-              print(images,"Check validity of 3d object%s",
-                    gmic_selection);
+              print(images,"Check validity of 3d object%s (%s check)",
+                    gmic_selection,
+                    is_full_check?"full":"fast");
             cimg_forY(selection,l) {
               const unsigned int ind = selection[l];
               CImg<T>& img = gmic_check(images[ind]);
-              if (!img.is_CImg3d(true,message)) {
+              if (!img.is_CImg3d(is_full_check,message)) {
                 if (verbosity>0 || is_debug) {
                   std::fprintf(cimg::output()," -> invalid.");
                   std::fflush(cimg::output());
@@ -5113,8 +5064,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   gmic_selection);
 #else
             try {
-              if (value) cimg_forY(selection,l) instant_window[selection[l]].show_mouse();
-              else cimg_forY(selection,l) instant_window[selection[l]].hide_mouse();
+              if (value) cimg_forY(selection,l) { if (!instant_window[l].is_closed()) instant_window[selection[l]].show_mouse(); }
+              else cimg_forY(selection,l) { if (!instant_window[l].is_closed()) instant_window[selection[l]].hide_mouse(); }
               print(images,"%s mouse cursor for instant window%s.",
                     value?"Show":"Hide",
                     gmic_selection);
@@ -8995,7 +8946,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         //----------------------------
         else if (command1=='s') {
 
-          // Set status
+          // Set status.
           if (!std::strcmp("-status",item)) {
             gmic_substitute_args();
             print(images,"Set status to '%s'.",argument_text);
