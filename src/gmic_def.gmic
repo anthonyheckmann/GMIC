@@ -19860,7 +19860,7 @@ gimp_remove_hotpixels_preview :
 #@gimp : Spatial overlap = int(24,0,256)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/27</i>.</small>")
-gimp_anisotropic_smoothing : -skip ${13=0},${14=0}
+gimp_anisotropic_smoothing : -skip ${13=1},${14=0}
   -repeat @# -l[$>]
     -apply_channels "-gimp_parallel_overlap \"-repeat $11 -smooth $1,$2,$3,$4,$5,$6,$7,$8,$9,$10 -done\",$13,$14",$12,0
   -endl -done -c 0,255
