@@ -14944,7 +14944,7 @@ gimp_logo_ca :
 #@gimp : for inclusion into next releases of <b>G'MIC</b>.
 #@gimp : "}
 #@gimp : sep = separator()
-#@gimp : note = link(0,"[1] G'MIC reference documentation","http://gmic.sourceforget.net/reference.shtml");
+#@gimp : note = link(0,"[1] G'MIC reference documentation","http://gmic.sourceforge.net/reference.shtml");
 #@gimp : note = link(0,"[2] G'MIC on Flickr","http://www.flickr.com/groups/gmic/discuss/")
 #@gimp : note = link(0,"[3] G'MIC on GimpChat","http://www.gimpchat.com/viewforum.php?f=28")
 #@gimp : note = link(0,"[4] G'MIC on Google+","https://plus.google.com/117441237982283011318/posts")
