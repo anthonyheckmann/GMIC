@@ -6616,17 +6616,69 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Inpaint.
           if (!std::strcmp("-inpaint",command)) {
             gmic_substitute_args();
+            float patch_size = 11, lookup_size = 22, lookup_increment = 1,
+              blend_size = 0, blend_threshold = 0, blend_decay = 0.05f, blend_scales = 10;
+            unsigned int is_blend_outer = 0;
             CImg<unsigned int> ind;
             char sep = 0;
             if (std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]%c%c",indices,&sep,&end)==2 &&
                 sep==']' &&
                 (ind=selection2cimg(indices,images.size(),images_names,"-inpaint",true,
                                     false,CImg<char>::empty())).height()==1) {
-              print(images,"Inpaint image%s with mask [%u].",
+              print(images,"Inpaint image%s masked by image [%u], with a fast algorithm.",
                     gmic_selection,
                     *ind);
               const CImg<T> mask = gmic_image_arg(*ind);
               cimg_forY(selection,l) gmic_apply(images[selection[l]],inpaint(mask));
+            } else if (((std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]%c%c",
+                                     indices,&sep,&end)==2 && sep==']') ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f%c",
+                                    indices,&patch_size,&end)==2 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f%c",
+                                    indices,&patch_size,&lookup_size,&end)==3 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f%c",
+                                    indices,&patch_size,&lookup_size,&lookup_increment,&end)==4 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f%c",
+                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    &blend_size,&end)==5 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f%c",
+                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    &blend_size,&blend_threshold,&end)==6 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f%c",
+                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    &blend_size,&blend_threshold,&blend_decay,&end)==7 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f%c",
+                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    &blend_size,&blend_threshold,&blend_decay,&blend_scales,&end)==8 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f,%u%c",
+                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    &blend_size,&blend_threshold,&blend_decay,&blend_scales,
+                                    &is_blend_outer,&end)==9) &&
+                       (ind=selection2cimg(indices,images.size(),images_names,"-inpaint",true,
+                                           false,CImg<char>::empty())).height()==1 &&
+                       patch_size>=0.5 && lookup_size>=0.5 && lookup_increment>=0.5 &&
+                       blend_size>=0 && blend_threshold>=0 && blend_threshold<=1 &&
+                       blend_decay>=0 && blend_scales>=0.5 && is_blend_outer<=1) {
+              const CImg<T> mask = gmic_image_arg(*ind);
+              patch_size = cimg::round(patch_size);
+              lookup_size = cimg::round(lookup_size);
+              lookup_increment = cimg::round(lookup_increment);
+              blend_size = cimg::round(blend_size);
+              blend_scales = cimg::round(blend_scales);
+              print(images,"Inpaint image%s masked by image [%d], with patch size %g, "
+                    "lookup size %g, lookup increment %g, blend size %g, blend threshold %g, "
+                    "blend decay %g, %g blend scale%s and outer blending %s.",
+                    gmic_selection,*ind,
+                    patch_size,lookup_size,lookup_increment,
+                    blend_size,blend_threshold,blend_decay,blend_scales,blend_scales!=1?"s":"",
+                    is_blend_outer?"enabled":"disabled");
+              cimg_forY(selection,l)
+                gmic_apply(images[selection[l]],
+                           inpaint_patch(mask,
+                                         (unsigned int)patch_size,(unsigned int)lookup_size,
+                                         (unsigned int)lookup_increment,
+                                         (unsigned int)blend_size,blend_threshold,blend_decay,
+                                         (unsigned int)blend_scales,(bool)is_blend_outer));
             } else arg_error("inpaint");
             is_released = false; ++position; continue;
           }
@@ -8857,67 +8909,6 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                                "Compute bitwise left rotation of image%s by expression %s",
                                gmic_selection,argument_text,
                                "Compute sequential bitwise left rotation of image%s");
-
-          // Repair image pixels.
-          if (!std::strcmp("-repair",command)) {
-            gmic_substitute_args();
-            float patch_size = 11, lookup_size = 22, lookup_increment = 1,
-              blend_size = 0, blend_threshold = 0, blend_decay = 0.05f, blend_scales = 10;
-            unsigned int is_blend_outer = 0;
-            CImg<unsigned int> ind;
-            char sep = 0;
-            if (((std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]%c%c",
-                              indices,&sep,&end)==2 && sep==']') ||
-                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f%c",
-                             indices,&patch_size,&end)==2 ||
-                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f%c",
-                             indices,&patch_size,&lookup_size,&end)==3 ||
-                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f%c",
-                             indices,&patch_size,&lookup_size,&lookup_increment,&end)==4 ||
-                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f%c",
-                             indices,&patch_size,&lookup_size,&lookup_increment,
-                             &blend_size,&end)==5 ||
-                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f%c",
-                             indices,&patch_size,&lookup_size,&lookup_increment,
-                             &blend_size,&blend_threshold,&end)==6 ||
-                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f%c",
-                             indices,&patch_size,&lookup_size,&lookup_increment,
-                             &blend_size,&blend_threshold,&blend_decay,&end)==7 ||
-                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f%c",
-                             indices,&patch_size,&lookup_size,&lookup_increment,
-                             &blend_size,&blend_threshold,&blend_decay,&blend_scales,&end)==8 ||
-                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f,%u%c",
-                             indices,&patch_size,&lookup_size,&lookup_increment,
-                             &blend_size,&blend_threshold,&blend_decay,&blend_scales,
-                             &is_blend_outer,&end)==9) &&
-                (ind=selection2cimg(indices,images.size(),images_names,"-repair",true,
-                                    false,CImg<char>::empty())).height()==1 &&
-                patch_size>=0.5 && lookup_size>=0.5 && lookup_increment>=0.5 &&
-                blend_size>=0 && blend_threshold>=0 && blend_threshold<=1 &&
-                blend_decay>=0 && blend_scales>=0.5 && is_blend_outer<=1) {
-              const CImg<T> mask = gmic_image_arg(*ind);
-              patch_size = cimg::round(patch_size);
-              lookup_size = cimg::round(lookup_size);
-              lookup_increment = cimg::round(lookup_increment);
-              blend_size = cimg::round(blend_size);
-              blend_scales = cimg::round(blend_scales);
-              print(images,"Repair image%s masked by image [%d], with patch size %g, "
-                    "lookup size %g, lookup increment %g, blend size %g, blend threshold %g, "
-                    "blend decay %g, %g blend scale%s and outer blending %s.",
-                    gmic_selection,*ind,
-                    patch_size,lookup_size,lookup_increment,
-                    blend_size,blend_threshold,blend_decay,blend_scales,blend_scales!=1?"s":"",
-                    is_blend_outer?"enabled":"disabled");
-              cimg_forY(selection,l)
-                gmic_apply(images[selection[l]],
-                           inpaint_patch(mask,
-                                         (unsigned int)patch_size,(unsigned int)lookup_size,
-                                         (unsigned int)lookup_increment,
-                                         (unsigned int)blend_size,blend_threshold,blend_decay,
-                                         (unsigned int)blend_scales,(bool)is_blend_outer));
-            } else arg_error("repair");
-            is_released = false; ++position; continue;
-          }
 
           // Reverse 3d object orientation.
           if (!std::strcmp("-reverse3d",command)) {
@@ -11965,7 +11956,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     "quiver","quit",
                     "remove","repeat","resize","reverse","return","rows","rotate",
                     "round","rand","rotate3d","rgb2hsi","rgb2hsl","rgb2hsv","rgb2lab",
-                    "rgb2srgb","rol","ror","reverse3d","repair",
+                    "rgb2srgb","rol","ror","reverse3d",
                     "status","skip","set","split","shared","shift","slices","srand","sub","sqrt",
                     "sqr","sign","sin","sort","solve","sub3d","sharpen","smooth","split3d",
                     "svd","sphere3d","specl3d","specs3d","sinc","sinh","srgb2rgb","streamline3d",

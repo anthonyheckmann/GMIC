@@ -4310,7 +4310,7 @@ yuv82rgb :
 #@gmic : Usual 'alignment' values are { 0=left-justified | 0.5=centered | 1=right-justified }.
 #@gmic : Default value: 'alignment=0'.
 #@gmic : $ image.jpg -split y,10 -reverse -append y
-#@gmic : $ image.jpg -repeat 5 --rows[0] 0,{10+18*$>}% -done -rm[0] -append x,0.5
+#@gmic : $ image.jpg -repeat 5 --rows[0] 0,{10+18*$>}% -done -remove[0] -append x,0.5
 #@gmic : $ image.jpg -append[0] [0],y
 
 #@gmic append_tiles : _M>=0,_N>=0,0<=_x_alignment<=1,0<=_y_alignment<=1
@@ -4367,7 +4367,7 @@ append_tiles : -check "isint(${1=0}) && isint(${2=0}) && ${3=0.5}>=0 && $3<=1 &&
 #@gmic : Autocrop and extract connected components in selected images, according to a mask given as the last channel of
 #@gmic : each of the selected image (e.g. alpha-channel).
 #@gmic : Default values: 'threshold=0%', 'min_area=0.1%', 'is_high_connectivity=0' and 'output_type=1'.
-#@gmic : $ 256,256 -noise 0.1,2 -dilate_circ 20 -label_fg 0,1 -n 0,255 --neq 0 -*[-1] 255 -a c --autocrop_components ,
+#@gmic : $ 256,256 -noise 0.1,2 -dilate_circ 20 -label_fg 0,1 -normalize 0,255 --neq 0 -*[-1] 255 -append c --autocrop_components ,
 autocrop_components : -skip ${1=0%} -check "${2=0.1%}>=0 && isbool(${3=0}) && isint(${4=1}) && $4>=0 && $4<=2"
   -e[^-1] "Autocrop connected components from image$?, with threshold $1, minimal area $2, "@{-arg\ 1+$3,low,high}" connectivity "\
           "and output type set to '"@{-arg\ 1+$4,crop,segmentation,coordinates}"'.\n"
@@ -4395,7 +4395,7 @@ autocrop_components : -skip ${1=0%} -check "${2=0.1%}>=0 && isbool(${3=0}) && is
 #@gmic : Autocrop selected images using the crop geometry of the last one by specified vector-valued intensity,
 #@gmic : or by automatic guessing the cropping value.
 #@gmic : Default value: auto mode.
-#@gmic : $ image.jpg --f[-1] 0 -ellipse[-1] 50%,50%,30%,20%,0,1,1 -autocrop_seq 0
+#@gmic : $ image.jpg --fill[-1] 0 -ellipse[-1] 50%,50%,30%,20%,0,1,1 -autocrop_seq 0
 autocrop_seq : -skip ${1=auto}
   -e[^-1] "Auto-crop image$? using crop geometry of last image by vector '$*'."
   -if {!@#} -return -endif
@@ -4955,7 +4955,7 @@ blur_radial : -skip ${2=0.5},${3=0.5}
 #@gmic blur_selective : sigma>=0,_edges>0,_nb_scales>0
 #@gmic : Blur selected images using selective gaussian scales.
 #@gmic : Default values: 'sigma=5', 'edges=0.5' and 'nb_scales=5'.
-#@gmic : $ image.jpg -noise 20 -cut 0,255 --l[-1] -repeat 4 -blur_selective , -done -endl
+#@gmic : $ image.jpg -noise 20 -cut 0,255 --local[-1] -repeat 4 -blur_selective , -done -endlocal
 blur_selective : -check "${1=5}>=0 && ${2=0.5}>=0 && isint(${3=5}) && $3>0"
   -e[^-1] "Blur image$? using $3 selective gaussian scales, with sigma $1 and edges $2."
   -v - -repeat @# -l[$>] nm=@{0,n}
@@ -5285,7 +5285,7 @@ _dt_diamond :
 
 #@gmic divergence
 #@gmic : Compute divergence of selected vector fields.
-#@gmic : $ image.jpg -luminance --gradient -a[-2,-1] c -divergence[-1]
+#@gmic : $ image.jpg -luminance --gradient -append[-2,-1] c -divergence[-1]
 divergence :
   -e[^-1] "Compute divergence of vector field$?."
   -v - -repeat @# -l[$>]
@@ -5524,9 +5524,13 @@ inn :
     -endif
   -endl -done -v +
 
-#@gmic inpaint : [mask] : (+)
+#@gmic inpaint : [mask] : [mask],_patch_size>=1,_lookup_size>=1,_lookup_increment>=1,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={ 0 | 1 } : (+)
 #@gmic : Inpaint selected images by specified mask.
+#@gmic : If no patch size is specified, inpainting is done using a fast averaging-algorithm.
+#@gmic : Otherwise, it used a patch-based reconstruction method, that can be very time consuming.
+#@gmic : Default values : 'patch_size', 'lookup_size=22', 'lookup_increment=1', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=0'.
 #@gmic : $ image.jpg 100%,100% -ellipse 50%,50%,30,30,0,1,255 -ellipse 20%,20%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]
+#@gmic : $ image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],17,24,2,30,0 -remove[1]
 
 #@gmic inpaint_flow : _nb_iter1>=0,_nb_iter2>=0,_dt>=0,_alpha,_sigma
 #@gmic : Apply iteration of the inpainting flow on selected images.
@@ -5732,12 +5736,6 @@ remove_pixels : -check "${1=10}>=0 && ${2=0}>=0"
     -rm[-1]
     100%,100% -rand[-1] 0,1 -ge[-1] $rate% -*
   -endl -done -v +
-
-#@gmic repair : [mask],_patch_size>=1,_lookup_size>=1,_lookup_increment>=1,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={ 0 | 1 } : (+)
-#@gmic : Repair masked image pixels in selected images, by patch-based inpainting.
-#@gmic : Beware, this is a very time consuming command.
-#@gmic : Default values : 'patch_size=11', 'lookup_size=22', 'lookup_increment=1', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=0'.
-#@gmic : $ image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --repair[0] [1],17,24,2,30,0 -rm[1]
 
 #@gmic sharpen : amplitude>=0 : amplitude>=0,edge>=0,_alpha,_sigma : (+)
 #@gmic : Sharpen selected images by inverse diffusion or shock filters methods.
@@ -6142,7 +6140,7 @@ min_patch : -check "isint(${1=16}) && $1>=1"
 #@gmic minimal_path : x0[%]>=0,y0[%]>=0,z0[%]>=0,x1[%]>=0,y1[%]>=0,z1[%]>=0,_is_high_connectivity={ 0 | 1 }
 #@gmic : Compute minimal path between two points on selected potential maps.
 #@gmic : Default value: 'is_high_connectivity=0'.
-#@gmic : $ image.jpg --gradient_norm -f[-1] 1/(1+i) -minimal_path[-1] 0,0,0,100%,100%,0 -pointcloud[-1] 0 -*[-1] 280 -to_rgb[-1] -resize[-1] [-2],0 -or
+#@gmic : $ image.jpg --gradient_norm -fill[-1] 1/(1+i) -minimal_path[-1] 0,0,0,100%,100%,0 -pointcloud[-1] 0 -*[-1] 280 -to_rgb[-1] -resize[-1] [-2],0 -or
 minimal_path : -check "$1>=0 && $2>=0 && $3>=0" -skip ${7=0}
   -e[^-1] "Compute minimal path between points ($1,$2,$3) and ($4,$5,$6) for potential map$?, with "@{-arg\ 1+$7,low,high}" connectivity."
   -v - -repeat @# -l[$>] nm=@{0,n}
@@ -6484,7 +6482,7 @@ gaussian : -skip ${1=3},${2=$1},${3=0}
 #@gmic : even if a color is specified.
 #@gmic : Default values: 'plot_type=1', 'vertex_type=1', 'ymin=ymax=0 (auto)', 'opacity=1', 'pattern=(undefined)'
 #@gmic : and 'color1=0'.
-#@gmic : $ image.jpg --rows 50% -blur[-1] 3 -s[-1] c -div[0] 1.5 -graph[0] [1],2,0,0,0,1,255,0,0 -graph[0] [2],2,0,0,0,1,0,255,0 -graph[0] [3],2,0,0,0,1,0,0,255 -keep[0]
+#@gmic : $ image.jpg --rows 50% -blur[-1] 3 -split[-1] c -div[0] 1.5 -graph[0] [1],2,0,0,0,1,255,0,0 -graph[0] [2],2,0,0,0,1,0,255,0 -graph[0] [3],2,0,0,0,1,0,0,255 -keep[0]
 
 #@gmic grid : size_x[%]>=0,size_y[%]>=0,_offset_x[%],_offset_y[%],_opacity,_pattern,_color1,..
 #@gmic : Draw xy-grid on selected images.
@@ -6575,7 +6573,7 @@ marble : -skip ${1=0.2},${2=0.1},${3=45},${4=0},${5=0.4},${6=0.8},${7=0.6},${8=1
 
 #@gmic maze : _width>0,_height>0,_cell_size>0
 #@gmic : Input maze with specified size.
-#@gmic : $ -maze 30,20 -negative -n 0,255
+#@gmic : $ -maze 30,20 -negative -normalize 0,255
 maze : -check "isint(${1=15}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=24}) && $3>0"
   -e[^-1] "Input $1x$2 maze."
   -v -
@@ -8331,7 +8329,7 @@ star3d : -check "${1=5}>0 && ${2=0.38}>=0 && $2<=1"
 #@gmic : Extract 3d streamlines from selected vector fields or from specified formula.
 #@gmic : 'interpolation' can be { 0=nearest integer | 1=1st-order | 2=2nd-order | 3=4th-order }.
 #@gmic : Default values: 'dl=0.1', 'interpolation=2', 'is_backward=0' and 'is_oriented=0'.
-#@gmic : $ 100,100,100,3 -rand -10,10 -blur 3 -repeat 300 --streamline3d[0] {?(100)},{?(100)},{?(100)},1000,1,1 -color3d[-1] @{-RGB} -done -rm[0] -box3d 100 -primitives3d[-1] 1 -add3d
+#@gmic : $ 100,100,100,3 -rand -10,10 -blur 3 -repeat 300 --streamline3d[0] {?(100)},{?(100)},{?(100)},1000,1,1 -color3d[-1] @{-RGB} -done -remove[0] -box3d 100 -primitives3d[-1] 1 -add3d
 
 #@gmic -3d : eq. to '-sub3d'. : (+)
 
@@ -9334,7 +9332,7 @@ halftone : -check "${1=5}>=2 && ${2=8}>=2 && ${3=8}>=2 && ${5=0}>=0" -skip ${4=5
 #@gmic hardsketchbw : _amplitude>=0,_density>=0,_opacity,0<=_edge_threshold<=100,_is_fast={ 0 | 1 }
 #@gmic : Apply hard B&W sketch effect on selected images.
 #@gmic : Default values: 'amplitude=1000', 'sampling=3', 'opacity=0.1', 'edge_threshold=20' and 'is_fast=0'.
-#@gmic : $ image.jpg --hardsketchbw 200,70,0.1,10 -median[-1] 2 --local -reverse -blur[-1] 3 -blend overlay -endl
+#@gmic : $ image.jpg --hardsketchbw 200,70,0.1,10 -median[-1] 2 --local -reverse -blur[-1] 3 -blend overlay -endlocal
 hardsketchbw : -skip ${1=300},${2=50},${3=0.1},${4=20},${5=0}
   -e[^-1] "Apply hard B&W sketch effect on image$?, with amplitude $1, density $2, opacity $3 and edge threshold $4."
   -if {!$2} -channels 0 -f 255 -return -endif
@@ -9607,7 +9605,7 @@ stars : -check "${1=10%}>=0 && ${2=1}>=0 && ${3=32}>0 && ${4=5}>=1 && ${5=0.38}>
 #@gmic : Apply sketch effect to selected images.
 #@gmic : Default values: 'nb_orients=2', 'start_angle=45', 'angle_range=180', 'length=30', 'threshold=1', 'opacity=0.03',
 #@gmic : 'bgfactor=0', 'density=0.6', 'sharpness=0.1', 'anisotropy=0.6', 'smoothness=0.25', 'coherence=1', 'is_boost=0' and 'is_curved=1'.
-#@gmic : $ image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endl
+#@gmic : $ image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endlocal
 sketchbw :
   -check "${1=2}>0 && ${3=180}>=0 && ${4=30}>=0 && ${5=1}>=0 && ${7=0}>=0 && ${8=0.6}>0 && ${9=0.1}>=0 && ${10=0.6}>=0 && ${11=0.25}>=0 && ${12=1}>=0"
   -skip ${2=45},${6=0.03},${13=0},${14=1}
@@ -13015,7 +13013,7 @@ pink_grayskel : -skip ${1=4},${2=0}
 #@gmic : (http://pinkhq.com/heightmaxima_8c.html)
 #@gmic : Heightmaxima filtering (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'height=1'.
-#@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]
+#@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]
 pink_heightmaxima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
   -e[^-1] "Filter by heightmaxima exec with connectivity $1 height $2."
   -v - -repeat @# -l[@{>,-1}]
@@ -13028,7 +13026,7 @@ pink_heightmaxima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
 #@gmic : (http://pinkhq.com/heightminima_8c.html)
 #@gmic : Heightminima filtering (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'height=1'.
-#@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]
+#@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]
 pink_heightminima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
   -e[^-1] "Apply filter by heightminima exec with connectivity $1 height $2."
   -v - -repeat @# -l[@{>,-1}]
@@ -13042,7 +13040,7 @@ pink_heightminima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
 #@gmic : (http://pinkhq.com/htkernu_8c.html)
 #@gmic : Grayscale ultimate homotopic thinning/thickening without condition (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'type=""'.
-#@gmic : $ image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -rm[0]
+#@gmic : $ image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -remove[0]
 pink_htkern : -skip ${1=4},${2=""}
   -repeat @# -l[@{>,-1}] -_xpinks htkern$2,"null $1" -endl -done
 
@@ -19745,7 +19743,7 @@ gimp_deinterlace :
 gimp_deinterlace_preview :
   -gimp_split_preview "-gimp_deinterlace $*",$-1
 
-#@gimp Inpaint [diffusion] : gimp_inpaint, gimp_inpaint_preview(0)
+#@gimp Inpaint [diffusion] : gimp_inpaint_diffusion, gimp_inpaint_diffusion_preview(0)
 #@gimp : Smooth inpaint = bool(true)
 #@gimp : Global iterations = int(10,1,30)
 #@gimp : Local iterations = int(10,1,30)
@@ -19761,7 +19759,7 @@ gimp_deinterlace_preview :
 #@gimp : When <i>'Mask by color'</i> mode is selected, preview is likely to be inaccurate.
 #@gimp : </small>")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
-gimp_inpaint :
+gimp_inpaint_diffusion :
   -if $7 # Mask by color.
     -repeat @# -l[$>]
       --select_color 0,${8-11} -rv
@@ -19775,11 +19773,11 @@ gimp_inpaint :
     -to_a[0] -f[0] 0
   -endif
 
-gimp_inpaint_preview :
-  -gimp_inpaint ${^0}
+gimp_inpaint_diffusion_preview :
+  -gimp_inpaint_diffusion ${^0}
   -if {!$7" && "@#>1} -rm[0] -endif
 
-#@gimp Inpaint [patch-based] : gimp_repair, gimp_no_preview
+#@gimp Inpaint [patch-based] : gimp_inpaint_patch, gimp_no_preview
 #@gimp : Patch size = int(11,1,64)
 #@gimp : Lookup factor = float(3,1,16)
 #@gimp : Lookup increment = int(2,1,10)
@@ -19793,16 +19791,18 @@ gimp_inpaint_preview :
 #@gimp : note = note("<small>If <i>Mask by color</i> has been selected :</small>")
 #@gimp : Mask color = color(255,0,0,255)
 #@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i> and <i>Maxime Daisy</i>.      Latest update: <i>2013/03/25</i>.</small>")
-gimp_repair :
+gimp_inpaint_patch :
+  -if {@.>=1581} inpaint=inpaint -else inpaint=repair -endif
   -if $9 # Mask by color.
     -repeat @# -l[$>]
       --select_color 0,${10-13}
-      -repair[0] [1],$1,{$1*$2},${3-8} -rm[1]
+      -$inpaint[0] [1],$1,{$1*$2},${3-8}
+      -rm[1]
     -endl -done
   -else # Mask by top layer.
     -if {@#==1} -return -endif
     -to_a[0] -channels[0] 100% -ge[0] 50%
-    -repair[^0] [0],$1,{$1*$2},${3-8}
+    -$inpaint[^0] [0],$1,{$1*$2},${3-8}
     -to_a[0] -f[0] 0
   -endif
 
