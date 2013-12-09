@@ -21579,6 +21579,8 @@ gmicol_logo_en :
 #@gmicol clone("Array [random]")
 #@gmicol clone("Array [regular]")
 #@gmicol clone("Chessboard")
+#@gmicol : thumbnail_parameters = 16,16,0,0,0,0.5,0,0,0,255,255,255,255,255
+
 #@gmicol clone("Dices")
 #@gmicol clone("Grid")
 #@gmicol clone("Taquin")
@@ -21588,6 +21590,7 @@ gmicol_logo_en :
 #@gmicol clone("Tiled random shifts")
 #@gmicol clone("Tiled parameterization")
 #@gmicol clone("Tiled isolation")
+#@gmicol : thumbnail_parameters = 10,10,10,10,1,1
 
 #@gmicol _<b>Artistic</b>
 #------------------------
@@ -21618,6 +21621,7 @@ gmicol_logo_en :
 #@gmicol : Hue = float(0,0,360)
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/23</i>.</small>")
+#@gmicol : thumbnail_parameters = 1.8,0,0,50
 gmicol_adjust_colors :
   -repeat @# -l[$>]
     avg={ia} -- $avg -* $1 -+ $avg
@@ -21654,7 +21658,7 @@ gmicol_crop_preview :
   -circle $1%,$4%,3,1,0,255,0 -circle $1%,$4%,3,1,0xFFFFFFFF,0
 
 #@gmicol Equalize : gmicol_equalize, gmicol_equalize_preview
-#@gmicol : Channel(s) = choice("All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gmicol : Channel(s) = choice(3,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gmicol : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/18</i>.</small>")
 gmicol_equalize :
@@ -21672,6 +21676,7 @@ gmicol_flip :
 #@gmicol Histogram : gmicol_histogram, gmicol_histogram_preview
 #@gmicol : Levels = int(128,1,256)
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/18</i>.</small>")
+#@gmicol : thumbnail_parameters = 32
 gmicol_histogram :
   -to_rgb -dh 640,480,$1
 
@@ -21698,8 +21703,8 @@ gmicol_resize :
   -c 0,255
 
 #@gmicol Rotate : gmicol_rotate, gmicol_rotate
-#@gmicol : Angle = float(90,0,359)
-#@gmicol : Stick to nearest 90 deg. = bool(1)
+#@gmicol : Angle = float(30,0,359)
+#@gmicol : Stick to nearest 90 deg. = bool(0)
 #@gmicol : Boundary = choice("Transparent","Nearest","Repeat")
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/23</i>.</small>")
 gmicol_rotate :
@@ -21732,6 +21737,8 @@ gmicol_rotate :
 
 #@gmicol clone("Abstraction")
 #@gmicol clone("Boost-fade")
+#@gmicol : thumbnail_parameters = 10
+
 #@gmicol clone("Channel processing")
 #@gmicol clone("CMYK tone")
 #@gmicol clone("Colormap")
