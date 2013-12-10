@@ -15004,6 +15004,7 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Thorsten "otto" Stettin</i> <small>(packaging)</small>
 #@gimp : <b> -</b> <i>Stepanekos</i> <small>(translation)</small>
 #@gimp : <b> -</b> <i>Bernd Zeimetz</i> <small>(packaging)</small>
+#@gimp : <b> -</b> <i>Matthias Zepper</i> <small>(testing)</small>
 #@gimp : <b> -</b>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/30</i>.</small>")
 
