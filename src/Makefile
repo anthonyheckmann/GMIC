@@ -287,7 +287,7 @@ ifeq ($(OS),Unix)
 	$(MAKE) linux
 	$(MAKE) gimp
 	$(MAKE) lib
-	$(MAKE) zart
+#	$(MAKE) zart
 else
 ifeq ($(OS),Darwin)
 	@echo "**"
@@ -295,7 +295,7 @@ ifeq ($(OS),Darwin)
 	@echo "**"
 	$(MAKE) macosx
 	$(MAKE) gimp
-	$(MAKE) zart
+#	$(MAKE) zart
 else
 	@echo "**"
 	@echo "** Windows configuration."
@@ -409,8 +409,8 @@ install:
 	cp -f gmic.h $(DESTDIR)$(USR)/include/
 ifneq ($(OS),Darwin)
 	mkdir -p $(DESTDIR)$(USR)/share
-	mkdir -p $(DESTDIR)$(USR)/share/zart
-	cp -f ../zart/zart $(DESTDIR)$(USR)/bin/zart
+#	mkdir -p $(DESTDIR)$(USR)/share/zart
+#	cp -f ../zart/zart $(DESTDIR)$(USR)/bin/zart
 	mkdir -p $(DESTDIR)$(USR)/lib
 	cp -f libgmic.so $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio3
 	ln -s libgmic.so._gmic_versio3 $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio2
@@ -435,8 +435,8 @@ uninstall:
 	rm -rf $(DESTDIR)$(USR)/share/doc/gmic/
 	rm -f $(DESTDIR)$(USR)/share/man/man1/gmic.1.gz
 	rm -f $(DESTDIR)$(USR)/share/man/fr/man1/gmic.1.gz
-	rm -f $(DESTDIR)$(USR)/bin/zart
-	rm -rf $(DESTDIR)$(USR)/share/zart/
+#	rm -f $(DESTDIR)$(USR)/bin/zart
+#	rm -rf $(DESTDIR)$(USR)/share/zart/
 
 distclean: clean
 
