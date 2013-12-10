@@ -10,7 +10,7 @@
 \setlength{\hoffset}{-0.8cm} 
 \setcounter{tocdepth}{1} 
 \sloppy{} 
-\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.8.0}\\\vspace*{1cm}}\end{center}}}} 
+\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.8.1 (beta)}\\\vspace*{1cm}}\end{center}}}} 
 \author{\Large \bf David Tschumperl\'e} 
 \renewcommand\indexname{Index of commands} 
 \makeindex 
@@ -48,7 +48,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
  
  gmic: GREYC's Magic for Image Computing. 
  
-        Version 1.5.8.0, Copyright (c) 2008-2013, David Tschumperl\'e 
+        Version 1.5.8.1 (beta), Copyright (c) 2008-2013, David Tschumperl\'e 
         (http://gmic.sourceforge.net) 
 \chapter{Usage} 
 \small
@@ -2338,7 +2338,7 @@ Append specified image to selected images, or all selected images together, alon
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def206.jpg}\\
 {\footnotesize \textbf{Example 206~:} \texttt{image.jpg -split y,10 -reverse -append y}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def207.jpg}\\
-{\footnotesize \textbf{Example 207~:} \texttt{image.jpg -repeat 5 --rows[0] 0,\{10+18*\$$>$\}\% -done -rm[0] -append x,0.5}}
+{\footnotesize \textbf{Example 207~:} \texttt{image.jpg -repeat 5 --rows[0] 0,\{10+18*\$$>$\}\% -done -remove[0] -append x,0.5}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def208.jpg}\\
 {\footnotesize \textbf{Example 208~:} \texttt{image.jpg -append[0] [0],y}}
 \end{center}
@@ -2374,7 +2374,7 @@ Autocrop and extract connected components in selected images, according to a mas
 each of the selected image (e.g. alpha-channel).
 ~\\~\\\textbf{Default values}: {\small \texttt{'threshold=0\%', 'min\_area=0.1\%', 'is\_high\_connectivity=0'} and \texttt{'output\_type=1'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def211.jpg}\\
-{\footnotesize \textbf{Example 211~:} \texttt{256,256 -noise 0.1,2 -dilate\_circ 20 -label\_fg 0,1 -n 0,255 --neq 0 -*[-1] 255 -a c --autocrop\_components ,}}
+{\footnotesize \textbf{Example 211~:} \texttt{256,256 -noise 0.1,2 -dilate\_circ 20 -label\_fg 0,1 -normalize 0,255 --neq 0 -*[-1] 255 -append c --autocrop\_components ,}}
 \end{center}
 
 \subsection{\emph{-autocrop\_seq\index{-autocrop\_seq}} }\vspace*{-0.5em}
@@ -2384,7 +2384,7 @@ Autocrop selected images using the crop geometry of the last one by specified ve
 or by automatic guessing the cropping value.
 ~\\~\\\textbf{Default value}: {\small \texttt{auto mode.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def212.jpg}\\
-{\footnotesize \textbf{Example 212~:} \texttt{image.jpg --f[-1] 0 -ellipse[-1] 50\%,50\%,30\%,20\%,0,1,1 -autocrop\_seq 0}}
+{\footnotesize \textbf{Example 212~:} \texttt{image.jpg --fill[-1] 0 -ellipse[-1] 50\%,50\%,30\%,20\%,0,1,1 -autocrop\_seq 0}}
 \end{center}
 
 \subsection{\emph{-channels\index{-channels}} (*)}\vspace*{-0.5em}
@@ -2853,7 +2853,7 @@ Apply radial blur on selected images.
 Blur selected images using selective gaussian scales.
 ~\\~\\\textbf{Default values}: {\small \texttt{'sigma=5', 'edges=0.5'} and \texttt{'nb\_scales=5'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def253.jpg}\\
-{\footnotesize \textbf{Example 253~:} \texttt{image.jpg -noise 20 -cut 0,255 --l[-1] -repeat 4 -blur\_selective , -done -endl}}
+{\footnotesize \textbf{Example 253~:} \texttt{image.jpg -noise 20 -cut 0,255 --local[-1] -repeat 4 -blur\_selective , -done -endlocal}}
 \end{center}
 
 \subsection{\emph{-blur\_x\index{-blur\_x}} }\vspace*{-0.5em}
@@ -3059,7 +3059,7 @@ Apply octagonal dilation of selected image by specified size.
 \subsection{\emph{-divergence\index{-divergence}} }\vspace*{-0.5em}
 Compute divergence of selected vector fields.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def277.jpg}\\
-{\footnotesize \textbf{Example 277~:} \texttt{image.jpg -luminance --gradient -a[-2,-1] c -divergence[-1]}}
+{\footnotesize \textbf{Example 277~:} \texttt{image.jpg -luminance --gradient -append[-2,-1] c -divergence[-1]}}
 \end{center}
 
 \subsection{\emph{-dog\index{-dog}} }\vspace*{-0.5em}
@@ -3204,10 +3204,16 @@ Compute gradient-directed 2nd derivative of image(s).
 
 \subsection{\emph{-inpaint\index{-inpaint}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{[mask]}}\\~\\
+{\small \texttt{[mask]}}~~~$|$\\
+\hspace*{2.2cm}{\small \texttt{[mask],\_patch\_size$>$=1,\_lookup\_size$>$=1,\_lookup\_increment$>$=1,\_blend\_size$>$=0,0$<$=\_blend\_threshold$<$=1,\_blend\_decay$>$=0,\_blend\_scales$>$=1,\_is\_blend\_outer=\{ 0 ~$|$~ 1 \}}}\\~\\
 Inpaint selected images by specified mask.
+~\\If no patch size is specified, inpainting is done using a fast averaging-algorithm.
+~\\Otherwise, it used a patch-based reconstruction method, that can be very time consuming.
+~\\~\\\textbf{Default values}: {\small \texttt{'patch\_size', 'lookup\_size=22', 'lookup\_increment=1', 'blend\_size=0', 'blend\_threshold=0', 'blend\_decay=0.05', 'blend\_scales=10'} and \texttt{'is\_blend\_outer=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def293.jpg}\\
 {\footnotesize \textbf{Example 293~:} \texttt{image.jpg 100\%,100\% -ellipse 50\%,50\%,30,30,0,1,255 -ellipse 20\%,20\%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]}}
+\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def294.jpg}\\
+{\footnotesize \textbf{Example 294~:} \texttt{image.jpg 100\%,100\% -circle 30\%,30\%,30,1,255,0,255 -circle 70\%,70\%,50,1,255,0,255 --inpaint[0] [1],17,24,2,30,0 -remove[1]}}
 \end{center}
 
 \subsection{\emph{-inpaint\_flow\index{-inpaint\_flow}} }\vspace*{-0.5em}
@@ -3215,22 +3221,22 @@ Inpaint selected images by specified mask.
 {\small \texttt{\_nb\_iter1$>$=0,\_nb\_iter2$>$=0,\_dt$>$=0,\_alpha,\_sigma}}\\~\\
 Apply iteration of the inpainting flow on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_iter1=4', 'nb\_iter2=15', 'dt=15', 'alpha=1'} and \texttt{'sigma=3'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def294.jpg}\\
-{\footnotesize \textbf{Example 294~:} \texttt{image.jpg 100\%,100\% -ellipse[-1] 30\%,30\%,40,30,0,1,255 -reverse -inpaint\_flow ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def295.jpg}\\
+{\footnotesize \textbf{Example 295~:} \texttt{image.jpg 100\%,100\% -ellipse[-1] 30\%,30\%,40,30,0,1,255 -reverse -inpaint\_flow ,}}
 \end{center}
 
 \subsection{\emph{-kuwahara\index{-kuwahara}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{size$>$0}}\\~\\
 Apply Kuwahara filter of specified size on selected images.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def295.jpg}\\
-{\footnotesize \textbf{Example 295~:} \texttt{image.jpg --kuwahara 5}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def296.jpg}\\
+{\footnotesize \textbf{Example 296~:} \texttt{image.jpg --kuwahara 5}}
 \end{center}
 
 \subsection{\emph{-laplacian\index{-laplacian}} }\vspace*{-0.5em}
 Compute Laplacian of selected images.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def296.jpg}\\
-{\footnotesize \textbf{Example 296~:} \texttt{image.jpg -laplacian}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def297.jpg}\\
+{\footnotesize \textbf{Example 297~:} \texttt{image.jpg -laplacian}}
 \end{center}
 
 \subsection{\emph{-lic\index{-lic}} }\vspace*{-0.5em}
@@ -3238,8 +3244,8 @@ Compute Laplacian of selected images.
 {\small \texttt{\_amplitude$>$0,\_channels$>$0}}\\~\\
 Render LIC representation of selected vector fields.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=30'} and \texttt{'channels=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def297.jpg}\\
-{\footnotesize \textbf{Example 297~:} \texttt{400,400,1,2,'if(c==0,x-w/2,y-h/2)' --lic 200,3 -quiver[-2] [-2],10,-13,1,1,255}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def298.jpg}\\
+{\footnotesize \textbf{Example 298~:} \texttt{400,400,1,2,'if(c==0,x-w/2,y-h/2)' --lic 200,3 -quiver[-2] [-2],10,-13,1,1,255}}
 \end{center}
 
 \subsection{\emph{-map\_tones\index{-map\_tones}} }\vspace*{-0.5em}
@@ -3247,8 +3253,8 @@ Render LIC representation of selected vector fields.
 {\small \texttt{\_threshold$>$=0,\_gamma$>$=0,\_smoothness$>$=0,nb\_iter$>$=0}}\\~\\
 Apply tone mapping operator on selected images, based on Poisson equation.
 ~\\~\\\textbf{Default values}: {\small \texttt{'threshold=0.1', 'gamma=0.8', 'smoothness=0.5'} and \texttt{'nb\_iter=30'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def298.jpg}\\
-{\footnotesize \textbf{Example 298~:} \texttt{image.jpg --map\_tones ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def299.jpg}\\
+{\footnotesize \textbf{Example 299~:} \texttt{image.jpg --map\_tones ,}}
 \end{center}
 
 \subsection{\emph{-map\_tones\_fast\index{-map\_tones\_fast}} }\vspace*{-0.5em}
@@ -3256,8 +3262,8 @@ Apply tone mapping operator on selected images, based on Poisson equation.
 {\small \texttt{\_radius[\%]$>$=0,\_power$>$=0}}\\~\\
 Apply fast tone mapping operator on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'radius=3\%'} and \texttt{'power=0.3'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def299.jpg}\\
-{\footnotesize \textbf{Example 299~:} \texttt{image.jpg --map\_tones\_fast ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def300.jpg}\\
+{\footnotesize \textbf{Example 300~:} \texttt{image.jpg --map\_tones\_fast ,}}
 \end{center}
 
 \subsection{\emph{-meancurvature\_flow\index{-meancurvature\_flow}} }\vspace*{-0.5em}
@@ -3265,16 +3271,16 @@ Apply fast tone mapping operator on selected images.
 {\small \texttt{\_nb\_iter$>$=0,\_dt,\_sequence\_flag=\{ 0 ~$|$~ 1 \}}}\\~\\
 Apply iterations of the mean curvature flow on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_iter=10', 'dt=30'} and \texttt{'keep\_sequence=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def300.jpg}\\
-{\footnotesize \textbf{Example 300~:} \texttt{image.jpg --meancurvature\_flow 20}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def301.jpg}\\
+{\footnotesize \textbf{Example 301~:} \texttt{image.jpg --meancurvature\_flow 20}}
 \end{center}
 
 \subsection{\emph{-median\index{-median}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{radius$>$=0}}\\~\\
 Apply median filter of specified radius on selected images.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def301.jpg}\\
-{\footnotesize \textbf{Example 301~:} \texttt{image.jpg --median 5}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def302.jpg}\\
+{\footnotesize \textbf{Example 302~:} \texttt{image.jpg --median 5}}
 \end{center}
 
 \subsection{\emph{-normalize\_local\index{-normalize\_local}} }\vspace*{-0.5em}
@@ -3282,20 +3288,20 @@ Apply median filter of specified radius on selected images.
 {\small \texttt{\_amplitude$>$=0,\_radius$>$0,\_n\_smooth$>$=0[\%],\_a\_smooth$>$=0[\%],\_is\_cut=\{ 0 ~$|$~ 1 \},\_min=0,\_max=255}}\\~\\
 Normalize selected images locally.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=3', 'radius=16', 'n\_smooth=4\%', 'a\_smooth=2\%', 'is\_cut=1', 'min=0'} and \texttt{'max=255'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def302.jpg}\\
-{\footnotesize \textbf{Example 302~:} \texttt{image.jpg --normalize\_local 8,10}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def303.jpg}\\
+{\footnotesize \textbf{Example 303~:} \texttt{image.jpg --normalize\_local 8,10}}
 \end{center}
 
 \subsection{\emph{-normalized\_cross\_correlation\index{-normalized\_cross\_correlation}} }\vspace*{-0.5em}
 Compute normalized cross-correlation using two-by-two selected images.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def303.jpg}\\
-{\footnotesize \textbf{Example 303~:} \texttt{image.jpg --shift -30,-20 -normalized\_cross\_correlation}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def304.jpg}\\
+{\footnotesize \textbf{Example 304~:} \texttt{image.jpg --shift -30,-20 -normalized\_cross\_correlation}}
 \end{center}
 
 \subsection{\emph{-phase\_correlation\index{-phase\_correlation}} }\vspace*{-0.5em}
 Estimate translation vector using two-by-two selected images.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def304.jpg}\\
-{\footnotesize \textbf{Example 304~:} \texttt{image.jpg --shift -30,-20 --phase\_correlation -unroll[-1] y}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def305.jpg}\\
+{\footnotesize \textbf{Example 305~:} \texttt{image.jpg --shift -30,-20 --phase\_correlation -unroll[-1] y}}
 \end{center}
 
 \subsection{\emph{-pde\_flow\index{-pde\_flow}} }\vspace*{-0.5em}
@@ -3303,8 +3309,8 @@ Estimate translation vector using two-by-two selected images.
 {\small \texttt{\_nb\_iter$>$=0,\_dt,\_velocity\_command,\_keep\_sequence=\{ 0 ~$|$~ 1 \}}}\\~\\
 Apply iterations of a generic PDE flow on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_iter=10', 'dt=30', 'velocity\_command=laplacian'} and \texttt{'keep\_sequence=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def305.jpg}\\
-{\footnotesize \textbf{Example 305~:} \texttt{image.jpg --pde\_flow 20}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def306.jpg}\\
+{\footnotesize \textbf{Example 306~:} \texttt{image.jpg --pde\_flow 20}}
 \end{center}
 
 \subsection{\emph{-red\_eye\index{-red\_eye}} }\vspace*{-0.5em}
@@ -3312,8 +3318,8 @@ Apply iterations of a generic PDE flow on selected images.
 {\small \texttt{0$<$=\_threshold$<$=100,\_smoothness$>$=0,0$<$=attenuation$<$=1}}\\~\\
 Attenuate red-eye effect in selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'threshold=75', 'smoothness=3.5'} and \texttt{'attenuation=0.1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def306.jpg}\\
-{\footnotesize \textbf{Example 306~:} \texttt{image.jpg --red\_eye ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def307.jpg}\\
+{\footnotesize \textbf{Example 307~:} \texttt{image.jpg --red\_eye ,}}
 \end{center}
 
 \subsection{\emph{-remove\_hotpixels\index{-remove\_hotpixels}} }\vspace*{-0.5em}
@@ -3321,8 +3327,8 @@ Attenuate red-eye effect in selected images.
 {\small \texttt{\_mask\_size$>$0, \_threshold[\%]$>$0}}\\~\\
 Remove hot pixels in selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'mask\_size=3'} and \texttt{'threshold=10\%'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def307.jpg}\\
-{\footnotesize \textbf{Example 307~:} \texttt{image.jpg -noise 10,2 --remove\_hotpixels ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def308.jpg}\\
+{\footnotesize \textbf{Example 308~:} \texttt{image.jpg -noise 10,2 --remove\_hotpixels ,}}
 \end{center}
 
 \subsection{\emph{-remove\_pixels\index{-remove\_pixels}} }\vspace*{-0.5em}
@@ -3332,18 +3338,8 @@ Remove (i.e. set to 0) specified density (in percent) of non-zero pixels to 0.
 ~\\Specified density is regarded against 'pixel\_sum' except if it is set to '0'
 ~\\(in this case, 'pixel\_sum' has default value 'width*height').
 ~\\~\\\textbf{Default value}: {\small \texttt{'density=10', 'pixel\_sum=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def308.jpg}\\
-{\footnotesize \textbf{Example 308~:} \texttt{image.jpg --remove\_pixels 50}}
-\end{center}
-
-\subsection{\emph{-repair\index{-repair}} (+)}\vspace*{-0.5em}
-~\\\textbf{Arguments: } 
-{\small \texttt{[mask],\_patch\_size$>$=1,\_lookup\_size$>$=1,\_lookup\_increment$>$=1,\_blend\_size$>$=0,0$<$=\_blend\_threshold$<$=1,\_blend\_decay$>$=0,\_blend\_scales$>$=1,\_is\_blend\_outer=\{ 0 ~$|$~ 1 \}}}\\~\\
-Repair masked image pixels in selected images, by patch-based inpainting.
-~\\Beware, this is a very time consuming command.
-~\\~\\\textbf{Default values}: {\small \texttt{'patch\_size=11', 'lookup\_size=22', 'lookup\_increment=1', 'blend\_size=0', 'blend\_threshold=0', 'blend\_decay=0.05', 'blend\_scales=10'} and \texttt{'is\_blend\_outer=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def309.jpg}\\
-{\footnotesize \textbf{Example 309~:} \texttt{image.jpg 100\%,100\% -circle 30\%,30\%,30,1,255,0,255 -circle 70\%,70\%,50,1,255,0,255 --repair[0] [1],17,24,2,30,0 -rm[1]}}
+{\footnotesize \textbf{Example 309~:} \texttt{image.jpg --remove\_pixels 50}}
 \end{center}
 
 \subsection{\emph{-sharpen\index{-sharpen}} (+)}\vspace*{-0.5em}
@@ -3661,7 +3657,7 @@ Return locations of minimal values in local patch-based neighborhood of given si
 Compute minimal path between two points on selected potential maps.
 ~\\~\\\textbf{Default value}: {\small \texttt{'is\_high\_connectivity=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def343.jpg}\\
-{\footnotesize \textbf{Example 343~:} \texttt{image.jpg --gradient\_norm -f[-1] 1/(1+i) -minimal\_path[-1] 0,0,0,100\%,100\%,0 -pointcloud[-1] 0 -*[-1] 280 -to\_rgb[-1] -resize[-1] [-2],0 -or}}
+{\footnotesize \textbf{Example 343~:} \texttt{image.jpg --gradient\_norm -fill[-1] 1/(1+i) -minimal\_path[-1] 0,0,0,100\%,100\%,0 -pointcloud[-1] 0 -*[-1] 280 -to\_rgb[-1] -resize[-1] [-2],0 -or}}
 \end{center}
 
 \subsection{\emph{-mse\index{-mse}} (*)}\vspace*{-0.5em}
@@ -3858,7 +3854,7 @@ even if a color is specified.
 ~\\~\\\textbf{Default values}: {\small \texttt{'plot\_type=1', 'vertex\_type=1', 'ymin=ymax=0 (auto)', 'opacity=1', 'pattern=(undefined)'}}
 and 'color1=0'.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def364.jpg}\\
-{\footnotesize \textbf{Example 364~:} \texttt{image.jpg --rows 50\% -blur[-1] 3 -s[-1] c -div[0] 1.5 -graph[0] [1],2,0,0,0,1,255,0,0 -graph[0] [2],2,0,0,0,1,0,255,0 -graph[0] [3],2,0,0,0,1,0,0,255 -keep[0]}}
+{\footnotesize \textbf{Example 364~:} \texttt{image.jpg --rows 50\% -blur[-1] 3 -split[-1] c -div[0] 1.5 -graph[0] [1],2,0,0,0,1,255,0,0 -graph[0] [2],2,0,0,0,1,0,255,0 -graph[0] [3],2,0,0,0,1,0,0,255 -keep[0]}}
 \end{center}
 
 \subsection{\emph{-grid\index{-grid}} }\vspace*{-0.5em}
@@ -3919,7 +3915,7 @@ Render marble like pattern on selected images.
 {\small \texttt{\_width$>$0,\_height$>$0,\_cell\_size$>$0}}\\~\\
 Input maze with specified size.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def371.jpg}\\
-{\footnotesize \textbf{Example 371~:} \texttt{-maze 30,20 -negative -n 0,255}}
+{\footnotesize \textbf{Example 371~:} \texttt{-maze 30,20 -negative -normalize 0,255}}
 \end{center}
 
 \subsection{\emph{-maze\_mask\index{-maze\_mask}} }\vspace*{-0.5em}
@@ -4817,7 +4813,7 @@ Extract 3d streamlines from selected vector fields or from specified formula.
 ~\\'interpolation' can be \{ 0=nearest integer ~$|$~ 1=1st-order ~$|$~ 2=2nd-order ~$|$~ 3=4th-order \}.
 ~\\~\\\textbf{Default values}: {\small \texttt{'dl=0.1', 'interpolation=2', 'is\_backward=0'} and \texttt{'is\_oriented=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def471.jpg}\\
-{\footnotesize \textbf{Example 471~:} \texttt{100,100,100,3 -rand -10,10 -blur 3 -repeat 300 --streamline3d[0] \{?(100)\},\{?(100)\},\{?(100)\},1000,1,1 -color3d[-1] @\{-RGB\} -done -rm[0] -box3d 100 -primitives3d[-1] 1 -add3d}}
+{\footnotesize \textbf{Example 471~:} \texttt{100,100,100,3 -rand -10,10 -blur 3 -repeat 300 --streamline3d[0] \{?(100)\},\{?(100)\},\{?(100)\},1000,1,1 -color3d[-1] @\{-RGB\} -done -remove[0] -box3d 100 -primitives3d[-1] 1 -add3d}}
 \end{center}
 
 \subsection{\emph{-sub3d\index{-sub3d}} (+)}\vspace*{-0.5em}
@@ -5426,7 +5422,7 @@ Apply halftone dithering to selected images.
 Apply hard B\&W sketch effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=1000', 'sampling=3', 'opacity=0.1', 'edge\_threshold=20'} and \texttt{'is\_fast=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def528.jpg}\\
-{\footnotesize \textbf{Example 528~:} \texttt{image.jpg --hardsketchbw 200,70,0.1,10 -median[-1] 2 --local -reverse -blur[-1] 3 -blend overlay -endl}}
+{\footnotesize \textbf{Example 528~:} \texttt{image.jpg --hardsketchbw 200,70,0.1,10 -median[-1] 2 --local -reverse -blur[-1] 3 -blend overlay -endlocal}}
 \end{center}
 
 \subsection{\emph{-hearts\index{-hearts}} }\vspace*{-0.5em}
@@ -5561,7 +5557,7 @@ Add random stars to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_orients=2', 'start\_angle=45', 'angle\_range=180', 'length=30', 'threshold=1', 'opacity=0.03',}}
 ~\\'bgfactor=0', 'density=0.6', 'sharpness=0.1', 'anisotropy=0.6', 'smoothness=0.25', 'coherence=1', 'is\_boost=0' and 'is\_curved=1'.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def543.jpg}\\
-{\footnotesize \textbf{Example 543~:} \texttt{image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endl}}
+{\footnotesize \textbf{Example 543~:} \texttt{image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endlocal}}
 \end{center}
 
 \subsection{\emph{-sponge\index{-sponge}} }\vspace*{-0.5em}
@@ -6221,7 +6217,7 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 ~\\Heightmaxima filtering (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'height=1'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def606.jpg}\\
-{\footnotesize \textbf{Example 606~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]}}
+{\footnotesize \textbf{Example 606~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]}}
 \end{center}
 
 \subsection{\emph{-pink\_heightminima\index{-pink\_heightminima}} }\vspace*{-0.5em}
@@ -6231,7 +6227,7 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 ~\\Heightminima filtering (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'height=1'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def607.jpg}\\
-{\footnotesize \textbf{Example 607~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -k[-1,-2]}}
+{\footnotesize \textbf{Example 607~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]}}
 \end{center}
 
 \subsection{\emph{-pink\_htkern\index{-pink\_htkern}} }\vspace*{-0.5em}
@@ -6242,7 +6238,7 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 ~\\Grayscale ultimate homotopic thinning/thickening without condition (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'type=""'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def608.jpg}\\
-{\footnotesize \textbf{Example 608~:} \texttt{image.jpg --pink\_htkern ,u --pink\_htkern[0] , ---[-1,-2] -rm[0]}}
+{\footnotesize \textbf{Example 608~:} \texttt{image.jpg --pink\_htkern ,u --pink\_htkern[0] , ---[-1,-2] -remove[0]}}
 \end{center}
 
 \subsection{\emph{-pink\_lvkern\index{-pink\_lvkern}} }\vspace*{-0.5em}

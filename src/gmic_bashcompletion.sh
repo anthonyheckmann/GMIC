@@ -396,7 +396,6 @@ _gmic_def()
 	      -red_eye --red_eye\
 	      -remove_hotpixels --remove_hotpixels\
 	      -remove_pixels --remove_pixels\
-	      -repair --repair\
 	      -sharpen --sharpen\
 	      -smooth --smooth\
 	      -split_freq --split_freq\
@@ -1226,7 +1225,6 @@ _gmic_def()
 	      red_eye\
 	      remove_hotpixels\
 	      remove_pixels\
-	      repair\
 	      sharpen\
 	      smooth\
 	      split_freq\
@@ -2387,7 +2385,7 @@ _gmic_def()
 		return 0
 		;;
 		"-inpaint" | "--inpaint")
-		COMPREPLY=( $(compgen -W "[mask] >") )
+		COMPREPLY=( $(compgen -W "[mask] [mask],_patch_size>=1,_lookup_size>=1,_lookup_increment>=1,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={0|1}") )
 		return 0
 		;;
 		"-inpaint_flow" | "--inpaint_flow")
@@ -2436,10 +2434,6 @@ _gmic_def()
 		;;
 		"-remove_pixels" | "--remove_pixels")
 		COMPREPLY=( $(compgen -W "density>=0,_pixel_sum>=0 >") )
-		return 0
-		;;
-		"-repair" | "--repair")
-		COMPREPLY=( $(compgen -W "[mask],_patch_size>=1,_lookup_size>=1,_lookup_increment>=1,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={0|1} >") )
 		return 0
 		;;
 		"-sharpen" | "--sharpen")
