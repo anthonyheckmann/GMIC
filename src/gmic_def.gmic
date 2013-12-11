@@ -15019,7 +15019,7 @@ gimp_logo_ca :
 #@gimp : link = link{"Make a donation to the G'MIC project","http://sourceforge.net/donate/index.php?group_id=234931"}
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these donators (recently received first) :"}
-#@gimp : link = link(0,"[1] Matthias Zepper","http://www.flickr.com/photos/curnen/")
+#@gimp : link = link(0,"[1] Matthias Zepper","http://www.matthias-zepper.de/")
 #@gimp : link = link(0,"[2] Christian Mariucci","")
 #@gimp : link = link(0,"[3] M. R.","")
 #@gimp : link = link(0,"[4] Mark Link","")
