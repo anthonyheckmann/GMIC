@@ -5836,12 +5836,12 @@ solve_poisson : -check "${2=60}>=0 && ${3=5}>0 && ${4=0}>=0"
     -rm[0]
   -endl -done -v +
 
-#@gmic split_scales : _nb_scales>0,_scale_ratio[%]>=0
-#@gmic : Split selected images into 'nb_scales' spatial scales (gaussian pyramids).
+#@gmic split_details : _nb_scales>0,_scale_ratio[%]>=0
+#@gmic : Split selected images into 'nb_scales' spatial detail scales (gaussian pyramids).
 #@gmic : Default values: 'nb_scales=4' and 'scale_ratio=0.5%'.
-#@gmic : $ image.jpg -decompose_scales ,
-split_scales : -check "isint(${1=4}) && $1>0 && ${2=0.5%}>=0"
-  -e[^-1] "Split image$? using $1 spatial scales with smoothness ratio $2."
+#@gmic : $ image.jpg -decompose_details ,
+split_details : -check "isint(${1=4}) && $1>0 && ${2=0.5%}>=0"
+  -e[^-1] "Split image$? using $1 spatial detail scales with smoothness ratio $2."
   -v - -repeat @# -l[$<] -repeat {$1-1} --b[-1] $2 --[-2] [-1] -rv[-2,-1] -done -endl -done -v +
 
 #@gmic structuretensors : _scheme : (+)
@@ -18194,14 +18194,18 @@ gimp_unsharp :
 gimp_unsharp_preview :
   -gimp_split_preview "-gimp_unsharp $*",$-1
 
-#@gimp Split scales : gimp_split_scales, gimp_split_scales_preview(1)
-#@gimp : Action = choice{"Decompose or update","Recompose"}
+#@gimp Split details : gimp_split_details, gimp_split_details_preview(1)
+#@gimp : Action = choice{"Decompose/update","Recompose"}
 #@gimp : sep = separator(), note = note("<small><b>Decompose options:</b></small>")
 #@gimp : Number of scales = int(5,2,16)
 #@gimp : Scale smoothness ratio = float(4,0,20)
 #@gimp : Output as = choice(2,"One row","One column","Tiling")
+#@gimp : sep = separator()
+#@gimp : note = note{"<small><b>Note:</b> Once you have performed a decomposition, just repeat the filter (with shortcut <i>CTRL+F</i>) to update/view the result of
+#@gimp : the recomposition, displayed as the first image. When you are done with your modifications, select <i>Recompose</i> mode to render the final recomposed image.
+#@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/12</i>.</small>")
-gimp_split_scales :
+gimp_split_details :
 
   -if {$1==1} -repeat @# -l[$<]
 
@@ -18237,7 +18241,7 @@ gimp_split_scales :
   -onfail
 
     # Decompose.
-    -remove_opacity --split_scales $2,$3
+    -remove_opacity --split_details $2,$3
     vlist=71777367,$2,$3,$4
     -l[-{$2-1}--1] -repeat @#
       im=@{$>,round(im,0.01)} iM=@{$>,round(iM,0.01)} vlist=$vlist,$im,$iM -*[$>] {127/max(abs($im),abs($iM))}
@@ -18249,10 +18253,8 @@ gimp_split_scales :
 
   -endl -done -endif
 
-gimp_split_scales_preview :
-  -if $1 -gimp_no_preview ,
-  -else -gimp_split_scales $*
-  -endif
+gimp_split_details_preview :
+  -if $1 -gimp_no_preview , -else -gimp_split_details $* -endif
 
 #@gimp Tone mapping : gimp_map_tones, gimp_map_tones_preview(0)
 #@gimp : Threshold = float(0.5,0,1)
