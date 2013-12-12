@@ -5836,6 +5836,14 @@ solve_poisson : -check "${2=60}>=0 && ${3=5}>0 && ${4=0}>=0"
     -rm[0]
   -endl -done -v +
 
+#@gmic split_scales : _nb_scales>0,_scale_ratio[%]>=0
+#@gmic : Split selected images into 'nb_scales' spatial scales (gaussian pyramids).
+#@gmic : Default values: 'nb_scales=4' and 'scale_ratio=0.5%'.
+#@gmic : $ image.jpg -decompose_scales ,
+split_scales : -check "isint(${1=4}) && $1>0 && ${2=0.5%}>=0"
+  -e[^-1] "Split image$? using $1 spatial scales with smoothness ratio $2."
+  -v - -repeat @# -l[$<] -repeat {$1-1} --b[-1] $2 --[-2] [-1] -rv[-2,-1] -done -endl -done -v +
+
 #@gmic structuretensors : _scheme : (+)
 #@gmic : Compute the structure tensor field of selected images.
 #@gmic : 'scheme' can be { 0=centered | 1=forward-backward1 | 2=forward-backward2 }.
@@ -18186,6 +18194,45 @@ gimp_unsharp :
 
 gimp_unsharp_preview :
   -gimp_split_preview "-gimp_unsharp $*",$-1
+
+#@gimp Split scales : gimp_split_scales, gimp_split_scales_preview(1)
+#@gimp : Action = choice{"Decompose","Recompose"}
+#@gimp : Number of scales = int(6,2,16)
+#@gimp : Scale smoothness ratio = float(1.5,0,20)
+#@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/12</i>.</small>")
+gimp_split_scales :
+
+  -if $1 -repeat @# -l[$<]
+
+    # Recompose.
+    --rows 100% vlist=@{-1,t} -rm[-1] -rows 0,{h-2}
+    nb_scales={arg(1,$vlist)}
+    sigma={arg(2,$vlist)}
+    N={int(sqrt($nb_scales))}
+    M={round($nb_scales/$N,1,1)}
+    -split_tiles $M,$N
+    -repeat {@#-1} im={arg(2*$>+3,$vlist)} iM={arg(2*$>+4,$vlist)} -n[{1+$>}] $im,$iM -done
+    -+
+  -onfail -error "Cannot recompose image, decompose it before trying to recompose it !"
+  -endl -done
+
+  -else -remove_opacity -repeat @# -l[$<]
+
+    # Decompose.
+    -split_scales $2,$3 vlist=$2,$3
+    -repeat {@#-1} -l[{1+$>}]
+      im={im} iM={iM} vlist=$vlist,$im,$iM -* {127/max(abs($im),abs($iM))} -+ 128
+    -endl -done
+    -c 0,255 -to_a -append_tiles ,
+    ({'$vlist'}) --[-1] 1 -r[-1] 100%,100%,1,@{-2,s} -+[-1] 1 -a y
+
+  -endl -done -endif
+  -c 0,255
+
+gimp_split_scales_preview :
+  -if $1 -gimp_no_preview ,
+  -else -gimp_split_scales $*
+  -endif
 
 #@gimp Tone mapping : gimp_map_tones, gimp_map_tones_preview(0)
 #@gimp : Threshold = float(0.5,0,1)
