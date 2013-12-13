@@ -18201,8 +18201,13 @@ gimp_unsharp_preview :
 #@gimp : Scale ratio = float(4,0,20)
 #@gimp : Output mode = choice(2,"Row","Column","Tiling")
 #@gimp : sep = separator()
-#@gimp : note = note{"<small><b>Note:</b> Once you have performed a decomposition, just repeat the filter (with shortcut <i>CTRL+F</i>) to update/view the result of
-#@gimp : the recomposition, displayed as the first image. When you are done with your modifications, select <i>Recompose</i> mode to render the final recomposed image.
+#@gimp : note = note{"<small><b>Instructions of use:</b>\n
+#@gimp : 1. Set parameter <i>Action</i> to <i>Decompose/update</i> and choose decompose parameters. Then click <i>OK</i>.\n
+#@gimp : 2. Process your image. For instance, remove details in the appropriate scales using the neutral color <i>(128,128,128)</i>.\n
+#@gimp : 3. Use <i>CTRL+F</i> to apply the filter again (update mode). The preview of the resulting recomposed image is always shown at the top left of your canvas.\n
+#@gimp : 4. Repeat steps 2. and 3. as many times as you want.\n
+#@gimp : 5. When you are happy with the result, open the G'MIC plug-in once again, set parameter <i>Action</i> to <i>Recompose</i>, and click <i>OK</i>.\n
+#@gimp : 6. You get your final modified image alone.
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/12</i>.</small>")
 gimp_split_details :
