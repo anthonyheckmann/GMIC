@@ -1696,6 +1696,12 @@ void on_dialog_apply_clicked() {
   process_image(0);
   _create_dialog_gui = false;
   _gimp_preview_invalidate();
+  const char *const commands_line = get_commands_line(false);
+  if (commands_line) { // Remember command line for the next use of the filter.
+    char s_tmp[64] = { 0 };
+    cimg_snprintf(s_tmp,sizeof(s_tmp),"gmic_commands_line%u",get_current_filter());
+    gimp_set_data(s_tmp,commands_line,std::strlen(commands_line));
+  }
 }
 
 void on_dialog_net_update_toggled(GtkToggleButton *const toggle_button) {
@@ -2061,11 +2067,18 @@ void process_image(const char *const commands_line) {
 
   // Check that everything went fine, else display an error dialog.
   if (spt.error_message) {
-    GtkWidget *const
-      message = gtk_message_dialog_new(0,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_OK,"%s",spt.error_message.data());
-    gtk_widget_show(message);
-    gtk_dialog_run(GTK_DIALOG(message));
-    gtk_widget_destroy(message);
+
+    if (run_mode!=GIMP_RUN_NONINTERACTIVE) {
+      GtkWidget *const
+        message = gtk_message_dialog_new(0,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_OK,"%s",spt.error_message.data());
+      gtk_widget_show(message);
+      gtk_dialog_run(GTK_DIALOG(message));
+      gtk_widget_destroy(message);
+    } else {
+      std::fprintf(cimg::output(),"\n[gmic_gimp]./error/ When runnin command '%s', this error occured :\n%s\n",
+                   _commands_line,spt.error_message.data());
+      std::fflush(cimg::output());
+    }
     status = GIMP_PDB_CALLING_ERROR;
   } else {
 
