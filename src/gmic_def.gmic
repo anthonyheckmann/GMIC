@@ -5839,7 +5839,7 @@ solve_poisson : -check "${2=60}>=0 && ${3=5}>0 && ${4=0}>=0"
 #@gmic split_details : _nb_scales>0,_scale_ratio[%]>=0
 #@gmic : Split selected images into 'nb_scales' spatial detail scales (gaussian pyramids).
 #@gmic : Default values: 'nb_scales=4' and 'scale_ratio=0.5%'.
-#@gmic : $ image.jpg -decompose_details ,
+#@gmic : $ image.jpg -split_details ,
 split_details : -check "isint(${1=4}) && $1>0 && ${2=0.5%}>=0"
   -e[^-1] "Split image$? using $1 spatial detail scales with smoothness ratio $2."
   -v - -repeat @# -l[$<] -repeat {$1-1} --b[-1] $2 --[-2] [-1] -rv[-2,-1] -done -endl -done -v +
