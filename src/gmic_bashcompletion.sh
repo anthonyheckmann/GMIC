@@ -403,6 +403,7 @@ _gmic_def()
 	      -solidify_linear --solidify_linear\
 	      -solidify_watershed --solidify_watershed\
 	      -solve_poisson --solve_poisson\
+	      -split_details --split_details\
 	      -structuretensors --structuretensors\
 	      -tv_flow --tv_flow\
 	      -unsharp --unsharp\
@@ -1232,6 +1233,7 @@ _gmic_def()
 	      solidify_linear\
 	      solidify_watershed\
 	      solve_poisson\
+	      split_details\
 	      structuretensors\
 	      tv_flow\
 	      unsharp\
@@ -2454,6 +2456,10 @@ _gmic_def()
 		;;
 		"-solve_poisson" | "--solve_poisson")
 		COMPREPLY=( $(compgen -W ""laplacian_command",_nb_iterations>=0,_time_step>0,_nb_scales>=0 >") )
+		return 0
+		;;
+		"-split_details" | "--split_details")
+		COMPREPLY=( $(compgen -W "_nb_scales>0,_scale_ratio[%]>=0 >") )
 		return 0
 		;;
 		"-structuretensors" | "--structuretensors")
