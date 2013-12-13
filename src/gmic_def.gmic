@@ -5836,15 +5836,17 @@ solve_poisson : -check "${2=60}>=0 && ${3=5}>0 && ${4=0}>=0"
     -rm[0]
   -endl -done -v +
 
-#@gmic split_details : _nb_scales>0,_scale_ratio[%]>=0,_scale_linearity>0
-#@gmic : Split selected images into 'nb_scales' spatial detail scales (gaussian pyramids).
-#@gmic : Default values: 'nb_scales=4', 'scale_ratio=0.5%' and 'scale_linearity=0.65'.
+#@gmic split_details : _nb_scales>0,_base_scale[%]>=0,_detail_scale[%]>=0
+#@gmic : Split selected images into 'nb_scales' spatial scales (gaussian pyramids).
+#@gmic : Default values: 'nb_scales=4', 'base_scale=2%' and 'detail_scale=0.5%'.
 #@gmic : $ image.jpg -split_details ,
-split_details : -check "isint(${1=4}) && $1>0 && ${2=0.5%}>=0 && ${3=0.65}>0"
-  -e[^-1] "Split image$? using $1 spatial detail scales with smoothness ratio $2 and scale linearity $3."
+split_details : -check "isint(${1=4}) && $1>0 && ${2=2%}>=0 && ${3=0.5%}>=0"
+  -e[^-1] "Split image$? using $1 spatial scales with base scale $2 and detail scale $3."
   -v - -repeat @# -l[$<]
-    sigma={if(@{-is_percent\ $2},$2*max(w,h),$2)}
-    -repeat {$1-1} --b[-1] {$sigma*($3^$>)} --[-2] [-1] -rv[-2,-1] -done
+    ss={max(0.5,if(@{-is_percent\ $2},$2*max(w,h),$2))}
+    se={max(0.5,if(@{-is_percent\ $3},$3*max(w,h),$3))}
+    ds={$se-$ss}
+    -repeat {$1-1} --b[-1] {$ss+$>*$ds/($1-2)} --[-2] [-1] -rv[-2,-1] -done
   -endl -done -v +
 
 #@gmic structuretensors : _scheme : (+)
@@ -18201,9 +18203,9 @@ gimp_unsharp_preview :
 #@gimp Split details : gimp_split_details, gimp_split_details_preview(1)
 #@gimp : Action = choice{"Decompose/update","Recompose"}
 #@gimp : sep = separator(), note = note("<small><b>Decompose options:</b></small>")
-#@gimp : Number of scales = int(5,2,16)
-#@gimp : Scale ratio = float(4,0,20)
-#@gimp : Scale linearity = float(0.65,0.1,1.5)
+#@gimp : Number of scales = int(3,2,16)
+#@gimp : Base scale = float(2,0,10)
+#@gimp : Detail scale = float(0.5,0,10)
 #@gimp : Output mode = choice(2,"Row","Column","Tiling")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Instructions of use:</b>\n
@@ -18248,7 +18250,7 @@ gimp_split_details :
   -onfail
 
     # Decompose.
-    --split_details $2,$3%,$4
+    --split_details $2,$3%,$4%
     vlist=71777367,$2,$3,$4,$5
     -l[-{$2-1}--1] -repeat @#
       fact={round(max(abs(im),abs(iM)),0.01)} vlist=$vlist,$fact -*[$>] {127/$fact}
