@@ -18203,7 +18203,7 @@ gimp_unsharp_preview :
 #@gimp : sep = separator(), note = note("<small><b>Decompose options:</b></small>")
 #@gimp : Number of scales = int(5,2,16)
 #@gimp : Scale ratio = float(4,0,20)
-#@gimp : Scale linearity = float(0.65,0.5,1.5)
+#@gimp : Scale linearity = float(0.65,0.1,1.5)
 #@gimp : Output mode = choice(2,"Row","Column","Tiling")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Instructions of use:</b>\n
@@ -18254,7 +18254,7 @@ gimp_split_details :
       fact={round(max(abs(im),abs(iM)),0.01)} vlist=$vlist,$fact -*[$>] {127/$fact}
     -done -+ 128 -endl
     -c 0,255
-    -if {$4==0} -a x -elif {$4==1} -a y -else -append_tiles , -endif
+    -if {$5==0} -a x -elif {$5==1} -a y -else -append_tiles , -endif
     ({'$vlist'},0) -j[0] [1] -rm[1]
 
   -endl -done -endif
