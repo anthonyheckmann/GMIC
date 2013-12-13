@@ -18198,58 +18198,54 @@ gimp_unsharp_preview :
 #@gimp : Action = choice{"Decompose/update","Recompose"}
 #@gimp : sep = separator(), note = note("<small><b>Decompose options:</b></small>")
 #@gimp : Number of scales = int(5,2,16)
-#@gimp : Scale smoothness ratio = float(4,0,20)
-#@gimp : Output as = choice(2,"One row","One column","Tiling")
+#@gimp : Scale ratio = float(4,0,20)
+#@gimp : Output mode = choice(2,"Row","Column","Tiling")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Note:</b> Once you have performed a decomposition, just repeat the filter (with shortcut <i>CTRL+F</i>) to update/view the result of
 #@gimp : the recomposition, displayed as the first image. When you are done with your modifications, select <i>Recompose</i> mode to render the final recomposed image.
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/12</i>.</small>")
 gimp_split_details :
-
+  -remove_opacity
   -if {$1==1} -repeat @# -l[$<]
-
-    --rows 100% vlist=@{-1,t} -rm[-1]
+    --rows 0 vlist=@{-1,t} -rm[-1]
     magick={arg(1,$vlist)} nb_imgs={1+arg(2,$vlist)} sigma={arg(3,$vlist)} mode={arg(4,$vlist)}
     -if {$magick!=71777367||$nb_imgs<2||$sigma<0||$mode<0||$mode>2} -error "" -endif
 
     # Recompose.
-    -remove_opacity -rows 0,{h-2}
     -if {$mode==0} -s x,$nb_imgs -elif {$mode==1} -s y,$nb_imgs
     -else N={int(sqrt($nb_imgs))} M={round($nb_imgs/$N,1,1)} -split_tiles $M,$N -k[0-{$nb_imgs-1}]
     -endif
-    -rm[0] -l[^0] -repeat @# im={arg(2*$>+5,$vlist)} iM={arg(2*$>+6,$vlist)} -n[$>] $im,$iM -done -endl
+    -rm[0] -l[^0] -- 128 -repeat @# fact={arg($>+5,$vlist)} -*[$>] {$fact/127} -done -endl
     -+ -c 0,255
   -onfail -error "Cannot recompose image, decompose it before trying to recompose it !"
   -endl -done
 
   -else -repeat @# -l[$<]
-
-    --rows 100% vlist=@{-1,t} -rm[-1]
+    --rows 0 vlist=@{-1,t} -rm[-1]
     magick={arg(1,$vlist)} nb_imgs={1+arg(2,$vlist)} sigma={arg(3,$vlist)} mode={arg(4,$vlist)}
     -if {$magick!=71777367||$nb_imgs<2||$sigma<0||$mode<0||$mode>2} -error "" -endif
 
     # Update.
-    --l -remove_opacity -rows 0,{h-2}
-    -if {$mode==0} -s x,$nb_imgs -elif {$mode==1} -s y,$nb_imgs
-    -else N={int(sqrt($nb_imgs))} M={round($nb_imgs/$N,1,1)} -split_tiles $M,$N -k[0-{$nb_imgs-1}]
-    -endif
-    -rm[0] -l[^0] -repeat @# im={arg(2*$>+5,$vlist)} iM={arg(2*$>+6,$vlist)} -n[$>] $im,$iM -done -endl
-    -+ -c 0,255 -endl
-    -j[0] [1] -rm[1]
-
+    --l
+      -if {$mode==0} -s x,$nb_imgs -elif {$mode==1} -s y,$nb_imgs
+      -else N={int(sqrt($nb_imgs))} M={round($nb_imgs/$N,1,1)} -split_tiles $M,$N -k[0-{$nb_imgs-1}]
+      -endif
+      -rm[0] -l[^0] -- 128 -repeat @# fact={arg($>+5,$vlist)} -*[$>] {$fact/127} -done -endl
+      -+ -c 0,255
+    -endl
+    -j[0] [1] -rm[1] ({'$vlist'},0) -j[0] [1] -rm[1]
   -onfail
 
     # Decompose.
-    -remove_opacity --split_details $2,$3
+    --split_details $2,$3
     vlist=71777367,$2,$3,$4
     -l[-{$2-1}--1] -repeat @#
-      im=@{$>,round(im,0.01)} iM=@{$>,round(iM,0.01)} vlist=$vlist,$im,$iM -*[$>] {127/max(abs($im),abs($iM))}
+      fact={round(max(abs(im),abs(iM)),0.01)} vlist=$vlist,$fact -*[$>] {127/$fact}
     -done -+ 128 -endl
-    -c 0,255 -to_a
-    -if {$4==0} -a x -elif {$4==1} -a y -else -append_tiles , -endif
     -c 0,255
-    ({'$vlist'}) --[-1] 1 -r[-1] 100%,100%,1,@{-2,s} -+[-1] 1 -a[-2,-1] y
+    -if {$4==0} -a x -elif {$4==1} -a y -else -append_tiles , -endif
+    ({'$vlist'},0) -j[0] [1] -rm[1]
 
   -endl -done -endif
 
