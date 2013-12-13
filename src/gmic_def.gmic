@@ -21445,31 +21445,6 @@ gimp_fourier_preview :
 gimp_watermark_fourier :
   -watermark_fourier "$1",$2 -c 0,255
 
-#@gimp Frequency merging : gimp_compose_freq, gimp_compose_freq(1)
-#@gimp : Note = note{"<small><b>Note:</b>
-#@gimp : This filter needs two layers to work properly. Set the <i>Input layers</i> option to handle multiple input layers.
-#@gimp : </small>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
-gimp_compose_freq :
-  -repeat {int(@#/2)}
-    --[-1] 128 -*[-1] 2 -+[-2,-1] -c[-1] 0,255
-  -mv[-1] 0 -done
-
-#@gimp Frequency splitting : gimp_split_freq, gimp_split_freq_preview(1)
-#@gimp : Smoothness = float(3,0,20)
-#@gimp : Note = note{"<small><b>Note:</b>
-#@gimp : This filter splits an image layer into two layers, one containing the low frequencies (colors), the other with the high frequencies (contours). You can thus process each layer separately, then recompose them with the previous <b>Frequency merging</b> filter.
-#@gimp : </small>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
-gimp_split_freq_preview :
-  -gimp_split_freq $1 -k[0,1] -a x
-
-gimp_split_freq :
-  -repeat @#
-    --b[-1] $1 --[-2] [-1] -/[-2] 2 -+[-2] 128 -rv[-2,-1]
-  -mv[-2,-1] 0 -done
-
-
 #@gimp _<b>Various</b>
 #----------------------
 
