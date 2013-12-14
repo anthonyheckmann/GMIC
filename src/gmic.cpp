@@ -2632,7 +2632,7 @@ void gmic::_gmic(const char *const commands_line, CImgList<T>& images,
   focale3d = 700;
   light3d.assign();
   light3d_x = light3d_y = 0;
-  light3d_z = -5e8;
+  light3d_z = -5e8f;
   specular_lightness3d = 0.15f;
   specular_shininess3d = 0.8f;
   if (p_progress) progress = p_progress; else { _progress = -1; progress = &_progress; }
@@ -6910,7 +6910,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Set 3d light position.
           if (!std::strcmp("-light3d",item)) {
             gmic_substitute_args();
-            float lx = 0, ly = 0, lz = -5e8;
+            float lx = 0, ly = 0, lz = -5e8f;
             CImg<unsigned int> ind;
             char sep = 0;
             if (std::sscanf(argument,"%f,%f,%f%c",
@@ -6931,7 +6931,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             } else {
               print(images,"Reset 3d light to default.");
               light3d.assign();
-              light3d_x = light3d_y = 0; light3d_z = -5e8;
+              light3d_x = light3d_y = 0; light3d_z = -5e8f;
             }
             continue;
           }
