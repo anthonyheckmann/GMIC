@@ -18205,8 +18205,10 @@ gimp_unsharp_preview :
 #@gimp : sep = separator(), note = note("<small><b>Decompose options:</b></small>")
 #@gimp : Number of scales = int(3,2,16)
 #@gimp : Base scale = float(5,0,20)
-#@gimp : Detail scale = float(1,0,20)
+#@gimp : Details scale = float(1,0,20)
 #@gimp : Output mode = choice(2,"Row","Column","Tiling")
+#@gimp : sep = separator()
+#@gimp : Preview type = choice(3,"Base scale","Details scales","Finest details scale","All scales")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Instructions of use:</b>\n
 #@gimp : 1. Set parameter <i>Action</i> to <i>Decompose/update</i> and choose decompose parameters. Then click <i>OK</i>.\n
@@ -18262,7 +18264,11 @@ gimp_split_details :
   -endl -done -endif
 
 gimp_split_details_preview :
-  -if $1 -gimp_no_preview , -else -gimp_split_details $* -endif
+  -if $1 -gimp_no_preview ,
+  -else -repeat @# -l[$>]
+    --split_details $2,$3,$4 -n[2--1] 0,255
+    -if {$6==0} -k[1] -elif {$6==1} -k[2--1] -append_tiles , -elif {$6==2} -k[-1] -else -append_tiles , -endif
+  -endl -done -endif
 
 #@gimp Tone mapping : gimp_map_tones, gimp_map_tones_preview(0)
 #@gimp : Threshold = float(0.5,0,1)
