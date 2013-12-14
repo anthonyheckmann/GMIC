@@ -18230,8 +18230,7 @@ gimp_split_details :
     -if {$mode==0} -s x,$nb_imgs -elif {$mode==1} -s y,$nb_imgs
     -else N={int(sqrt($nb_imgs))} M={round($nb_imgs/$N,1,1)} -split_tiles $M,$N -k[0-{$nb_imgs-1}]
     -endif
-    -rm[0] -l[^0] -- 128 -repeat @# fact={arg($>+4,$vlist)} -*[$>] {$fact/127} -done -endl
-    -+ -c 0,255
+    -rm[0] -l[^0] -- 128 -repeat @# -*[$>] {arg($>+4,$vlist)/127} -done -endl -+ -c 0,255
   -onfail -error "Cannot recompose image, decompose it before trying to recompose it !"
   -endl -done
 
@@ -18245,8 +18244,7 @@ gimp_split_details :
       -if {$mode==0} -s x,$nb_imgs -elif {$mode==1} -s y,$nb_imgs
       -else N={int(sqrt($nb_imgs))} M={round($nb_imgs/$N,1,1)} -split_tiles $M,$N -k[0-{$nb_imgs-1}]
       -endif
-      -rm[0] -l[^0] -- 128 -repeat @# fact={arg($>+4,$vlist)} -*[$>] {$fact/127} -done -endl
-      -+ -c 0,255
+      -rm[0] -l[^0] -- 128 -repeat @# -*[$>] {arg($>+4,$vlist)/127} -done -endl -+ -c 0,255
     -endl
     -j[0] [1] -rm[1] ({'$vlist'},0) -j[0] [1] -rm[1]
   -onfail
@@ -18254,10 +18252,9 @@ gimp_split_details :
     # Decompose.
     --split_details $2,$3,$4
     vlist=71777367,$2,$5
-    -l[-{$2-1}--1] -repeat @#
+    -l[2--1] -repeat @#
       fact={round(max(abs(im),abs(iM)),0.01)} vlist=$vlist,$fact -*[$>] {127/$fact}
-    -done -+ 128 -endl
-    -c 0,255
+    -done -+ 128 -endl -c 0,255
     -if {$5==0} -a x -elif {$5==1} -a y -else -append_tiles , -endif
     ({'$vlist'},0) -j[0] [1] -rm[1]
 
