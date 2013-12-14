@@ -18261,6 +18261,7 @@ gimp_split_details :
   -endl -done -endif
 
 gimp_split_details_preview :
+  -remove_opacity
   -if $1 -gimp_no_preview ,
   -else -repeat @# -l[$>]
     --split_details $2,$3,$4 -n[2--1] 0,255
