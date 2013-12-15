@@ -18024,6 +18024,45 @@ gimp_watermark_visible :
 #@gimp _<b>Details</b>
 #----------------------
 
+#@gimp Details equalizer : gimp_equalize_details, gimp_equalize_details_preview(0)
+#@gimp : note = note("<small><b>Coarse scale:</b></small>")
+#@gimp : Threshold = float(0,0,10)
+#@gimp : Gain = float(0,-2,2)
+#@gimp : Smoothness = int(0,0,10)
+#@gimp : sep = separator(), note = note("<small><b>Medium scale:</b></small>")
+#@gimp : Threshold = float(0,0,10)
+#@gimp : Gain = float(0,-2,2)
+#@gimp : Smoothness = int(0,0,10)
+#@gimp : sep = separator(), note = note("<small><b>Small scale:</b></small>")
+#@gimp : Threshold = float(0,0,10)
+#@gimp : Gain = float(0,-2,2)
+#@gimp : Smoothness = int(0,0,10)
+#@gimp : sep = separator(), note = note("<small><b>Fine scale:</b></small>")
+#@gimp : Threshold = float(0,0,10)
+#@gimp : Gain = float(0,-2,2)
+#@gimp : Smoothness = int(0,0,10)
+#@gimp : sep = separator(), Channel(s) = choice(0,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/15</i>.</small>")
+_gimp_equalize_details :
+  -repeat @# -l[$>]
+    -split_details 5,5%,0.5%
+    -__gimp_equalize_details[1] $1,$2,$3,8
+    -__gimp_equalize_details[2] $4,$5,$6,4
+    -__gimp_equalize_details[3] $7,$8,$9,2
+    -__gimp_equalize_details[4] $10,$11,$12,1
+    -+ -c 0,255
+  -endl -done
+
+__gimp_equalize_details :
+  -threshold $1,1 -* {10^$2} -bilateral $4%,{$3*8}
+
+gimp_equalize_details :
+  -apply_channels "-_gimp_equalize_details ${1-12}",$13,0
+
+gimp_equalize_details_preview :
+  -gimp_split_preview "-gimp_equalize_details $*",$-1
+
 #@gimp Freaky details : gimp_freaky_details, gimp_freaky_details_preview(0)
 #@gimp : Amplitude = int(2,1,5)
 #@gimp : Scale = float(10,0,100)
