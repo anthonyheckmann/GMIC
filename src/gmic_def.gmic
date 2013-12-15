@@ -21946,6 +21946,7 @@ gmicol_rotate :
 #@gmicol _<b>Details</b>
 #-----------------------
 
+#@gmicol clone("Details equalizer")
 #@gmicol clone("Freaky details")
 #@gmicol clone("Local contrast enhancement")
 #@gmicol clone("Local normalization")
