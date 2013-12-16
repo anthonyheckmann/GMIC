@@ -19463,39 +19463,55 @@ gimp_cracks :
 gimp_cracks_preview :
   -gimp_split_preview "-gimp_cracks $*",$-1
 
-#@gimp Dots : gimp_dots,gimp_dots_preview(0)
+#@gimp Shapes : gimp_shapes,gimp_shapes_preview(0)
+#@gimp : Shape = choice("Circles","Squares","Diamond","Horizontal stripes","Vertical stripes")
 #@gimp : Number of scales = int(16,2,24)
 #@gimp : Resolution = float(10,1,50)
-#@gimp : Minimal radius = float(5,0,100)
-#@gimp : Maximal radius = float(50,0,100)
+#@gimp : Zoom factor = _int(2,1,8)
+#@gimp : Minimal size = float(5,0,150)
+#@gimp : Maximal size = float(90,0,150)
 #@gimp : Stencil type = choice(0,"Black & white","RGB","Color")
 #@gimp : Negative = bool(1)
 #@gimp : Antialiasing = bool(1)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
-gimp_dots :
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
+gimp_shapes :
   -remove_opacity -repeat @# -l[$>]
-
-    -if {!$5} -_gimp_dots $* -* 255
-    -elif {$5==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_dots[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
-    -else --_gimp_dots $* -r[0] $2%,$2% -r[0] [1],[1] -*
+    -if {!$7} -_gimp_shapes $* -* 255
+    -elif {$7==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_shapes[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
+    -else --_gimp_shapes $* -r[0] $3%,$3% -r[0] [1],[1] -*
     -endif
   -endl -done
 
-_gimp_dots :
-  -norm w={w} h={h} -r $2%,$2%,1,1,2
-  s={max(round($w/w),round($h/h))}
-  r0={$s*$3/100} r1={$s*$4/100}
-  -repeat $1 -_dt_circle[] {if($7,2,1)*2*round($r0+$>*($r1-$r0)/($1-1))} -done
-  -if $7 -r[-$1--1] 50%,50%,1,1,2 -endif
-  -r[-$1--1] @{-max_wh[-$1--1]},1,1,0,0,0.5,0.5 -r[-$1--1] $s,$s,1,1,0,0,0.5,0.5
-  -if $6 -rv[-$1--1] -*[-$1--1] -1 -+[-$1--1] 1 -endif
-  -map_sprites $1
+_gimp_shapes :
+  -norm w={w} h={h} -r $3%,$3%,1,1,2
+  s={(1+$9)*$4*max(round($w/w),round($h/h))}
+  r0={$s*$5%} r1={$s*$6%}
+  -repeat $2 -_gimp_shapes$1 {round($r0+$>*($r1-$r0)/($2-1))},$s -done
+  -r[-$2--1] $s,$s,1,1,0,0,0.5,0.5
+  -if $8 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
+  -map_sprites $2
+  -if $9 -r 50%,50%,1,1,2 -endif
 
-gimp_dots_preview :
+_gimp_shapes0 :
+  -_dt_circle[] $1
+
+_gimp_shapes1 :
+  -if $1 $1,$1,1,1,1 -else 1,1 -endif
+
+_gimp_shapes2 :
+  -if $1 $1,$1,1,1 -=[-1] 1,50%,50% -distance[-1] 1,1 -lt[-1] {$1/2} -else 1,1 -endif
+
+_gimp_shapes3 :
+  -if $1 $2,$1,1,1,1 -else 1,1 -endif
+
+_gimp_shapes4 :
+  -if $1 $1,$2,1,1,1 -else 1,1 -endif
+
+gimp_shapes_preview :
   -repeat @# -l[$>]
     w={w} h={h}
-    -gimp_split_preview "-gimp_dots $*",$-1
+    -gimp_split_preview "-gimp_shapes ${1-3},1,${5--2}",$-1
     -r $w,$h,1,100%,0,0,0.5,0.5
   -endl -done
 
@@ -22058,7 +22074,7 @@ gmicol_rotate :
 #@gmicol clone("Canvas")
 #@gmicol clone("Canvas texture")
 #@gmicol clone("Cracks")
-#@gmicol clone("Dots")
+#@gmicol clone("Shapes")
 #@gmicol clone("Halftone")
 #@gmicol clone("Hearts")
 #@gmicol clone("Lava")
