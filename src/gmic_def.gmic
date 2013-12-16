@@ -18027,38 +18027,49 @@ gimp_watermark_visible :
 #@gimp Details equalizer : gimp_equalize_details, gimp_equalize_details_preview(0)
 #@gimp : note = note("<small><b>Coarse scale:</b></small>")
 #@gimp : Threshold = float(0,0,10)
-#@gimp : Gain = float(0,-2,2)
 #@gimp : Smoothness = int(0,0,10)
+#@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
+#@gimp : Gain = float(0,-2,2)
 #@gimp : sep = separator(), note = note("<small><b>Medium scale:</b></small>")
 #@gimp : Threshold = float(0,0,10)
-#@gimp : Gain = float(0,-2,2)
 #@gimp : Smoothness = int(0,0,10)
+#@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
+#@gimp : Gain = float(0,-2,2)
 #@gimp : sep = separator(), note = note("<small><b>Small scale:</b></small>")
 #@gimp : Threshold = float(0,0,10)
-#@gimp : Gain = float(0,-2,2)
 #@gimp : Smoothness = int(0,0,10)
+#@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
+#@gimp : Gain = float(0,-2,2)
 #@gimp : sep = separator(), note = note("<small><b>Fine scale:</b></small>")
 #@gimp : Threshold = float(0,0,10)
-#@gimp : Gain = float(0,-2,2)
 #@gimp : Smoothness = int(0,0,10)
+#@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
+#@gimp : Gain = float(0,-2,2)
+#@gimp : sep = separator()
+#@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
+#@gimp : Spatial overlap = int(32,0,256)
 #@gimp : sep = separator(), Channel(s) = choice(0,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/15</i>.</small>")
 _gimp_equalize_details :
   -repeat @# -l[$>]
     -split_details 5,5%,0.5%
-    -__gimp_equalize_details[1] $1,$2,$3,8
-    -__gimp_equalize_details[2] $4,$5,$6,4
-    -__gimp_equalize_details[3] $7,$8,$9,2
-    -__gimp_equalize_details[4] $10,$11,$12,1
+    -__gimp_equalize_details[1] ${1-4},8
+    -__gimp_equalize_details[2] ${5-8},4
+    -__gimp_equalize_details[3] ${9-12},2
+    -__gimp_equalize_details[4] ${13-16},1
     -+ -c 0,255
   -endl -done
 
 __gimp_equalize_details :
-  -threshold $1,1 -* {10^$2} -bilateral $4%,{$3*8}
+  -threshold $1,1
+  -if {$3==0} -b {$2*$5/2}
+  -elif {$3==1} -repeat $2 -bilateral 1%,$5 -done
+  -else -smooth {$2*50},0.2,0.8,$5,$5 -endif
+  -* {10^$4}
 
 gimp_equalize_details :
-  -apply_channels "-_gimp_equalize_details ${1-12}",$13,0
+  -apply_channels "-gimp_parallel_overlap \"-_gimp_equalize_details ${1-16}\",$17,$18",$19,0
 
 gimp_equalize_details_preview :
   -gimp_split_preview "-gimp_equalize_details $*",$-1
@@ -20089,6 +20100,16 @@ gimp_selective_smoothing :
 
 gimp_selective_smoothing_preview :
   -gimp_split_preview "-gimp_selective_smoothing $*",$-1
+
+#@gimp Smooth [skin] : gimp_smooth_skin, gimp_smooth_skin_preview(0)
+#@gimp : Strength = int(5,0,10)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
+gimp_smooth_skin :
+  -gimp_equalize_details 0,0,0,0,0,4,2,-0.2,0,$1,2,0.1,0,0,0,0.05,0,32,2
+
+gimp_smooth_skin_preview :
+  -gimp_split_preview "-gimp_smooth_skin $*",$-1
 
 #@gimp Smooth [thin brush] : gimp_anisotropic_smoothing, gimp_anisotropic_smoothing(0)
 #@gimp : Amplitude = float(60,0,1000)
