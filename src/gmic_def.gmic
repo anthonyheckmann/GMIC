@@ -5259,7 +5259,8 @@ _jf_circle :
 
 _dt_circle :
  ir={round($1)}
- -if {$ir<2} $ir,$ir,1,1,1
+ -if {!$ir} 1,1
+ -elif {$ir<2} $ir,$ir,1,1,1
  -else
    {int($ir/2)+($ir%2)},{int($ir/2)+($ir%2)} -=[-1] 1,100%,100%
    -distance[-1] 1 -le[-1] {(i+0.4)/sqrt(2)}
@@ -8990,6 +8991,20 @@ linearize_tiles : -check "$1>0 && ${2=$1}>0"
     -repeat {int(@#/$s)} -a[-$s--1] c -mv[-1] 0 -done -append_tiles $1,$2
   -nm $nm,1 -endl -done -v +
 
+#@gmic map_sprites : _nb_scales>=1
+#@gmic : Map set of sprites (defined as the 'nb_scales' latest images of the selection) to other selected images,
+#@gmic : according to the luminosity of their pixel values.
+#@gmic : $ image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16
+map_sprites : -check "isint($1) && $1>0"
+  -e[^-1] "Map set of $1 sprites to image selection$?."
+  -v - -norm[0--{$1+1}] -quantize[0--{$1+1}] $1,0,1
+  -slices[-$1--1] 0 -r[-$1--1] @{-max_wh[-$1--1]},1,100%,0,0,0.5,0.5
+  -r[-$1--1] 100%,100%,1,@{-max_s[-$1--1]} w={w} h={h} -a[-$1--1] x
+  -r[^-1] ${w}00%,${h}00%,1,1 -*[^-1] $w
+  (0,{$w-1};0,{$w-1}^0,0;{$h-1},{$h-1}) -r[-1] $w,$h,1,2,3 -round[-1]
+  -repeat {@#-2} --r[-1] [$>],[$>],1,2,0,2 -r[$>] 100%,100%,1,2,0 -+[$>,-1] --warp[-2] [$>],0,0 -rv[$>,-1] -rm[-1]
+  -done -rm[-2,-1] -v +
+
 #@gmic quadratize_tiles : M>0,_N>0
 #@gmic : Quadratize MxN tiles on selected images.
 #@gmic : Default value: 'N=M'.
@@ -9201,22 +9216,6 @@ cubism : -check "${1=50}>=0 && ${2=10}>=0 && $2<=50 && ${5=0}>=0" -skip ${3=75},
     -endif
 
   -endl -done -v +
-
-#@gmic dotsbw : _nb_scales>0,0<=_resolution<=100,_radius_factor>=0
-#@gmic : Apply B&W dots effect on selected images.
-#@gmic : Default values: 'nb_scales=16', 'resolution=10' and 'radius_factor=1'.
-#@gmic : $ image.jpg --dotsbw , --blend shapeaverage0
-dotsbw : -check "isint(${1=16}) && $1>0 && ${2=10}>0 && $2<100 && ${3=1}>=0"
-  -e[^-1] "Apply B&W dots effect on image$?, with $1 scale(s), resolution $2% and radius factor %3."
-  -v - -remove_opacity -norm
-  -repeat @# -l[$>]
-    w={w} h={h} -r $2%,$2%,1,1,2 dx={round($w/w)} dy={round($h/h)} -n 0,255 -n 0,{$1-1} -round
-    $w,$h -nm[-1] @{0,n}
-    -repeat $1
-      --==[0] $> -r[-1] $w,$h,1,1,4,0,0.5,0.5 -distance[-1] 1 -le[-1] {0.65*$3*$dx*$>/$1-1} -or[-2,-1]
-    -done
-    -rm[0]
-  -endl -done -* 255 -v +
 
 #@gmic draw_whirl : _amplitude>=0
 #@gmic : Apply whirl drawing effect on selected images.
@@ -19464,27 +19463,41 @@ gimp_cracks :
 gimp_cracks_preview :
   -gimp_split_preview "-gimp_cracks $*",$-1
 
-#@gimp Dots : gimp_dots, gimp_dots_preview(0)
-#@gimp : Number of scales = int(10,1,20)
-#@gimp : Resolution = float(10,1,20)
-#@gimp : Radius = float(1,0,3)
-#@gimp : Stencil type = choice(2,"Black & White","RGB","Color")
-#@gimp : Transparency = bool(0)
-#@gimp : Negative = bool(0)
+#@gimp Dots : gimp_dots,gimp_dots_preview(0)
+#@gimp : Number of scales = int(16,2,24)
+#@gimp : Resolution = float(10,1,50)
+#@gimp : Minimal radius = float(5,0,100)
+#@gimp : Maximal radius = float(50,0,100)
+#@gimp : Stencil type = choice(0,"Black & white","RGB","Color")
+#@gimp : Negative = bool(1)
+#@gimp : Antialiasing = bool(1)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_dots :
-  -v -
-  -remove_opacity
-  -if $6 -* -1 -+ 255 -endif
-  -if {$4==0} -dotsbw $1,$2,$3
-  -elif {$4==1} -repeat @# -l[$>] -s c -dotsbw $1,$2,$3 -a c -endl -done
-  -else -repeat @# -l[$>] --dotsbw $1,$2,$3 -blend shapeaverage0 -endl -done -endif
-  -if $5 -to_rgba -replace_color 0,0,0,0,0,255,0,0,0,0 -endif
-  -if $6 -repeat @# -l[$>] -split_opacity -*[0] -1 -+[0] 255 -a c -endl -done -endif
+  -remove_opacity -repeat @# -l[$>]
+
+    -if {!$5} -_gimp_dots $* -* 255
+    -elif {$5==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_dots[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
+    -else --_gimp_dots $* -r[0] $2%,$2% -r[0] [1],[1] -*
+    -endif
+  -endl -done
+
+_gimp_dots :
+  -norm w={w} h={h} -r $2%,$2%,1,1,2
+  s={max(round($w/w),round($h/h))}
+  r0={$s*$3/100} r1={$s*$4/100}
+  -repeat $1 -_dt_circle[] {if($7,2,1)*2*round($r0+$>*($r1-$r0)/($1-1))} -done
+  -if $7 -r[-$1--1] 50%,50%,1,1,2 -endif
+  -r[-$1--1] @{-max_wh[-$1--1]},1,1,0,0,0.5,0.5 -r[-$1--1] $s,$s,1,1,0,0,0.5,0.5
+  -if $6 -rv[-$1--1] -*[-$1--1] -1 -+[-$1--1] 1 -endif
+  -map_sprites $1
 
 gimp_dots_preview :
-  -gimp_split_preview "-gimp_dots $*",$-1
+  -repeat @# -l[$>]
+    w={w} h={h}
+    -gimp_split_preview "-gimp_dots $*",$-1
+    -r $w,$h,1,100%,0,0,0.5,0.5
+  -endl -done
 
 #@gimp Halftone : gimp_halftone, gimp_halftone_preview(0)
 #@gimp : note = note("<b><small>Image parameters :</small></b>")

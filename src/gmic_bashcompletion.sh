@@ -2459,7 +2459,7 @@ _gmic_def()
 		return 0
 		;;
 		"-split_details" | "--split_details")
-		COMPREPLY=( $(compgen -W "_nb_scales>0,_scale_ratio[%]>=0 >") )
+		COMPREPLY=( $(compgen -W "_nb_scales>0,_base_scale[%]>=0,_detail_scale[%]>=0 >") )
 		return 0
 		;;
 		"-structuretensors" | "--structuretensors")

@@ -10,7 +10,7 @@
 \setlength{\hoffset}{-0.8cm} 
 \setcounter{tocdepth}{1} 
 \sloppy{} 
-\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.8.1 (beta)}\\\vspace*{1cm}}\end{center}}}} 
+\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.8.1}\\\vspace*{1cm}}\end{center}}}} 
 \author{\Large \bf David Tschumperl\'e} 
 \renewcommand\indexname{Index of commands} 
 \makeindex 
@@ -48,7 +48,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
  
  gmic: GREYC's Magic for Image Computing. 
  
-        Version 1.5.8.1 (beta), Copyright (c) 2008-2013, David Tschumperl\'e 
+        Version 1.5.8.1, Copyright (c) 2008-2013, David Tschumperl\'e 
         (http://gmic.sourceforge.net) 
 \chapter{Usage} 
 \small
@@ -3414,9 +3414,9 @@ Solve Poisson equation so that applying '-laplacian[n]' is close to the result o
 
 \subsection{\emph{-split\_details\index{-split\_details}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_nb\_scales$>$0,\_scale\_ratio[\%]$>$=0}}\\~\\
-Split selected images into 'nb\_scales' spatial detail scales (gaussian pyramids).
-~\\~\\\textbf{Default values}: {\small \texttt{'nb\_scales=4'} and \texttt{'scale\_ratio=0.5\%'.}}
+{\small \texttt{\_nb\_scales$>$0,\_base\_scale[\%]$>$=0,\_detail\_scale[\%]$>$=0}}\\~\\
+Split selected images into 'nb\_scales' spatial scales (gaussian pyramids).
+~\\~\\\textbf{Default values}: {\small \texttt{'nb\_scales=4', 'base\_scale=2\%'} and \texttt{'detail\_scale=0.5\%'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def319.jpg}\\
 {\footnotesize \textbf{Example 319~:} \texttt{image.jpg -split\_details ,}}
 \end{center}

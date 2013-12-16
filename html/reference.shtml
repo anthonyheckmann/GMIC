@@ -57,7 +57,7 @@
 <a id="section0"><h2><font color="brown"><u>Version</u></font></h2></a> 
 <pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing. 
  
-       Version 1.5.8.1 (beta), Copyright (c) 2008-2013, David Tschumperle 
+       Version 1.5.8.1, Copyright (c) 2008-2013, David Tschumperle 
        (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>) 
 </pre> 
 <h2><a id="section1"><font color="brown"><u>Usage</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
@@ -2921,11 +2921,11 @@ _sigma>=1,_dsigma>=1,0<=_precision<=1
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def318.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -m "foo : -gradient x" --solve_poisson foo --foo[0] --laplacian[1]</div></div></td><td><tt>image.jpg -m "foo : -gradient x" --solve_poisson foo --foo[0] --laplacian[1]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-split_details</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_nb_scales>0,_scale_ratio[%]>=0
+_nb_scales>0,_base_scale[%]>=0,_detail_scale[%]>=0
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Split selected images into 'nb_scales' spatial detail scales (gaussian pyramids).
-<br/><br/><b>Default values</b>: 'nb_scales=4' and 'scale_ratio=0.5%'.
+<p style="margin-left:100px"><tt>Split selected images into 'nb_scales' spatial scales (gaussian pyramids).
+<br/><br/><b>Default values</b>: 'nb_scales=4', 'base_scale=2%' and 'detail_scale=0.5%'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def319.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -split_details ,</div></div></td><td><tt>image.jpg -split_details ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-structuretensors (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
