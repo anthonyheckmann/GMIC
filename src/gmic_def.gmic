@@ -9583,6 +9583,17 @@ stained_glass : -check "${1=40%}>=0 && ${2=0.2}>=0" -skip ${3=0}
     -n[-1] 0,1  -^[-1] $2 -*
   -endl -done -v +
 
+#@gmic star : _width>0,_height>0
+#@gmic : Input star binary mask with specified size.
+#@gmic : $ -star ,
+star : -check "${1=512}>=1 && ${2=$1}>=1"
+  -e[^-1] "Input $1x$2 star binary mask."
+  -v - -l[]
+    -star3d 5,0.5 -col3d 1 -c3d -n3d -*3d $1,$2
+    $1,$2 -object3d[-1] [-2],50%,50%,0,1,2 -rm[-2]
+    -nm "[Heart binary mask]"
+  -endl -v +
+
 #@gmic stars : _density[%]>=0,_depth>=0,_size>0,_nb_branches>=1,0<=_thickness<=1,_smoothness[%]>=0,_R,_G,_B,_opacity
 #@gmic : Add random stars to selected images.
 #@gmic : Default values: 'density=10%', 'depth=1', 'size=32', 'nb_branches=5', 'thickness=0.38', 'smoothness=0.5', 'R=G=B=200' and 'opacity=1'.
@@ -19704,7 +19715,8 @@ gimp_seamless_turbulence :
   -c 0,255 -n 0,255
 
 #@gimp Shapes : gimp_shapes,gimp_shapes_preview(0)
-#@gimp : Shape = choice("Circles","Squares","Diamond","Horizontal stripes","Vertical stripes")
+#@gimp : Shape = choice{"Circles","Squares","Diamonds","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars",
+#@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Hearts (outline)","Stars (outline)"}
 #@gimp : Number of scales = int(16,2,24)
 #@gimp : Resolution = float(10,1,50)
 #@gimp : Zoom factor = _int(2,1,8)
@@ -19727,7 +19739,7 @@ _gimp_shapes :
   -norm w={w} h={h} -r $3%,$3%,1,1,2
   s={(1+$9)*$4*max(round($w/w),round($h/h))}
   r0={$s*$5%} r1={$s*$6%}
-  -repeat $2 -_gimp_shapes$1 {round($r0+$>*($r1-$r0)/($2-1))},$s -done
+  -repeat $2 r={round($r0+$>*($r1-$r0)/($2-1))} -if $r -_gimp_shapes$1[] $r,$s -else 1,1 -endif -done
   -r[-$2--1] $s,$s,1,1,0,0,0.5,0.5
   -if $8 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
   -map_sprites $2
@@ -19737,16 +19749,40 @@ _gimp_shapes0 :
   -_dt_circle[] $1
 
 _gimp_shapes1 :
-  -if $1 $1,$1,1,1,1 -else 1,1 -endif
+  $1,$1,1,1,1
 
 _gimp_shapes2 :
-  -if $1 $1,$1,1,1 -=[-1] 1,50%,50% -distance[-1] 1,1 -lt[-1] {$1/2} -else 1,1 -endif
+  $1,$1,1,1 -= 1,50%,50% -distance 1,1 -lt {$1/2}
 
 _gimp_shapes3 :
-  -if $1 $2,$1,1,1,1 -else 1,1 -endif
+  $2,$1,1,1,1
 
 _gimp_shapes4 :
-  -if $1 $1,$2,1,1,1 -else 1,1 -endif
+  $1,$2,1,1,1
+
+_gimp_shapes5 :
+  -ball $1,200 -n 0,1
+
+_gimp_shapes6 :
+  -heart 65 -r $1,$1,1,1,2 -ge 50%
+
+_gimp_shapes7 :
+  -star $1,$1
+
+_gimp_shapes8 :
+  -_gimp_shapes0 $1 -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes9 :
+  -_gimp_shapes1 $1 -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes10 :
+  -_gimp_shapes2 $1 -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes11 :
+  -_gimp_shapes6 $1 -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes12 :
+  -_gimp_shapes7 $1 -expand_xy 1,0 --erode 3 --
 
 gimp_shapes_preview :
   -repeat @# -l[$>]
