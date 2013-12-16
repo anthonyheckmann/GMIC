@@ -19463,58 +19463,6 @@ gimp_cracks :
 gimp_cracks_preview :
   -gimp_split_preview "-gimp_cracks $*",$-1
 
-#@gimp Shapes : gimp_shapes,gimp_shapes_preview(0)
-#@gimp : Shape = choice("Circles","Squares","Diamond","Horizontal stripes","Vertical stripes")
-#@gimp : Number of scales = int(16,2,24)
-#@gimp : Resolution = float(10,1,50)
-#@gimp : Zoom factor = _int(2,1,8)
-#@gimp : Minimal size = float(5,0,150)
-#@gimp : Maximal size = float(90,0,150)
-#@gimp : Stencil type = choice(0,"Black & white","RGB","Color")
-#@gimp : Negative = bool(1)
-#@gimp : Antialiasing = bool(1)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
-gimp_shapes :
-  -remove_opacity -repeat @# -l[$>]
-    -if {!$7} -_gimp_shapes $* -* 255
-    -elif {$7==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_shapes[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
-    -else --_gimp_shapes $* -r[0] $3%,$3% -r[0] [1],[1] -*
-    -endif
-  -endl -done
-
-_gimp_shapes :
-  -norm w={w} h={h} -r $3%,$3%,1,1,2
-  s={(1+$9)*$4*max(round($w/w),round($h/h))}
-  r0={$s*$5%} r1={$s*$6%}
-  -repeat $2 -_gimp_shapes$1 {round($r0+$>*($r1-$r0)/($2-1))},$s -done
-  -r[-$2--1] $s,$s,1,1,0,0,0.5,0.5
-  -if $8 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
-  -map_sprites $2
-  -if $9 -r 50%,50%,1,1,2 -endif
-
-_gimp_shapes0 :
-  -_dt_circle[] $1
-
-_gimp_shapes1 :
-  -if $1 $1,$1,1,1,1 -else 1,1 -endif
-
-_gimp_shapes2 :
-  -if $1 $1,$1,1,1 -=[-1] 1,50%,50% -distance[-1] 1,1 -lt[-1] {$1/2} -else 1,1 -endif
-
-_gimp_shapes3 :
-  -if $1 $2,$1,1,1,1 -else 1,1 -endif
-
-_gimp_shapes4 :
-  -if $1 $1,$2,1,1,1 -else 1,1 -endif
-
-gimp_shapes_preview :
-  -repeat @# -l[$>]
-    w={w} h={h}
-    -gimp_split_preview "-gimp_shapes ${1-3},1,${5--2}",$-1
-    -r $w,$h,1,100%,0,0,0.5,0.5
-  -endl -done
-
 #@gimp Halftone : gimp_halftone, gimp_halftone_preview(0)
 #@gimp : note = note("<b><small>Image parameters :</small></b>")
 #@gimp : Gamma = float(0,-1.2,1.2)
@@ -19754,6 +19702,58 @@ gimp_seamless_turbulence :
     -if {$5!=1} ia={ia} -- $ia -* $5 -+ $ia -endif
   -endl -done
   -c 0,255 -n 0,255
+
+#@gimp Shapes : gimp_shapes,gimp_shapes_preview(0)
+#@gimp : Shape = choice("Circles","Squares","Diamond","Horizontal stripes","Vertical stripes")
+#@gimp : Number of scales = int(16,2,24)
+#@gimp : Resolution = float(10,1,50)
+#@gimp : Zoom factor = _int(2,1,8)
+#@gimp : Minimal size = float(5,0,150)
+#@gimp : Maximal size = float(90,0,150)
+#@gimp : Stencil type = choice(0,"Black & white","RGB","Color")
+#@gimp : Negative = bool(1)
+#@gimp : Antialiasing = bool(1)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
+gimp_shapes :
+  -remove_opacity -repeat @# -l[$>]
+    -if {!$7} -_gimp_shapes $* -* 255
+    -elif {$7==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_shapes[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
+    -else --_gimp_shapes $* -r[0] $3%,$3% -r[0] [1],[1] -*
+    -endif
+  -endl -done
+
+_gimp_shapes :
+  -norm w={w} h={h} -r $3%,$3%,1,1,2
+  s={(1+$9)*$4*max(round($w/w),round($h/h))}
+  r0={$s*$5%} r1={$s*$6%}
+  -repeat $2 -_gimp_shapes$1 {round($r0+$>*($r1-$r0)/($2-1))},$s -done
+  -r[-$2--1] $s,$s,1,1,0,0,0.5,0.5
+  -if $8 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
+  -map_sprites $2
+  -if $9 -r 50%,50%,1,1,2 -endif
+
+_gimp_shapes0 :
+  -_dt_circle[] $1
+
+_gimp_shapes1 :
+  -if $1 $1,$1,1,1,1 -else 1,1 -endif
+
+_gimp_shapes2 :
+  -if $1 $1,$1,1,1 -=[-1] 1,50%,50% -distance[-1] 1,1 -lt[-1] {$1/2} -else 1,1 -endif
+
+_gimp_shapes3 :
+  -if $1 $2,$1,1,1,1 -else 1,1 -endif
+
+_gimp_shapes4 :
+  -if $1 $1,$2,1,1,1 -else 1,1 -endif
+
+gimp_shapes_preview :
+  -repeat @# -l[$>]
+    w={w} h={h}
+    -gimp_split_preview "-gimp_shapes ${1-3},1,${5--2}",$-1
+    -r $w,$h,1,100%,0,0,0.5,0.5
+  -endl -done
 
 #@gimp Sponge : gimp_sponge, gimp_sponge_preview(0)
 #@gimp : Size = int(13,3,21)
@@ -22074,7 +22074,6 @@ gmicol_rotate :
 #@gmicol clone("Canvas")
 #@gmicol clone("Canvas texture")
 #@gmicol clone("Cracks")
-#@gmicol clone("Shapes")
 #@gmicol clone("Halftone")
 #@gmicol clone("Hearts")
 #@gmicol clone("Lava")
@@ -22083,6 +22082,7 @@ gmicol_rotate :
 #@gmicol clone("Mosaic")
 #@gmicol clone("Paper texture")
 #@gmicol clone("Plaid")
+#@gmicol clone("Shapes")
 #@gmicol clone("Sponge")
 #@gmicol clone("Stained glass")
 #@gmicol clone("Stencil")
