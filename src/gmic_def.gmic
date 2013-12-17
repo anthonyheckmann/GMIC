@@ -15144,16 +15144,17 @@ gimp_gmicky_preview :
 #@gimp : "}
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Documentation:</b></small>")
-#@gimp : note = link(0,"Official G'MIC wiki.","https://sourceforge.net/p/gmic/wiki/Home/");
-#@gimp : note = link(0,"Screenshots of some of the plug-in filters.","http://gmic.sourceforge.net/gimp.shtml");
-#@gimp : note = link(0,"List of available plug-in filters.","http://gmic.sourceforge.net/gimp_filters.txt")
-#@gimp : note = link(0,"Reference documentation of the G'MIC language.","http://gmic.sourceforge.net/reference.shtml");
+#@gimp : note = link{0,"Official G'MIC wiki.","https://sourceforge.net/p/gmic/wiki/Home/"}
+#@gimp : note = link{0,"Screenshots of some of the plug-in filters.","http://gmic.sourceforge.net/gimp.shtml"}
+#@gimp : note = link{0,"List of available plug-in filters.","http://gmic.sourceforge.net/gimp_filters.txt"}
+#@gimp : note = link{0,"Reference documentation of the G'MIC language (html).","http://gmic.sourceforge.net/reference.shtml"}
+#@gimp : note = link{0,"Reference documentation of the G'MIC language (pdf).","http://gmic.sourceforge.net/gmic_reference.pdf"}
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>News / Communities:</b></small>")
-#@gimp : note = link(0,"G'MIC news on Google+.","https://plus.google.com/117441237982283011318/posts")
-#@gimp : note = link(0,"G'MIC community on Google+.","https://plus.google.com/u/0/b/117441237982283011318/communities/100367598461382347439")
-#@gimp : note = link(0,"G'MIC community on GimpChat.","http://www.gimpchat.com/viewforum.php?f=28")
-#@gimp : note = link(0,"G'MIC community on Flickr.","http://www.flickr.com/groups/gmic/discuss/")
+#@gimp : note = link{0,"G'MIC news on Google+.","https://plus.google.com/117441237982283011318/posts"}
+#@gimp : note = link{0,"G'MIC community on Google+.","https://plus.google.com/u/0/b/117441237982283011318/communities/100367598461382347439"}
+#@gimp : note = link{0,"G'MIC community on GimpChat.","http://www.gimpchat.com/viewforum.php?f=28"}
+#@gimp : note = link{0,"G'MIC community on Flickr.","http://www.flickr.com/groups/gmic/discuss/"}
 #@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/17</i>.</small>")
 
 #@gimp Release notes : _none_, _none_
