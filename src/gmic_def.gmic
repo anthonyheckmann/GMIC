@@ -14940,53 +14940,6 @@ gimp_logo_ca :
 # Untranslated filters
 #----------------------
 
-#@gimp Filter design : _none_, _none_
-#@gimp : note = note{"
-#@gimp : <b>G'MIC</b> is an <b>open</b> image processing framework. Thus, including
-#@gimp : <b>user-defined filters</b> into this plug-in is possible.\n\n
-#@gimp : To do so, you need to create a <span foreground="purple" style="italic">.gmic</span>
-#@gimp : file in your <i>Home</i> folder (or <i>Applications Data/</i> on Windows, without the first dot).
-#@gimp : It will be read each time the plug-in is launched, or when the <i>Refresh</i>
-#@gimp : button (under the central pane) is pressed. It must be a regular ASCII file, containing the declarations and
-#@gimp : implementations of the filters (written in the <b>G'MIC</b> language) that will be added
-#@gimp : to the list of available ones."}
-#@gimp : note = note{"
-#@gimp : Existing filters are already defined this way.
-#@gimp : Writing a filter from scratch in <b>G'MIC</b> requires some skills, but
-#@gimp : can be generally done in very few lines.\n\n
-#@gimp : <span foreground="purple" underline="single">Example of a valid <i>.gmic</i> entry :</span>"}
-#@gimp : note = note{"<tt>#@gimp My effect : my_effect, my_effect</tt>"}
-#@gimp : note = note{"<tt>#@gimp : Sigma = float(2,0,10)</tt>"}
-#@gimp : note = note{"<tt>my_effect :\n     --blur $1 -n 0,255 -xor</tt>"}
-#@gimp : note = note{"
-#@gimp : Look at the reference documentation to learn more.
-#@gimp : By the way, you are encouraged to share your nice custom filters with us on our forums,
-#@gimp : for inclusion into next releases of <b>G'MIC</b>.
-#@gimp : "}
-#@gimp : sep = separator()
-#@gimp : note = link(0,"[1] G'MIC reference documentation","http://gmic.sourceforge.net/reference.shtml");
-#@gimp : note = link(0,"[2] G'MIC on Flickr","http://www.flickr.com/groups/gmic/discuss/")
-#@gimp : note = link(0,"[3] G'MIC on GimpChat","http://www.gimpchat.com/viewforum.php?f=28")
-#@gimp : note = link(0,"[4] G'MIC on Google+","https://plus.google.com/117441237982283011318/posts")
-
-#@gimp Release notes : _none_, _none_
-#@gimp : note = note{"
-#@gimp : - <b>2009/01/13</b> : version <i>1.3</i> (initial plug-in release).\n
-#@gimp : - <b>2010/09/03</b> : version <i>1.4</i>.\n
-#@gimp : - <b>2011/07/07</b> : version <i>1.5.0.0</i>.\n
-#@gimp : - <b>2012/03/01</b> : version <i>1.5.1.0</i>.\n
-#@gimp : - <b>2012/10/15</b> : version <i>1.5.2.0</i>.\n
-#@gimp : - <b>2013/01/07</b> : version <i>1.5.3.0</i>.\n
-#@gimp : - <b>2013/01/28</b> : version <i>1.5.4.0</i>.\n
-#@gimp : - <b>2013/03/08</b> : version <i>1.5.5.0</i>.\n
-#@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
-#@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
-#@gimp : - <b>2013/12/07</b> : version <i>1.5.8.0</i>.\n
-#@gimp : - <span foreground="purple"><b>2013/12/16</b> : version <i>1.5.8.1</i> (Current stable).</span>\n
-#@gimp : "}
-#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157638511994515/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
-
 #@gimp Contributors : _none_, _none_
 #@gimp : note = note{"
 #@gimp : We would like to thank all these people who contributed to <b>G'MIC</b> in one way or another.
@@ -15030,6 +14983,55 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Matthias Zepper</i> <small>(testing)</small>
 #@gimp : <b> -</b>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/30</i>.</small>")
+
+#@gimp Filter design : _none_, _none_
+#@gimp : note = note{"
+#@gimp : <b>G'MIC</b> is an <b>open</b> image processing framework. Thus, including
+#@gimp : <b>user-defined filters</b> into this plug-in is possible.\n\n
+#@gimp : To do so, you need to create a <span foreground="purple" style="italic">.gmic</span>
+#@gimp : file in your <i>Home</i> folder (or <i>Applications Data/</i> on Windows, without the first dot).
+#@gimp : It will be read each time the plug-in is launched, or when the <i>Refresh</i>
+#@gimp : button (under the central pane) is pressed. It must be a regular ASCII file, containing the declarations and
+#@gimp : implementations of the filters (written in the <b>G'MIC</b> language) that will be added
+#@gimp : to the list of available ones."}
+#@gimp : note = note{"
+#@gimp : Existing filters are already defined this way.
+#@gimp : Writing a filter from scratch in <b>G'MIC</b> requires some skills, but
+#@gimp : can be generally done in very few lines.\n\n
+#@gimp : <span foreground="purple" underline="single">Example of a valid <i>.gmic</i> entry :</span>"}
+#@gimp : note = note{"<tt>#@gimp My effect : my_effect, my_effect</tt>"}
+#@gimp : note = note{"<tt>#@gimp : Sigma = float(2,0,10)</tt>"}
+#@gimp : note = note{"<tt>my_effect :\n     --blur $1 -n 0,255 -xor</tt>"}
+#@gimp : note = note{"
+#@gimp : Look at the reference documentation to learn more.
+#@gimp : By the way, you are encouraged to share your nice custom filters with us on our forums,
+#@gimp : for inclusion into next releases of <b>G'MIC</b>.
+#@gimp : "}
+#@gimp : sep = separator()
+#@gimp : note = link(0,"[1] G'MIC reference documentation","http://gmic.sourceforge.net/reference.shtml");
+#@gimp : note = link(0,"[2] G'MIC on Flickr","http://www.flickr.com/groups/gmic/discuss/")
+#@gimp : note = link(0,"[3] G'MIC on GimpChat","http://www.gimpchat.com/viewforum.php?f=28")
+#@gimp : note = link(0,"[4] G'MIC on Google+","https://plus.google.com/117441237982283011318/posts")
+
+#@gimp Filter sources : _none_, gimp_display_filter_sources
+#@gimp : note = note{"Here you can see the filter sources currently enabled in your plug-in.
+#@gimp : For most users, there will be only one URL listed there."}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/06/03</i>.</small>")
+gimp_display_filter_sources :
+  -if @# -k[0] -f 0 -else 256,256 -endif
+  -l[] -gimp_filter_sources -y x -a y -onfail (0) -endl
+  -text[0] "Enabled external sources:\n--------------------------------",5,5,13,1,255
+  -if @{-is_windows} path=@{-path_user}/ -else path=@{-path_user}/. -endif
+  i=1 -repeat {h}
+    --rows[-1] $>
+    -if {@{-1,0-3}'=='{'http'}}
+      -text[0] [$i]" "@{-1,t},5,{32+15*$i},13,1,255 i={$i+1}
+    -else
+      -if $path@{-1,t} -text[0] [$i]" "@{-1,t}" (local file)",5,{32+15*$i},13,1,255 i={$i+1} -endif
+    -endif
+    -rm[-1]
+  -done
+  -rm[-1]
 
 #@gimp Friends Hall of Fame : _none_, gimp_friends
 #@gimp : note = note{"\n<span foreground="purple" underline="single">Donators :</span>"}
@@ -15136,26 +15138,41 @@ gimp_gmicky_preview :
   -if $filename $filename -else -i $url -o $filename -endif
   -r2dy $h -- 255 -r $w,$h,1,3,0,0,0.5,0.5 -+ 255
 
-#@gimp Filter sources : _none_, gimp_display_filter_sources
-#@gimp : note = note{"Here you can see the filter sources currently enabled in your plug-in.
-#@gimp : For most users, there will be only one URL listed there."}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/06/03</i>.</small>")
-gimp_display_filter_sources :
-  -if @# -k[0] -f 0 -else 256,256 -endif
-  -l[] -gimp_filter_sources -y x -a y -onfail (0) -endl
-  -text[0] "Enabled external sources:\n--------------------------------",5,5,13,1,255
-  -if @{-is_windows} path=@{-path_user}/ -else path=@{-path_user}/. -endif
-  i=1 -repeat {h}
-    --rows[-1] $>
-    -if {@{-1,0-3}'=='{'http'}}
-      -text[0] [$i]" "@{-1,t},5,{32+15*$i},13,1,255 i={$i+1}
-    -else
-      -if $path@{-1,t} -text[0] [$i]" "@{-1,t}" (local file)",5,{32+15*$i},13,1,255 i={$i+1} -endif
-    -endif
-    -rm[-1]
-  -done
-  -rm[-1]
+#@gimp Links : _none_, _none_
+#@gimp : note = note{"
+#@gimp : Here is a list of links that might help you in finding additional information about the G'MIC project.
+#@gimp : "}
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Documentation:</b></small>")
+#@gimp : note = link(0,"Official G'MIC wiki.","https://sourceforge.net/p/gmic/wiki/Home/");
+#@gimp : note = link(0,"Screenshots of some of the plug-in filters.","http://gmic.sourceforge.net/gimp.shtml");
+#@gimp : note = link(0,"List of available plug-in filters.","http://gmic.sourceforge.net/gimp_filters.txt")
+#@gimp : note = link(0,"Reference documentation of the G'MIC language.","http://gmic.sourceforge.net/reference.shtml");
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>News / Communities:</b></small>")
+#@gimp : note = link(0,"G'MIC news on Google+.","https://plus.google.com/117441237982283011318/posts")
+#@gimp : note = link(0,"G'MIC community on Google+.","https://plus.google.com/u/0/b/117441237982283011318/communities/100367598461382347439")
+#@gimp : note = link(0,"G'MIC community on GimpChat.","http://www.gimpchat.com/viewforum.php?f=28")
+#@gimp : note = link(0,"G'MIC community on Flickr.","http://www.flickr.com/groups/gmic/discuss/")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/17</i>.</small>")
 
+#@gimp Release notes : _none_, _none_
+#@gimp : note = note{"
+#@gimp : - <b>2009/01/13</b> : version <i>1.3</i> (initial plug-in release).\n
+#@gimp : - <b>2010/09/03</b> : version <i>1.4</i>.\n
+#@gimp : - <b>2011/07/07</b> : version <i>1.5.0.0</i>.\n
+#@gimp : - <b>2012/03/01</b> : version <i>1.5.1.0</i>.\n
+#@gimp : - <b>2012/10/15</b> : version <i>1.5.2.0</i>.\n
+#@gimp : - <b>2013/01/07</b> : version <i>1.5.3.0</i>.\n
+#@gimp : - <b>2013/01/28</b> : version <i>1.5.4.0</i>.\n
+#@gimp : - <b>2013/03/08</b> : version <i>1.5.5.0</i>.\n
+#@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
+#@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
+#@gimp : - <b>2013/12/07</b> : version <i>1.5.8.0</i>.\n
+#@gimp : - <span foreground="purple"><b>2013/12/16</b> : version <i>1.5.8.1</i> (Current stable).</span>\n
+#@gimp : "}
+#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157638511994515/")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
 
 #@gimp _<b>Arrays &amp; tiles</b>
 #--------------------------------
@@ -19592,6 +19609,83 @@ gimp_mosaic :
 gimp_mosaic_preview :
   -gimp_split_preview "-gimp_mosaic $*",$-1
 
+#@gimp Op art : gimp_shapes,gimp_shapes_preview(0)
+#@gimp : Shape = choice{"Circles","Squares","Diamonds","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars",
+#@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Hearts (outline)","Stars (outline)"}
+#@gimp : Number of scales = int(16,2,24)
+#@gimp : Resolution = float(10,1,50)
+#@gimp : Zoom factor = _int(2,1,8)
+#@gimp : Minimal size = float(5,0,150)
+#@gimp : Maximal size = float(90,0,150)
+#@gimp : Stencil type = choice(0,"Black & white","RGB","Color")
+#@gimp : Negative = bool(1)
+#@gimp : Antialiasing = bool(1)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
+gimp_shapes :
+  -remove_opacity -repeat @# -l[$>]
+    -if {!$7} -_gimp_shapes $* -* 255
+    -elif {$7==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_shapes[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
+    -else --_gimp_shapes $* -r[0] $3%,$3% -r[0] [1],[1] -*
+    -endif
+  -endl -done
+
+_gimp_shapes :
+  -norm w={w} h={h} -r $3%,$3%,1,1,2
+  s={(1+$9)*$4*max(round($w/w),round($h/h))}
+  r0={$s*$5%} r1={$s*$6%}
+  -repeat $2 r={round($r0+$>*($r1-$r0)/($2-1))} -if $r -_gimp_shapes$1[] $r,$s -else 1,1 -endif -done
+  -r[-$2--1] $s,$s,1,1,0,0,0.5,0.5
+  -if $8 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
+  -map_sprites $2
+  -if $9 -r 50%,50%,1,1,2 -endif
+
+_gimp_shapes0 :
+  -_dt_circle[] $1
+
+_gimp_shapes1 :
+  $1,$1,1,1,1
+
+_gimp_shapes2 :
+  $1,$1,1,1 -= 1,50%,50% -distance 1,1 -lt {$1/2}
+
+_gimp_shapes3 :
+  $2,$1,1,1,1
+
+_gimp_shapes4 :
+  $1,$2,1,1,1
+
+_gimp_shapes5 :
+  -ball $1,200 -n 0,1
+
+_gimp_shapes6 :
+  -heart 65 -r $1,$1,1,1,2 -ge 50%
+
+_gimp_shapes7 :
+  -star $1,$1
+
+_gimp_shapes8 :
+  -_gimp_shapes0 $1 -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes9 :
+  -_gimp_shapes1 $1 -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes10 :
+  -_gimp_shapes2 $1 -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes11 :
+  -_gimp_shapes6 $1 -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes12 :
+  -_gimp_shapes7 $1 -expand_xy 1,0 --erode 3 --
+
+gimp_shapes_preview :
+  -repeat @# -l[$>]
+    w={w} h={h}
+    -gimp_split_preview "-gimp_shapes ${1-3},1,${5--2}",$-1
+    -r $w,$h,1,100%,0,0,0.5,0.5
+  -endl -done
+
 #@gimp Pack sprites : gimp_pack_sprites, gimp_no_preview
 #@gimp : Number of scales = int(5,1,16)
 #@gimp : Minimal scale [%] = float(25,1,100)
@@ -19713,83 +19807,6 @@ gimp_seamless_turbulence :
     -if {$5!=1} ia={ia} -- $ia -* $5 -+ $ia -endif
   -endl -done
   -c 0,255 -n 0,255
-
-#@gimp Shapes : gimp_shapes,gimp_shapes_preview(0)
-#@gimp : Shape = choice{"Circles","Squares","Diamonds","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars",
-#@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Hearts (outline)","Stars (outline)"}
-#@gimp : Number of scales = int(16,2,24)
-#@gimp : Resolution = float(10,1,50)
-#@gimp : Zoom factor = _int(2,1,8)
-#@gimp : Minimal size = float(5,0,150)
-#@gimp : Maximal size = float(90,0,150)
-#@gimp : Stencil type = choice(0,"Black & white","RGB","Color")
-#@gimp : Negative = bool(1)
-#@gimp : Antialiasing = bool(1)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
-gimp_shapes :
-  -remove_opacity -repeat @# -l[$>]
-    -if {!$7} -_gimp_shapes $* -* 255
-    -elif {$7==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_shapes[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
-    -else --_gimp_shapes $* -r[0] $3%,$3% -r[0] [1],[1] -*
-    -endif
-  -endl -done
-
-_gimp_shapes :
-  -norm w={w} h={h} -r $3%,$3%,1,1,2
-  s={(1+$9)*$4*max(round($w/w),round($h/h))}
-  r0={$s*$5%} r1={$s*$6%}
-  -repeat $2 r={round($r0+$>*($r1-$r0)/($2-1))} -if $r -_gimp_shapes$1[] $r,$s -else 1,1 -endif -done
-  -r[-$2--1] $s,$s,1,1,0,0,0.5,0.5
-  -if $8 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
-  -map_sprites $2
-  -if $9 -r 50%,50%,1,1,2 -endif
-
-_gimp_shapes0 :
-  -_dt_circle[] $1
-
-_gimp_shapes1 :
-  $1,$1,1,1,1
-
-_gimp_shapes2 :
-  $1,$1,1,1 -= 1,50%,50% -distance 1,1 -lt {$1/2}
-
-_gimp_shapes3 :
-  $2,$1,1,1,1
-
-_gimp_shapes4 :
-  $1,$2,1,1,1
-
-_gimp_shapes5 :
-  -ball $1,200 -n 0,1
-
-_gimp_shapes6 :
-  -heart 65 -r $1,$1,1,1,2 -ge 50%
-
-_gimp_shapes7 :
-  -star $1,$1
-
-_gimp_shapes8 :
-  -_gimp_shapes0 $1 -expand_xy 1,0 --erode 3 --
-
-_gimp_shapes9 :
-  -_gimp_shapes1 $1 -expand_xy 1,0 --erode 3 --
-
-_gimp_shapes10 :
-  -_gimp_shapes2 $1 -expand_xy 1,0 --erode 3 --
-
-_gimp_shapes11 :
-  -_gimp_shapes6 $1 -expand_xy 1,0 --erode 3 --
-
-_gimp_shapes12 :
-  -_gimp_shapes7 $1 -expand_xy 1,0 --erode 3 --
-
-gimp_shapes_preview :
-  -repeat @# -l[$>]
-    w={w} h={h}
-    -gimp_split_preview "-gimp_shapes ${1-3},1,${5--2}",$-1
-    -r $w,$h,1,100%,0,0,0.5,0.5
-  -endl -done
 
 #@gimp Sponge : gimp_sponge, gimp_sponge_preview(0)
 #@gimp : Size = int(13,3,21)
@@ -22116,9 +22133,9 @@ gmicol_rotate :
 #@gmicol clone("Marble")
 #@gmicol clone("Mineral mosaic")
 #@gmicol clone("Mosaic")
+#@gmicol clone("Op art")
 #@gmicol clone("Paper texture")
 #@gmicol clone("Plaid")
-#@gmicol clone("Shapes")
 #@gmicol clone("Sponge")
 #@gmicol clone("Stained glass")
 #@gmicol clone("Stencil")
