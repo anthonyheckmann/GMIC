@@ -16985,11 +16985,12 @@ _gimp_recompose_channels9 : -cmy2rgb
 _gimp_recompose_channels10 : -cmyk2rgb
 
 #@gimp Detect skin : gimp_detect_skin, gimp_detect_skin_preview(1)
+#@gimp : Estimation = choice(1,"Manual","Automatic")
+#@gimp : sep = separator()
 #@gimp : Tolerance = float(0.5,0,1)
 #@gimp : Smoothness = float(0.5,0,5)
 #@gimp : Dilation = int(0,-64,64)
 #@gimp : Pre-normalize = bool(1)
-#@gimp : Estimation = choice(1,"Manual","Automatic")
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Manual estimation:</b>\n
 #@gimp : Use the sliders below to target as much skin pixels as you can.</small>")
@@ -16999,14 +17000,14 @@ _gimp_recompose_channels10 : -cmyk2rgb
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/19</i>.</small>")
 gimp_detect_skin :
-  -to_rgb -if $4 -balance_gamma 128,128,128 -endif
-  -if $5 -detect_skin $1 -else -detect_skin $1,$6%,$7%,$8% -endif
-  -if {$3>0} -dilate_oct $3 -elif {$3<0} -erode_oct {-$3} -endif
-  -repeat @# M=@{$>,255*iM} -b[$>] $2% -n[$>] 0,$M -done
+  -to_rgb -if $5 -balance_gamma 128,128,128 -endif
+  -if $1 -detect_skin $2 -else -detect_skin $2,$6%,$7%,$8% -endif
+  -if {$4>0} -dilate_oct $4 -elif {$4<0} -erode_oct {-$4} -endif
+  -repeat @# M=@{$>,255*iM} -b[$>] $3% -n[$>] 0,$M -done
 
 gimp_detect_skin_preview :
   -gimp_split_preview "-gimp_detect_skin $*",$-1
-  -if {!$5}
+  -if {!$1}
     -to_rgb
     -circle $6%,$7%,$8%,0.3,0,255,0
     -circle $6%,$7%,$8%,1,0xFFFFFFFF,0,255,0
@@ -20285,6 +20286,19 @@ gimp_selective_smoothing_preview :
 
 #@gimp Smooth [skin] : gimp_smooth_skin, gimp_smooth_skin_preview(0)
 #@gimp : Strength = int(5,0,10)
+# #@gimp : Skin detection = choice("None","Manual","Automatic")
+# #@gimp : sep = separator()
+# #@gimp : note = note("<small><b>Skin detection :</b></small>")
+# #@gimp : Tolerance = float(0.5,0,1)
+# #@gimp : Smoothness = float(0.5,0,5)
+# #@gimp : Dilation = int(0,-64,64)
+# #@gimp : Pre-normalize = bool(1)
+# #@gimp : sep = separator()
+# #@gimp : note = note("<small><b>Manual estimation:</b>\n
+# #@gimp : Use the sliders below to target as much skin pixels as you can.</small>")
+# #@gimp : X-coordinates = float(50,0,100)
+# #@gimp : Y-coordinates = float(50,0,100)
+# #@gimp : Radius = float(5,0,25)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
 gimp_smooth_skin :
