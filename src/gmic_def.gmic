@@ -5986,6 +5986,28 @@ barycenter :
     -endif
   -nm "[barycenter of '"$nm"']" -endl -done -v +
 
+#@gmic detect_skin : 0<=tolerance<=1
+#@gmic : Detect skin in selected color images and output an appartenance probability map.
+#@gmic : Detection is performed using CbCr chromaticity data of skin pixels.
+#@gmic : Default value: 'tolerance=0.5'.
+detect_skin : -check "${1=0.5}>=0 && $1<=1"
+  -e[^-1] "Detect skin in image$?, using tolerance $1."
+  -v -
+  A=0.09749985486268997
+  B=0.06388871371746063
+  C=0.05250053107738495
+  m0=120.9292108800069
+  m1=142.5745272918084
+  -to_rgb -srgb2rgb -rgb2ycbcr -channels 1,2
+  -repeat @# -l[$>]
+    whd={w},{h},{d}
+    -r {w*h*d},2,1,1,-1
+    -s y --[0] $m0 --[1] $m1 -a y
+    -i[0] ($A,$B;$B,$C) --** -rm[0]
+    -* -s y -+ -*[-1] {$1-1} -exp[-1]
+    -r $whd,1,-1
+  -endl -done -v +
+
 #@gmic displacement : [source_image],_smoothness,_precision>=0,_nb_scales>=0,iteration_max>=0,is_backward={ 0 | 1 } : (+)
 #@gmic : Estimate displacement field between specified source and selected images.
 #@gmic : If 'smoothness>=0', regularization type is set to isotropic, else to anisotropic.
@@ -16942,6 +16964,21 @@ _gimp_recompose_channels8 : -lch82rgb
 _gimp_recompose_channels9 : -cmy2rgb
 _gimp_recompose_channels10 : -cmyk2rgb
 
+#@gimp Detect skin : gimp_detect_skin, gimp_detect_skin_preview(0)
+#@gimp : Tolerance = float(0.5,0,1)
+#@gimp : Smoothness = float(1,0,10)
+#@gimp : Dilation = int(0,-64,64)
+#@gimp : Pre-normalize = bool(1)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/19</i>.</small>")
+gimp_detect_skin :
+  -to_rgb -if $4 -balance_gamma 128,128,128 -endif -detect_skin $1
+  -if {$3>0} -dilate_oct $3 -elif {$3<0} -erode_oct {-$3} -endif
+  -b $2 -n 0,255
+
+gimp_detect_skin_preview :
+  -gimp_split_preview "-gimp_detect_skin $*",$-1
+
 #@gimp Equalize HSV : gimp_hsv_equalizer, gimp_hsv_equalizer_preview
 #@gimp : Preview bands = bool(false)
 #@gimp : sep = separator()
@@ -21965,6 +22002,7 @@ gmicol_rotate :
 #@gmicol clone("B-color")
 #@gmicol _
 
+#@gmicol clone("Detect skin")
 #@gmicol clone("Equalize HSV")
 #@gmicol clone("HSL adjustment")
 #@gmicol clone("HSV select")
@@ -22392,3 +22430,95 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands
+
+
+all :
+  N={@#/2}
+
+  # Preprocess image.
+
+#   -balance_gamma[0-{$N-1}] 128,128,128
+   -b 2
+
+  --l
+
+  # Extract features to learn.
+  -repeat $N -l[$<,{$<+$N}]
+    -srgb2rgb[0] -rgb2ycbcr[0] -channels[0] 1,2
+#    -srgb2rgb[0] -rgb2hsv[0] -channels[0] 0,1 -f[0] 'if(c==0,(i+180)%360,i*255)'
+
+    -warp[0] [1],0,0 -rm[1]
+
+  -endl -done
+  -a y
+
+  # PCA-based learning.
+  --l
+  M={h}
+  -s c
+  m0=@{0,ia} --[0] $m0
+  m1=@{1,ia} --[1] $m1
+  -transpose -a y
+  --transpose -** -/ $M
+  -invert
+  A={i[0]} B={i[1]} C={i[3]}
+  -rm
+  -endl
+
+  # Display histogram and model.
+  -permute ycxz -pointcloud 0,256,256 -n[-1] 0,255
+  100%,100%,1,1,'X=x-$m0;Y=y-$m1;exp(-0.08*($A*X*X+2*$B*X*Y+$C*Y*Y))' -n[-1] 0,255
+  -a[-2,-1] c
+  -circle[-1] $m0,$m1,2,1,0,128,255
+  -d -rm[-1]
+
+  -endl
+
+  # Apply skin detector.
+  -rm[$N--1]
+  -repeat $N -l[$>]
+    -balance_gamma 128,128,128
+    -srgb2rgb -rgb2ycbcr -channels 1,2
+#    -srgb2rgb -rgb2hsl8 -channels 0,1 -sh 0,0 -+[-1] 128 -rm[-1]
+    -f 'if(c==1,0,X=i(x,y,0,0)-$m0;Y=i(x,y,0,1)-$m1;exp(-0.4*($A*X*X+2*$B*X*Y+$C*Y*Y)))'
+    -channels 0
+
+  -endl -done
+
+
+learn :
+  -v -
+
+  -repeat @# -l[$>]
+    basename=@{0,b}
+    --srgb2rgb -rgb2ycbcr[-1] -channels[-1] 1,2 -b[-1] 2
+
+    -w[0] -1,-1,0,"Color image"
+    r=25
+    -do
+      -wait
+      x=@{!,x} y=@{!,y} b=@{!,b} w=@{!,o}
+      -if {$b&&$x>=0}
+        -circle[0] $x,$y,$r,1,-1
+        -w[0]
+      -elif {$x>=0}
+        --circle[0] $x,$y,$r,1,0xFFFFFFFF,255 -w[-1] -rm[-1]
+      -endif
+      -if $w
+        r={max(2,$r+2*$w)} -wait -1
+      -endif
+      -if @{!,SPACE}
+        -k[0]
+        -channels 0 -eq -1
+        -r 100%,100%,1,2
+        -f 'if(i,if(c==0,x,y),-1)'
+        -s c -discard -1 -a c
+        -break
+      -endif
+    -while 1
+
+  -endl -done
+  -o masks2.cimgz
+
+
+
