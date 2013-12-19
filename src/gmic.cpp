@@ -5870,9 +5870,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               const CImg<T> values = gmic_image_arg(*ind);
               cimg_forY(selection,l) gmic_apply(images[selection[l]],fill(values));
             } else {
+              CImg<char> arg_fill_text(argument_text,std::strlen(argument_text)+1);
+              cimg::strpare(arg_fill_text,'\'',true,false);
               print(images,"Fill image%s with expression '%s'.",
                     gmic_selection,
-                    argument_text);
+                    arg_fill_text.data());
               CImg<char> arg_fill(argument,std::strlen(argument)+1);
               cimg::strpare(arg_fill,'\'',true,false);
               gmic_strreplace(arg_fill);
