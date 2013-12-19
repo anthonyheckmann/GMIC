@@ -5986,27 +5986,47 @@ barycenter :
     -endif
   -nm "[barycenter of '"$nm"']" -endl -done -v +
 
-#@gmic detect_skin : 0<=tolerance<=1
+#@gmic detect_skin : 0<=tolerance<=1,_skin_x,_skin_y,_skin_radius>=0
 #@gmic : Detect skin in selected color images and output an appartenance probability map.
 #@gmic : Detection is performed using CbCr chromaticity data of skin pixels.
-#@gmic : Default value: 'tolerance=0.5'.
-detect_skin : -check "${1=0.5}>=0 && $1<=1"
-  -e[^-1] "Detect skin in image$?, using tolerance $1."
-  -v -
-  A=0.09749985486268997
-  B=0.06388871371746063
-  C=0.05250053107738495
-  m0=120.9292108800069
-  m1=142.5745272918084
-  -to_rgb -srgb2rgb -rgb2ycbcr -channels 1,2
-  -repeat @# -l[$>]
-    whd={w},{h},{d}
-    -r {w*h*d},2,1,1,-1
-    -s y --[0] $m0 --[1] $m1 -a y
-    -i[0] ($A,$B;$B,$C) --** -rm[0]
-    -* -s y -+ -*[-1] {$1-1} -exp[-1]
-    -r $whd,1,-1
-  -endl -done -v +
+#@gmic : If arguments 'skin_x', 'skin_y' and 'skin_radius' are provided, skin pixels are learnt
+#@gmic : from the sample pixels inside the circle located at ('skin_x','skin_y') with radius 'skin_radius'.
+#@gmic : Default value: 'tolerance=0.5' and 'skin_x=skiny=radius=-1'.
+detect_skin : -check "${1=0.5}>=0 && $1<=1" -skip ${2=-1},${3=-1},${4=-1}
+  -if {$2<0||$3<=0||$4<=0}
+    -e[0--3] "Detect skin in image$?, using tolerance $1."
+    -v -
+    m0=120.9292108800069
+    m1=142.5745272918084
+    A=0.09749985486268997
+    B=0.06388871371746063
+    C=0.05250053107738495
+    -to_rgb -srgb2rgb -rgb2ycbcr -channels 1,2
+    -repeat @# -l[$>]
+      whd={w},{h},{d} -r {w*h*d},2,1,1,-1
+      -s y --[0] $m0 --[1] $m1 -a y
+      -i[0] ($A,$B;$B,$C) --** -rm[0]
+      -* -s y -+ -*[-1] {$1-1} -exp[-1]
+      -r $whd,1,-1
+    -endl -done
+  -else
+    -e[0--3] "Detect skin in image$?, using tolerance $1 and target circle at ($2,$3) with radius $4."
+    -v -
+    -to_rgb -srgb2rgb -rgb2ycbcr -channels 1,2
+    -repeat @# -l[$>]
+      100%,100% -circle[1] $2,$3,$4,1,1 --f[1] 'if(i,y,-1)' -f[1] 'if(i,x,-1)' -discard[1,2] -1 -a[1,2] c
+      --warp[0] [1],0,0 -rm[1]
+      -s[1] c
+      m0=@{1,ia} --[1] $m0
+      m1=@{2,ia} --[2] $m1
+      M={h} -a[1,2] x --transpose[1] -rv[1,2] -**[1,2] -/[1] $M -invert[1]
+      -rv whd={w},{h},{d} -r[1] {w*h*d},2,1,1,-1
+      -s[1] y --[1] $m0 --[2] $m1 -a[1,2] y --** -rm[0]
+      -* -s y -+ -*[-1] {$1-1} -exp[-1]
+      -r $whd,1,-1
+    -endl -done
+  -endif
+  -v +
 
 #@gmic displacement : [source_image],_smoothness,_precision>=0,_nb_scales>=0,iteration_max>=0,is_backward={ 0 | 1 } : (+)
 #@gmic : Estimate displacement field between specified source and selected images.
@@ -16964,20 +16984,35 @@ _gimp_recompose_channels8 : -lch82rgb
 _gimp_recompose_channels9 : -cmy2rgb
 _gimp_recompose_channels10 : -cmyk2rgb
 
-#@gimp Detect skin : gimp_detect_skin, gimp_detect_skin_preview(0)
+#@gimp Detect skin : gimp_detect_skin, gimp_detect_skin_preview(1)
 #@gimp : Tolerance = float(0.5,0,1)
-#@gimp : Smoothness = float(1,0,10)
+#@gimp : Smoothness = float(0.5,0,5)
 #@gimp : Dilation = int(0,-64,64)
 #@gimp : Pre-normalize = bool(1)
+#@gimp : Estimation = choice(1,"Manual","Automatic")
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Manual estimation:</b>\n
+#@gimp : Use the sliders below to target as much skin pixels as you can.</small>")
+#@gimp : X-coordinates = float(50,0,100)
+#@gimp : Y-coordinates = float(50,0,100)
+#@gimp : Radius = float(5,0,25)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/19</i>.</small>")
 gimp_detect_skin :
-  -to_rgb -if $4 -balance_gamma 128,128,128 -endif -detect_skin $1
+  -to_rgb -if $4 -balance_gamma 128,128,128 -endif
+  -if $5 -detect_skin $1 -else -detect_skin $1,$6%,$7%,$8% -endif
   -if {$3>0} -dilate_oct $3 -elif {$3<0} -erode_oct {-$3} -endif
-  -repeat @# M=@{$>,255*iM} -b[$>] $2 -n[$>] 0,$M -done
+  -repeat @# M=@{$>,255*iM} -b[$>] $2% -n[$>] 0,$M -done
 
 gimp_detect_skin_preview :
   -gimp_split_preview "-gimp_detect_skin $*",$-1
+  -if {!$5}
+    -to_rgb
+    -circle $6%,$7%,$8%,0.3,0,255,0
+    -circle $6%,$7%,$8%,1,0xFFFFFFFF,0,255,0
+    -line {$6-0.25*$8}%,{$7-0.25*$8}%,{$6+0.25*$8}%,{$7+0.25*$8}%,1,255,255,0
+    -line {$6+0.25*$8}%,{$7-0.25*$8}%,{$6-0.25*$8}%,{$7+0.25*$8}%,1,255,255,0
+  -endif
 
 #@gimp Equalize HSV : gimp_hsv_equalizer, gimp_hsv_equalizer_preview
 #@gimp : Preview bands = bool(false)
@@ -22547,6 +22582,3 @@ learn :
 
   -endl -done
   -o masks2.cimgz
-
-
-
