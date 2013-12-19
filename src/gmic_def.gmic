@@ -16974,7 +16974,7 @@ _gimp_recompose_channels10 : -cmyk2rgb
 gimp_detect_skin :
   -to_rgb -if $4 -balance_gamma 128,128,128 -endif -detect_skin $1
   -if {$3>0} -dilate_oct $3 -elif {$3<0} -erode_oct {-$3} -endif
-  -b $2 -n 0,255
+  -repeat @# M=@{$>,255*iM} -b[$>] $2 -n[$>] 0,$M -done
 
 gimp_detect_skin_preview :
   -gimp_split_preview "-gimp_detect_skin $*",$-1
