@@ -19648,7 +19648,7 @@ gimp_mosaic_preview :
   -gimp_split_preview "-gimp_mosaic $*",$-1
 
 #@gimp Op art : gimp_shapes,gimp_shapes_preview(0)
-#@gimp : Shape = choice{"Circles","Squares","Diamonds","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars",
+#@gimp : Shape = choice{1,"Custom layers","Circles","Squares","Diamonds","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars",
 #@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Hearts (outline)","Stars (outline)"}
 #@gimp : Number of scales = int(16,2,24)
 #@gimp : Resolution = float(10,1,50)
@@ -19658,21 +19658,56 @@ gimp_mosaic_preview :
 #@gimp : Stencil type = choice(0,"Black & white","RGB","Color")
 #@gimp : Negative = bool(1)
 #@gimp : Antialiasing = bool(1)
+#@gimp : sep = separator()
+#@gimp : note = note{"<small><b>Note:</b>
+#@gimp : If you set the parameter <i>Shape</i> to <i>Custom layers</i>, the different shapes used to map the pixel intensities will be defined as
+#@gimp : the <i>Number of scales</i> top layers of your image. Don't forget to set also <i>Input layers</i> to <i>All</i> to be sure
+#@gimp : these layers are passed to the filter.
+#@gimp : </small>"}
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
 gimp_shapes :
-  -remove_opacity -repeat @# -l[$>]
-    -if {!$7} -_gimp_shapes $* -* 255
-    -elif {$7==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_shapes[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
-    -else --_gimp_shapes $* -r[0] $3%,$3% -r[0] [1],[1] -*
+  -if $1 # Pre-defined shapes.
+    -remove_opacity -repeat @# -l[$>]
+      -if {!$7} -_gimp_shapes $* -* 255
+      -elif {$7==1} -split_opacity -to_rgb[0] -s[0] c -repeat 3 -_gimp_shapes[$>] $* -done -*[0-2] 255 -a[0-2] c -a c
+      -else --_gimp_shapes $* -r[0] $3%,$3% -r[0] [1],[1] -*
+      -endif
+    -endl -done
+  -else # Custom shapes.
+    -if {@#<=$2} -error[] "Some layers are missing in 'Custom layers' mode ("{$2+1}" expected at least, "@#" provided)." -endif
+    -to_colormode[0-{$2-1}] @{-max_s[0-{$2-1}]} -remove_opacity[$2--1]
+    -repeat {@#-$2} -l[0-{$2-1},{$2+$>}]
+      -norm[-1] w={w} h={h} -r[-1] $3%,$3%,1,1,2
+      s={$4*max(round($w/w),round($h/h))}
+      r0={$s*$5%} r1={$s*$6%}
+      -repeat $2 r={round($r0+$>*($r1-$r0)/($2-1))} -if $r --r[$>] $r,$r,1,100%,3 -else 1,1 -endif -done
+      -r[-$2--1] $s,$s,1,100%,0,0,0.5,0.5
+      -map_sprites[$2--1] $2
+    -endl -done -rm[0-{$2-1}]
+  -endif
+
+gimp_shapes_preview :
+  -if $1 -repeat @# -l[$>]
+    w={w} h={h}
+    -gimp_split_preview "-gimp_shapes ${1-3},1,${5--2}",$-1
+    -r $w,$h,1,100%,0,0,0.5,0.5
+    -endl -done
+  -else
+    -if {@#>$2} -repeat {@#-$2} -l[0-{$2-1},{$2+$>}]
+      w={w} h={h}
+      --gimp_shapes ${1-3},1,${5--2} -rm[-2]
+      -r[-1] $w,$h,1,100%,0,0,0.5,0.5
+    -endl -done -rm[0-{$2-1}]
+    -else -_gimp_no_preview "Missing\nlayers !"
     -endif
-  -endl -done
+  -endif
 
 _gimp_shapes :
   -norm w={w} h={h} -r $3%,$3%,1,1,2
   s={(1+$9)*$4*max(round($w/w),round($h/h))}
   r0={$s*$5%} r1={$s*$6%}
-  -repeat $2 r={round($r0+$>*($r1-$r0)/($2-1))} -if $r -_gimp_shapes$1[] $r,$s -else 1,1 -endif -done
+  -repeat $2 r={round($r0+$>*($r1-$r0)/($2-1))} -if $r -_gimp_shapes{$1-1}[] $r,$s -else 1,1 -endif -done
   -r[-$2--1] $s,$s,1,1,0,0,0.5,0.5
   -if $8 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
   -map_sprites $2
@@ -19716,13 +19751,6 @@ _gimp_shapes11 :
 
 _gimp_shapes12 :
   -_gimp_shapes7 $1 -expand_xy 1,0 --erode 3 --
-
-gimp_shapes_preview :
-  -repeat @# -l[$>]
-    w={w} h={h}
-    -gimp_split_preview "-gimp_shapes ${1-3},1,${5--2}",$-1
-    -r $w,$h,1,100%,0,0,0.5,0.5
-  -endl -done
 
 #@gimp Pack sprites : gimp_pack_sprites, gimp_no_preview
 #@gimp : Number of scales = int(5,1,16)
