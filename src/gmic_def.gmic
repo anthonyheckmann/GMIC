@@ -16989,30 +16989,28 @@ _gimp_recompose_channels10 : -cmyk2rgb
 #@gimp : sep = separator()
 #@gimp : Tolerance = float(0.5,0,1)
 #@gimp : Smoothness = float(0.5,0,5)
-#@gimp : Dilation = int(0,-64,64)
-#@gimp : Pre-normalize = bool(1)
+#@gimp : Pre-normalize image = bool(1)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Manual estimation:</b>\n
 #@gimp : Use the sliders below to target as much skin pixels as you can.</small>")
-#@gimp : X-coordinates = float(50,0,100)
-#@gimp : Y-coordinates = float(50,0,100)
+#@gimp : X-coordinate = float(50,0,100)
+#@gimp : Y-coordinate = float(50,0,100)
 #@gimp : Radius = float(5,0,25)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/19</i>.</small>")
 gimp_detect_skin :
-  -to_rgb -if $5 -balance_gamma 128,128,128 -endif
-  -if $1 -detect_skin $2 -else -detect_skin $2,$6%,$7%,$8% -endif
-  -if {$4>0} -dilate_oct $4 -elif {$4<0} -erode_oct {-$4} -endif
-  -repeat @# M=@{$>,255*iM} -b[$>] $3% -n[$>] 0,$M -done
+  -to_rgb -if $4 -balance_gamma 128,128,128 -endif
+  -if $1 -detect_skin $2 -else -detect_skin $2,$5%,$6%,$7% -endif
+  -repeat @# -l[$>] M={iM} -b $3% -* {255*$M/iM} -endl -done
 
 gimp_detect_skin_preview :
   -gimp_split_preview "-gimp_detect_skin $*",$-1
   -if {!$1}
     -to_rgb
-    -circle $6%,$7%,$8%,0.3,0,255,0
-    -circle $6%,$7%,$8%,1,0xFFFFFFFF,0,255,0
-    -line {$6-0.25*$8}%,{$7-0.25*$8}%,{$6+0.25*$8}%,{$7+0.25*$8}%,1,255,255,0
-    -line {$6+0.25*$8}%,{$7-0.25*$8}%,{$6-0.25*$8}%,{$7+0.25*$8}%,1,255,255,0
+    -circle $5%,$6%,$7%,0.3,0,255,0
+    -circle $5%,$6%,$7%,1,0xFFFFFFFF,0,255,0
+    -line {$5-0.25*$7}%,{$6-0.25*$7}%,{$5+0.25*$7}%,{$6+0.25*$7}%,1,255,255,0
+    -line {$5+0.25*$7}%,{$6-0.25*$7}%,{$5-0.25*$7}%,{$6+0.25*$7}%,1,255,255,0
   -endif
 
 #@gimp Equalize HSV : gimp_hsv_equalizer, gimp_hsv_equalizer_preview
@@ -20284,28 +20282,64 @@ gimp_selective_smoothing :
 gimp_selective_smoothing_preview :
   -gimp_split_preview "-gimp_selective_smoothing $*",$-1
 
-#@gimp Smooth [skin] : gimp_smooth_skin, gimp_smooth_skin_preview(0)
-#@gimp : Strength = int(5,0,10)
-# #@gimp : Skin detection = choice("None","Manual","Automatic")
-# #@gimp : sep = separator()
-# #@gimp : note = note("<small><b>Skin detection :</b></small>")
-# #@gimp : Tolerance = float(0.5,0,1)
-# #@gimp : Smoothness = float(0.5,0,5)
-# #@gimp : Dilation = int(0,-64,64)
-# #@gimp : Pre-normalize = bool(1)
-# #@gimp : sep = separator()
-# #@gimp : note = note("<small><b>Manual estimation:</b>\n
-# #@gimp : Use the sliders below to target as much skin pixels as you can.</small>")
-# #@gimp : X-coordinates = float(50,0,100)
-# #@gimp : Y-coordinates = float(50,0,100)
-# #@gimp : Radius = float(5,0,25)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
+#@gimp Smooth [skin] : gimp_smooth_skin, gimp_smooth_skin_preview(1)
+#@gimp : note = note("<small><b>Step 1:</b> Skin detection</small>")
+#@gimp : Estimation = choice(2,"None","Manual","Automatic")
+#@gimp : Tolerance = float(0.5,0,1)
+#@gimp : Smoothness = float(1,0,5)
+#@gimp : Pre-normalize image = bool(1)
+#@gimp : X-coordinate [manual] = float(50,0,100)
+#@gimp : Y-coordinate [manual] = float(50,0,100)
+#@gimp : Radius [manual] = float(5,0,25)
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Step 2:</b> Medium scale smoothing</small>")
+#@gimp : Base scale = float(2,0,10)
+#@gimp : Fine scale = float(0.2,0,2)
+#@gimp : Smoothness = int(5,0,10)
+#@gimp : Smoothness type = choice(1,"Gaussian","Bilateral")
+#@gimp : sep = separator()
+#@gimp : note = note("<small><b>Step 3:</b> Details enhancement</small>")
+#@gimp : Gain = float(0.05,0,0.5)
+#@gimp : sep = separator()
+#@gimp : Preview data = choice(4,"Skin mask","Base scale","Medium scale","Fine scale","Result image")
+#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/20</i>.</small>")
 gimp_smooth_skin :
-  -gimp_equalize_details 0,0,0,0,0,4,2,-0.2,0,$1,2,0.1,0,0,0,0.05,0,32,2
+  -repeat @# -l[$>]
+    -if $4 --balance_gamma 128,128,128 -else [0] -endif
+    -if {$1==0} -channels[-1] 0 -f[-1] 1 -elif {$1==2} -detect_skin[-1] $2 -else -detect_skin[-1] $2,$5%,$6%,$7% -endif
+    M={iM} -b[-1] $3% -*[-1] {$M/iM}
+    -split_details[0] 5,$8%,$9%
+    --_gimp_smooth_skin[3] $11,$10
+    -j[3] [-1],0,0,0,0,1,[-2] -rm[-2,-1] -*[-1] {10^$12}
+    -+ -c 0,255
+  -endl -done
+
+_gimp_smooth_skin :
+  -if {$1==0} -b $2%
+  -else -repeat $2 -bilateral 1%,2 -done
+  -endif
 
 gimp_smooth_skin_preview :
-  -gimp_split_preview "-gimp_smooth_skin $*",$-1
+  -if {$-2==0}
+    -gimp_split_preview "-if $4 -balance_gamma 128,128,128 -endif -if {$1==0} -f 1 -elif {$1==2} -detect_skin $2 -else -detect_skin $2,$5%,$6%,$7%  -endif M={iM} -b $3% -* {255*$M/iM}",$-1
+  -elif {$-2==1}
+    -gimp_split_preview "-b $8%",$-1
+  -elif {$-2==2}
+    -gimp_split_preview "-split_details 5,$8%,$9% -k[-2] -_gimp_smooth_skin $11,$10 -n 0,255",$-1
+  -elif {$-2==3}
+    -gimp_split_preview "-split_details 5,$8%,$9% -k[-1] -n 0,255",$-1
+  -else
+    -gimp_split_preview "-gimp_smooth_skin $*",$-1
+  -endif
+
+  -if {$1==1}
+    -to_rgb
+    -circle $5%,$6%,$7%,0.1,0,255,0
+    -circle $5%,$6%,$7%,0.2,0xFFFFFFFF,0,255,0
+    -line {$5-0.25*$7}%,{$6-0.25*$7}%,{$5+0.25*$7}%,{$6+0.25*$7}%,0.5,255,255,0
+    -line {$5+0.25*$7}%,{$6-0.25*$7}%,{$5-0.25*$7}%,{$6+0.25*$7}%,0.5,255,255,0
+  -endif
 
 #@gimp Smooth [thin brush] : gimp_anisotropic_smoothing, gimp_anisotropic_smoothing(0)
 #@gimp : Amplitude = float(60,0,1000)
@@ -22596,3 +22630,7 @@ learn :
 
   -endl -done
   -o masks2.cimgz
+
+toto :
+
+gmic ~/Desktop/portraits/portrait-etranger-rue-03.jpg --l --split_details 3,10,0.02 -*[-1] 3 --detect_skin[0] 0.5 -mv[-1] 1 --bilateral[-2] [0],25,25 -j[-3] [-1],0,0,0,0,1,[1] -rm[0,1,-1] -+ -endl -a z -c 0,255
