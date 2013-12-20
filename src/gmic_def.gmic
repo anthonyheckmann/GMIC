@@ -5844,8 +5844,8 @@ solve_poisson : -check "${2=60}>=0 && ${3=5}>0 && ${4=0}>=0"
 split_details : -check "isint(${1=4}) && $1>0 && ${2=2%}>=0 && ${3=0.5%}>=0"
   -e[^-1] "Split image$? using $1 spatial scales with base scale $2 and detail scale $3."
   -v - -repeat @# -l[$<]
-    ss={max(0.5,if(@{-is_percent\ $2},$2*max(w,h),$2))}
-    se={max(0.5,if(@{-is_percent\ $3},$3*max(w,h),$3))}
+    ss={max(0.3,if(@{-is_percent\ $2},$2*max(w,h),$2))}
+    se={max(0.3,if(@{-is_percent\ $3},$3*max(w,h),$3))}
     ds={$se-$ss}
     -repeat {$1-1} --b[-1] {$ss+$>*$ds/($1-2)} --[-2] [-1] -rv[-2,-1] -done
   -endl -done -v +
@@ -20294,14 +20294,14 @@ gimp_selective_smoothing_preview :
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Step 2:</b> Medium scale smoothing</small>")
 #@gimp : Base scale = float(2,0,10)
-#@gimp : Fine scale = float(0.2,0,2)
-#@gimp : Smoothness = int(3,0,10)
+#@gimp : Fine scale = float(0.2,0,0.8)
+#@gimp : Smoothness = int(3,1,10)
 #@gimp : Smoothness type = choice(1,"Gaussian","Bilateral")
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Step 3:</b> Details enhancement</small>")
 #@gimp : Gain = float(0.05,0,0.5)
 #@gimp : sep = separator()
-#@gimp : Preview data = choice(4,"Skin mask","Base scale","Medium scale","Fine scale","Result image")
+#@gimp : Preview data = choice{5,"Skin mask","Base scale","Medium scale (original)","Medium scale (smoothed)","Fine scale","Result image"}
 #@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/20</i>.</small>")
 gimp_smooth_skin :
@@ -20326,8 +20326,10 @@ gimp_smooth_skin_preview :
   -elif {$-2==1}
     -gimp_split_preview "-b $8%",$-1
   -elif {$-2==2}
-    -gimp_split_preview "--split_details 4,$8%,$9% -k[0,-2] -_gimp_smooth_skin $11,$10 -k[-1] -n 0,255",$-1
+    -gimp_split_preview "--split_details 4,$8%,$9% -k[-2] -n 0,255",$-1
   -elif {$-2==3}
+    -gimp_split_preview "--split_details 4,$8%,$9% -k[0,-2] -_gimp_smooth_skin $11,$10 -k[-1] -n 0,255",$-1
+  -elif {$-2==4}
     -gimp_split_preview "-split_details 4,$8%,$9% -k[-1] -n 0,255",$-1
   -else
     -gimp_split_preview "-gimp_smooth_skin $*",$-1
@@ -22541,96 +22543,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands
-
-
-all :
-  N={@#/2}
-
-  # Preprocess image.
-
-#   -balance_gamma[0-{$N-1}] 128,128,128
-   -b 2
-
-  --l
-
-  # Extract features to learn.
-  -repeat $N -l[$<,{$<+$N}]
-    -srgb2rgb[0] -rgb2ycbcr[0] -channels[0] 1,2
-#    -srgb2rgb[0] -rgb2hsv[0] -channels[0] 0,1 -f[0] 'if(c==0,(i+180)%360,i*255)'
-
-    -warp[0] [1],0,0 -rm[1]
-
-  -endl -done
-  -a y
-
-  # PCA-based learning.
-  --l
-  M={h}
-  -s c
-  m0=@{0,ia} --[0] $m0
-  m1=@{1,ia} --[1] $m1
-  -transpose -a y
-  --transpose -** -/ $M
-  -invert
-  A={i[0]} B={i[1]} C={i[3]}
-  -rm
-  -endl
-
-  # Display histogram and model.
-  -permute ycxz -pointcloud 0,256,256 -n[-1] 0,255
-  100%,100%,1,1,'X=x-$m0;Y=y-$m1;exp(-0.08*($A*X*X+2*$B*X*Y+$C*Y*Y))' -n[-1] 0,255
-  -a[-2,-1] c
-  -circle[-1] $m0,$m1,2,1,0,128,255
-  -d -rm[-1]
-
-  -endl
-
-  # Apply skin detector.
-  -rm[$N--1]
-  -repeat $N -l[$>]
-    -balance_gamma 128,128,128
-    -srgb2rgb -rgb2ycbcr -channels 1,2
-#    -srgb2rgb -rgb2hsl8 -channels 0,1 -sh 0,0 -+[-1] 128 -rm[-1]
-    -f 'if(c==1,0,X=i(x,y,0,0)-$m0;Y=i(x,y,0,1)-$m1;exp(-0.4*($A*X*X+2*$B*X*Y+$C*Y*Y)))'
-    -channels 0
-
-  -endl -done
-
-
-learn :
-  -v -
-
-  -repeat @# -l[$>]
-    basename=@{0,b}
-    --srgb2rgb -rgb2ycbcr[-1] -channels[-1] 1,2 -b[-1] 2
-
-    -w[0] -1,-1,0,"Color image"
-    r=25
-    -do
-      -wait
-      x=@{!,x} y=@{!,y} b=@{!,b} w=@{!,o}
-      -if {$b&&$x>=0}
-        -circle[0] $x,$y,$r,1,-1
-        -w[0]
-      -elif {$x>=0}
-        --circle[0] $x,$y,$r,1,0xFFFFFFFF,255 -w[-1] -rm[-1]
-      -endif
-      -if $w
-        r={max(2,$r+2*$w)} -wait -1
-      -endif
-      -if @{!,SPACE}
-        -k[0]
-        -channels 0 -eq -1
-        -r 100%,100%,1,2
-        -f 'if(i,if(c==0,x,y),-1)'
-        -s c -discard -1 -a c
-        -break
-      -endif
-    -while 1
-
-  -endl -done
-  -o masks2.cimgz
-
-toto :
-
-gmic ~/Desktop/portraits/portrait-etranger-rue-03.jpg --l --split_details 3,10,0.02 -*[-1] 3 --detect_skin[0] 0.5 -mv[-1] 1 --bilateral[-2] [0],25,25 -j[-3] [-1],0,0,0,0,1,[1] -rm[0,1,-1] -+ -endl -a z -c 0,255
