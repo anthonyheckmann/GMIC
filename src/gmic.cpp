@@ -4256,11 +4256,13 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             float sigma_s = 0, sigma_r = 0;
             CImg<unsigned int> ind;
             char sep_s =  0, sep_r = 0;
-            if ((std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f%c",
-                             indices,&sigma_s,&sigma_r,&end)==3 ||
-                 (std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f%c,%f%c",
-                              indices,&sigma_s,&sep_s,&sigma_r,&end)==4 && sep_s=='%')) &&
-                (ind=selection2cimg(indices,images.size(),images_names,"-map",true,
+            if ((std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
+                             indices,argx,argy,&end)==3) &&
+                (std::sscanf(argx,"%f%c",&sigma_s,&end)==1 ||
+                 (std::sscanf(argx,"%f%c%c",&sigma_s,&sep_s,&end)==2 && sep_s=='%')) &&
+                (std::sscanf(argy,"%f%c",&sigma_r,&end)==1 ||
+                 (std::sscanf(argy,"%f%c%c",&sigma_r,&sep_r,&end)==2 && sep_r=='%')) &&
+                (ind=selection2cimg(indices,images.size(),images_names,"-bilateral",true,
                                     false,CImg<char>::empty())).height()==1 &&
                 sigma_s>=0 && sigma_r>=0) {
               print(images,"Apply joint bilateral filter on image%s, with guide image [%u] "
@@ -4268,24 +4270,26 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     gmic_selection,
                     *ind,
                     sigma_s,sep_s=='%'?"%":"",
-                    sigma_r);
+                    sigma_r,sep_r=='%'?"%":"");
               const CImg<T> guide = gmic_image_arg(*ind);
               if (sep_s=='%') sigma_s = -sigma_s;
+              if (sep_r=='%') sigma_r = -sigma_r;
               cimg_forY(selection,l)
                 gmic_apply(images[selection[l]],blur_bilateral(guide,sigma_s,sigma_r));
-            } else if ((std::sscanf(argument,"%f,%f%c",
-                                    &sigma_s,&sigma_r,&end)==2 ||
-
-
-                        (std::sscanf(argument,"%f%c,%f%c",
-                                     &sigma_s,&sep_s,&sigma_r,&end)==3 && sep_s=='%')) &&
+            } else if ((std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
+                                    argx,argy,&end)==2) &&
+                       (std::sscanf(argx,"%f%c",&sigma_s,&end)==1 ||
+                        (std::sscanf(argx,"%f%c%c",&sigma_s,&sep_s,&end)==2 && sep_s=='%')) &&
+                       (std::sscanf(argy,"%f%c",&sigma_r,&end)==1 ||
+                        (std::sscanf(argy,"%f%c%c",&sigma_r,&sep_r,&end)==2 && sep_r=='%')) &&
                        sigma_s>=0 && sigma_r>=0) {
               print(images,"Apply bilateral filter on image%s, with standard deviations %g%s "
                     "and %g.",
                     gmic_selection,
                     sigma_s,sep_s=='%'?"%":"",
-                    sigma_r);
+                    sigma_r,sep_r=='%'?"%":"");
               if (sep_s=='%') sigma_s = -sigma_s;
+              if (sep_r=='%') sigma_r = -sigma_r;
               cimg_forY(selection,l)
                 gmic_apply(images[selection[l]],
                            blur_bilateral(images[selection[l]],sigma_s,sigma_r));

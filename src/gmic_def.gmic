@@ -4905,7 +4905,7 @@ bandpass : -skip ${1=0},${2=20%}
     -fft[-2] -*[-3] [-1] -*[-2,-1] -ifft -rm[-1]
   -endl -done -v +
 
-#@gmic bilateral : [guide],std_variation_s>0[%],std_variation_r>0 : std_variation_s>0[%],std_variation_r>0 : (+)
+#@gmic bilateral : [guide],std_variation_s>0[%],std_variation_r[%]>0 : std_variation_s>0[%],std_variation_r[%]>0 : (+)
 #@gmic : Blur selected images by anisotropic (eventually joint/cross) bilateral filtering.
 #@gmic : If a guide image is provided, it is used for computing the smoothing geometry in the cross bilateral filter.
 #@gmic : A guide image must be of the same xyz-size as the selected images.
