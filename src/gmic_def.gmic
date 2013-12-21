@@ -20311,15 +20311,20 @@ gimp_selective_smoothing_preview :
 #@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/20</i>.</small>")
 gimp_smooth_skin :
-  -repeat @# -l[$>]
+  -repeat @# -l[$>] -split_opacity -l[0] -to_rgb
+
+    # Skin detection step.
     -if $4 --balance_gamma 128,128,128 -else [0] -endif
     -if {$1==0} -channels[-1] 0 -f[-1] 1 -elif {$1==2} -detect_skin[-1] $2 -else -detect_skin[-1] $2,$5%,$6%,$7% -endif
     M={iM} -b[-1] $3% -*[-1] {$M/iM}
+
+    # Details smoothing step.
     -split_details[0] 4,$8%,$9%
     --_gimp_smooth_skin[2] $11,$10
     -j[2] [-1],0,0,0,0,1,[-2] -rm[-2,-1]
     -*[-1] {10^$12} -+ -c 0,255
-  -endl -done
+
+  -endl -a c -endl -done
 
 _gimp_smooth_skin :
   -if {$1==0} -b {$2/8}%
