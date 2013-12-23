@@ -19688,8 +19688,8 @@ gimp_mosaic_preview :
   -gimp_split_preview "-gimp_mosaic $*",$-1
 
 #@gimp Op art : gimp_shapes,gimp_shapes_preview(0)
-#@gimp : Shape = choice{1,"Custom layers","Circles","Squares","Diamonds","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars",
-#@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Hearts (outline)","Stars (outline)"}
+#@gimp : Shape = choice{1,"Custom layers","Circles","Squares","Diamonds","Triangles","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars",
+#@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Triangles (outline)","Hearts (outline)","Stars (outline)"}
 #@gimp : Number of scales = int(16,2,24)
 #@gimp : Resolution = float(10,1,50)
 #@gimp : Zoom factor = _int(2,1,8)
@@ -19763,34 +19763,40 @@ _gimp_shapes2 :
   $1,$1,1,1 -= 1,50%,50% -distance 1,1 -lt {$1/2}
 
 _gimp_shapes3 :
-  $2,$1,1,1,1
+  $2,$2,1,1,'x+y<=2*$1-1'
 
 _gimp_shapes4 :
-  $1,$2,1,1,1
+  $2,$1,1,1,1
 
 _gimp_shapes5 :
-  -ball $1,200 -n 0,1
+  $1,$2,1,1,1
 
 _gimp_shapes6 :
-  -heart 65 -r $1,$1,1,1,2 -ge 50%
+  -ball $1,200 -n 0,1
 
 _gimp_shapes7 :
-  -star $1,$1
+  -heart 65 -r $1,$1,1,1,2 -ge 50%
 
 _gimp_shapes8 :
-  -_gimp_shapes0 $1 -expand_xy 1,0 --erode 3 --
+  -star $1,$1
 
 _gimp_shapes9 :
-  -_gimp_shapes1 $1 -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes0 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes10 :
-  -_gimp_shapes2 $1 -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes1 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes11 :
-  -_gimp_shapes6 $1 -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes2 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes12 :
-  -_gimp_shapes7 $1 -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes3 $* -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes13 :
+  -_gimp_shapes7 $* -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes14 :
+  -_gimp_shapes8 $* -expand_xy 1,0 --erode 3 --
 
 #@gimp Pack sprites : gimp_pack_sprites, gimp_no_preview
 #@gimp : Number of scales = int(5,1,16)
