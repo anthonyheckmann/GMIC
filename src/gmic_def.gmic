@@ -9033,19 +9033,27 @@ linearize_tiles : -check "$1>0 && ${2=$1}>0"
     -repeat {int(@#/$s)} -a[-$s--1] c -mv[-1] 0 -done -append_tiles $1,$2
   -nm $nm,1 -endl -done -v +
 
-#@gmic map_sprites : _nb_scales>=1
+#@gmic map_sprites : _nb_scales>=1,_allow_rotation={ 0=none | 1=90 deg. | 2=180 deg. }
 #@gmic : Map set of sprites (defined as the 'nb_scales' latest images of the selection) to other selected images,
 #@gmic : according to the luminosity of their pixel values.
 #@gmic : $ image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16
-map_sprites : -check "isint($1) && $1>0"
+map_sprites : -check "isint($1) && $1>0 && isint(${2=0}) && $2>=0 && $2<=2"
   -e[^-1] "Map set of $1 sprites to image selection$?."
   -v - -norm[0--{$1+1}] -quantize[0--{$1+1}] $1,0,1
   -slices[-$1--1] 0 -r[-$1--1] @{-max_wh[-$1--1]},1,100%,0,0,0.5,0.5
-  -r[-$1--1] 100%,100%,1,@{-max_s[-$1--1]} w={w} h={h} -a[-$1--1] x
+  -if {$2==1}
+    N={4*$1}
+    -repeat {@#-$1} -*[$>] 4 --rand[$>] 0,3 -round[-1] -+[$>,-1] -done
+    -repeat $1 -l[{1+$<}] --mirror xy --rotate 90 -endl -done
+  -elif {$2==2}
+    N={2*$1}
+    -repeat {@#-$1} -*[$>] 2 --rand[$>] 0,1 -round[-1] -+[$>,-1] -done
+    -repeat $1 -l[{1+$<}] --mirror xy -endl -done
+  -else N=$1 -endif
+  -r[-$N--1] 100%,100%,1,@{-max_s[-$N--1]} w={w} h={h} -a[-$N--1] x
   -r[^-1] ${w}00%,${h}00%,1,1 -*[^-1] $w
   (0,{$w-1};0,{$w-1}^0,0;{$h-1},{$h-1}) -r[-1] $w,$h,1,2,3 -round[-1]
-  -repeat {@#-2} --r[-1] [$>],[$>],1,2,0,2 -r[$>] 100%,100%,1,2,0 -+[$>,-1] --warp[-2] [$>],0,0 -rv[$>,-1] -rm[-1]
-  -done -rm[-2,-1] -v +
+  -repeat {@#-2} --r[-1] [$>],[$>],1,2,0,2 -r[$>] 100%,100%,1,2,0 -+[$>,-1] --warp[-2] [$>],0,0 -rv[$>,-1] -rm[-1] -done -rm[-2,-1] -v +
 
 #@gmic quadratize_tiles : M>0,_N>0
 #@gmic : Quadratize MxN tiles on selected images.
@@ -19696,6 +19704,7 @@ gimp_mosaic_preview :
 #@gimp : Minimal size = float(5,0,150)
 #@gimp : Maximal size = float(90,0,150)
 #@gimp : Stencil type = choice(0,"Black & white","RGB","Color")
+#@gimp : Allow angle = choice("0 deg.","90 deg.","180 deg.")
 #@gimp : Negative = bool(1)
 #@gimp : Antialiasing = bool(1)
 #@gimp : sep = separator()
@@ -19723,7 +19732,7 @@ gimp_shapes :
       r0={$s*$5%} r1={$s*$6%}
       -repeat $2 r={round($r0+$>*($r1-$r0)/($2-1))} -if $r --r[$>] $r,$r,1,100%,3 -else 1,1 -endif -done
       -r[-$2--1] $s,$s,1,100%,0,0,0.5,0.5
-      -map_sprites[$2--1] $2
+      -map_sprites[$2--1] $2,$8
     -endl -done -rm[0-{$2-1}]
   -endif
 
@@ -19745,13 +19754,13 @@ gimp_shapes_preview :
 
 _gimp_shapes :
   -norm w={w} h={h} -r $3%,$3%,1,1,2
-  s={(1+$9)*$4*max(round($w/w),round($h/h))}
+  s={(1+$10)*$4*max(round($w/w),round($h/h))}
   r0={$s*$5%} r1={$s*$6%}
   -repeat $2 r={round($r0+$>*($r1-$r0)/($2-1))} -if $r -_gimp_shapes{$1-1}[] $r,$s -else 1,1 -endif -done
   -r[-$2--1] $s,$s,1,1,0,0,0.5,0.5
-  -if $8 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
-  -map_sprites $2
-  -if $9 -r 50%,50%,1,1,2 -endif
+  -if $9 -rv[-$2--1] -*[-$2--1] -1 -+[-$2--1] 1 -endif
+  -map_sprites $2,$8
+  -if $10 -r 50%,50%,1,1,2 -endif
 
 _gimp_shapes0 :
   -_dt_circle[] $1
