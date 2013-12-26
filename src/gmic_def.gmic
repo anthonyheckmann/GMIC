@@ -19696,8 +19696,8 @@ gimp_mosaic_preview :
   -gimp_split_preview "-gimp_mosaic $*",$-1
 
 #@gimp Op art : gimp_shapes,gimp_shapes_preview(0)
-#@gimp : Shape = choice{1,"Custom layers","Circles","Squares","Diamonds","Triangles","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars",
-#@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Triangles (outline)","Hearts (outline)","Stars (outline)"}
+#@gimp : Shape = choice{1,"Custom layers","Circles","Squares","Diamonds","Triangles","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars","Arrows",
+#@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Triangles (outline)","Hearts (outline)","Stars (outline)","Arrows (outline)"}
 #@gimp : Number of scales = int(16,2,24)
 #@gimp : Resolution = float(10,1,50)
 #@gimp : Zoom factor = _int(2,1,8)
@@ -19790,22 +19790,30 @@ _gimp_shapes8 :
   -star $1,$1
 
 _gimp_shapes9 :
-  -_gimp_shapes0 $* -expand_xy 1,0 --erode 3 --
+  -arrow3d 0,0,0,1,0,0,15%,40%,30% -col3d 1 -*3d $1 -c3d
+  $2,$2 -object3d[-1] [-2],50%,50%,0,1,2,0,0
+  -rm[-2] --mirror y -max
 
 _gimp_shapes10 :
-  -_gimp_shapes1 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes0 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes11 :
-  -_gimp_shapes2 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes1 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes12 :
-  -_gimp_shapes3 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes2 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes13 :
-  -_gimp_shapes7 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes3 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes14 :
+  -_gimp_shapes7 $* -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes15 :
   -_gimp_shapes8 $* -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes16 :
+  -_gimp_shapes9 $* -expand_xy 1,0 --erode 3 --
 
 #@gimp Pack sprites : gimp_pack_sprites, gimp_no_preview
 #@gimp : Number of scales = int(5,1,16)
