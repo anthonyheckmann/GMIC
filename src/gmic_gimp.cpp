@@ -319,8 +319,8 @@ const char *t(const char *const s) {
   // Catalan translation
   if (!std::strcmp(get_locale(),"ca")) {
     if (!s) {
-      static const char *const ns = "<b>No ha estat possible establir una connexi&#243; a Internet !</b>\n\n"
-        "<i>No es possible arribar a aquestes fonts de filtres :</i>\n";
+      static const char *const ns = "No ha estat possible establir una connexi&#243; a Internet !\n\n"
+        "No es possible arribar a aquestes fonts de filtres :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC per al GIMP");
@@ -370,8 +370,8 @@ const char *t(const char *const s) {
   // Dutch translation
   if (!std::strcmp(get_locale(),"nl")) {
     if (!s) {
-      static const char *const ns = "<b>Geen internet-update mogelijk !</b>\n\n"
-        "<i>Kan deze filters bronnen te bereiken :</i>\n";
+      static const char *const ns = "Geen internet-update mogelijk !\n\n"
+        "Kan deze filters bronnen te bereiken :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC voor GIMP");
@@ -420,8 +420,8 @@ const char *t(const char *const s) {
   // French translation
   if (!std::strcmp(get_locale(),"fr")) {
     if (!s) {
-      static const char *const ns = "<b>Mise &#224; jour depuis Internet incompl&#232;te !</b>\n\n"
-        "<i>Acc&#232;s impossible aux sources de filtres :</i>\n";
+      static const char *const ns = "Mise &#224; jour depuis Internet incompl&#232;te !\n\n"
+        "Acc&#232;s impossible aux sources de filtres :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC pour GIMP");
@@ -471,8 +471,8 @@ const char *t(const char *const s) {
   // German translation
   if (!std::strcmp(get_locale(),"de")) {
     if (!s) {
-      static const char *const ns = "<b>Kein Internet-Update m\303\266glich !</b>\n\n"
-        "<i>Kann diese Filter Quellen erreichen :</i>\n";
+      static const char *const ns = "Kein Internet-Update m\303\266glich !\n\n"
+        "Kann diese Filter Quellen erreichen :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC f\303\274r GIMP");
@@ -519,8 +519,8 @@ const char *t(const char *const s) {
   // Italian translation
   if (!std::strcmp(get_locale(),"it")) {
     if (!s) {
-      static const char *const ns = "<b>Impossibile aggiornare da Internet !</b>\n\n"
-        "<i>Impossibile raggiungere queste fonti filtri :</i>\n";
+      static const char *const ns = "Impossibile aggiornare da Internet !\n\n"
+        "Impossibile raggiungere queste fonti filtri :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC per GIMP");
@@ -567,8 +567,8 @@ const char *t(const char *const s) {
   // Polish translation
   if (!std::strcmp(get_locale(),"pl")) {
     if (!s) {
-      static const char *const ns = "<b>Aktualizacja filtr\303\263w przez internet (cz\304\231\305\233ciowo) nie powiod\305\202a si\304\231 !</b>\n\n"
-        "<i>Brak dost\304\231pu do tych \305\272r\303\263de\305\202 filtr\303\263w :</i>\n";
+      static const char *const ns = "Aktualizacja filtr\303\263w przez internet (cz\304\231\305\233ciowo) nie powiod\305\202a si\304\231 !\n\n"
+        "Brak dost\304\231pu do tych \305\272r\303\263de\305\202 filtr\303\263w :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC dla GIMP");
@@ -618,8 +618,8 @@ const char *t(const char *const s) {
   // Portuguese translation
   if (!std::strcmp(get_locale(),"pt")) {
     if (!s) {
-      static const char *const ns = "<b>A atualiza\303\247\303\243o pela internet falhou !</b>\n\n"
-        "<i>Incapaz de chegar a essas fontes de filtros :</i>\n";
+      static const char *const ns = "A atualiza\303\247\303\243o pela internet falhou !\n\n"
+        "Incapaz de chegar a essas fontes de filtros :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC para o GIMP");
@@ -669,8 +669,8 @@ const char *t(const char *const s) {
   // Serbian translation
   if (!std::strcmp(get_locale(),"sr")) {
     if (!s) {
-      static const char *const ns = "<b>A\305\276uriranje filtera sa interneta (delimi\304\215no) neuspe\305\241no !</b>\n\n"
-        "<i>Nije mogu\304\207e dospeti do izvorne lokacije ovih filtera :</i>\n";
+      static const char *const ns = "A\305\276uriranje filtera sa interneta (delimi\304\215no) neuspe\305\241no !\n\n"
+        "Nije mogu\304\207e dospeti do izvorne lokacije ovih filtera :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC za GIMP");
@@ -719,8 +719,8 @@ const char *t(const char *const s) {
   // Spanish translation (Castillan)
   if (!std::strcmp(get_locale(),"es")) {
     if (!s) {
-      static const char *const ns = "<b>No es posible establecer conexión a Internet !</b>\n\n"
-        "<i>No es posible acceder a estas fuentes de filtros :</i>\n";
+      static const char *const ns = "No es posible establecer conexión a Internet !\n\n"
+        "No es posible acceder a estas fuentes de filtros :\n";
       return ns;
     }
     _t("G'MIC for GIMP","G'MIC para GIMP");
@@ -769,8 +769,8 @@ const char *t(const char *const s) {
 
   // English translation (default)
   if (!s) {
-    static const char *const ns = "<b>Filters update from Internet (partially) failed !</b>\n\n"
-      "<i>Unable to reach these filters sources :</i>\n";
+    static const char *const ns = "Filters update from Internet (partially) failed !\n\n"
+      "Unable to reach these filters sources :\n";
     return ns;
   }
   return s;
