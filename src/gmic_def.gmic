@@ -19696,7 +19696,7 @@ gimp_mosaic_preview :
   -gimp_split_preview "-gimp_mosaic $*",$-1
 
 #@gimp Op art : gimp_shapes,gimp_shapes_preview(0)
-#@gimp : Shape = choice{1,"Custom layers","Circles","Squares","Diamonds","Triangles","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars","Arrows",
+#@gimp : Shape = choice{1,"Custom layers","Circles","Squares","Diamonds","Triangles","Horizontal stripes","Vertical stripes","Balls","Hearts","Stars","Arrows","Truchet",
 #@gimp : "Circles (outline)","Squares (outline)","Diamonds (outline)","Triangles (outline)","Hearts (outline)","Stars (outline)","Arrows (outline)"}
 #@gimp : Number of scales = int(16,2,24)
 #@gimp : Resolution = float(10,1,50)
@@ -19795,24 +19795,28 @@ _gimp_shapes9 :
   -rm[-2] --mirror y -max
 
 _gimp_shapes10 :
-  -_gimp_shapes0 $* -expand_xy 1,0 --erode 3 --
+  $2,$2,1,1,"X=x/w;Y=y/h;r=abs(0.5-sqrt(X^2+Y^2));a=atan2(y,x);r<0.03+0.12*$1/$2*sin(2*a)"
+  --mirror xy -max
 
 _gimp_shapes11 :
-  -_gimp_shapes1 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes0 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes12 :
-  -_gimp_shapes2 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes1 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes13 :
-  -_gimp_shapes3 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes2 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes14 :
-  -_gimp_shapes7 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes3 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes15 :
-  -_gimp_shapes8 $* -expand_xy 1,0 --erode 3 --
+  -_gimp_shapes7 $* -expand_xy 1,0 --erode 3 --
 
 _gimp_shapes16 :
+  -_gimp_shapes8 $* -expand_xy 1,0 --erode 3 --
+
+_gimp_shapes17 :
   -_gimp_shapes9 $* -expand_xy 1,0 --erode 3 --
 
 #@gimp Pack sprites : gimp_pack_sprites, gimp_no_preview
