@@ -19795,7 +19795,8 @@ _gimp_shapes9 :
   -rm[-2] --mirror y -max
 
 _gimp_shapes10 :
-  $2,$2,1,1,"X=x/w;Y=y/h;r=abs(0.5-sqrt(X^2+Y^2));a=atan2(y,x);r<0.03+0.12*$1/$2*sin(2*a)"
+  S={$2+1-($2%2)}
+  $S,$S,1,1,"X=x/(w-1);Y=y/(h-1);r=abs(0.5-sqrt(X^2+Y^2));a=atan2(y,x);r<0.1-0.17*(0.5-$1/$2)*sin(2*a)"
   --mirror xy -max
 
 _gimp_shapes11 :
