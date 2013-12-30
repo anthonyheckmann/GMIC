@@ -57,7 +57,7 @@
 <a id="section0"><h2><font color="brown"><u>Version</u></font></h2></a> 
 <pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing. 
  
-       Version 1.5.8.1, Copyright (c) 2008-2013, David Tschumperle 
+       Version 1.5.8.2 (beta), Copyright (c) 2008-2013, David Tschumperle 
        (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>) 
 </pre> 
 <h2><a id="section1"><font color="brown"><u>Usage</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
@@ -3016,7 +3016,15 @@ x0[%],y0[%],z0[%],x1[%],y1[%],z1[%]
 
 <p style="margin-left:100px"><tt>Compute the barycenter vector of pixel values.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def331.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">256,256 -ellipse 50%,50%,20%,20%,0,1,1 -deform 20 --barycenter --ellipse[-2] @{-1,0,1},5,5,0,10</div></div></td><td><tt>256,256 -ellipse 50%,50%,20%,20%,0,1,1 -deform 20 --barycenter --ellipse[-2] @{-1,0,1},5,5,0,10</tt></td></tr>
-</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-displacement (+)</b>:</font>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-detect_skin</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+0<=tolerance<=1
+
+</font></i></tt></p>
+<p style="margin-left:100px"><tt>Detect skin in selected color images and output an appartenance probability map.
+<br/>Detection is performed using CbCr chromaticity data of skin pixels.
+<br/><br/><b>Default value</b>: 'tolerance=0.5'.
+</tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-displacement (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 [source_image],_smoothness,_precision>=0,_nb_scales>=0,iteration_max>=0,is_backward={ 0 | 1 }
 
@@ -4529,6 +4537,14 @@ M>0,_N>0
 <p style="margin-left:100px"><tt>Linearize MxN tiles on selected images.
 <br/><br/><b>Default value</b>: 'N=M'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def510.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --linearize_tiles 16</div></div></td><td><tt>image.jpg --linearize_tiles 16</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-map_sprites</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+_nb_scales>=1
+
+</font></i></tt></p>
+<p style="margin-left:100px"><tt>Map set of sprites (defined as the 'nb_scales' latest images of the selection) to other selected images,
+<br/>&nbsp;according to the luminosity of their pixel values.
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def511.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16</div></div></td><td><tt>image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-quadratize_tiles</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 M>0,_N>0
@@ -4536,7 +4552,7 @@ M>0,_N>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Quadratize MxN tiles on selected images.
 <br/><br/><b>Default value</b>: 'N=M'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def511.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --quadratize_tiles 16</div></div></td><td><tt>image.jpg --quadratize_tiles 16</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def512.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --quadratize_tiles 16</div></div></td><td><tt>image.jpg --quadratize_tiles 16</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-rotate_tiles</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 angle,_M>0,N>0
@@ -4544,7 +4560,7 @@ angle,_M>0,N>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply MxN tiled-rotation effect on selected images.
 <br/><br/><b>Default values</b>: 'M=8' and 'N=M'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def512.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -to_rgba -rotate_tiles 10,8 -drop_shadow 10,10 -display_rgba</div></div></td><td><tt>image.jpg -to_rgba -rotate_tiles 10,8 -drop_shadow 10,10 -display_rgba</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def513.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -to_rgba -rotate_tiles 10,8 -drop_shadow 10,10 -display_rgba</div></div></td><td><tt>image.jpg -to_rgba -rotate_tiles 10,8 -drop_shadow 10,10 -display_rgba</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-shift_tiles</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 M>0,_N>0,_amplitude
@@ -4552,7 +4568,7 @@ M>0,_N>0,_amplitude
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply MxN tiled-shift effect on selected images.
 <br/><br/><b>Default values</b>: 'N=M' and 'amplitude=20'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def513.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shift_tiles 8,8,10</div></div></td><td><tt>image.jpg --shift_tiles 8,8,10</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def514.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shift_tiles 8,8,10</div></div></td><td><tt>image.jpg --shift_tiles 8,8,10</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-taquin</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 M>0,_N>0
@@ -4560,7 +4576,7 @@ M>0,_N>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create MxN taquin puzzle from selected images.
 <br/><br/><b>Default value</b>: 'N=M'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def514.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --taquin 8</div></div></td><td><tt>image.jpg --taquin 8</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def515.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --taquin 8</div></div></td><td><tt>image.jpg --taquin 8</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-tunnel</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _level>=0,_factor>0,_cx,_cy,_opacity,_angle
@@ -4568,7 +4584,7 @@ _level>=0,_factor>0,_cx,_cy,_opacity,_angle
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply tunnel effect on selected images.
 <br/><br/><b>Default values</b>: 'level=9', 'factor=80%', 'cx=cy=0.5', 'opacity=1' and 'angle=0'
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def515.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --tunnel 20</div></div></td><td><tt>image.jpg --tunnel 20</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def516.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --tunnel 20</div></div></td><td><tt>image.jpg --tunnel 20</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection15"><font color="purple">** <u>Artistic</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-boxfitting</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -4578,7 +4594,7 @@ _min_box_size>=1,_max_box_size>=0,_initial_density>=0,_nb_attempts>=1
 <p style="margin-left:100px"><tt>Apply box fitting effect on selected images, as displayed the web page:
 <br/>&nbsp;[http://www.complexification.net/gallery/machines/boxFittingImg/]
 <br/><br/><b>Default values</b>: 'min_box_size=1', 'max_box_size=0', 'initial_density=0.1' and 'nb_tries=3'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def516.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --boxfitting ,</div></div></td><td><tt>image.jpg --boxfitting ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def517.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --boxfitting ,</div></div></td><td><tt>image.jpg --boxfitting ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-cartoon</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _smoothness,_sharpening,_threshold>=0,_thickness>=0,_color>=0,quantization>0
@@ -4586,7 +4602,7 @@ _smoothness,_sharpening,_threshold>=0,_thickness>=0,_color>=0,quantization>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply cartoon effect on selected images.
 <br/><br/><b>Default values</b>: 'smoothness=3', 'sharpening=150', 'threshold=20', 'thickness=0.25', 'color=1.5' and 'quantization=8'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def517.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --cartoon 3,80,15</div></div></td><td><tt>image.jpg --cartoon 3,80,15</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def518.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --cartoon 3,80,15</div></div></td><td><tt>image.jpg --cartoon 3,80,15</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-circlism</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _radius_min>0,_radius_max>0,_smoothness[%]>=0,_radius_linearity>=0,_location_linearity>=0,_shape={0=squares | 1=diamonds | 2=circle }
@@ -4594,7 +4610,7 @@ _radius_min>0,_radius_max>0,_smoothness[%]>=0,_radius_linearity>=0,_location_lin
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply circlism effect on selected images (effect inspired by Ben Heine).
 <br/><br/><b>Default values</b>: 'radius_min=2', 'radius_max=20', 'smoothness=1', 'radius_linearity=0.4', 'location_linearity=3' and 'shape=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def518.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --circlism ,</div></div></td><td><tt>image.jpg --circlism ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def519.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --circlism ,</div></div></td><td><tt>image.jpg --circlism ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-color_ellipses</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _count>0,_radius>=0,_opacity>=0
@@ -4602,7 +4618,7 @@ _count>0,_radius>=0,_opacity>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add random color ellipses to selected images.
 <br/><br/><b>Default values</b>: 'count=400', 'radius=5' and 'opacity=0.1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def519.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --color_ellipses ,,0.15</div></div></td><td><tt>image.jpg --color_ellipses ,,0.15</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def520.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --color_ellipses ,,0.15</div></div></td><td><tt>image.jpg --color_ellipses ,,0.15</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-cubism</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _density>=0,0<=_thickness<=50,_max_angle,_opacity,_smoothness>=0
@@ -4610,15 +4626,7 @@ _density>=0,0<=_thickness<=50,_max_angle,_opacity,_smoothness>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply cubism effect on selected images.
 <br/><br/><b>Default values</b>: 'density=50', 'thickness=10', 'max_angle=75', 'opacity=0.7' and 'smoothness=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def520.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --cubism ,</div></div></td><td><tt>image.jpg --cubism ,</tt></td></tr>
-</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-dotsbw</b>:</font>
-<p style="margin-left:150px"><tt><i><font color="purple">
-_nb_scales>0,0<=_resolution<=100,_radius_factor>=0
-
-</font></i></tt></p>
-<p style="margin-left:100px"><tt>Apply B&W dots effect on selected images.
-<br/><br/><b>Default values</b>: 'nb_scales=16', 'resolution=10' and 'radius_factor=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def521.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --dotsbw , --blend shapeaverage0</div></div></td><td><tt>image.jpg --dotsbw , --blend shapeaverage0</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def521.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --cubism ,</div></div></td><td><tt>image.jpg --cubism ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-draw_whirl</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude>=0
@@ -4784,6 +4792,13 @@ _edges[%]>=0, shading>=0, is_thin_separators={ 0 | 1 }
 <p style="margin-left:100px"><tt>Generate stained glass from selected images.
 <br/><br/><b>Default values</b>: 'edges=40%', 'shading=0.2' and 'is_precise=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def542.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --stained_glass ,</div></div></td><td><tt>image.jpg --stained_glass ,</tt></td></tr>
+</table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-star</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+_width>0,_height>0
+
+</font></i></tt></p>
+<p style="margin-left:100px"><tt>Input star binary mask with specified size.
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def543.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-star ,</div></div></td><td><tt>-star ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-stars</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _density[%]>=0,_depth>=0,_size>0,_nb_branches>=1,0<=_thickness<=1,_smoothness[%]>=0,_R,_G,_B,_opacity
@@ -4791,7 +4806,7 @@ _density[%]>=0,_depth>=0,_size>0,_nb_branches>=1,0<=_thickness<=1,_smoothness[%]
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add random stars to selected images.
 <br/><br/><b>Default values</b>: 'density=10%', 'depth=1', 'size=32', 'nb_branches=5', 'thickness=0.38', 'smoothness=0.5', 'R=G=B=200' and 'opacity=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def543.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -stars ,</div></div></td><td><tt>image.jpg -stars ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def544.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -stars ,</div></div></td><td><tt>image.jpg -stars ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-sketchbw</b>:</font>
 
 <p style="margin-left:100px"><tt>&nbsp;_nb_orients>0,_start_angle,_angle_range>=0,_length>=0,_threshold>=0,
@@ -4801,7 +4816,7 @@ _density[%]>=0,_depth>=0,_size>0,_nb_branches>=1,0<=_thickness<=1,_smoothness[%]
 <br/>Apply sketch effect to selected images.
 <br/><br/><b>Default values</b>: 'nb_orients=2', 'start_angle=45', 'angle_range=180', 'length=30', 'threshold=1', 'opacity=0.03',
 <br/>'bgfactor=0', 'density=0.6', 'sharpness=0.1', 'anisotropy=0.6', 'smoothness=0.25', 'coherence=1', 'is_boost=0' and 'is_curved=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def544.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endlocal</div></div></td><td><tt>image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endlocal</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def545.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endlocal</div></div></td><td><tt>image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endlocal</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-sponge</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _size>0
@@ -4809,7 +4824,7 @@ _size>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply sponge effect on selected images.
 <br/><br/><b>Default value</b>: 'size=13'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def545.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --sponge ,</div></div></td><td><tt>image.jpg --sponge ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def546.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --sponge ,</div></div></td><td><tt>image.jpg --sponge ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-stencil</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _radius[%]>=0,_smoothness>=0,_iterations>=0
@@ -4817,7 +4832,7 @@ _radius[%]>=0,_smoothness>=0,_iterations>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply stencil filter on selected images.
 <br/><br/><b>Default values</b>: 'radius=3', 'smoothness=1' and 'iterations=8'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def546.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --stencil 1,10,3</div></div></td><td><tt>image.jpg --stencil 1,10,3</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def547.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --stencil 1,10,3</div></div></td><td><tt>image.jpg --stencil 1,10,3</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-stencilbw</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _edges>=0,_smoothness>=0
@@ -4825,7 +4840,7 @@ _edges>=0,_smoothness>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply B&W stencil effect on selected images.
 <br/><br/><b>Default values</b>: 'edges=15' and 'smoothness=10'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def547.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --stencilbw 40,4</div></div></td><td><tt>image.jpg --stencilbw 40,4</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def548.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --stencilbw 40,4</div></div></td><td><tt>image.jpg --stencilbw 40,4</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-tetris</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _scale>0
@@ -4833,7 +4848,7 @@ _scale>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply tetris effect on selected images.
 <br/><br/><b>Default value</b>: 'scale=10'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def548.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --tetris 10</div></div></td><td><tt>image.jpg --tetris 10</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def549.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --tetris 10</div></div></td><td><tt>image.jpg --tetris 10</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-warhol</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _M>0,_N>0,_smoothness>=0,_color>=0
@@ -4841,7 +4856,7 @@ _M>0,_N>0,_smoothness>=0,_color>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create MxN Andy Warhol-like artwork from selected images.
 <br/><br/><b>Default values</b>: 'M=3', 'N=M', 'smoothness=2' and 'color=20'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def549.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --warhol 5,3,3,40</div></div></td><td><tt>image.jpg --warhol 5,3,3,40</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def550.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --warhol 5,3,3,40</div></div></td><td><tt>image.jpg --warhol 5,3,3,40</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-weave</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _density>=0,0<=_thickness<=100,0<=_shadow<=100,_shading>=0,_fibers_amplitude>=0,_fibers_smoothness>=0,_angle,-1<=_x_curvature<=1,-1<=_y_curvature<=1
@@ -4850,7 +4865,7 @@ _density>=0,0<=_thickness<=100,0<=_shadow<=100,_shading>=0,_fibers_amplitude>=0,
 <p style="margin-left:100px"><tt>Apply weave effect to the selected images.
 <br/>'angle' can be { 0=0 deg. | 1=22.5 deg. | 2=45 deg. | 3=67.5 deg. }.
 <br/><br/><b>Default values</b>: 'density=6', 'thickness=65', 'shadow=40', 'shading=0.5', 'fibers_amplitude=0', 'fibers_smoothness=0', 'angle=0' and 'curvature_x=curvature_y=0'
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def550.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --weave ,</div></div></td><td><tt>image.jpg --weave ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def551.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --weave ,</div></div></td><td><tt>image.jpg --weave ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-whirls</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _texture>=0,_smoothness>=0,_darkness>=0,_lightness>=0
@@ -4858,7 +4873,7 @@ _texture>=0,_smoothness>=0,_darkness>=0,_lightness>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add random whirl texture to selected images.
 <br/><br/><b>Default values</b>: 'texture=3', 'smoothness=6', 'darkness=0.5' and 'lightness=1.8'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def551.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --whirls ,</div></div></td><td><tt>image.jpg --whirls ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def552.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --whirls ,</div></div></td><td><tt>image.jpg --whirls ,</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection16"><font color="purple">** <u>Warpings</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-euclidean2polar</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -4867,7 +4882,7 @@ _cx,_cy,_n>0,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply euclidean to polar transform on selected images.
 <br/><br/><b>Default values</b>: 'cx=cy=0.5', 'n=1' and 'boundary=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def552.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --euclidean2polar ,</div></div></td><td><tt>image.jpg --euclidean2polar ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def553.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --euclidean2polar ,</div></div></td><td><tt>image.jpg --euclidean2polar ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-deform</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude>=0
@@ -4875,7 +4890,7 @@ _amplitude>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply random smooth deformation on selected images.
 <br/><br/><b>Default value</b>: 'amplitude=10'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def553.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --deform[0] 10 --deform[0] 20</div></div></td><td><tt>image.jpg --deform[0] 10 --deform[0] 20</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def554.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --deform[0] 10 --deform[0] 20</div></div></td><td><tt>image.jpg --deform[0] 10 --deform[0] 20</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fisheye</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _x,_y,0<=_radius<=100,_amplitude>=0
@@ -4883,7 +4898,7 @@ _x,_y,0<=_radius<=100,_amplitude>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply fish-eye deformation on selected images.
 <br/><br/><b>Default values</b>: 'x=y=50', 'radius=50' and 'amplitude=1.2'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def554.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --fisheye ,</div></div></td><td><tt>image.jpg --fisheye ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def555.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --fisheye ,</div></div></td><td><tt>image.jpg --fisheye ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-flower</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude,_frequency,_offset_r[%],_angle,_cx,_cy,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
@@ -4891,7 +4906,7 @@ _amplitude,_frequency,_offset_r[%],_angle,_cx,_cy,_boundary={ 0=dirichlet | 1=ne
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply flower deformation on selected images.
 <br/><br/><b>Default values</b>: 'amplitude=30', 'frequency=6', 'offset_r=0', 'angle=0', 'cx=cy=0.5' and 'boundary=2'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def555.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -flower ,</div></div></td><td><tt>image.jpg -flower ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def556.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -flower ,</div></div></td><td><tt>image.jpg -flower ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-kaleidoscope</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _cx,_cy,_radius,_angle,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
@@ -4899,7 +4914,7 @@ _cx,_cy,_radius,_angle,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create kaleidoscope effect from selected images.
 <br/><br/><b>Default values</b>: 'cx=cy=0.5', 'radius=100', 'angle=30' and 'boundary=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def556.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --kaleidoscope ,</div></div></td><td><tt>image.jpg --kaleidoscope ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def557.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --kaleidoscope ,</div></div></td><td><tt>image.jpg --kaleidoscope ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-map_sphere</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _width>0,_height>0,_radius,_dilation>0,_fading>=0,_fading_power>=0
@@ -4907,7 +4922,7 @@ _width>0,_height>0,_radius,_dilation>0,_fading>=0,_fading_power>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Map selected images on a sphere.
 <br/><br/><b>Default values</b>: 'width=height=512', 'radius=100', 'dilation=0.5', 'fading=0' and 'fading_power=0.5'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def557.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --map_sphere ,</div></div></td><td><tt>image.jpg --map_sphere ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def558.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --map_sphere ,</div></div></td><td><tt>image.jpg --map_sphere ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-polar2euclidean</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _cx,_cy,_n>0,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
@@ -4915,7 +4930,7 @@ _cx,_cy,_n>0,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply polar to euclidean transform on selected images.
 <br/><br/><b>Default values</b>: 'cx=cy=0.5', 'n=1' and 'boundary=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def558.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --euclidean2polar , -mirror[-1] x -polar2euclidean[-1] ,</div></div></td><td><tt>image.jpg --euclidean2polar , -mirror[-1] x -polar2euclidean[-1] ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def559.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --euclidean2polar , -mirror[-1] x -polar2euclidean[-1] ,</div></div></td><td><tt>image.jpg --euclidean2polar , -mirror[-1] x -polar2euclidean[-1] ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-raindrops</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude,_density>=0,_wavelength>=0,_merging_steps>=0
@@ -4923,7 +4938,7 @@ _amplitude,_density>=0,_wavelength>=0,_merging_steps>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply raindrops deformation on selected images.
 <br/><br/><b>Default values</b>: 'amplitude=80','density=0.1', 'wavelength=1' and 'merging_steps=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def559.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --raindrops ,</div></div></td><td><tt>image.jpg --raindrops ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def560.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --raindrops ,</div></div></td><td><tt>image.jpg --raindrops ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-ripple</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude,_frequency,_shape={ 0=bloc | 1=triangle | 2=sine | 3=sine+ | 4=random },_angle,_offset
@@ -4931,7 +4946,7 @@ _amplitude,_frequency,_shape={ 0=bloc | 1=triangle | 2=sine | 3=sine+ | 4=random
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply ripple deformation on selected images.
 <br/><br/><b>Default values</b>: 'amplitude=10', 'frequency=10', 'shape=2', 'angle=0' and 'offset=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def560.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --ripple ,</div></div></td><td><tt>image.jpg --ripple ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def561.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --ripple ,</div></div></td><td><tt>image.jpg --ripple ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-rotoidoscope</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _cx,_cy,_tiles>0,_smoothness[%]>=0,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
@@ -4939,7 +4954,7 @@ _cx,_cy,_tiles>0,_smoothness[%]>=0,_boundary={ 0=dirichlet | 1=neumann | 2=cycli
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create rotational kaleidoscope effect from selected images.
 <br/><br/><b>Default values</b>: 'cx=cy=50%', 'tiles=10', 'smoothness=1' and 'boundary=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def561.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --rotoidoscope ,</div></div></td><td><tt>image.jpg --rotoidoscope ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def562.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --rotoidoscope ,</div></div></td><td><tt>image.jpg --rotoidoscope ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-symmetrize</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _x[%],_y[%],_angle,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic },_is_antisymmetry={ 0 | 1 },_swap_sides={ 0 | 1 }
@@ -4947,7 +4962,7 @@ _x[%],_y[%],_angle,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic },_is_antisymm
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Symmetrize selected image regarding specified axis.
 <br/><br/><b>Default values</b>: 'x=y=50%', 'angle=90', 'boundary=1', 'is_antisymmetry=0' and 'swap_sides=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def562.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --symmetrize 50%,50%,45 --symmetrize[-1] 50%,50%,-45</div></div></td><td><tt>image.jpg --symmetrize 50%,50%,45 --symmetrize[-1] 50%,50%,-45</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def563.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --symmetrize 50%,50%,45 --symmetrize[-1] 50%,50%,-45</div></div></td><td><tt>image.jpg --symmetrize 50%,50%,45 --symmetrize[-1] 50%,50%,-45</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-transform_polar</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 "expr_radius",_"expr_angle",_x_center,_y_center,_boundary={ 0=dirichlet | 1=neumann }
@@ -4955,7 +4970,7 @@ _x[%],_y[%],_angle,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic },_is_antisymm
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply user-defined transform on polar representation of selected images.
 <br/><br/><b>Default values</b>: 'expr_radius=R-r', 'expr_rangle=a', 'x_center=y_center=50' and 'boundary=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def563.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --transform_polar[0] R*(r/R)^2,a --transform_polar[0] r,2*a</div></div></td><td><tt>image.jpg --transform_polar[0] R*(r/R)^2,a --transform_polar[0] r,2*a</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def564.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --transform_polar[0] R*(r/R)^2,a --transform_polar[0] r,2*a</div></div></td><td><tt>image.jpg --transform_polar[0] R*(r/R)^2,a --transform_polar[0] r,2*a</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-twirl</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude,_cx,_cy,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
@@ -4963,7 +4978,7 @@ _amplitude,_cx,_cy,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply twirl deformation on selected images.
 <br/><br/><b>Default values</b>: 'amplitude=1', 'cx=cy=0.5' and 'boundary=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def564.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --twirl 0.6</div></div></td><td><tt>image.jpg --twirl 0.6</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def565.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --twirl 0.6</div></div></td><td><tt>image.jpg --twirl 0.6</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-warp_perspective</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _x-angle,_y-angle,_zoom>0,_x-center,_y-center,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
@@ -4971,7 +4986,7 @@ _x-angle,_y-angle,_zoom>0,_x-center,_y-center,_boundary={ 0=dirichlet | 1=neuman
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Warp selected images with perspective deformation.
 <br/><br/><b>Default values</b>: 'x-angle=1.5', 'y-angle=0', 'zoom=1', 'x-center=y-center=50' and 'boundary=2'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def565.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --warp_perspective ,</div></div></td><td><tt>image.jpg --warp_perspective ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def566.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --warp_perspective ,</div></div></td><td><tt>image.jpg --warp_perspective ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-water</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude>=0,_smoothness>=0
@@ -4979,7 +4994,7 @@ _amplitude>=0,_smoothness>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply water deformation on selected images.
 <br/><br/><b>Default values</b>: 'amplitude=30' and 'smoothness=1.5'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def566.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --water ,</div></div></td><td><tt>image.jpg --water ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def567.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --water ,</div></div></td><td><tt>image.jpg --water ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-wave</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude>=0,_frequency>=0,_center_x,_center_y
@@ -4987,7 +5002,7 @@ _amplitude>=0,_frequency>=0,_center_x,_center_y
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply wave deformation on selected images.
 <br/><br/><b>Default values</b>: 'amplitude=4', 'frequency=0.4' and 'center_x=center_y=50'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def567.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --wave ,</div></div></td><td><tt>image.jpg --wave ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def568.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --wave ,</div></div></td><td><tt>image.jpg --wave ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-wind</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude>=0,_angle,0<=_attenuation<=1,_threshold
@@ -4995,7 +5010,7 @@ _amplitude>=0,_angle,0<=_attenuation<=1,_threshold
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply wind effect on selected images.
 <br/><br/><b>Default values</b>: 'amplitude=20', 'angle=0', 'attenuation=0.7' and 'threshold=20'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def568.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --wind ,</div></div></td><td><tt>image.jpg --wind ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def569.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --wind ,</div></div></td><td><tt>image.jpg --wind ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-zoom</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _factor,_cx,_cy,_cz,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
@@ -5003,7 +5018,7 @@ _factor,_cx,_cy,_cz,_boundary={ 0=dirichlet | 1=neumann | 2=cyclic }
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply zoom factor to selected images.
 <br/><br/><b>Default values</b>: 'factor=1', 'cx=cy=cz=0.5' and 'boundary=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def569.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --zoom[0] 0.6 --zoom[0] 1.5</div></div></td><td><tt>image.jpg --zoom[0] 0.6 --zoom[0] 1.5</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def570.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --zoom[0] 0.6 --zoom[0] 1.5</div></div></td><td><tt>image.jpg --zoom[0] 0.6 --zoom[0] 1.5</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection17"><font color="purple">** <u>Degradations</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-cracks</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -5012,7 +5027,7 @@ _density>=0,_amplitude,_relief={ 0 | 1 }
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add random cracks to selected images.
 <br/><br/><b>Default values</b>: 'density=0.2', 'amplitude=40' and 'relief=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def570.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --cracks 0.2,60,1</div></div></td><td><tt>image.jpg --cracks 0.2,60,1</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def571.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --cracks 0.2,60,1</div></div></td><td><tt>image.jpg --cracks 0.2,60,1</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-light_patch</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _density>0,_darkness>=0,_lightness>=0
@@ -5020,7 +5035,7 @@ _density>0,_darkness>=0,_lightness>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add light patches to selected images.
 <br/><br/><b>Default values</b>: 'density=10', 'darkness=0.9' and 'lightness=1.7'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def571.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --light_patch 20,0.9,4</div></div></td><td><tt>image.jpg --light_patch 20,0.9,4</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def572.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --light_patch 20,0.9,4</div></div></td><td><tt>image.jpg --light_patch 20,0.9,4</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-noise_hurl</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude>=0
@@ -5028,7 +5043,7 @@ _amplitude>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add hurl noise to selected images.
 <br/><br/><b>Default value</b>: 'amplitude=10'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def572.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --noise_hurl ,</div></div></td><td><tt>image.jpg --noise_hurl ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def573.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --noise_hurl ,</div></div></td><td><tt>image.jpg --noise_hurl ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pixelize</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _scale_x>0,_scale_y>0,_scale_z>0
@@ -5036,7 +5051,7 @@ _scale_x>0,_scale_y>0,_scale_z>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Pixelize selected images with specified scales.
 <br/><br/><b>Default values</b>: 'scale_x=20' and 'scale_y=scale_z=scale_x'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def573.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pixelize ,</div></div></td><td><tt>image.jpg --pixelize ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def574.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pixelize ,</div></div></td><td><tt>image.jpg --pixelize ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-shade_stripes</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _frequency>=0,_direction={ 0=horizontal | 1=vertical },_darkness>=0,_lightness>=0
@@ -5044,7 +5059,7 @@ _frequency>=0,_direction={ 0=horizontal | 1=vertical },_darkness>=0,_lightness>=
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add shade stripes to selected images.
 <br/><br/><b>Default values</b>: 'frequency=5', 'direction=1', 'darkness=0.8' and 'lightness=2'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def574.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shade_stripes 30</div></div></td><td><tt>image.jpg --shade_stripes 30</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def575.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shade_stripes 30</div></div></td><td><tt>image.jpg --shade_stripes 30</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-shadow_patch</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _opacity>=0
@@ -5052,7 +5067,7 @@ _opacity>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add shadow patches to selected images.
 <br/><br/><b>Default value</b>: 'opacity=0.7'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def575.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shadow_patch 0.4</div></div></td><td><tt>image.jpg --shadow_patch 0.4</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def576.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shadow_patch 0.4</div></div></td><td><tt>image.jpg --shadow_patch 0.4</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-spread</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _dx>=0,_dy>=0,_dz>=0
@@ -5060,7 +5075,7 @@ _dx>=0,_dy>=0,_dz>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Spread pixel values of selected images randomly along x,y and z.
 <br/><br/><b>Default values</b>: 'dx=3', 'dy=dx' and 'dz=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def576.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --spread 3</div></div></td><td><tt>image.jpg --spread 3</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def577.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --spread 3</div></div></td><td><tt>image.jpg --spread 3</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-stripes_y</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _frequency>=0
@@ -5068,7 +5083,7 @@ _frequency>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add vertical stripes to selected images.
 <br/><br/><b>Default value</b>: 'frequency=10'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def577.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --stripes_y ,</div></div></td><td><tt>image.jpg --stripes_y ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def578.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --stripes_y ,</div></div></td><td><tt>image.jpg --stripes_y ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-texturize_canvas</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude>=0,_fibrousness>=0,_emboss_level>=0
@@ -5076,11 +5091,11 @@ _amplitude>=0,_fibrousness>=0,_emboss_level>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add paint canvas texture to selected images.
 <br/><br/><b>Default values</b>: 'amplitude=20', 'fibrousness=3' and 'emboss_level=0.6'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def578.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --texturize_canvas ,</div></div></td><td><tt>image.jpg --texturize_canvas ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def579.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --texturize_canvas ,</div></div></td><td><tt>image.jpg --texturize_canvas ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-texturize_paper</b>:</font>
 
 <p style="margin-left:100px"><tt>Add paper texture to selected images.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def579.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --texturize_paper</div></div></td><td><tt>image.jpg --texturize_paper</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def580.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --texturize_paper</div></div></td><td><tt>image.jpg --texturize_paper</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-vignette</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _strength>=0,0<=_radius_min<=100,0<=_radius_max<=100
@@ -5088,7 +5103,7 @@ _strength>=0,0<=_radius_min<=100,0<=_radius_max<=100
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add vignette effect to selected images.
 <br/><br/><b>Default values</b>: 'strength=100', 'radius_min=70' and 'radius_max=90'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def580.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --vignette ,</div></div></td><td><tt>image.jpg --vignette ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def581.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --vignette ,</div></div></td><td><tt>image.jpg --vignette ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-watermark_visible</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _text,0<_opacity<1,_size>0,_angle,_mode={ 0=remove | 1=add },_smoothness>=0
@@ -5096,7 +5111,7 @@ _text,0<_opacity<1,_size>0,_angle,_mode={ 0=remove | 1=add },_smoothness>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Add or remove a visible watermark on selected images (value range must be [0,255]).
 <br/><br/><b>Default values</b>: 'text=(c) G'MIC', 'opacity=0.3', 'size=57', 'angle=25', 'mode=1' and 'smoothness=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def581.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --watermark_visible ,0.7</div></div></td><td><tt>image.jpg --watermark_visible ,0.7</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def582.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --watermark_visible ,0.7</div></div></td><td><tt>image.jpg --watermark_visible ,0.7</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection18"><font color="purple">** <u>Blending and fading</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-blend</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -5111,29 +5126,29 @@ blending_mode,0<=_opacity<=1,_revert_layer_order={ 0 | 1 }
 <br/>&nbsp;screen | shapeaverage | shapeaverage0 | softburn | softdodge | softlight | stamp | subtract | value |
 <br/>&nbsp;vividlight | xor }.
 <br/><br/><b>Default values</b>: 'blending_mode=alpha', 'opacity=1' and 'revert_layers=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def582.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --drop_shadow , -resize2dy[-1] 200 -rotate[-1] 20 --blend alpha -drgba[-2]</div></div></td><td><tt>image.jpg --drop_shadow , -resize2dy[-1] 200 -rotate[-1] 20 --blend alpha -drgba[-2]</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def583.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} -blend overlay</div></div></td><td><tt>image.jpg -testimage2d {w},{h} -blend overlay</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def584.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex add,alpha,and,average,blue,burn,darken</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex add,alpha,and,average,blue,burn,darken</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def585.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex difference,divide,dodge,exclusion,freeze,grainextract,grainmerge</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex difference,divide,dodge,exclusion,freeze,grainextract,grainmerge</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def586.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex green,hardlight,hardmix,hue,interpolation,lighten,lightness</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex green,hardlight,hardmix,hue,interpolation,lighten,lightness</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def587.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex linearburn,linearlight,luminance,multiply,negation,or,overlay</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex linearburn,linearlight,luminance,multiply,negation,or,overlay</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def588.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex pinlight,red,reflect,saturation,screen,shapeaverage,softburn</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex pinlight,red,reflect,saturation,screen,shapeaverage,softburn</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def589.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def583.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --drop_shadow , -resize2dy[-1] 200 -rotate[-1] 20 --blend alpha -drgba[-2]</div></div></td><td><tt>image.jpg --drop_shadow , -resize2dy[-1] 200 -rotate[-1] 20 --blend alpha -drgba[-2]</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def584.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} -blend overlay</div></div></td><td><tt>image.jpg -testimage2d {w},{h} -blend overlay</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def585.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex add,alpha,and,average,blue,burn,darken</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex add,alpha,and,average,blue,burn,darken</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def586.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex difference,divide,dodge,exclusion,freeze,grainextract,grainmerge</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex difference,divide,dodge,exclusion,freeze,grainextract,grainmerge</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def587.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex green,hardlight,hardmix,hue,interpolation,lighten,lightness</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex green,hardlight,hardmix,hue,interpolation,lighten,lightness</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def588.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex linearburn,linearlight,luminance,multiply,negation,or,overlay</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex linearburn,linearlight,luminance,multiply,negation,or,overlay</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def589.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex pinlight,red,reflect,saturation,screen,shapeaverage,softburn</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex pinlight,red,reflect,saturation,screen,shapeaverage,softburn</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def590.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor</div></div></td><td><tt>-m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:" "${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-blend_edges</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 smoothness[%]>=0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Blend selected images togethers using 'edges' mode.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def590.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --blend_edges 0.8</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --blend_edges 0.8</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def591.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --blend_edges 0.8</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --blend_edges 0.8</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-blend_fade</b>:</font>
 
 <p style="margin-left:100px"><tt>Blend selected images together using a given fading pattern (defined as the latest image).
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def591.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} 100%,100%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend_fade</div></div></td><td><tt>image.jpg -testimage2d {w},{h} 100%,100%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend_fade</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def592.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} 100%,100%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend_fade</div></div></td><td><tt>image.jpg -testimage2d {w},{h} 100%,100%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend_fade</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-blend_median</b>:</font>
 
 <p style="margin-left:100px"><tt>Blend selected images together using 'median' mode.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def592.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --mirror[0] y --blend_median</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --mirror[0] y --blend_median</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def593.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --mirror[0] y --blend_median</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --mirror[0] y --blend_median</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fade_diamond</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 0<=_start<=100,0<=_end<=100
@@ -5141,7 +5156,7 @@ smoothness[%]>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create diamond fading from selected images.
 <br/><br/><b>Default values</b>: 'start=80' and 'end=90'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def593.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_diamond 80,85</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_diamond 80,85</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def594.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_diamond 80,85</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_diamond 80,85</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fade_linear</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _angle,0<=_start<=100,0<=_end<=100
@@ -5149,7 +5164,7 @@ _angle,0<=_start<=100,0<=_end<=100
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create linear fading from selected images.
 <br/><br/><b>Default values</b>: 'angle=45', 'start=30' and 'end=70'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def594.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_linear 45,48,52</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_linear 45,48,52</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def595.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_linear 45,48,52</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_linear 45,48,52</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fade_radial</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 0<=_start<=100,0<=_end<=100
@@ -5157,7 +5172,7 @@ _angle,0<=_start<=100,0<=_end<=100
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create radial fading from selected images.
 <br/><br/><b>Default values</b>: 'start=30' and 'end=70'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def595.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_radial 30,70</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_radial 30,70</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def596.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_radial 30,70</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_radial 30,70</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fade_x</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 0<=_start<=100,0<=_end<=100
@@ -5165,7 +5180,7 @@ _angle,0<=_start<=100,0<=_end<=100
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create horizontal fading from selected images.
 <br/><br/><b>Default values</b>: 'start=30' and 'end=70'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def596.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_x 30,70</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_x 30,70</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def597.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_x 30,70</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_x 30,70</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fade_y</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 0<=_start<=100,0<=_end<=100
@@ -5173,7 +5188,7 @@ _angle,0<=_start<=100,0<=_end<=100
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create vertical fading from selected images.
 <br/><br/><b>Default values</b>: 'start=30' and 'end=70'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def597.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_y 30,70</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_y 30,70</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def598.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} --fade_y 30,70</div></div></td><td><tt>image.jpg -testimage2d {w},{h} --fade_y 30,70</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-fade_z</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 0<=_start<=100,0<=_end<=100
@@ -5191,7 +5206,7 @@ delay>0
 <p style="margin-left:100px"><tt>Animate filter from starting parameters to ending parameters or animate selected images
 <br/>&nbsp;in a display window.
 <br/><br/><b>Default value</b>: 'delay=30'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def598.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -animate flower,"0,3","20,8",9</div></div></td><td><tt>image.jpg -animate flower,"0,3","20,8",9</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def599.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -animate flower,"0,3","20,8",9</div></div></td><td><tt>image.jpg -animate flower,"0,3","20,8",9</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-morph</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 nb_frames>0,_smoothness>=0,_precision>0
@@ -5199,7 +5214,7 @@ nb_frames>0,_smoothness>=0,_precision>0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create morphing sequence between selected images.
 <br/><br/><b>Default values</b>: 'smoothness=0.1' and 'precision=5'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def599.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --rotate 20,1,1,50%,50% -morph 9</div></div></td><td><tt>image.jpg --rotate 20,1,1,50%,50% -morph 9</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def600.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --rotate 20,1,1,50%,50% -morph 9</div></div></td><td><tt>image.jpg --rotate 20,1,1,50%,50% -morph 9</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-register_nonrigid</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _smoothness>=0,_precision>0,_nb_scale>=0
@@ -5207,7 +5222,7 @@ _smoothness>=0,_precision>0,_nb_scale>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Register selected images with non-rigid warp.
 <br/><br/><b>Default values</b>: 'smoothness=0.2', 'precision=6' and 'nb_scale=0(auto)'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def600.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --rotate 20,1,1,50%,50% --register_nonrigid , -remove[-2]</div></div></td><td><tt>image.jpg --rotate 20,1,1,50%,50% --register_nonrigid , -remove[-2]</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def601.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --rotate 20,1,1,50%,50% --register_nonrigid , -remove[-2]</div></div></td><td><tt>image.jpg --rotate 20,1,1,50%,50% --register_nonrigid , -remove[-2]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-register_rigid</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _smoothness>=0
@@ -5215,7 +5230,7 @@ _smoothness>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Register selected images with rigid warp.
 <br/><br/><b>Default value</b>: 'smoothness=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def601.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shift 30,20 --register_rigid , -remove[-2]</div></div></td><td><tt>image.jpg --shift 30,20 --register_rigid , -remove[-2]</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def602.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shift 30,20 --register_rigid , -remove[-2]</div></div></td><td><tt>image.jpg --shift 30,20 --register_rigid , -remove[-2]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-transition_plasma</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _nb_frames>=2,_scale>=0,_smoothness[%]>=0
@@ -5223,7 +5238,7 @@ _nb_frames>=2,_scale>=0,_smoothness[%]>=0
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create plasma transition sequence between consecutive images.
 <br/><br/><b>Default values</b>: 'nb_frames=10', 'scale=5' and 'smoothness=0.5%'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def602.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} -transition_plasma 9</div></div></td><td><tt>image.jpg -testimage2d {w},{h} -transition_plasma 9</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def603.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -testimage2d {w},{h} -transition_plasma 9</div></div></td><td><tt>image.jpg -testimage2d {w},{h} -transition_plasma 9</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-transition3d</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _nb_frames>=2,_nb_xtiles>0,_nb_ytiles>0,_axis_x,_axis_y,_axis_z,_is_antialias
@@ -5232,7 +5247,7 @@ _nb_frames>=2,_nb_xtiles>0,_nb_ytiles>0,_axis_x,_axis_y,_axis_z,_is_antialias
 <p style="margin-left:100px"><tt>Create 3d transition sequence between selected consecutive images.
 <br/>'axis_x', 'axis_y' and 'axis_z' can be set as mathematical expressions, depending on 'x' and 'y'.
 <br/><br/><b>Default values</b>: 'nb_frames=10', 'nb_xtiles=nb_ytiles=3', 'axis_x=1', 'axis_y=1', 'axis_z=0' and 'is_antialias=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def603.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 5 -transition3d 9 -drgba</div></div></td><td><tt>image.jpg --blur 5 -transition3d 9 -drgba</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def604.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 5 -transition3d 9 -drgba</div></div></td><td><tt>image.jpg --blur 5 -transition3d 9 -drgba</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection20"><font color="purple">** <u>Interactive demos</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-demo</b>:</font>
 
@@ -5346,8 +5361,8 @@ filename
 <p style="margin-left:100px"><tt>Pink wrapper name,p1, .. ,pn (requires the PINK library to be installed).
 <br/>(http://pinkhq.com/)
 <br/>&nbsp;prepares input, calls external "name input p1 ... pn output" and reads output (/tmp)
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def604.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink asfr,5 -pink[0] asf,5</div></div></td><td><tt>image.jpg --pink asfr,5 -pink[0] asf,5</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def605.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 -pink maxima,4</div></div></td><td><tt>image.jpg --blur 2 -pink maxima,4</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def605.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink asfr,5 -pink[0] asf,5</div></div></td><td><tt>image.jpg --pink asfr,5 -pink[0] asf,5</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def606.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 -pink maxima,4</div></div></td><td><tt>image.jpg --blur 2 -pink maxima,4</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_grayskel</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 }, _lambda=0
@@ -5356,7 +5371,7 @@ _connectivity={ 4 | 8 | 6 | 26 }, _lambda=0
 <p style="margin-left:100px"><tt>(http://pinkhq.com/grayskel_8c.html)
 <br/>Grayscale homotopic skeleton (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'lambda=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def606.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2</div></div></td><td><tt>image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def607.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2</div></div></td><td><tt>image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_heightmaxima</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 },_height=1
@@ -5365,7 +5380,7 @@ _connectivity={ 4 | 8 | 6 | 26 },_height=1
 <p style="margin-left:100px"><tt>(http://pinkhq.com/heightmaxima_8c.html)
 <br/>Heightmaxima filtering (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'height=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def607.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]</div></div></td><td><tt>image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def608.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]</div></div></td><td><tt>image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_heightminima</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 },_height=1
@@ -5374,7 +5389,7 @@ _connectivity={ 4 | 8 | 6 | 26 },_height=1
 <p style="margin-left:100px"><tt>(http://pinkhq.com/heightminima_8c.html)
 <br/>Heightminima filtering (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'height=1'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def608.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]</div></div></td><td><tt>image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def609.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]</div></div></td><td><tt>image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_htkern</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
@@ -5384,7 +5399,7 @@ _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
 <br/>(http://pinkhq.com/htkernu_8c.html)
 <br/>Grayscale ultimate homotopic thinning/thickening without condition (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'type=""'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def609.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -remove[0]</div></div></td><td><tt>image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -remove[0]</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def610.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -remove[0]</div></div></td><td><tt>image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -remove[0]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_lvkern</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
@@ -5394,7 +5409,7 @@ _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
 <br/>(http://pinkhq.com/lvkernu_8c.html)
 <br/>Grayscale ultimate leveling thinning/thickening without condition (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'type=""'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def610.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -pink_lvkern ,u</div></div></td><td><tt>image.jpg -pink_lvkern ,u</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def611.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -pink_lvkern ,u</div></div></td><td><tt>image.jpg -pink_lvkern ,u</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_reg_minima</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 }
@@ -5403,7 +5418,7 @@ _connectivity={ 4 | 8 | 6 | 26 }
 <p style="margin-left:100px"><tt>(http://pinkhq.com/minima_8c.html)
 <br/>Regional minima (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def611.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 -pink_reg_minima ,</div></div></td><td><tt>image.jpg --blur 2 -pink_reg_minima ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def612.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 2 -pink_reg_minima ,</div></div></td><td><tt>image.jpg --blur 2 -pink_reg_minima ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelcurv</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
@@ -5412,8 +5427,8 @@ _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
 <p style="margin-left:100px"><tt>(http://pinkhq.com/skelcurv_8c.html)
 <br/>Curvilinear binary skeleton guided by a priority function or image (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'prio=0', 'connectivity=4' and 'inhibit=""'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def612.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"</div></div></td><td><tt>image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def613.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelcurv , --pink_skelcurv[-2] ,8</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelcurv , --pink_skelcurv[-2] ,8</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def613.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"</div></div></td><td><tt>image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def614.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelcurv , --pink_skelcurv[-2] ,8</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelcurv , --pink_skelcurv[-2] ,8</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelend</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 },_n=0
@@ -5422,7 +5437,7 @@ _connectivity={ 4 | 8 | 6 | 26 },_n=0
 <p style="margin-left:100px"><tt>(http://pinkhq.com/skelend_8c.html)
 <br/>Homotopic skeleton of a 2d or 3d binary image with dynamic detection of end points (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4' and 'n=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def614.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def615.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skeleton</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
@@ -5431,7 +5446,7 @@ _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
 <p style="margin-left:100px"><tt>(http://pinkhq.com/skeleton_8c.html)
 <br/>Ultimate binary skeleton guided by a priority image (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'prio=0', 'connectivity=4' and 'inhibit=""'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def615.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skeleton[-1] ,</div></div></td><td><tt>image.jpg -threshold 50% --pink_skeleton[-1] ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def616.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skeleton[-1] ,</div></div></td><td><tt>image.jpg -threshold 50% --pink_skeleton[-1] ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_skelpar</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _algorithm={0..29},_nsteps=_1,_inhibit=""
@@ -5440,7 +5455,7 @@ _algorithm={0..29},_nsteps=_1,_inhibit=""
 <p style="margin-left:100px"><tt>(http://pinkhq.com/skelpar_8c.html)
 <br/>Parallel binary skeleton (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'algorithm=4', 'nsteps=-1' and 'inhibit=""'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def616.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def617.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2</div></div></td><td><tt>image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-pink_wshed</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _connectivity={ 4 | 8 | 6 | 26 },_inverse={ 0 | 1 },_height=0
@@ -5449,7 +5464,7 @@ _connectivity={ 4 | 8 | 6 | 26 },_inverse={ 0 | 1 },_height=0
 <p style="margin-left:100px"><tt>(http://pinkhq.com/wshedtopo_8c.html)
 <br/>Watershed (requires the PINK library to be installed).
 <br/><br/><b>Default values</b>: 'connectivity=4', 'inverse=0' and 'height=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def617.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5</div></div></td><td><tt>image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def618.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5</div></div></td><td><tt>image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection22"><font color="purple">** <u>Convenience functions</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-alert</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -5726,7 +5741,7 @@ region_label,feature,_default_value
 <br/>Argument 'feature' is a string that corresponds to the way the feature would
 <br/>&nbsp;be asked for the entire image.
 <br/><br/><b>Default value</b>: 'default_value=0'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def618.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@{"-region_feature[0,1] 10,"{ia}""} sum=@{"-region_feature[0,1] 10,"@{-1,+}""}</div></div></td><td><tt>image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@{"-region_feature[0,1] 10,"{ia}""} sum=@{"-region_feature[0,1] 10,"@{-1,+}""}</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def619.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@{"-region_feature[0,1] 10,"{ia}""} sum=@{"-region_feature[0,1] 10,"@{-1,+}""}</div></div></td><td><tt>image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@{"-region_feature[0,1] 10,"{ia}""} sum=@{"-region_feature[0,1] 10,"@{-1,+}""}</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-reset</b>:</font>
 
 <p style="margin-left:100px"><tt>Reset global parameters of the interpreter environment.
@@ -5805,7 +5820,7 @@ _scorefile,_number_of_sessions>=0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Generate score board for the GPT championship (GREYC Poker Tour).
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def619.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-gpt ,</div></div></td><td><tt>-gpt ,</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def620.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-gpt ,</div></div></td><td><tt>-gpt ,</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection24"><font color="purple">** <u>Commands shortcuts</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px">
 <font color="green"><b>&nbsp;&nbsp;-h  (*)</b>:</font>
@@ -5995,7 +6010,7 @@ _scorefile,_number_of_sessions>=0
 <font color="green"><b>&nbsp;&nbsp;-frame </b>:</font>
 <font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
 </p>
-<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 827 ]</b></font>
+<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 829 ]</b></font>
 <h2><a id="section13"><font color="brown"><u>Examples of use</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
 <pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
  The few examples below illustrate possible uses of this tool: 

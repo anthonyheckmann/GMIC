@@ -415,6 +415,7 @@ _gmic_def()
 	      -area_fg --area_fg\
 	      -at_line --at_line\
 	      -barycenter --barycenter\
+	      -detect_skin --detect_skin\
 	      -displacement --displacement\
 	      -distance --distance\
 	      -float2fft8 --float2fft8\
@@ -639,6 +640,7 @@ _gmic_def()
 	      -frame_y --frame_y\
 	      -imagegrid --imagegrid\
 	      -linearize_tiles --linearize_tiles\
+	      -map_sprites --map_sprites\
 	      -quadratize_tiles --quadratize_tiles\
 	      -rotate_tiles --rotate_tiles\
 	      -shift_tiles --shift_tiles\
@@ -649,7 +651,6 @@ _gmic_def()
 	      -circlism --circlism\
 	      -color_ellipses --color_ellipses\
 	      -cubism --cubism\
-	      -dotsbw --dotsbw\
 	      -draw_whirl --draw_whirl\
 	      -drawing --drawing\
 	      -drop_shadow --drop_shadow\
@@ -671,6 +672,7 @@ _gmic_def()
 	      -poster_hope --poster_hope\
 	      -rodilius --rodilius\
 	      -stained_glass --stained_glass\
+	      -star --star\
 	      -stars --stars\
 	      -sketchbw --sketchbw\
 	      -sponge --sponge\
@@ -1245,6 +1247,7 @@ _gmic_def()
 	      area_fg\
 	      at_line\
 	      barycenter\
+	      detect_skin\
 	      displacement\
 	      distance\
 	      float2fft8\
@@ -1469,6 +1472,7 @@ _gmic_def()
 	      frame_y\
 	      imagegrid\
 	      linearize_tiles\
+	      map_sprites\
 	      quadratize_tiles\
 	      rotate_tiles\
 	      shift_tiles\
@@ -1479,7 +1483,6 @@ _gmic_def()
 	      circlism\
 	      color_ellipses\
 	      cubism\
-	      dotsbw\
 	      draw_whirl\
 	      drawing\
 	      drop_shadow\
@@ -1501,6 +1504,7 @@ _gmic_def()
 	      poster_hope\
 	      rodilius\
 	      stained_glass\
+	      star\
 	      stars\
 	      sketchbw\
 	      sponge\
@@ -2502,6 +2506,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "x0[%],y0[%],z0[%],x1[%],y1[%],z1[%] >") )
 		return 0
 		;;
+		"-detect_skin" | "--detect_skin")
+		COMPREPLY=( $(compgen -W "0<=tolerance<=1 >") )
+		return 0
+		;;
 		"-displacement" | "--displacement")
 		COMPREPLY=( $(compgen -W "[source_image],_smoothness,_precision>=0,_nb_scales>=0,iteration_max>=0,is_backward={0|1} >") )
 		return 0
@@ -3118,6 +3126,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "M>0,_N>0 >") )
 		return 0
 		;;
+		"-map_sprites" | "--map_sprites")
+		COMPREPLY=( $(compgen -W "_nb_scales>=1 >") )
+		return 0
+		;;
 		"-quadratize_tiles" | "--quadratize_tiles")
 		COMPREPLY=( $(compgen -W "M>0,_N>0 >") )
 		return 0
@@ -3156,10 +3168,6 @@ _gmic_def()
 		;;
 		"-cubism" | "--cubism")
 		COMPREPLY=( $(compgen -W "_density>=0,0<=_thickness<=50,_max_angle,_opacity,_smoothness>=0 >") )
-		return 0
-		;;
-		"-dotsbw" | "--dotsbw")
-		COMPREPLY=( $(compgen -W "_nb_scales>0,0<=_resolution<=100,_radius_factor>=0 >") )
 		return 0
 		;;
 		"-draw_whirl" | "--draw_whirl")
@@ -3240,6 +3248,10 @@ _gmic_def()
 		;;
 		"-stained_glass" | "--stained_glass")
 		COMPREPLY=( $(compgen -W "_edges[%]>=0,shading>=0,is_thin_separators={0|1} >") )
+		return 0
+		;;
+		"-star" | "--star")
+		COMPREPLY=( $(compgen -W "_width>0,_height>0 >") )
 		return 0
 		;;
 		"-stars" | "--stars")
