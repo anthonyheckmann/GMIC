@@ -1788,7 +1788,7 @@ static DWORD WINAPI gmic_parallel(void *arg)
   try {
     st.gmic_instance._parse(st.commands_line,pos,*st.images,*st.images_names,st.variables_sizes);
   } catch (gmic_exception &e) {
-    st.exception._command.assign(e._command);
+    st.exception._command_help.assign(e._command_help);
     st.exception._message.assign(e._message);
   }
   return 0;
@@ -6769,7 +6769,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 _parse(commands_line,++position,nimages,nimages_names,variables_sizes);
               } else { // Onfail block not found.
                 exception_message.assign(e._message);
-                exception_command.assign(e._command);
+                exception_command.assign(e._command_help);
               }
             }
             scope.remove();
@@ -12340,12 +12340,12 @@ int main(int argc, char **argv) {
   catch (gmic_exception &e) {
     std::fprintf(cimg::output(),"\n[gmic] %s%s%s%s",
                  cimg::t_red,cimg::t_bold,e.what(),cimg::t_normal);
-    if (*e.command()) {
+    if (*e.command_help()) {
       std::fprintf(cimg::output(),"\n[gmic] Command '-%s' has the following description: \n",
-		   e.command());
+		   e.command_help());
       images.assign(); images_names.assign();
       CImg<unsigned char>(data_gmic_def,1,size_data_gmic_def,1,1).move_to(images);
-      cimg_snprintf(command_line,sizeof(command_line),"-v - -help \"%s\",0",e.command());
+      cimg_snprintf(command_line,sizeof(command_line),"-v - -help \"%s\",0",e.command_help());
       gmic(command_line,images,images_names);
     } else { std::fprintf(cimg::output(),"\n\n"); std::fflush(cimg::output()); }
     return -1;

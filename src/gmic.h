@@ -139,14 +139,14 @@ namespace cimg_library {
 // Define the G'MIC exception class.
 //----------------------------------
 struct gmic_exception {
-  gmic_image<char> _command, _message;
+  gmic_image<char> _command_help, _message;
 
   gmic_exception() {}
 
   gmic_exception(const char *const command, const char *const message) {
     if (command) {
-      _command.assign(std::strlen(command)+1,1,1,1);
-      std::strcpy(_command._data,command);
+      _command_help.assign(std::strlen(command)+1,1,1,1);
+      std::strcpy(_command_help._data,command);
     }
     if (message) {
       _message.assign(std::strlen(message)+1,1,1,1);
@@ -157,8 +157,8 @@ struct gmic_exception {
   const char *what() const { // Give the error message returned by the G'MIC interpreter.
     return _message._data?_message._data:"";
   }
-  const char *command() const {
-    return _command._data?_command._data:"";
+  const char *command_help() const {
+    return _command_help._data?_command_help._data:"";
   }
 };
 
