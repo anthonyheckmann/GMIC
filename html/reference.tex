@@ -2801,8 +2801,8 @@ Apply bandpass filter to selected images.
 
 \subsection{\emph{-bilateral\index{-bilateral}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{[guide],std\_variation\_s$>$0[\%],std\_variation\_r$>$0}}~~~$|$\\
-\hspace*{2.2cm}{\small \texttt{std\_variation\_s$>$0[\%],std\_variation\_r$>$0}}\\~\\
+{\small \texttt{[guide],std\_variation\_s$>$0[\%],std\_variation\_r[\%]$>$0}}~~~$|$\\
+\hspace*{2.2cm}{\small \texttt{std\_variation\_s$>$0[\%],std\_variation\_r[\%]$>$0}}\\~\\
 Blur selected images by anisotropic (eventually joint/cross) bilateral filtering.
 ~\\If a guide image is provided, it is used for computing the smoothing geometry in the cross bilateral filter.
 ~\\A guide image must be of the same xyz-size as the selected images.
@@ -3526,10 +3526,12 @@ Compute the barycenter vector of pixel values.
 
 \subsection{\emph{-detect\_skin\index{-detect\_skin}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{0$<$=tolerance$<$=1}}\\~\\
+{\small \texttt{0$<$=tolerance$<$=1,\_skin\_x,\_skin\_y,\_skin\_radius$>$=0}}\\~\\
 Detect skin in selected color images and output an appartenance probability map.
 ~\\Detection is performed using CbCr chromaticity data of skin pixels.
-~\\~\\\textbf{Default value}: {\small \texttt{'tolerance=0.5'.}}
+~\\If arguments 'skin\_x', 'skin\_y' and 'skin\_radius' are provided, skin pixels are learnt
+from the sample pixels inside the circle located at ('skin\_x','skin\_y') with radius 'skin\_radius'.
+~\\~\\\textbf{Default value}: {\small \texttt{'tolerance=0.5'} and \texttt{'skin\_x=skiny=radius=-1'.}}
 
 
 \subsection{\emph{-displacement\index{-displacement}} (+)}\vspace*{-0.5em}
@@ -5270,7 +5272,7 @@ Linearize MxN tiles on selected images.
 
 \subsection{\emph{-map\_sprites\index{-map\_sprites}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_nb\_scales$>$=1}}\\~\\
+{\small \texttt{\_nb\_scales$>$=1,\_allow\_rotation=\{ 0=none ~$|$~ 1=90 deg. ~$|$~ 2=180 deg. \}}}\\~\\
 Map set of sprites (defined as the 'nb\_scales' latest images of the selection) to other selected images,
 according to the luminosity of their pixel values.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def511.jpg}\\

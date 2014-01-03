@@ -2395,8 +2395,8 @@ _min_freq[%],_max_freq[%]
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def247.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -bandpass 1%,3%</div></div></td><td><tt>image.jpg -bandpass 1%,3%</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-bilateral (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-[guide],std_variation_s>0[%],std_variation_r>0 |<br/>
-std_variation_s>0[%],std_variation_r>0
+[guide],std_variation_s>0[%],std_variation_r[%]>0 |<br/>
+std_variation_s>0[%],std_variation_r[%]>0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Blur selected images by anisotropic (eventually joint/cross) bilateral filtering.
@@ -3018,12 +3018,14 @@ x0[%],y0[%],z0[%],x1[%],y1[%],z1[%]
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def331.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">256,256 -ellipse 50%,50%,20%,20%,0,1,1 -deform 20 --barycenter --ellipse[-2] @{-1,0,1},5,5,0,10</div></div></td><td><tt>256,256 -ellipse 50%,50%,20%,20%,0,1,1 -deform 20 --barycenter --ellipse[-2] @{-1,0,1},5,5,0,10</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-detect_skin</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-0<=tolerance<=1
+0<=tolerance<=1,_skin_x,_skin_y,_skin_radius>=0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Detect skin in selected color images and output an appartenance probability map.
 <br/>Detection is performed using CbCr chromaticity data of skin pixels.
-<br/><br/><b>Default value</b>: 'tolerance=0.5'.
+<br/>If arguments 'skin_x', 'skin_y' and 'skin_radius' are provided, skin pixels are learnt
+<br/>&nbsp;from the sample pixels inside the circle located at ('skin_x','skin_y') with radius 'skin_radius'.
+<br/><br/><b>Default value</b>: 'tolerance=0.5' and 'skin_x=skiny=radius=-1'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-displacement (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 [source_image],_smoothness,_precision>=0,_nb_scales>=0,iteration_max>=0,is_backward={ 0 | 1 }
@@ -4539,7 +4541,7 @@ M>0,_N>0
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def510.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --linearize_tiles 16</div></div></td><td><tt>image.jpg --linearize_tiles 16</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-map_sprites</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_nb_scales>=1
+_nb_scales>=1,_allow_rotation={ 0=none | 1=90 deg. | 2=180 deg. }
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Map set of sprites (defined as the 'nb_scales' latest images of the selection) to other selected images,

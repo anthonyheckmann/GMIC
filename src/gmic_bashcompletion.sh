@@ -2247,7 +2247,7 @@ _gmic_def()
 		return 0
 		;;
 		"-bilateral" | "--bilateral")
-		COMPREPLY=( $(compgen -W "[guide],std_variation_s>0[%],std_variation_r>0 std_variation_s>0[%],std_variation_r>0") )
+		COMPREPLY=( $(compgen -W "[guide],std_variation_s>0[%],std_variation_r[%]>0 std_variation_s>0[%],std_variation_r[%]>0") )
 		return 0
 		;;
 		"-blur" | "--blur")
@@ -2507,7 +2507,7 @@ _gmic_def()
 		return 0
 		;;
 		"-detect_skin" | "--detect_skin")
-		COMPREPLY=( $(compgen -W "0<=tolerance<=1 >") )
+		COMPREPLY=( $(compgen -W "0<=tolerance<=1,_skin_x,_skin_y,_skin_radius>=0 >") )
 		return 0
 		;;
 		"-displacement" | "--displacement")
@@ -3127,7 +3127,7 @@ _gmic_def()
 		return 0
 		;;
 		"-map_sprites" | "--map_sprites")
-		COMPREPLY=( $(compgen -W "_nb_scales>=1 >") )
+		COMPREPLY=( $(compgen -W "_nb_scales>=1,_allow_rotation={0=none|1=90deg.|2=180deg.} >") )
 		return 0
 		;;
 		"-quadratize_tiles" | "--quadratize_tiles")
