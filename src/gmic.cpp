@@ -3746,7 +3746,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       while (position<commands_line.size() &&
              (*commands_line[position]==1 || *commands_line[position]==2)) {
         const CImg<char> &code = commands_line[position];
-        if (!std::sscanf(code.data()+1,"%x,%x#",&debug_line,&(debug_filename=0)))
+        if (!std::sscanf(code.data()+1,"%x,%x",&debug_line,&(debug_filename=0)))
           debug_filename = debug_line = ~0U;
         ++position;
       }
