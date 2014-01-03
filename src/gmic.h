@@ -209,7 +209,7 @@ struct gmic {
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
                      gmic_list<char> (&commands_has_arguments)[256],
-                     const bool is_debug_infos=false);
+                     const bool add_debug_infos=false);
   gmic& add_commands(std::FILE *const file,
                      const char *const filename,
                      gmic_list<char> (&commands_names)[256],

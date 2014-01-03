@@ -1901,7 +1901,7 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
       *(ptrd++) = c;
     } else if (is_dquoted) { // If non-escaped character inside string.
       if (c=='\"') is_dquoted = false;
-      else if (c==1 || c==2) { while (c!=' ') c = *(ptrs++); } // Discard debug infos inside string.
+      else if (c==1) while (c!=' ') c = *(ptrs++); // Discard debug infos inside string.
       else *(ptrd++) = c=='$'?_dollar:c=='{'?_lbrace:c=='}'?_rbrace:
              c==','?_comma:c=='@'?_arobace:c;
     } else { // Non-escaped character outside string.
@@ -2038,9 +2038,9 @@ gmic& gmic::add_commands(const char *const data_commands,
                          CImgList<char> (&commands_names)[256],
                          CImgList<char> (&commands)[256],
                          CImgList<char> (&commands_has_arguments)[256],
-                         const bool is_debug_infos) {
+                         const bool add_debug_infos) {
   if (!data_commands || !*data_commands) return *this;
-  char mac[256] = { 0 }, com[256*1024] = { 0 }, line[256*1024] = { 0 };
+  char mac[256] = { 0 }, com[256*1024] = { 0 }, line[256*1024] = { 0 }, debug_info[32] = { 0 };
   unsigned int pos[256] = { 0 }, line_number = 0;
   *mac = *com = *line = 0;
   bool is_last_slash = false, _is_last_slash = false;
@@ -2066,6 +2066,7 @@ gmic& gmic::add_commands(const char *const data_commands,
     if (_is_last_slash) *(linee--) = 0; // .. and remove it if necessary.
     if (!*lines) continue; // Empty line found.
     *mac = *com = 0;
+
     if (!is_last_slash && std::strchr(lines,':') && // Check for a command definition.
         std::sscanf(lines,"%255[a-zA-Z0-9_] %c %262143[^\n]",mac,&sep,com)>=2 &&
         (*lines<'0' || *lines>'9') && sep==':') {
@@ -2074,17 +2075,12 @@ gmic& gmic::add_commands(const char *const data_commands,
       CImg<char> body = CImg<char>::string(com);
       CImg<char>::vector((char)gmic_command_has_arguments(body)).
         move_to(commands_has_arguments[ind],pos[ind]);
-      if (is_debug_infos) { // Insert code with debug infos 'filename' and 'line'.
-        char code_file[32] = { 0 }, code_line[32] = { 0 };
-        const unsigned int file_number = commands_filenames.width() - 1;
-        const int
-          digits_file = std::cimg_snprintf(code_file+1,sizeof(code_file)-2,"%u",file_number),
-          digits_line = std::cimg_snprintf(code_line+1,sizeof(code_line)-2,"%u",line_number);
-        code_file[0] = 1; code_file[digits_file+1] = ' ';
-        code_line[0] = 2; code_line[digits_line+1] = ' ';
-        ((CImg<char>(code_file,digits_file+2,1,1,1,true),
-          CImg<char>(code_line,digits_line+2,1,1,1,true),body)>'x').move_to(commands[ind],pos[ind]++);
-      } else body.move_to(commands[ind],pos[ind]++); // Insert code without debug info.
+      if (add_debug_infos) { // Insert code with debug infos.
+        const int l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
+                                                    commands_filenames.width()-1,line_number);
+        debug_info[0] = 1; debug_info[l_debug_info+1] = ' ';
+        ((CImg<char>(debug_info,l_debug_info+2,1,1,1,true),body)>'x').move_to(commands[ind],pos[ind]++);
+      } else body.move_to(commands[ind],pos[ind]++); // Insert code without debug infos.
     } else { // Continuation of a previous line.
       if (ind<0) error("Command '-command': Syntax error in expression '%s'.",lines);
       const unsigned int p = pos[ind] - 1;
@@ -2092,12 +2088,12 @@ gmic& gmic::add_commands(const char *const data_commands,
       else --(commands[ind][p]._width);
       const CImg<char> body = CImg<char>(lines,linee - lines + 2);
       commands_has_arguments[ind](p,0) |= (char)gmic_command_has_arguments(body);
-      if (is_debug_infos && !is_last_slash) { // Insert code with debug info 'line'.
-        char code_line[32] = { 0 };
-        const int digits_line = std::cimg_snprintf(code_line+1,sizeof(code_line)-2,"%u",line_number);
-        code_line[0] = 2; code_line[digits_line+1] = ' ';
-        ((commands[ind][p],CImg<char>(code_line,digits_line+2,1,1,1,true),body)>'x').move_to(commands[ind][p]);
-      } else commands[ind][p].append(body,'x'); // Insert code without debug info.
+      if (add_debug_infos && !is_last_slash) { // Insert code with debug infos.
+        const int l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
+                                                    commands_filenames.width()-1,line_number);
+        debug_info[0] = 1; debug_info[l_debug_info+1] = ' ';
+        ((commands[ind][p],CImg<char>(debug_info,l_debug_info+2,1,1,1,true),body)>'x').move_to(commands[ind][p]);
+      } else commands[ind][p].append(body,'x'); // Insert code without debug infos.
     }
   }
 
@@ -3737,16 +3733,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     if (!commands_line && is_start) { print(images,"Start G'MIC parser."); is_start = false; }
     while (position<commands_line.size() && !is_quit && !is_return) {
 
-      // Process debug informations if any.
+      // Process debug infos.
       while (position<commands_line.size() &&
              (*commands_line[position]==1 || *commands_line[position]==2)) {
-        CImg<char> code = commands_line[position];
-        unsigned int number = 0;
-        code.back() = 0;
-        if (std::sscanf(code.data()+1,"%u",&number)==1) {
-          if (*code==1) debug_filename = number;
-          else debug_line = number;
-        }
+        const CImg<char> &code = commands_line[position];
+        if (std::sscanf(code.data()+1,"%x,%x#",&debug_filename,&debug_line)!=2)
+          debug_filename = debug_line = ~0U;
         ++position;
       }
       if (position>=commands_line.size()) continue;
