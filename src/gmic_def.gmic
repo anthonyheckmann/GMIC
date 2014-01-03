@@ -567,7 +567,7 @@ _help_usage :
 \n     'Adding custom commands'). Native commands cannot be added unless you modify the G'MIC
 \n     interpreter source code."
 
-  -_help_section "Inputs / outputs properties"
+  -_help_section "Inputs/outputs properties"
 
   -_help_paragraph "  - G'MIC is able to read/write most of the classical image file formats, including:
 \n    . 2d grayscale/color files: .png, .jpeg, .gif, .pnm, .tif, .bmp, ..
@@ -615,8 +615,9 @@ _help_usage :
 \n       'filename.jpg,30' (here, to get a 30% quality output).
 \n    . .mnc files: The output header can set from another file, using the output expression
 \n       'filename.mnc,header_template.mnc'.
-\n    . Filenames with extension '.gmic' are assumed to be G'MIC custom commands files. Loading
-\n       such a file will add the commands it defines to the interpreter.
+\n    . .gmic files: These filenames are assumed to be G'MIC custom commands files. Loading
+\n       such a file will add the commands it defines to the interpreter. Debug infos can be
+\n       enabled/disabled by the input expression 'filename.gmic,add_debug_infos={ 0 | 1 }'.
 \n    . Inserting 'ext:' on the beginning of a filename (e.g. 'jpg:filename') forces G'MIC to
 \n       read/write the file as it would have been done if it had the specified extension.
 \n  - Some input/output formats and options may not be supported by your current version of
@@ -1009,10 +1010,11 @@ apply_files : -skip "${3=gmic_}",${4=0}
 
 #@gmic m : eq. to '-command'. : (*)
 
-#@gmic command : filename : http[s]://URL : "string" : (*)
+#@gmic command : { filename | http[s]://URL },_add_debug_info={ 0 | 1 } : "string" : (*)
 #@gmic : Import G'MIC custom commands from specified file, URL or string.
 #@gmic : (eq. to '-m').
 #@gmic : Imported commands are available directly after the '-command' invocation.
+#@gmic : Default value: 'add_debug_info=1'.
 #@gmic : $ image.jpg -command "foo : -mirror y -deform $""1" --foo[0] 5 --foo[0] 15
 
 #@gmic cupid : _size>0

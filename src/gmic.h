@@ -214,7 +214,8 @@ struct gmic {
                      const char *const filename,
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
-                     gmic_list<char> (&commands_has_arguments)[256]);
+                     gmic_list<char> (&commands_has_arguments)[256],
+                     const bool add_debug_infos=true);
   gmic_image<char> scope2string(const bool is_last_slash=true) const;
   gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection,
                                 const bool is_last_slash=true) const;

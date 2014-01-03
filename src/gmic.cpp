@@ -2125,17 +2125,18 @@ gmic& gmic::add_commands(std::FILE *const file,
                          const char *const filename,
                          CImgList<char> (&commands_names)[256],
                          CImgList<char> (&commands)[256],
-                         CImgList<char> (&commands_has_arguments)[256]) {
+                         CImgList<char> (&commands_has_arguments)[256],
+                         const bool add_debug_infos) {
   if (!file) return *this;
   std::fseek(file,0,SEEK_END);
   const long siz = std::ftell(file);
   std::rewind(file);
   if (siz>0) {
-    CImg<char>::string(filename).move_to(commands_filenames);
+    if (add_debug_infos) CImg<char>::string(filename).move_to(commands_filenames);
     CImg<char> buffer(siz+1);
     if (std::fread(buffer.data(),sizeof(char),siz,file)) {
       buffer[siz] = 0;
-      try { add_commands(buffer.data(),commands_names,commands,commands_has_arguments,true); }
+      try { add_commands(buffer.data(),commands_names,commands,commands_has_arguments,add_debug_infos); }
       catch (...) { std::fclose(file); throw; }
     }
   }
@@ -4741,18 +4742,28 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             gmic_substitute_args();
             CImg<char> arg_command(argument,std::strlen(argument)+1);
             gmic_strreplace(arg_command);
+
+            bool add_debug_infos = true;
+            const unsigned int larg = std::strlen(arg_command);
+            if (larg>2 && arg_command[larg-2]==',' && (arg_command[larg-1]=='0' || arg_command[larg-1]=='1')) {
+              add_debug_infos = (arg_command[larg-1]=='1');
+              arg_command[larg-2] = 0;
+            }
+
             std::FILE *file = std::fopen(arg_command,"rb");
             unsigned int siz = 0;
             for (unsigned int l = 0; l<256; ++l) siz+=commands[l].size();
             if (file) {
-              print(images,"Import custom commands from file '%s'",
-                    argument_text);
-              add_commands(file,arg_command,commands_names,commands,commands_has_arguments);
+              print(images,"Import custom commands from file '%s'%s",
+                    argument_text,
+                    !add_debug_infos?" without debug infos":"");
+              add_commands(file,arg_command,commands_names,commands,commands_has_arguments,add_debug_infos);
               std::fclose(file);
             } else if (!cimg::strncasecmp(arg_command,"http://",7) ||
                        !cimg::strncasecmp(arg_command,"https://",8)) { // Try to read from network.
-              print(images,"Import custom commands from URL '%s'",
-                    argument_text);
+              print(images,"Import custom commands from URL '%s'%s",
+                    argument_text,
+                    !add_debug_infos?" without debug infos":"");
               char filename_tmp[512] = { 0 };
               try {
                 file = std::fopen(cimg::load_network_external(arg_command,filename_tmp),"r");
@@ -4760,7 +4771,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 file = 0;
               }
               if (file) {
-                add_commands(file,arg_command,commands_names,commands,commands_has_arguments);
+                add_commands(file,arg_command,commands_names,commands,commands_has_arguments,add_debug_infos);
                 std::fclose(file);
               } else
                 error(images,"Command '-command': Unable to reach custom commands file '%s' "
@@ -11968,12 +11979,13 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         } else if (!cimg::strcasecmp("gmic",ext)) {
 
           // G'MIC custom commands file
-          print(images,"Input custom commands file '%s'",
-                _filename0);
+          const bool add_debug_infos = (*options!='0');
+          print(images,"Input custom commands file '%s'%s",
+                _filename0,!add_debug_infos?" without debug infos":"");
           unsigned int siz = 0;
           for (unsigned int l = 0; l<256; ++l) siz+=commands[l].size();
           std::FILE *const file = cimg::fopen(filename,"rb");
-          add_commands(file,filename,commands_names,commands,commands_has_arguments);
+          add_commands(file,filename,commands_names,commands,commands_has_arguments,add_debug_infos);
           cimg::fclose(file);
           if (verbosity>=0 || is_debug) {
             unsigned int nb_added = 0;
