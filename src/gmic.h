@@ -208,8 +208,10 @@ struct gmic {
   gmic& add_commands(const char *const data_commands,
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
-                     gmic_list<char> (&commands_has_arguments)[256]);
+                     gmic_list<char> (&commands_has_arguments)[256],
+                     const bool is_debug_infos=false);
   gmic& add_commands(std::FILE *const file,
+                     const char *const filename,
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
                      gmic_list<char> (&commands_has_arguments)[256]);
@@ -353,7 +355,7 @@ struct gmic {
 #endif // #if cimg_display!=0
   gmic_list<char> commands[256], commands_names[256], commands_has_arguments[256],
     _variables[256], _variables_names[256], *variables[256], *variables_names[256],
-    scope;
+    commands_filenames, scope;
   gmic_list<unsigned int> dowhiles, repeatdones;
   gmic_image<unsigned char> background3d, light3d;
   gmic_image<float> pose3d;
@@ -364,7 +366,7 @@ struct gmic {
     check_elif;
   int verbosity, render3d, renderd3d;
   volatile int _cancel, *cancel;
-  unsigned int nb_carriages;
+  unsigned int nb_carriages, debug_filename, debug_line;
   unsigned long reference_time;
 
 }; // End of the 'gmic' class.

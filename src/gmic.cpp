@@ -1887,7 +1887,7 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
   char *ptrd = item.data(), c = 0;
   for (const char *ptrs = ptrs0; *ptrs; ++ptrs) {
     c = *ptrs;
-    if (c=='\\') {  // If escaped character.
+    if (c=='\\') { // If escaped character.
       c = *(++ptrs);
       if (!c) { c = '\\'; --ptrs; }
       else if (c=='$') c = _dollar;
@@ -1901,6 +1901,7 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
       *(ptrd++) = c;
     } else if (is_dquoted) { // If non-escaped character inside string.
       if (c=='\"') is_dquoted = false;
+      else if (c==1 || c==2) { while (c!=' ') c = *(ptrs++); } // Discard debug infos inside string.
       else *(ptrd++) = c=='$'?_dollar:c=='{'?_lbrace:c=='}'?_rbrace:
              c==','?_comma:c=='@'?_arobace:c;
     } else { // Non-escaped character outside string.
@@ -1973,7 +1974,11 @@ gmic& gmic::error(const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
   char message[1024+128] = { 0 };
-  cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
+  if (debug_filename!=~0U && debug_line!=~0U)
+    cimg_snprintf(message,128,"*** Error in %s (file '%s', line %u) *** ",
+                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line);
+  else
+    cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2032,10 +2037,11 @@ gmic& gmic::debug(const char *format, ...) {
 gmic& gmic::add_commands(const char *const data_commands,
                          CImgList<char> (&commands_names)[256],
                          CImgList<char> (&commands)[256],
-                         CImgList<char> (&commands_has_arguments)[256]) {
+                         CImgList<char> (&commands_has_arguments)[256],
+                         const bool is_debug_infos) {
   if (!data_commands || !*data_commands) return *this;
   char mac[256] = { 0 }, com[256*1024] = { 0 }, line[256*1024] = { 0 };
-  unsigned int pos[256] = { 0 };
+  unsigned int pos[256] = { 0 }, line_number = 0;
   *mac = *com = *line = 0;
   bool is_last_slash = false, _is_last_slash = false;
   int ind = -1;
@@ -2044,7 +2050,7 @@ gmic& gmic::add_commands(const char *const data_commands,
     // Read new line.
     char *_line = line;
     while (*data!='\n' && *data && _line<line+sizeof(line)) *(_line++) = *(data++); *_line = 0;
-    if (*data=='\n') ++data; // Skip next '\n'.
+    if (*data=='\n') { ++data; ++line_number; } // Skip next '\n'.
     // Replace non-usual characters by spaces.
     for (_line = line; *_line; ++_line) if ((unsigned char)*_line<' ') *_line = ' ';
     _line = line; if (*_line=='#') *_line = 0; else do { // Remove comments.
@@ -2068,8 +2074,17 @@ gmic& gmic::add_commands(const char *const data_commands,
       CImg<char> body = CImg<char>::string(com);
       CImg<char>::vector((char)gmic_command_has_arguments(body)).
         move_to(commands_has_arguments[ind],pos[ind]);
-      body.move_to(commands[ind],pos[ind]++);
-
+      if (is_debug_infos) { // Insert code with debug infos 'filename' and 'line'.
+        char code_file[32] = { 0 }, code_line[32] = { 0 };
+        const unsigned int file_number = commands_filenames.width() - 1;
+        const int
+          digits_file = std::cimg_snprintf(code_file+1,sizeof(code_file)-2,"%u",file_number),
+          digits_line = std::cimg_snprintf(code_line+1,sizeof(code_line)-2,"%u",line_number);
+        code_file[0] = 1; code_file[digits_file+1] = ' ';
+        code_line[0] = 2; code_line[digits_line+1] = ' ';
+        ((CImg<char>(code_file,digits_file+2,1,1,1,true),
+          CImg<char>(code_line,digits_line+2,1,1,1,true),body)>'x').move_to(commands[ind],pos[ind]++);
+      } else body.move_to(commands[ind],pos[ind]++); // Insert code without debug info.
     } else { // Continuation of a previous line.
       if (ind<0) error("Command '-command': Syntax error in expression '%s'.",lines);
       const unsigned int p = pos[ind] - 1;
@@ -2077,7 +2092,12 @@ gmic& gmic::add_commands(const char *const data_commands,
       else --(commands[ind][p]._width);
       const CImg<char> body = CImg<char>(lines,linee - lines + 2);
       commands_has_arguments[ind](p,0) |= (char)gmic_command_has_arguments(body);
-      commands[ind][p].append(body,'x');
+      if (is_debug_infos && !is_last_slash) { // Insert code with debug info 'line'.
+        char code_line[32] = { 0 };
+        const int digits_line = std::cimg_snprintf(code_line+1,sizeof(code_line)-2,"%u",line_number);
+        code_line[0] = 2; code_line[digits_line+1] = ' ';
+        ((commands[ind][p],CImg<char>(code_line,digits_line+2,1,1,1,true),body)>'x').move_to(commands[ind][p]);
+      } else commands[ind][p].append(body,'x'); // Insert code without debug info.
     }
   }
 
@@ -2097,6 +2117,7 @@ gmic& gmic::add_commands(const char *const data_commands,
 // Add commands from a file.
 //---------------------------
 gmic& gmic::add_commands(std::FILE *const file,
+                         const char *const filename,
                          CImgList<char> (&commands_names)[256],
                          CImgList<char> (&commands)[256],
                          CImgList<char> (&commands_has_arguments)[256]) {
@@ -2105,10 +2126,11 @@ gmic& gmic::add_commands(std::FILE *const file,
   const long siz = std::ftell(file);
   std::rewind(file);
   if (siz>0) {
+    CImg<char>::string(filename).move_to(commands_filenames);
     CImg<char> buffer(siz+1);
     if (std::fread(buffer.data(),sizeof(char),siz,file)) {
       buffer[siz] = 0;
-      try { add_commands(buffer.data(),commands_names,commands,commands_has_arguments); }
+      try { add_commands(buffer.data(),commands_names,commands,commands_has_arguments,true); }
       catch (...) { std::fclose(file); throw; }
     }
   }
@@ -2388,7 +2410,11 @@ gmic& gmic::error(const CImgList<T>& list, const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
   char message[1024+128] = { 0 };
-  cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
+  if (debug_filename!=~0U && debug_line!=~0U)
+    cimg_snprintf(message,128,"*** Error in %s (file '%s', line %u) *** ",
+                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line);
+  else
+    cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2414,7 +2440,11 @@ gmic& gmic::error(const char *const command, const CImgList<T>& list,
   va_list ap;
   va_start(ap,format);
   char message[1024+128] = { 0 };
-  cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
+  if (debug_filename!=~0U && debug_line!=~0U)
+    cimg_snprintf(message,128,"*** Error in %s (file '%s', line %u) *** ",
+                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line);
+  else
+    cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2440,7 +2470,11 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
   va_list ap;
   va_start(ap,format);
   char message[1024+128] = { 0 };
-  cimg_snprintf(message,128,"*** Error in %s *** ",scope2string(scope_selection).data());
+  if (debug_filename!=~0U && debug_line!=~0U)
+    cimg_snprintf(message,128,"*** Error in %s (file '%s', line %u) *** ",
+                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line);
+  else
+    cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2469,9 +2503,14 @@ template<typename T>
 gmic& gmic::_arg_error(const CImgList<T>& list, const char *const command,
                        const char *const argument) {
   char message[1024] = { 0 };
-  cimg_snprintf(message,sizeof(message),
-                "*** Error in %s *** Command '-%s': Invalid argument '%s'.",
-                scope2string().data(),command,argument);
+  if (debug_filename!=~0U && debug_line!=~0U)
+    cimg_snprintf(message,sizeof(message),
+                  "*** Error in %s (file '%s', line %u) *** Command '-%s': Invalid argument '%s'.",
+                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line,command,argument);
+  else
+    cimg_snprintf(message,sizeof(message),
+                  "*** Error in %s *** Command '-%s': Invalid argument '%s'.",
+                  scope2string().data(),command,argument);
   gmic_ellipsize(message,sizeof(message));
   gmic_strreplace(message);
   CImg<char>::string(message).move_to(status);
@@ -2617,6 +2656,8 @@ void gmic::_gmic(const char *const commands_line, CImgList<T>& images,
   cimg::srand();
   verbosity = 0;
   nb_carriages = 0;
+  debug_filename = ~0U;
+  debug_line = ~0U;
   is_released = true;
   is_debug = false;
   is_start = true;
@@ -3695,9 +3736,20 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     // Begin command line parsing.
     if (!commands_line && is_start) { print(images,"Start G'MIC parser."); is_start = false; }
     while (position<commands_line.size() && !is_quit && !is_return) {
-      const char
-        *const initial_item = commands_line[position].data(),
-        *const initial_argument = position+1<commands_line.size()?commands_line[position+1].data():"";
+
+      // Process debug informations if any.
+      while (position<commands_line.size() &&
+             (*commands_line[position]==1 || *commands_line[position]==2)) {
+        CImg<char> code = commands_line[position];
+        unsigned int number = 0;
+        code.back() = 0;
+        if (std::sscanf(code.data()+1,"%u",&number)==1) {
+          if (*code==1) debug_filename = number;
+          else debug_line = number;
+        }
+        ++position;
+      }
+      if (position>=commands_line.size()) continue;
 
       // Check consistency of the parser environment.
       if (images_names.size()!=images.size())
@@ -3709,6 +3761,10 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
         error("Internal error: Scope overflow (infinite recursion ?).");
 
       // Substitute expressions in current item.
+      const char
+        *const initial_item = commands_line[position].data(),
+        *const initial_argument = position+1<commands_line.size()?commands_line[position+1].data():"";
+
       CImg<char> _item, _argument, _argument_text;
       substitute_item(initial_item,images,images_names,variables_sizes).move_to(_item);
       char *item = _item.data();
@@ -4690,7 +4746,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             if (file) {
               print(images,"Import custom commands from file '%s'",
                     argument_text);
-              add_commands(file,commands_names,commands,commands_has_arguments);
+              add_commands(file,arg_command,commands_names,commands,commands_has_arguments);
               std::fclose(file);
             } else if (!cimg::strncasecmp(arg_command,"http://",7) ||
                        !cimg::strncasecmp(arg_command,"https://",8)) { // Try to read from network.
@@ -4703,7 +4759,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 file = 0;
               }
               if (file) {
-                add_commands(file,commands_names,commands,commands_has_arguments);
+                add_commands(file,arg_command,commands_names,commands,commands_has_arguments);
                 std::fclose(file);
               } else
                 error(images,"Command '-command': Unable to reach custom commands file '%s' "
@@ -7958,12 +8014,15 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               gi.variables[255] = variables[255];  // Share global variables between all threads.
               gi.variables_names[255] = variables_names[255];
               gi.scope.assign(scope);
+              gi.commands_filenames.assign(commands_filenames,true);
               cimg_snprintf(title,_title.size(),"*thread%d",l);
               CImg<char>::string(title).move_to(gi.scope);
               gi.background3d.assign(background3d);
               gi.light3d.assign(light3d);
               gi.pose3d.assign(pose3d);
               gi.status.assign(status);
+              gi.debug_filename = debug_filename;
+              gi.debug_line = debug_line;
               gi.focale3d = focale3d;
               gi.light3d_x = light3d_x;
               gi.light3d_y = light3d_y;
@@ -10983,7 +11042,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     std::memcpy(command_code_text+128," ... ",5);
                     std::memcpy(command_code_text+133,command_code+ls-130,131);
                   } else std::strcpy(command_code_text,command_code);
-                  debug(images,"Found custom command '%s': '%s' (%s).",
+                  debug(images,"Found custom command '%s: %s' (%s).",
                         custom_command,command_code_text,
                         commands_has_arguments[ind](l,0)?"takes arguments":"takes no arguments");
                 }
@@ -11909,7 +11968,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           unsigned int siz = 0;
           for (unsigned int l = 0; l<256; ++l) siz+=commands[l].size();
           std::FILE *const file = cimg::fopen(filename,"rb");
-          add_commands(file,commands_names,commands,commands_has_arguments);
+          add_commands(file,filename,commands_names,commands,commands_has_arguments);
           cimg::fclose(file);
           if (verbosity>=0 || is_debug) {
             unsigned int nb_added = 0;
