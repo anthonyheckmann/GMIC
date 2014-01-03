@@ -2044,7 +2044,7 @@ gmic& gmic::add_commands(const char *const data_commands,
   unsigned int pos[256] = { 0 }, line_number = 0;
   *mac = *com = *line = 0;
   bool is_last_slash = false, _is_last_slash = false;
-  int ind = -1;
+  int ind = -1, l_debug_info = 0;
   char sep = 0;
   for (const char *data = data_commands; *data; is_last_slash = _is_last_slash) {
     // Read new line.
@@ -2076,8 +2076,11 @@ gmic& gmic::add_commands(const char *const data_commands,
       CImg<char>::vector((char)gmic_command_has_arguments(body)).
         move_to(commands_has_arguments[ind],pos[ind]);
       if (add_debug_infos) { // Insert code with debug infos.
-        const int l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
-                                                    commands_filenames.width()-1,line_number);
+        if (commands_filenames.width()<2)
+          l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
+        else
+          l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
+                                            line_number,commands_filenames.width()-1);
         debug_info[0] = 1; debug_info[l_debug_info+1] = ' ';
         ((CImg<char>(debug_info,l_debug_info+2,1,1,1,true),body)>'x').move_to(commands[ind],pos[ind]++);
       } else body.move_to(commands[ind],pos[ind]++); // Insert code without debug infos.
@@ -2089,8 +2092,11 @@ gmic& gmic::add_commands(const char *const data_commands,
       const CImg<char> body = CImg<char>(lines,linee - lines + 2);
       commands_has_arguments[ind](p,0) |= (char)gmic_command_has_arguments(body);
       if (add_debug_infos && !is_last_slash) { // Insert code with debug infos.
-        const int l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
-                                                    commands_filenames.width()-1,line_number);
+        if (commands_filenames.width()<2)
+          l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
+        else
+          l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
+                                            line_number,commands_filenames.width()-1);
         debug_info[0] = 1; debug_info[l_debug_info+1] = ' ';
         ((commands[ind][p],CImg<char>(debug_info,l_debug_info+2,1,1,1,true),body)>'x').move_to(commands[ind][p]);
       } else commands[ind][p].append(body,'x'); // Insert code without debug infos.
@@ -3737,7 +3743,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       while (position<commands_line.size() &&
              (*commands_line[position]==1 || *commands_line[position]==2)) {
         const CImg<char> &code = commands_line[position];
-        if (std::sscanf(code.data()+1,"%x,%x#",&debug_filename,&debug_line)!=2)
+        if (!std::sscanf(code.data()+1,"%x,%x#",&debug_line,&(debug_filename=0)))
           debug_filename = debug_line = ~0U;
         ++position;
       }
