@@ -16993,10 +16993,11 @@ _gimp_recompose_channels9 : -cmy2rgb
 _gimp_recompose_channels10 : -cmyk2rgb
 
 #@gimp Detect skin : gimp_detect_skin, gimp_detect_skin_preview(1)
-#@gimp : Estimation = choice(1,"Manual","Automatic")
+#@gimp : Skin estimation = choice(1,"Manual","Automatic")
 #@gimp : sep = separator()
 #@gimp : Tolerance = float(0.5,0,1)
 #@gimp : Smoothness = float(0.5,0,5)
+#@gimp : Threshold = float(1,0,10)
 #@gimp : Pre-normalize image = bool(1)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Manual estimation:</b>\n
@@ -17004,21 +17005,32 @@ _gimp_recompose_channels10 : -cmyk2rgb
 #@gimp : X-coordinate = float(50,0,100)
 #@gimp : Y-coordinate = float(50,0,100)
 #@gimp : Radius = float(5,0,25)
+#@gimp : sep = separator()
+#@gimp : Output mode = choice(1,"Probability map","Opaque skin","Transparent skin")
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/19</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/01/03</i>.</small>")
 gimp_detect_skin :
-  -to_rgb -if $4 -balance_gamma 128,128,128 -endif
-  -if $1 -detect_skin $2 -else -detect_skin $2,$5%,$6%,$7% -endif
-  -repeat @# -l[$>] M={iM} -b $3% -* {255*$M/iM} -endl -done
+  -to_rgb
+  -m "_gimp_detect_skin :
+        -if $5 -balance_gamma 128,128,128 -endif
+        -if $1 -detect_skin $2 -else -detect_skin $2,$6%,$7%,$8% -endif
+        M={iM} -b $3% -* {255*$M/iM} -* $4 -c 0,255"
+  -repeat @# -l[$>]
+    -if $9  # Opaque/transparent skin.
+      --_gimp_detect_skin -a c
+      -if {$9>1} -sh 100%,100% -*[-1] -1 -+[-1] 255 -rm[-1] -endif
+    -else -_gimp_detect_skin # Probability mask.
+    -endif
+  -endl -done
+  -uncommand _gimp_detect_skin
 
 gimp_detect_skin_preview :
   -gimp_split_preview "-gimp_detect_skin $*",$-1
   -if {!$1}
-    -to_rgb
-    -circle $5%,$6%,$7%,0.3,0,255,0
-    -circle $5%,$6%,$7%,1,0xFFFFFFFF,0,255,0
-    -line {$5-0.25*$7}%,{$6-0.25*$7}%,{$5+0.25*$7}%,{$6+0.25*$7}%,1,255,255,0
-    -line {$5+0.25*$7}%,{$6-0.25*$7}%,{$5-0.25*$7}%,{$6+0.25*$7}%,1,255,255,0
+    -circle $6%,$7%,$8%,0.3,0,255,0,255
+    -circle $6%,$7%,$8%,1,0xFFFFFFFF,0,255,0,255
+    -line {$6-0.25*$8}%,{$7-0.25*$8}%,{$6+0.25*$8}%,{$7+0.25*$8}%,1,255,255,0,255
+    -line {$6+0.25*$8}%,{$7-0.25*$8}%,{$6-0.25*$8}%,{$7+0.25*$8}%,1,255,255,0,255
   -endif
 
 #@gimp Equalize HSV : gimp_hsv_equalizer, gimp_hsv_equalizer_preview
@@ -20318,9 +20330,10 @@ gimp_selective_smoothing_preview :
 
 #@gimp Smooth [skin] : gimp_smooth_skin, gimp_smooth_skin_preview(1)
 #@gimp : note = note("<small><b>Step 1:</b> Skin detection</small>")
-#@gimp : Estimation = choice(2,"None","Manual","Automatic")
+#@gimp : Skin estimation = choice(2,"None","Manual","Automatic")
 #@gimp : Tolerance = float(0.5,0,1)
 #@gimp : Smoothness = float(1,0,5)
+#@gimp : Threshold = float(1,0,10)
 #@gimp : Pre-normalize image = bool(1)
 #@gimp : X-coordinate [manual] = float(50,0,100)
 #@gimp : Y-coordinate [manual] = float(50,0,100)
@@ -20342,15 +20355,15 @@ gimp_smooth_skin :
   -repeat @# -l[$>] -split_opacity -l[0] -to_rgb
 
     # Skin detection step.
-    -if $4 --balance_gamma 128,128,128 -else [0] -endif
-    -if {$1==0} -channels[-1] 0 -f[-1] 1 -elif {$1==2} -detect_skin[-1] $2 -else -detect_skin[-1] $2,$5%,$6%,$7% -endif
-    M={iM} -b[-1] $3% -*[-1] {$M/iM}
+    -if $5 --balance_gamma 128,128,128 -else [0] -endif
+    -if {$1==0} -channels[-1] 0 -f[-1] 1 -elif {$1==2} -detect_skin[-1] $2 -else -detect_skin[-1] $2,$6%,$7%,$8% -endif
+    M={iM} -b[-1] $3% -*[-1] {$M/iM} -*[-1] $4 -c[-1] 0,1
 
     # Details smoothing step.
-    -split_details[0] 4,$8%,$9%
-    --_gimp_smooth_skin[2] $11,$10
+    -split_details[0] 4,$9%,$10%
+    --_gimp_smooth_skin[2] $12,$11
     -j[2] [-1],0,0,0,0,1,[-2] -rm[-2,-1]
-    -*[-1] {10^$12} -+ -c 0,255
+    -*[-1] {10^$13} -+ -c 0,255
 
   -endl -a c -endl -done
 
@@ -20367,25 +20380,25 @@ _gimp_smooth_skin :
 
 gimp_smooth_skin_preview :
   -if {$-2==0}
-    -gimp_split_preview "-if $4 -balance_gamma 128,128,128 -endif -if {$1==0} -f 1 -elif {$1==2} -detect_skin $2 -else -detect_skin $2,$5%,$6%,$7%  -endif M={iM} -b $3% -* {255*$M/iM}",$-1
+    -gimp_split_preview "-if $5 -balance_gamma 128,128,128 -endif -if {$1==0} -f 1 -elif {$1==2} -detect_skin $2 -else -detect_skin $2,$6%,$7%,$8% -endif M={iM} -b $3% -* {255*$M/iM} -* $4 -c 0,255",$-1
   -elif {$-2==1}
-    -gimp_split_preview "-b $8%",$-1
+    -gimp_split_preview "-b $9%",$-1
   -elif {$-2==2}
-    -gimp_split_preview "-split_details 4,$8%,$9% -k[-2] -n 0,255",$-1
+    -gimp_split_preview "-split_details 4,$9%,$10% -k[-2] -n 0,255",$-1
   -elif {$-2==3}
-    -gimp_split_preview "-split_details 4,$8%,$9% -k[-2] -_gimp_smooth_skin $11,$10 -n 0,255",$-1
+    -gimp_split_preview "-split_details 4,$9%,$10% -k[-2] -_gimp_smooth_skin $12,$11 -n 0,255",$-1
   -elif {$-2==4}
-    -gimp_split_preview "-split_details 4,$8%,$9% -k[-1] -n 0,255",$-1
+    -gimp_split_preview "-split_details 4,$9%,$10% -k[-1] -n 0,255",$-1
   -else
     -gimp_split_preview "-gimp_smooth_skin $*",$-1
   -endif
 
   -if {$1==1}
     -to_rgb
-    -circle $5%,$6%,$7%,0.2,0,255,0
-    -circle $5%,$6%,$7%,0.4,0xFFFFFFFF,0,255,0
-    -line {$5-0.25*$7}%,{$6-0.25*$7}%,{$5+0.25*$7}%,{$6+0.25*$7}%,0.8,255,255,0
-    -line {$5+0.25*$7}%,{$6-0.25*$7}%,{$5-0.25*$7}%,{$6+0.25*$7}%,0.8,255,255,0
+    -circle $6%,$7%,$8%,0.2,0,255,0
+    -circle $6%,$7%,$8%,0.4,0xFFFFFFFF,0,255,0
+    -line {$6-0.25*$8}%,{$7-0.25*$8}%,{$6+0.25*$8}%,{$7+0.25*$8}%,0.8,255,255,0
+    -line {$6+0.25*$8}%,{$7-0.25*$8}%,{$6-0.25*$8}%,{$7+0.25*$8}%,0.8,255,255,0
   -endif
 
 #@gimp Smooth [thin brush] : gimp_anisotropic_smoothing, gimp_anisotropic_smoothing(0)
