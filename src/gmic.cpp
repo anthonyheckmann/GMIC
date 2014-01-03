@@ -1920,7 +1920,10 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
   }
   if (is_debug) {
     debug("Decompose command line into %u items: ",items.size());
-    cimglist_for(items,l) debug("  item[%u] = '%s'",l,items[l].data());
+    cimglist_for(items,l) {
+      if (items(l,0)==1) debug("  item[%u] = (debug info 0x%s)",l,items[l].data()+1);
+      else debug("  item[%u] = '%s'",l,items[l].data());
+    }
   }
   return items;
 }
@@ -11040,6 +11043,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     std::memcpy(command_code_text+128," ... ",5);
                     std::memcpy(command_code_text+133,command_code+ls-130,131);
                   } else std::strcpy(command_code_text,command_code);
+                  for (char *ptrs = command_code_text, *ptrd = ptrs; *ptrs || (*ptrd=0); ++ptrs)
+                    if (*ptrs==1) while (*ptrs!=' ') ++ptrs; else *(ptrd++) = *ptrs;
                   debug(images,"Found custom command '%s: %s' (%s).",
                         custom_command,command_code_text,
                         commands_has_arguments[ind](l,0)?"takes arguments":"takes no arguments");
@@ -11295,6 +11300,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     std::memcpy(command_code_text+128," ... ",5);
                     std::memcpy(command_code_text+133,substituted_command.data()+l-130,131);
                   } else std::strcpy(command_code_text,substituted_command.data());
+                 for (char *ptrs = command_code_text, *ptrd = ptrs; *ptrs || (*ptrd=0); ++ptrs)
+                    if (*ptrs==1) while (*ptrs!=' ') ++ptrs; else *(ptrd++) = *ptrs;
                   debug(images,"Expand command line for command '%s' to: '%s'.",
                         custom_command,command_code_text);
                 }
