@@ -2051,11 +2051,11 @@ gmic& gmic::add_commands(const char *const data_commands,
   int ind = -1, l_debug_info = 0;
   char sep = 0;
   for (const char *data = data_commands; *data; is_last_slash = _is_last_slash) {
+
     // Read new line.
     char *_line = line;
     while (*data!='\n' && *data && _line<line+sizeof(line)) *(_line++) = *(data++); *_line = 0;
-    if (*line) ++line_number;
-    if (*data=='\n') { ++data; if (!*line) ++line_number; } // Skip next '\n'.
+    if (*data=='\n' || !*data) { ++line_number; if (*data=='\n') ++data; } // Skip next '\n'.
 
     // Replace non-usual characters by spaces.
     for (_line = line; *_line; ++_line) if ((unsigned char)*_line<' ') *_line = ' ';
