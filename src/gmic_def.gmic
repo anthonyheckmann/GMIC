@@ -9888,7 +9888,7 @@ fisheye : -skip ${1=50},${2=50},${3=50},${4=1.2}
 flower : -skip ${1=30},${2=6},${3=0},${4=0},${5=0.5},${6=0.5},${7=2}
   -e[^-1] "Apply flower deformation on image$?, with amplitude $1, frequency $2, offset $3, angle $4 deg. and center ($1,$2)."
   -v - -repeat @# -l[$>]
-  -euclidean2polar $5,$6,1,$7 -shift $3,0,0,0,2
+    -euclidean2polar $5,$6,1,$7 -shift $3,0,0,0,2
     100%,100%,1,1,y -/[-1] {h} -*[-1] $2 ({$4/360}) -+[-2] @-1 -rm[-1] -*[-1] 6.2831853 -sin[-1]
     -*[-1] $1 -*[-1] {w} -/[-1] 100
     -channels[-1] 0,1 -warp[-2] [-1],1,1,$7 -rm[-1]

@@ -2054,7 +2054,9 @@ gmic& gmic::add_commands(const char *const data_commands,
     // Read new line.
     char *_line = line;
     while (*data!='\n' && *data && _line<line+sizeof(line)) *(_line++) = *(data++); *_line = 0;
-    if (*data=='\n') { ++data; ++line_number; } // Skip next '\n'.
+    if (*line) ++line_number;
+    if (*data=='\n') { ++data; if (!*line) ++line_number; } // Skip next '\n'.
+
     // Replace non-usual characters by spaces.
     for (_line = line; *_line; ++_line) if ((unsigned char)*_line<' ') *_line = ' ';
     _line = line; if (*_line=='#') *_line = 0; else do { // Remove comments.
