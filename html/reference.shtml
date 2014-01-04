@@ -3013,10 +3013,10 @@ x0[%],y0[%],z0[%],x1[%],y1[%],z1[%]
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Retrieve pixels of the selected images belonging to the specified line (x0,y0,z0)-(x1,y1,z1).
 [gmic]-0./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ Input file 'image.jpg' at position [0] (1 image 425x329x1x3).
-[gmic]-1./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ [1m[0;31;59m*** Error in ./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ *** Command '-at_line': Undefined argument '$6', in expression '$6' (for 7 arguments specified).[0;0;0m
+[gmic]-1./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ [1m[0;31;59m*** Error in ./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ (file '../src/gmic_def.gmic', call from lineCommand '-at_line': Undefined argument '$6', in expression '$6' (for 7 arguments specified).[0;0;0m
 [gmic]-1./__help/document_gmic/*repeat/ Abort G'MIC instance.
 
-[gmic] [0;31;59m[1m*** Error in ./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ *** Command '-at_line': Undefined argument '$6', in expression '$6' (for 7 arguments specified).[0;0;0m
+[gmic] [0;31;59m[1m*** Error in ./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ (file '../src/gmic_def.gmic', call from lineCommand '-at_line': Undefined argument '$6', in expression '$6' (for 7 arguments specified).[0;0;0m
 [gmic] Command '-at_line' has the following description: 
 
     -at_line:

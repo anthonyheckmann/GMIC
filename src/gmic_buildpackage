@@ -135,7 +135,7 @@ gmic \\- Perform generic image processing operations, through the G'MIC language
 \n\
 .SH HELP\n\
 ">gmic.1
-\gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help ascii 2>&1 | sed -e 's/'$(echo "\033")'/ESC/g' | \
+\gmic -v - ../src/gmic_def.gmic,0 raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help ascii 2>&1 | sed -e 's/'$(echo "\033")'/ESC/g' | \
     sed 's/ESC\[4;31;59m/\\fB/g' | \
     sed 's/ESC\[0;32;59m/\\fB/g' | \
     sed 's/ESC\[1m/\\fB/g' | \
@@ -162,7 +162,7 @@ cd ..
 #-----------------------------------
 echo " - Create bash autocompletion script."
 cd src/
-\gmic -v - gmic_def.gmic raw:gmic_def.gmic,uchar -document_gmic bash >& gmic_bashcompletion.sh
+\gmic -v - gmic_def.gmic,0 raw:gmic_def.gmic,uchar -document_gmic bash >& gmic_bashcompletion.sh
 cd ..
 
 # Create HTML reference and gallery pages.
@@ -171,17 +171,17 @@ echo " - Create HTML reference page."
 cd html
 rm -f img/gmic_def*.jpg image.jpg
 ln -s img/tiger.jpg image.jpg
-\gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar -document_gmic images,img/
-\gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help html >& reference.shtml
+\gmic -v - ../src/gmic_def.gmic,0 raw:../src/gmic_def.gmic,uchar -document_gmic images,img/
+\gmic -v - ../src/gmic_def.gmic,0 raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help html >& reference.shtml
 rm -f image.jpg
-\gmic ../src/gmic_def.gmic gallery.gmic -gmic_gallery
+\gmic ../src/gmic_def.gmic,0 gallery.gmic,0 -gmic_gallery
 cd ..
 
 # Create .pdf handbook.
 #----------------------
 echo " - Create PDF reference handbook."
 cd html
-\gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help latex >& reference.tex
+\gmic -v - ../src/gmic_def.gmic,0 raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help latex >& reference.tex
 pdflatex reference.tex
 makeindex reference
 pdflatex reference.tex
