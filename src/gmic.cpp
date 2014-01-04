@@ -4752,6 +4752,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             gmic_strreplace(arg_command0);
             CImg<char> arg_command(arg_command0);
 
+            unsigned int siz = 0;
+            for (unsigned int l = 0; l<256; ++l) siz+=commands[l].size();
+
             bool add_debug_infos = true;
             const unsigned int larg = std::strlen(arg_command);
             if (larg>2 && arg_command[larg-2]==',' && (arg_command[larg-1]=='0' || arg_command[larg-1]=='1')) {
@@ -4760,8 +4763,6 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             }
 
             std::FILE *file = std::fopen(arg_command,"rb");
-            unsigned int siz = 0;
-            for (unsigned int l = 0; l<256; ++l) siz+=commands[l].size();
             if (file) {
               print(images,"Import custom commands from file '%s'%s",
                     argument_text,
