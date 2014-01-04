@@ -1955,8 +1955,8 @@ gmic& gmic::warn(const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  char message[1024+128] = { 0 };
-  cimg_snprintf(message,128,"*** Warning in %s *** ",scope2string().data());
+  char message[1024+512] = { 0 };
+  cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -1976,13 +1976,13 @@ gmic& gmic::warn(const char *format, ...) {
 gmic& gmic::error(const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  char message[1024+128] = { 0 };
+  char message[1024+512] = { 0 };
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
-    cimg_snprintf(message,128,"*** Error in %s (file '%s', %sline %u) *** ",
+    cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
-    cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
+    cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2367,8 +2367,8 @@ gmic& gmic::warn(const CImgList<T>& list, const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  char message[1024+128] = { 0 };
-  cimg_snprintf(message,128,"*** Warning in %s *** ",scope2string().data());
+  char message[1024+512] = { 0 };
+  cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2389,8 +2389,8 @@ gmic& gmic::warn(const CImgList<T>& list, const CImg<unsigned int>& scope_select
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  char message[1024+128] = { 0 };
-  cimg_snprintf(message,128,"*** Warning in %s *** ",scope2string(scope_selection).data());
+  char message[1024+512] = { 0 };
+  cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string(scope_selection).data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2416,13 +2416,13 @@ template<typename T>
 gmic& gmic::error(const CImgList<T>& list, const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  char message[1024+128] = { 0 };
+  char message[1024+512] = { 0 };
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
-    cimg_snprintf(message,128,"*** Error in %s (file '%s', %sline %u) *** ",
+    cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
-    cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
+    cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2447,13 +2447,13 @@ gmic& gmic::error(const char *const command, const CImgList<T>& list,
                   const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  char message[1024+128] = { 0 };
+  char message[1024+512] = { 0 };
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
-    cimg_snprintf(message,128,"*** Error in %s (file '%s', %sline %u) *** ",
+    cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
-    cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
+    cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -2478,13 +2478,13 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
                   const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  char message[1024+128] = { 0 };
+  char message[1024+512] = { 0 };
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
-    cimg_snprintf(message,128,"*** Error in %s (file '%s', %sline %u) *** ",
+    cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
-    cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
+    cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,sizeof(message));
   va_end(ap);
@@ -4748,8 +4748,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Import custom commands.
           if (!std::strcmp("-command",item)) {
             gmic_substitute_args();
-            CImg<char> arg_command(argument,std::strlen(argument)+1);
-            gmic_strreplace(arg_command);
+            CImg<char> arg_command0(argument,std::strlen(argument)+1);
+            gmic_strreplace(arg_command0);
+            CImg<char> arg_command(arg_command0);
 
             bool add_debug_infos = true;
             const unsigned int larg = std::strlen(arg_command);
@@ -4789,7 +4790,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             } else {
               print(images,"Import custom commands from expression '%s'",
                     argument_text);
-              add_commands(arg_command,commands_names,commands,commands_has_arguments);
+              add_commands(arg_command0,commands_names,commands,commands_has_arguments);
             }
             if (verbosity>=0 || is_debug) {
               unsigned int nb_added = 0;
