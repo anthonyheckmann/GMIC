@@ -1977,9 +1977,10 @@ gmic& gmic::error(const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
   char message[1024+128] = { 0 };
-  if (debug_filename!=~0U && debug_line!=~0U)
-    cimg_snprintf(message,128,"*** Error in %s (file '%s', line %u) *** ",
-                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line);
+  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+    cimg_snprintf(message,128,"*** Error in %s (file '%s', %sline %u) *** ",
+                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
@@ -2416,9 +2417,10 @@ gmic& gmic::error(const CImgList<T>& list, const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
   char message[1024+128] = { 0 };
-  if (debug_filename!=~0U && debug_line!=~0U)
-    cimg_snprintf(message,128,"*** Error in %s (file '%s', line %u) *** ",
-                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line);
+  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+    cimg_snprintf(message,128,"*** Error in %s (file '%s', %sline %u) *** ",
+                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
@@ -2446,9 +2448,10 @@ gmic& gmic::error(const char *const command, const CImgList<T>& list,
   va_list ap;
   va_start(ap,format);
   char message[1024+128] = { 0 };
-  if (debug_filename!=~0U && debug_line!=~0U)
-    cimg_snprintf(message,128,"*** Error in %s (file '%s', line %u) *** ",
-                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line);
+  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+    cimg_snprintf(message,128,"*** Error in %s (file '%s', %sline %u) *** ",
+                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
@@ -2476,9 +2479,10 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
   va_list ap;
   va_start(ap,format);
   char message[1024+128] = { 0 };
-  if (debug_filename!=~0U && debug_line!=~0U)
-    cimg_snprintf(message,128,"*** Error in %s (file '%s', line %u) *** ",
-                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line);
+  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+    cimg_snprintf(message,128,"*** Error in %s (file '%s', %sline %u) *** ",
+                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,128,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
@@ -2509,10 +2513,11 @@ template<typename T>
 gmic& gmic::_arg_error(const CImgList<T>& list, const char *const command,
                        const char *const argument) {
   char message[1024] = { 0 };
-  if (debug_filename!=~0U && debug_line!=~0U)
+  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
     cimg_snprintf(message,sizeof(message),
-                  "*** Error in %s (file '%s', line %u) *** Command '-%s': Invalid argument '%s'.",
-                  scope2string().data(),commands_filenames[debug_filename].data(),debug_line,command,argument);
+                  "*** Error in %s (file '%s', %sline %u) *** Command '-%s': Invalid argument '%s'.",
+                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  is_debug_infos?"":"call from ",debug_line,command,argument);
   else
     cimg_snprintf(message,sizeof(message),
                   "*** Error in %s *** Command '-%s': Invalid argument '%s'.",
@@ -2666,6 +2671,7 @@ void gmic::_gmic(const char *const commands_line, CImgList<T>& images,
   debug_line = ~0U;
   is_released = true;
   is_debug = false;
+  is_debug_infos = false;
   is_start = true;
   is_quit = false;
   is_return = false;
@@ -3732,6 +3738,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       images_names.remove(images.size(),images_names.size()-1);
     else if (images.size()>images_names.size())
       images_names.insert(images.size() - images_names.size(),CImg<char>::string("[unnamed]"));
+
+    is_debug_infos = false;
     if (is_debug) {
       nb_carriages = 2;
       debug(images,"%sStart G'MIC parser in scope '%s/' [%s].%s",
@@ -3744,11 +3752,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     while (position<commands_line.size() && !is_quit && !is_return) {
 
       // Process debug infos.
-      while (position<commands_line.size() &&
-             (*commands_line[position]==1 || *commands_line[position]==2)) {
+      while (position<commands_line.size() && *commands_line[position]==1) {
         const CImg<char> &code = commands_line[position];
         if (!std::sscanf(code.data()+1,"%x,%x",&debug_line,&(debug_filename=0)))
           debug_filename = debug_line = ~0U;
+        else is_debug_infos = true;
         ++position;
       }
       if (position>=commands_line.size()) continue;

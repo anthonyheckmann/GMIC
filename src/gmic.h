@@ -364,7 +364,7 @@ struct gmic {
   float focale3d, light3d_x, light3d_y, light3d_z, specular_lightness3d, specular_shininess3d,
     _progress, *progress;
   bool is_released, is_debug, is_start, is_quit, is_return, is_double3d, is_default_type,
-    check_elif;
+    is_debug_infos, check_elif;
   int verbosity, render3d, renderd3d;
   volatile int _cancel, *cancel;
   unsigned int nb_carriages, debug_filename, debug_line;
