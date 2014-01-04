@@ -2045,17 +2045,17 @@ gmic& gmic::add_commands(const char *const data_commands,
                          const bool add_debug_infos) {
   if (!data_commands || !*data_commands) return *this;
   char mac[256] = { 0 }, com[256*1024] = { 0 }, line[256*1024] = { 0 }, debug_info[32] = { 0 };
-  unsigned int pos[256] = { 0 }, line_number = 0;
+  unsigned int pos[256] = { 0 }, line_number = 1;
   *mac = *com = *line = 0;
-  bool is_last_slash = false, _is_last_slash = false;
+  bool is_last_slash = false, _is_last_slash = false, is_newline = false;
   int ind = -1, l_debug_info = 0;
   char sep = 0;
-  for (const char *data = data_commands; *data; is_last_slash = _is_last_slash) {
+  for (const char *data = data_commands; *data; is_last_slash = _is_last_slash, line_number+=is_newline?1:0) {
 
     // Read new line.
     char *_line = line;
     while (*data!='\n' && *data && _line<line+sizeof(line)) *(_line++) = *(data++); *_line = 0;
-    if (*data=='\n' || !*data) { ++line_number; if (*data=='\n') ++data; } // Skip next '\n'.
+    if (*data=='\n') { is_newline = true; ++data; } else is_newline = false; // Skip next '\n'.
 
     // Replace non-usual characters by spaces.
     for (_line = line; *_line; ++_line) if ((unsigned char)*_line<' ') *_line = ' ';
