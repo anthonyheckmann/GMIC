@@ -1901,7 +1901,7 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
       *(ptrd++) = c;
     } else if (is_dquoted) { // If non-escaped character inside string.
       if (c=='\"') is_dquoted = false;
-      else if (c==1) while (c!=' ') c = *(ptrs++); // Discard debug infos inside string.
+      else if (c==1) while (c!=' ') c = *(++ptrs); // Discard debug infos inside string.
       else *(ptrd++) = c=='$'?_dollar:c=='{'?_lbrace:c=='}'?_rbrace:
              c==','?_comma:c=='@'?_arobace:c;
     } else { // Non-escaped character outside string.
