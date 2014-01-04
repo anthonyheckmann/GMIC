@@ -104,7 +104,7 @@ gmic_gallery : -skip ${1=84}
   -_gmic_gallery "-stencilbw 30"
   -_gmic_gallery "-glow 4"
   -_gmic_gallery "-ditheredbw"
-  -_gmic_gallery "-dotsbw , -n 0,255"
+  -_gmic_gallery "-blur_angular 10"
   -_gmic_gallery "-blur_radial 10"
 
   -_gmic_gallery "-repeat 3 --deform[0] 10 -done -+ -n 0,255"
