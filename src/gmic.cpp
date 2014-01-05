@@ -1995,7 +1995,7 @@ gmic& gmic::error(const char *const format, ...) {
     std::fflush(cimg::output());
   }
   message.move_to(status);
-  throw gmic_exception(0,message);
+  throw gmic_exception(0,status);
   return *this;
 }
 
@@ -2439,7 +2439,7 @@ gmic& gmic::error(const CImgList<T>& list, const char *const format, ...) {
     std::fflush(cimg::output());
   }
   message.move_to(status);
-  throw gmic_exception(0,message);
+  throw gmic_exception(0,status);
   return *this;
 }
 
@@ -2470,7 +2470,7 @@ gmic& gmic::error(const char *const command, const CImgList<T>& list,
     std::fflush(cimg::output());
   }
   message.move_to(status);
-  throw gmic_exception(command,message);
+  throw gmic_exception(command,status);
   return *this;
 }
 
@@ -2503,7 +2503,7 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
     std::fflush(cimg::output());
   }
   message.move_to(status);
-  throw gmic_exception(0,message);
+  throw gmic_exception(0,status);
   return *this;
 }
 
@@ -2536,7 +2536,7 @@ gmic& gmic::_arg_error(const CImgList<T>& list, const char *const command,
     std::fflush(cimg::output());
   }
   message.move_to(status);
-  throw gmic_exception(command,message);
+  throw gmic_exception(command,status);
   return *this;
 }
 
