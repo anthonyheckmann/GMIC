@@ -1935,7 +1935,7 @@ gmic& gmic::print(const char *format, ...) {
   va_list ap;
   va_start(ap,format);
   CImg<char> message(16384);
-  cimg_vsnprintf(message.fill(0),message.width(),format,ap);
+  cimg_vsnprintf(message,message.width(),format,ap);
   gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
@@ -1955,10 +1955,10 @@ gmic& gmic::warn(const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  char message[1024+512] = { 0 };
+  CImg<char> message(1024+512);
   cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string().data());
-  cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
   if (*message!='\r')
@@ -1966,7 +1966,7 @@ gmic& gmic::warn(const char *format, ...) {
   nb_carriages = 1;
   std::fprintf(cimg::output(),
                "%s[gmic]%s %s%s%s",
-               cimg::t_red,scope2string().data(),cimg::t_bold,message,cimg::t_normal);
+               cimg::t_red,scope2string().data(),cimg::t_bold,message.data(),cimg::t_normal);
   std::fflush(cimg::output());
   return *this;
 }
@@ -1976,26 +1976,25 @@ gmic& gmic::warn(const char *format, ...) {
 gmic& gmic::error(const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  char message[1024+512] = { 0 };
+  CImg<char> message(1024+512);
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
-  else
-    cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
-  cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  else cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
+  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
-  CImg<char>::string(message).move_to(status);
   if (verbosity>=0 || is_debug) {
     if (*message!='\r')
       for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
     nb_carriages = 1;
     std::fprintf(cimg::output(),"[gmic]%s %s%s%s%s",
-                 scope2string().data(),cimg::t_bold,cimg::t_red,message,cimg::t_normal);
+                 scope2string().data(),cimg::t_bold,cimg::t_red,message.data(),cimg::t_normal);
     std::fflush(cimg::output());
   }
+  message.move_to(status);
   throw gmic_exception(0,message);
   return *this;
 }
@@ -2006,9 +2005,9 @@ gmic& gmic::debug(const char *format, ...) {
   if (!is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  char message[1024] = { 0 };
-  cimg_vsnprintf(message,sizeof(message),format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  CImg<char> message(1024);
+  cimg_vsnprintf(message,message.width(),format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   if (*message!='\r')
     for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
@@ -2325,7 +2324,7 @@ gmic& gmic::print(const CImgList<T>& list, const char *format, ...) {
   va_list ap;
   va_start(ap,format);
   CImg<char> message(16384);
-  cimg_vsnprintf(message.fill(0),message.width(),format,ap);
+  cimg_vsnprintf(message,message.width(),format,ap);
   gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
@@ -2346,7 +2345,7 @@ gmic& gmic::print(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
   va_list ap;
   va_start(ap,format);
   CImg<char> message(16384);
-  cimg_vsnprintf(message.fill(0),message.width(),format,ap);
+  cimg_vsnprintf(message,message.width(),format,ap);
   gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
@@ -2369,10 +2368,10 @@ gmic& gmic::warn(const CImgList<T>& list, const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  char message[1024+512] = { 0 };
+  CImg<char> message(1024+512);
   cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string().data());
-  cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
   if (*message!='\r')
@@ -2380,7 +2379,7 @@ gmic& gmic::warn(const CImgList<T>& list, const char *format, ...) {
   nb_carriages = 1;
   std::fprintf(cimg::output(),
                "[gmic]-%u%s %s%s%s%s",
-               list.size(),scope2string().data(),cimg::t_bold,cimg::t_red,message,cimg::t_normal);
+               list.size(),scope2string().data(),cimg::t_bold,cimg::t_red,message.data(),cimg::t_normal);
   std::fflush(cimg::output());
   return *this;
 }
@@ -2391,10 +2390,10 @@ gmic& gmic::warn(const CImgList<T>& list, const CImg<unsigned int>& scope_select
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  char message[1024+512] = { 0 };
+  CImg<char> message(1024+512);
   cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string(scope_selection).data());
-  cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
   if (*message!='\r')
@@ -2404,10 +2403,10 @@ gmic& gmic::warn(const CImgList<T>& list, const CImg<unsigned int>& scope_select
     std::fprintf(cimg::output(),
                  "[gmic]-%u%s %s%s%s%s",
                  list.size(),scope2string(scope_selection).data(),
-                 cimg::t_bold,cimg::t_red,message,cimg::t_normal);
+                 cimg::t_bold,cimg::t_red,message.data(),cimg::t_normal);
   else std::fprintf(cimg::output(),
                     "%s%s%s%s",
-                    cimg::t_bold,cimg::t_red,message,cimg::t_normal);
+                    cimg::t_bold,cimg::t_red,message.data(),cimg::t_normal);
   std::fflush(cimg::output());
   return *this;
 }
@@ -2418,18 +2417,17 @@ template<typename T>
 gmic& gmic::error(const CImgList<T>& list, const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  char message[1024+512] = { 0 };
+  CImg<char> message(1024+512);
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
-  cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
-  CImg<char>::string(message).move_to(status);
   if (verbosity>=0 || is_debug) {
     if (*message!='\r')
       for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
@@ -2437,9 +2435,10 @@ gmic& gmic::error(const CImgList<T>& list, const char *const format, ...) {
     std::fprintf(cimg::output(),
                  "[gmic]-%u%s %s%s%s%s",
                  list.size(),scope2string().data(),
-                 cimg::t_bold,cimg::t_red,message,cimg::t_normal);
+                 cimg::t_bold,cimg::t_red,message.data(),cimg::t_normal);
     std::fflush(cimg::output());
   }
+  message.move_to(status);
   throw gmic_exception(0,message);
   return *this;
 }
@@ -2449,18 +2448,17 @@ gmic& gmic::error(const char *const command, const CImgList<T>& list,
                   const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  char message[1024+512] = { 0 };
+  CImg<char> message(1024+512);
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
-  cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
-  CImg<char>::string(message).move_to(status);
   if (verbosity>=0 || is_debug) {
     if (*message!='\r')
       for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
@@ -2468,9 +2466,10 @@ gmic& gmic::error(const char *const command, const CImgList<T>& list,
     std::fprintf(cimg::output(),
                  "[gmic]-%u%s %s%s%s%s",
                  list.size(),scope2string().data(),
-                 cimg::t_bold,cimg::t_red,message,cimg::t_normal);
+                 cimg::t_bold,cimg::t_red,message.data(),cimg::t_normal);
     std::fflush(cimg::output());
   }
+  message.move_to(status);
   throw gmic_exception(command,message);
   return *this;
 }
@@ -2480,18 +2479,17 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
                   const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  char message[1024+512] = { 0 };
+  CImg<char> message(1024+512);
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
-  cimg_vsnprintf(message + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   gmic_strreplace(message);
-  CImg<char>::string(message).move_to(status);
   if (verbosity>=0 || is_debug) {
     if (*message!='\r')
       for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
@@ -2500,10 +2498,11 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
       std::fprintf(cimg::output(),
                    "[gmic]-%u%s %s%s%s%s",
                    list.size(),scope2string(scope_selection).data(),
-                   cimg::t_bold,cimg::t_red,message,cimg::t_normal);
-    else std::fprintf(cimg::output(),"%s",message);
+                   cimg::t_bold,cimg::t_red,message.data(),cimg::t_normal);
+    else std::fprintf(cimg::output(),"%s",message.data());
     std::fflush(cimg::output());
   }
+  message.move_to(status);
   throw gmic_exception(0,message);
   return *this;
 }
@@ -2514,19 +2513,18 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
 template<typename T>
 gmic& gmic::_arg_error(const CImgList<T>& list, const char *const command,
                        const char *const argument) {
-  char message[1024] = { 0 };
+  CImg<char> message(1024);
   if (debug_filename<commands_filenames.size() && debug_line!=~0U)
-    cimg_snprintf(message,sizeof(message),
+    cimg_snprintf(message,message.width(),
                   "*** Error in %s (file '%s', %sline %u) *** Command '-%s': Invalid argument '%s'.",
                   scope2string().data(),commands_filenames[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line,command,argument);
   else
-    cimg_snprintf(message,sizeof(message),
+    cimg_snprintf(message,message.width(),
                   "*** Error in %s *** Command '-%s': Invalid argument '%s'.",
                   scope2string().data(),command,argument);
-  gmic_ellipsize(message,sizeof(message));
+  gmic_ellipsize(message,message.width());
   gmic_strreplace(message);
-  CImg<char>::string(message).move_to(status);
   if (verbosity>=0 || is_debug) {
     if (*message!='\r')
       for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
@@ -2534,9 +2532,10 @@ gmic& gmic::_arg_error(const CImgList<T>& list, const char *const command,
     std::fprintf(cimg::output(),
                  "[gmic]-%u%s %s%s%s%s",
                  list.size(),scope2string().data(),
-                 cimg::t_bold,cimg::t_red,message,cimg::t_normal);
+                 cimg::t_bold,cimg::t_red,message.data(),cimg::t_normal);
     std::fflush(cimg::output());
   }
+  message.move_to(status);
   throw gmic_exception(command,message);
   return *this;
 }
@@ -2548,9 +2547,9 @@ gmic& gmic::debug(const CImgList<T>& list, const char *format, ...) {
   if (!is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  char message[1024] = { 0 };
-  cimg_vsnprintf(message,sizeof(message),format,ap);
-  gmic_ellipsize(message,sizeof(message));
+  CImg<char> message(1024);
+  cimg_vsnprintf(message,message.width(),format,ap);
+  gmic_ellipsize(message,message.width());
   va_end(ap);
   if (*message!='\r')
     for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
