@@ -2043,7 +2043,10 @@ gmic& gmic::add_commands(const char *const data_commands,
                          CImgList<char> (&commands_has_arguments)[256],
                          const char *const commands_file) {
   if (!data_commands || !*data_commands) return *this;
-  char mac[256] = { 0 }, com[256*1024] = { 0 }, line[256*1024] = { 0 }, debug_info[32] = { 0 };
+
+  CImg<char> mac(256);
+
+  char com[256*1024] = { 0 }, line[256*1024] = { 0 }, debug_info[32] = { 0 };
   unsigned int pos[256] = { 0 }, line_number = 1;
   *mac = *com = *line = 0;
   bool is_last_slash = false, _is_last_slash = false, is_newline = false;
@@ -2075,10 +2078,11 @@ gmic& gmic::add_commands(const char *const data_commands,
     *mac = *com = 0;
 
     if (!is_last_slash && std::strchr(lines,':') && // Check for a command definition.
-        std::sscanf(lines,"%255[a-zA-Z0-9_] %c %262143[^\n]",mac,&sep,com)>=2 &&
+        std::sscanf(lines,"%255[a-zA-Z0-9_] %c %262143[^\n]",mac.data(),&sep,com)>=2 &&
         (*lines<'0' || *lines>'9') && sep==':') {
       ind = gmic_hashcode(mac,false);
-      CImg<char>::string(mac).move_to(commands_names[ind],pos[ind]);
+      commands_names[ind].insert(mac,pos[ind]);
+
       CImg<char> body = CImg<char>::string(com);
       CImg<char>::vector((char)gmic_command_has_arguments(body)).
         move_to(commands_has_arguments[ind],pos[ind]);
