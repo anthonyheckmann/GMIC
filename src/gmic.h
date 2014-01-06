@@ -209,7 +209,7 @@ struct gmic {
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
                      gmic_list<char> (&commands_has_arguments)[256],
-                     const char *const filename_debug_infos=0);
+                     const char *const commands_file=0);
   gmic& add_commands(std::FILE *const file,
                      const char *const filename,
                      gmic_list<char> (&commands_names)[256],
@@ -356,7 +356,7 @@ struct gmic {
 #endif // #if cimg_display!=0
   gmic_list<char> commands[256], commands_names[256], commands_has_arguments[256],
     _variables[256], _variables_names[256], *variables[256], *variables_names[256],
-    commands_filenames, scope;
+    commands_files, scope;
   gmic_list<unsigned int> dowhiles, repeatdones;
   gmic_image<unsigned char> background3d, light3d;
   gmic_image<float> pose3d;

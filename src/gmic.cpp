@@ -1977,9 +1977,9 @@ gmic& gmic::error(const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
   CImg<char> message(1024+512);
-  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+  if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
-                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  scope2string().data(),commands_files[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
   cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
@@ -2041,7 +2041,7 @@ gmic& gmic::add_commands(const char *const data_commands,
                          CImgList<char> (&commands_names)[256],
                          CImgList<char> (&commands)[256],
                          CImgList<char> (&commands_has_arguments)[256],
-                         const char *const filename_debug_infos) {
+                         const char *const commands_file) {
   if (!data_commands || !*data_commands) return *this;
   char mac[256] = { 0 }, com[256*1024] = { 0 }, line[256*1024] = { 0 }, debug_info[32] = { 0 };
   unsigned int pos[256] = { 0 }, line_number = 1;
@@ -2049,7 +2049,7 @@ gmic& gmic::add_commands(const char *const data_commands,
   bool is_last_slash = false, _is_last_slash = false, is_newline = false;
   int ind = -1, l_debug_info = 0;
   char sep = 0;
-  if (filename_debug_infos) CImg<char>::string(filename_debug_infos).move_to(commands_filenames);
+  if (commands_file) CImg<char>::string(commands_file).move_to(commands_files);
 
   for (const char *data = data_commands; *data; is_last_slash = _is_last_slash, line_number+=is_newline?1:0) {
 
@@ -2082,12 +2082,12 @@ gmic& gmic::add_commands(const char *const data_commands,
       CImg<char> body = CImg<char>::string(com);
       CImg<char>::vector((char)gmic_command_has_arguments(body)).
         move_to(commands_has_arguments[ind],pos[ind]);
-      if (filename_debug_infos) { // Insert code with debug infos.
-        if (commands_filenames.width()<2)
+      if (commands_file) { // Insert code with debug infos.
+        if (commands_files.width()<2)
           l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
         else
           l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
-                                            line_number,commands_filenames.width()-1);
+                                            line_number,commands_files.width()-1);
         debug_info[0] = 1; debug_info[l_debug_info+1] = ' ';
         ((CImg<char>(debug_info,l_debug_info+2,1,1,1,true),body)>'x').move_to(commands[ind],pos[ind]++);
       } else body.move_to(commands[ind],pos[ind]++); // Insert code without debug infos.
@@ -2098,12 +2098,12 @@ gmic& gmic::add_commands(const char *const data_commands,
       else --(commands[ind][p]._width);
       const CImg<char> body = CImg<char>(lines,linee - lines + 2);
       commands_has_arguments[ind](p,0) |= (char)gmic_command_has_arguments(body);
-      if (filename_debug_infos && !is_last_slash) { // Insert code with debug infos.
-        if (commands_filenames.width()<2)
+      if (commands_file && !is_last_slash) { // Insert code with debug infos.
+        if (commands_files.width()<2)
           l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
         else
           l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
-                                            line_number,commands_filenames.width()-1);
+                                            line_number,commands_files.width()-1);
         debug_info[0] = 1; debug_info[l_debug_info+1] = ' ';
         ((commands[ind][p],CImg<char>(debug_info,l_debug_info+2,1,1,1,true),body)>'x').move_to(commands[ind][p]);
       } else commands[ind][p].append(body,'x'); // Insert code without debug infos.
@@ -2112,13 +2112,13 @@ gmic& gmic::add_commands(const char *const data_commands,
 
   if (is_debug) {
     CImg<unsigned int> hdist(256);
-    unsigned int nb_coms = 0;
-    cimg_forX(hdist,i) { hdist[i] = commands[i].size(); nb_coms+=commands[i].size(); }
+    unsigned int nb_commands = 0;
+    cimg_forX(hdist,i) { hdist[i] = commands[i].size(); nb_commands+=commands[i].size(); }
     const CImg<double> st = hdist.get_stats();
     debug("Distribution of command hashes: [ %s ], min = %u, max = %u, mean = %g, "
           "std = %g (%u commands).",
           hdist.value_string().data(),(unsigned int)st[0],(unsigned int)st[1],st[2],
-          std::sqrt(st[3]),nb_coms);
+          std::sqrt(st[3]),nb_commands);
   }
   return *this;
 }
@@ -2420,9 +2420,9 @@ gmic& gmic::error(const CImgList<T>& list, const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
   CImg<char> message(1024+512);
-  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+  if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
-                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  scope2string().data(),commands_files[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
@@ -2451,9 +2451,9 @@ gmic& gmic::error(const char *const command, const CImgList<T>& list,
   va_list ap;
   va_start(ap,format);
   CImg<char> message(1024+512);
-  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+  if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
-                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  scope2string().data(),commands_files[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
@@ -2482,9 +2482,9 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
   va_list ap;
   va_start(ap,format);
   CImg<char> message(1024+512);
-  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+  if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
-                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  scope2string().data(),commands_files[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line);
   else
     cimg_snprintf(message,512,"*** Error in %s *** ",scope2string().data());
@@ -2516,10 +2516,10 @@ template<typename T>
 gmic& gmic::_arg_error(const CImgList<T>& list, const char *const command,
                        const char *const argument) {
   CImg<char> message(1024);
-  if (debug_filename<commands_filenames.size() && debug_line!=~0U)
+  if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,message.width(),
                   "*** Error in %s (file '%s', %sline %u) *** Command '-%s': Invalid argument '%s'.",
-                  scope2string().data(),commands_filenames[debug_filename].data(),
+                  scope2string().data(),commands_files[debug_filename].data(),
                   is_debug_infos?"":"call from ",debug_line,command,argument);
   else
     cimg_snprintf(message,message.width(),
@@ -8039,7 +8039,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               gi.variables[255] = variables[255];  // Share global variables between all threads.
               gi.variables_names[255] = variables_names[255];
               gi.scope.assign(scope);
-              gi.commands_filenames.assign(commands_filenames,true);
+              gi.commands_files.assign(commands_files,true);
               cimg_snprintf(title,_title.size(),"*thread%d",l);
               CImg<char>::string(title).move_to(gi.scope);
               gi.background3d.assign(background3d);
