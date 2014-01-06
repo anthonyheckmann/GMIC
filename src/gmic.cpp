@@ -2041,7 +2041,7 @@ gmic& gmic::add_commands(const char *const data_commands,
                          CImgList<char> (&commands_names)[256],
                          CImgList<char> (&commands)[256],
                          CImgList<char> (&commands_has_arguments)[256],
-                         const bool add_debug_infos) {
+                         const char *const filename_debug_infos) {
   if (!data_commands || !*data_commands) return *this;
   char mac[256] = { 0 }, com[256*1024] = { 0 }, line[256*1024] = { 0 }, debug_info[32] = { 0 };
   unsigned int pos[256] = { 0 }, line_number = 1;
@@ -2049,6 +2049,8 @@ gmic& gmic::add_commands(const char *const data_commands,
   bool is_last_slash = false, _is_last_slash = false, is_newline = false;
   int ind = -1, l_debug_info = 0;
   char sep = 0;
+  if (filename_debug_infos) CImg<char>::string(filename_debug_infos).move_to(commands_filenames);
+
   for (const char *data = data_commands; *data; is_last_slash = _is_last_slash, line_number+=is_newline?1:0) {
 
     // Read new line.
@@ -2080,7 +2082,7 @@ gmic& gmic::add_commands(const char *const data_commands,
       CImg<char> body = CImg<char>::string(com);
       CImg<char>::vector((char)gmic_command_has_arguments(body)).
         move_to(commands_has_arguments[ind],pos[ind]);
-      if (add_debug_infos) { // Insert code with debug infos.
+      if (filename_debug_infos) { // Insert code with debug infos.
         if (commands_filenames.width()<2)
           l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
         else
@@ -2096,7 +2098,7 @@ gmic& gmic::add_commands(const char *const data_commands,
       else --(commands[ind][p]._width);
       const CImg<char> body = CImg<char>(lines,linee - lines + 2);
       commands_has_arguments[ind](p,0) |= (char)gmic_command_has_arguments(body);
-      if (add_debug_infos && !is_last_slash) { // Insert code with debug infos.
+      if (filename_debug_infos && !is_last_slash) { // Insert code with debug infos.
         if (commands_filenames.width()<2)
           l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
         else
@@ -2134,11 +2136,11 @@ gmic& gmic::add_commands(std::FILE *const file,
   const long siz = std::ftell(file);
   std::rewind(file);
   if (siz>0) {
-    if (add_debug_infos) CImg<char>::string(filename).move_to(commands_filenames);
     CImg<char> buffer(siz+1);
     if (std::fread(buffer.data(),sizeof(char),siz,file)) {
       buffer[siz] = 0;
-      try { add_commands(buffer.data(),commands_names,commands,commands_has_arguments,add_debug_infos); }
+      try { add_commands(buffer.data(),commands_names,commands,commands_has_arguments,
+                         add_debug_infos?(filename?filename:"(FILE*)"):0); }
       catch (...) { std::fclose(file); throw; }
     }
   }
@@ -4749,31 +4751,31 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Import custom commands.
           if (!std::strcmp("-command",item)) {
             gmic_substitute_args();
-            CImg<char> arg_command0(argument,std::strlen(argument)+1);
-            gmic_strreplace(arg_command0);
-            CImg<char> arg_command(arg_command0);
+            CImg<char> _arg_command(argument,std::strlen(argument)+1);
+            const char *arg_command_text = argument_text;
+            char *arg_command = _arg_command;
+            gmic_strreplace(arg_command);
 
             unsigned int siz = 0;
             for (unsigned int l = 0; l<256; ++l) siz+=commands[l].size();
 
             bool add_debug_infos = true;
-            const unsigned int larg = std::strlen(arg_command);
-            if (larg>2 && arg_command[larg-2]==',' && (arg_command[larg-1]=='0' || arg_command[larg-1]=='1')) {
-              add_debug_infos = (arg_command[larg-1]=='1');
-              arg_command[larg-2] = 0;
+            if ((*arg_command=='0' || *arg_command=='1') && arg_command[1]==',') {
+              add_debug_infos = (*arg_command=='1');
+              arg_command+=2; arg_command_text+=2;
             }
 
             std::FILE *file = std::fopen(arg_command,"rb");
             if (file) {
               print(images,"Import custom commands from file '%s'%s",
-                    argument_text,
+                    arg_command_text,
                     !add_debug_infos?" without debug infos":"");
               add_commands(file,arg_command,commands_names,commands,commands_has_arguments,add_debug_infos);
               std::fclose(file);
             } else if (!cimg::strncasecmp(arg_command,"http://",7) ||
                        !cimg::strncasecmp(arg_command,"https://",8)) { // Try to read from network.
               print(images,"Import custom commands from URL '%s'%s",
-                    argument_text,
+                    arg_command_text,
                     !add_debug_infos?" without debug infos":"");
               char filename_tmp[512] = { 0 };
               try {
@@ -4787,12 +4789,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               } else
                 error(images,"Command '-command': Unable to reach custom commands file '%s' "
                       "from network.",
-                      argument_text);
+                      arg_command_text);
               std::remove(filename_tmp);
             } else {
               print(images,"Import custom commands from expression '%s'",
-                    argument_text);
-              add_commands(arg_command0,commands_names,commands,commands_has_arguments);
+                    arg_command_text);
+              add_commands(arg_command,commands_names,commands,commands_has_arguments);
             }
             if (verbosity>=0 || is_debug) {
               unsigned int nb_added = 0;

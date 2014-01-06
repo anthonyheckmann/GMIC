@@ -209,13 +209,13 @@ struct gmic {
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
                      gmic_list<char> (&commands_has_arguments)[256],
-                     const bool add_debug_infos=false);
+                     const char *const filename_debug_infos=0);
   gmic& add_commands(std::FILE *const file,
                      const char *const filename,
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
                      gmic_list<char> (&commands_has_arguments)[256],
-                     const bool add_debug_infos=true);
+                     const bool add_debug_infos=false);
   gmic_image<char> scope2string(const bool is_last_slash=true) const;
   gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection,
                                 const bool is_last_slash=true) const;

@@ -1010,7 +1010,7 @@ apply_files : -skip "${3=gmic_}",${4=0}
 
 #@gmic m : eq. to '-command'. : (*)
 
-#@gmic command : { filename | http[s]://URL },_add_debug_info={ 0 | 1 } : "string" : (*)
+#@gmic command : _add_debug_info={ 0 | 1 },{ filename | http[s]://URL | "string" } : (*)
 #@gmic : Import G'MIC custom commands from specified file, URL or string.
 #@gmic : (eq. to '-m').
 #@gmic : Imported commands are available directly after the '-command' invocation.
