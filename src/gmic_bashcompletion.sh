@@ -641,6 +641,7 @@ _gmic_def()
 	      -imagegrid --imagegrid\
 	      -linearize_tiles --linearize_tiles\
 	      -map_sprites --map_sprites\
+	      -puzzle --puzzle\
 	      -quadratize_tiles --quadratize_tiles\
 	      -rotate_tiles --rotate_tiles\
 	      -shift_tiles --shift_tiles\
@@ -1473,6 +1474,7 @@ _gmic_def()
 	      imagegrid\
 	      linearize_tiles\
 	      map_sprites\
+	      puzzle\
 	      quadratize_tiles\
 	      rotate_tiles\
 	      shift_tiles\
@@ -1719,7 +1721,7 @@ _gmic_def()
 		return 0
 		;;
 		"-display_parametric" | "--display_parametric")
-		COMPREPLY=( $(compgen -W "_width>32,_height>32,_outline_opacity,_vertex_radius>=0,_is_antialiased={0|1},_is_decorated={0|1},_xlabel,_ylabel >") )
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_outline_opacity,_vertex_radius>=0,_is_antialiased={0|1},_is_decorated={0|1},_xlabel,_ylabel >") )
 		return 0
 		;;
 		"-display_polar" | "--display_polar")
@@ -3128,6 +3130,10 @@ _gmic_def()
 		;;
 		"-map_sprites" | "--map_sprites")
 		COMPREPLY=( $(compgen -W "_nb_scales>=1,_allow_rotation={0=none|1=90deg.|2=180deg.} >") )
+		return 0
+		;;
+		"-puzzle" | "--puzzle")
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_M>=1,_N>=1,_flexibility,_center_noise,_height_noise,_resolution>=1 >") )
 		return 0
 		;;
 		"-quadratize_tiles" | "--quadratize_tiles")

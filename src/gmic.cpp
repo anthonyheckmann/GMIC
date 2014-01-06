@@ -11880,9 +11880,15 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               error(images,"Command '-input': raw file '%s', invalid specified "
 		    "dimensions %gx%gx%gx%g.",
                     _filename0,dx,dy,dz,dc);
-            print(images,"Input raw file '%s' (offset: %lu) with type '%s' at position%s",
-                  _filename0,offset,stype,
-                  gmic_selection);
+
+            if (offset)
+              print(images,"Input raw file '%s' (offset: %lu) with type '%s' at position%s",
+                    _filename0,offset,stype,
+                    gmic_selection);
+            else
+              print(images,"Input raw file '%s' with type '%s' at position%s",
+                    _filename0,stype,
+                    gmic_selection);
 
 #define gmic_load_raw(value_type,svalue_type) \
             if (!cimg::strcasecmp(stype,svalue_type)) \
