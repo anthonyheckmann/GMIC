@@ -2043,12 +2043,9 @@ gmic& gmic::add_commands(const char *const data_commands,
                          CImgList<char> (&commands_has_arguments)[256],
                          const char *const commands_file) {
   if (!data_commands || !*data_commands) return *this;
-
-  CImg<char> mac(256);
-
-  char com[256*1024] = { 0 }, line[256*1024] = { 0 }, debug_info[32] = { 0 };
+  CImg<char> com(256*1024), line(256*1024);
+  char mac[256] = { 0 }, debug_info[32] = { 0 };
   unsigned int pos[256] = { 0 }, line_number = 1;
-  *mac = *com = *line = 0;
   bool is_last_slash = false, _is_last_slash = false, is_newline = false;
   int ind = -1, l_debug_info = 0;
   char sep = 0;
@@ -2058,7 +2055,8 @@ gmic& gmic::add_commands(const char *const data_commands,
 
     // Read new line.
     char *_line = line;
-    while (*data!='\n' && *data && _line<line+sizeof(line)) *(_line++) = *(data++); *_line = 0;
+    const char *const line_end = line.end();
+    while (*data!='\n' && *data && _line<line_end) *(_line++) = *(data++); *_line = 0;
     if (*data=='\n') { is_newline = true; ++data; } else is_newline = false; // Skip next '\n'.
 
     // Replace non-usual characters by spaces.
@@ -2067,7 +2065,7 @@ gmic& gmic::add_commands(const char *const data_commands,
         if ((_line=std::strchr(_line,'#')) && *(_line-1)==' ') { *--_line = 0; break; }
       } while (_line++);
     // Remove useless trailing spaces.
-    char *linee = line + std::strlen(line) - 1;
+    char *linee = line.data() + std::strlen(line) - 1;
     while (*linee==' ' && linee>=line) --linee; *(linee+1) = 0;
     char *lines = line; while (*lines==' ') ++lines; // Remove useless leading spaces.
     // Check if last character is a '\'...
@@ -2078,11 +2076,10 @@ gmic& gmic::add_commands(const char *const data_commands,
     *mac = *com = 0;
 
     if (!is_last_slash && std::strchr(lines,':') && // Check for a command definition.
-        std::sscanf(lines,"%255[a-zA-Z0-9_] %c %262143[^\n]",mac.data(),&sep,com)>=2 &&
+        std::sscanf(lines,"%255[a-zA-Z0-9_] %c %262143[^\n]",mac,&sep,com.data())>=2 &&
         (*lines<'0' || *lines>'9') && sep==':') {
       ind = gmic_hashcode(mac,false);
-      commands_names[ind].insert(mac,pos[ind]);
-
+      CImg<char>::string(mac).move_to(commands_names[ind],pos[ind]);
       CImg<char> body = CImg<char>::string(com);
       CImg<char>::vector((char)gmic_command_has_arguments(body)).
         move_to(commands_has_arguments[ind],pos[ind]);
