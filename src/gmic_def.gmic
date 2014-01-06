@@ -1287,7 +1287,7 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
     -a z -nm $nm,1
   -endl -done -v +
 
-#@gmic display_parametric : _width>32,_height>32,_outline_opacity,_vertex_radius>=0,_is_antialiased={ 0 | 1 },_is_decorated={ 0 | 1 },_xlabel,_ylabel
+#@gmic display_parametric : _width>0,_height>0,_outline_opacity,_vertex_radius>=0,_is_antialiased={ 0 | 1 },_is_decorated={ 0 | 1 },_xlabel,_ylabel
 #@gmic : Render 2d or 3d parametric curve or point clouds from selected image data.
 #@gmic : Curve points are defined as pixels of a 2 or 3-channel image.
 #@gmic : If the point image contains more than 3 channels, additional channels define the (R,G,B) color for each vertex.
@@ -1296,7 +1296,7 @@ _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0
 #@gmic : Default values: 'width=512', 'height=width', 'outline_opacity=3', 'vertex_radius=0', 'is_antialiased=1', 'is_decorated=1', 'xlabel="x-axis"' and 'ylabel="y-axis"'.
 #@gmic : $ 1024,1,1,2,'t=x/40;if(c==0,sin(t),cos(t))*(exp(cos(t))-2*cos(4*t)-sin(t/12)^5)' -display_parametric 512,512
 #@gmic : $ 1000,1,1,2,?(-100,100) -quantize 4,1 -noise 12 -channels 0,2 --normalize 0,255 -append c -display_parametric 512,512,0.1,8
-display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=3},${5=1},${6=1},"${7=x-axis}","${8=y-axis}"
+display_parametric : -check "${1=512}>0 && ${2=$1}>0 && ${4=0}>=0" -skip ${3=3},${5=1},${6=1},"${7=x-axis}","${8=y-axis}"
   -v - s0="no " s1="" o0="" o1="colored "
   -v + -e[^-1] "Render $1x$2 parametric graph plot from data of image$?, with "${o{$3>1}}"outline opacity "{if($3>1,$3-1,$3)}\
                ", vertex radius $4, "${s{$5!=0}}"antialiasing and "${s{$6!=0}}"decoration." -v -
@@ -1317,7 +1317,7 @@ display_parametric : -check "${1=512}>32 && ${2=$1}>32 && ${4=0}>=0" -skip ${3=3
     -i[-2] (1,0;1,{$N-1}) -r[-2] 2,$N,1,1,3 -round[-2] 1,$N,1,1,1 # Primitives, colors and opacities.
     -y -a y -c3d -n3d -*3d 1,-1,1
 
-    {if($6,$1-32,$1)},{if($6,$2-32,$2)},1,{if($is_grayscale,1,3)},255
+    {if($6,max(1,$1-32),$1)},{if($6,max(1,$2-32),$2)},1,{if($is_grayscale,1,3)},255
     -*3d[0] {0.96*min(w,h)}
     -if $6 L={0.1*max($1,$2)} -grid[1] $L,$L,0,0,0.25,0xCCCCCCCC,0 -endif
 
@@ -20779,7 +20779,7 @@ _gimp_random3d3 : -sphere3d $1,2
 _gimp_random3d4 : ($1) -/[-1] 3 -torus3d $1,@-1 -rm[-2]
 
 #@gimp Ball : gimp_ball, gimp_ball_preview(0)
-#@gimp : Radius = int(128,0,1024)
+#@gimp : Radius = int(128,1,1024)
 #@gimp : Specular light = float(0.8,0,8)
 #@gimp : Specular size = float(1,0,8)
 #@gimp : Shadow = float(1.5,0,4)
@@ -21056,17 +21056,20 @@ gimp_radial_gradient :
     100%,100% -=[-1] 1,$12%,$13% -distance[-1] 1 -_fade $10,$11
   -mv[-1] 0 -done
 
-#@gimp Heart : gimp_heart, gimp_heart
+#@gimp Heart : gimp_heart, gimp_heart_preview
+#@gimp : Size = float(75,0,100)
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : Color = color(255,0,0,255)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/13</i>.</small>")
 gimp_heart :
-  -if {@#>0} wh=@{-max_wh} w={min(512,arg(1,$wh))} h={min(512,arg(2,$wh))} -else w=512 h=512 -endif
-  -heart $w,$h -to_rgba[-1]
-  -replace_color[-1] 0,0,1,1,1,255,$2,$3,$4,$5
-  -replace_color[-1] 0,0,0,0,0,255,$2,$3,$4,0
-  -frame[-1] {2.5*$1}%,{2.5*$1}%,$2,$3,$4,0 -b[-1] $1%
-  -blend[-2,-1] alpha
+  -if {@#>0} wh=@{-max_wh} w={$1%*min(512,arg(1,$wh))} h={$1%*min(512,arg(2,$wh))} -else w={$1%*512} h={$1%*512} -endif
+  -heart {max(1,$w)},{max(1,$h)} -to_rgba[-1]
+  -replace_color[-1] 0,0,1,1,1,255,$3,$4,$5,$6
+  -replace_color[-1] 0,0,0,0,0,255,$3,$4,$5,0
+  -b[-1] $2% -mv[-1] 0
+
+gimp_heart_preview :
+  -gimp_heart $* -blend[0,-1] alpha,1,1
 
 #@gimp Lissajous : gimp_lissajous, gimp_lissajous(1)
 #@gimp : Resolution = int(4096,2,8192)
