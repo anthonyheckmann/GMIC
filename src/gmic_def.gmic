@@ -22054,6 +22054,7 @@ gmicol_logo_en :
 
 #@gmicol clone("Dices")
 #@gmicol clone("Grid")
+#@gmicol clone("Puzzle")
 #@gmicol clone("Taquin")
 #@gmicol clone("Tileable rotation")
 #@gmicol clone("Tiled rotation")
