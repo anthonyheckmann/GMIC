@@ -9058,13 +9058,13 @@ map_sprites : -check "isint($1) && $1>0 && isint(${2=0}) && $2>=0 && $2<=2"
   (0,{$w-1};0,{$w-1}^0,0;{$h-1},{$h-1}) -r[-1] $w,$h,1,2,3 -round[-1]
   -repeat {@#-2} --r[-1] [$>],[$>],1,2,0,2 -r[$>] 100%,100%,1,2,0 -+[$>,-1] --warp[-2] [$>],0,0 -rv[$>,-1] -rm[-1] -done -rm[-2,-1] -v +
 
-#@gmic puzzle : _width>0,_height>0,_M>=1,_N>=1,_flexibility,_center_noise,_height_noise,_resolution>=1
+#@gmic puzzle : _width>0,_height>0,_M>=1,_N>=1,_curvature,_center_noise,_height_noise,_resolution>=1
 #@gmic : Input puzzle binary mask with specified size and geometry.
-#@gmic : Default values: 'width=height=512', 'M=N=5', 'flexibility=0.5', 'centering=0.5', 'height=0.5' and 'resolution=64'.
+#@gmic : Default values: 'width=height=512', 'M=N=5', 'curvature=0.5', 'centering=0.5', 'height=0.5' and 'resolution=64'.
 #@gmic : $ -puzzle ,
 puzzle : -check "isint(${1=512}) && $1>0 && isint(${2=$1}) && $2>0 && isint(${3=5}) && $3>0 && isint(${4=$3}) && $4>0 && isint(${8=64}) && $8>0"
          -skip ${5=0.5},${6=0.5},${7=0.5}
-  -e[^-1] "Draw $3x$4 puzzle pattern on image$?, with flexibility $5, centering $6, height $7 and resolution $8."
+  -e[^-1] "Draw $3x$4 puzzle pattern on image$?, with curvature $5, centering $6, height $7 and resolution $8."
   -v - -l[]
     -if {$4>=2} -_puzzle[] $3,{$4-1},${5-8} -+3d[-1] 0,1 -endif
     -if {$3>=2} -_puzzle[] $4,{$3-1},${5-8} -r3d[-1] 0,0,1,90 -+3d[-1] 1,$4 -endif
@@ -9077,15 +9077,19 @@ _puzzle :
   -repeat $2
     ({'CImg3d'},$R,{$R-1})
     -repeat $1
-      base={$3*?(-0.05,0.05)}
+      sign={if(?<=0.5,-1,1)}
       center={$4*?(-0.25,0.25)}
-      height={(1+$5*?(-0.5,0.5))*if(?<=0.5,-1,1)}
-      ($>,$base;\
-       {0.4+$center+$>},$base;\
-       {0.35+$center+$>},{$base+0.1*$height};\
-       {0.5+$center+$>},{$base+0.2*$height};\
-       {0.65+$center+$>},{$base+0.1*$height};\
-       {0.6+$center+$>},$base)
+      height={(1+$5*?(-0.5,0.5))*$sign}
+      ($>,0;\
+       {0.2+$center+$>},{-$sign*$3*0.1};\
+       {0.4+$center+$>},0;\
+       {0.35+$center+$>},{0.1*$height};\
+       {0.45+$center+$>},{0.2*$height};\
+       {0.55+$center+$>},{0.2*$height};\
+       {0.65+$center+$>},{0.1*$height};\
+       {0.6+$center+$>},0;\
+       {0.8+$center+$>},{-$sign*$3*0.1})
+
     -done
     ($1,0) -a[-{$1+1}--1] y -r[-1] 2,$R,1,1,5 -z[-1] 0,2
     (2,0,1;2,{$R-2},{$R-1}) -r[-1] 3,{$R-1},1,1,3 -round[-1]
@@ -15451,7 +15455,7 @@ gimp_imagegrid :
 #@gimp : note = note("<small><b>Pattern parameters:</b></small>")
 #@gimp : X-tiles = int(5,2,32)
 #@gimp : Y-tiles = int(5,2,32)
-#@gimp : Flexibility = float(0,0,3)
+#@gimp : Curvature = float(0.5,0,1.5)
 #@gimp : Centering = float(0,0,1)
 #@gimp : Height = float(0,0,2)
 #@gimp : sep = separator()
@@ -15479,7 +15483,10 @@ gimp_puzzle :
     -if {$10!=100||$11||$12||$13||$14}
 
       # Decompose puzzle into set of pieces.
-      --[-1] 1 -label_fg[-1] 0 -dilate[-1] 3 --[-1] 1
+      ---[-1] 1 -label_fg[-1] 0
+      --area_fg[-1] 0,0 -lt[-1] 50% -or[-3] [-1] -eq[-1] 0 -*[-2,-1]
+      -distance[-2] 0 -*[-2] -1 -watershed[-1] [-2] -rm[-2] -label[-1] 0,0
+
       -repeat {iM+1}
         --==[1] $>
         coords=@{-autocrop_coords[-1]\ 0}
