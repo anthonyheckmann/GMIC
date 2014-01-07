@@ -2565,7 +2565,7 @@ Resize selected images along the x-axis, preserving 2d ratio.
 
 \subsection{\emph{-resize2dy\index{-resize2dy}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{height[\%]$>$0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
+{\small \texttt{height[\%]$>$=0,\_interpolation,\_boundary,\_ax,\_ay,\_az,\_ac}}\\~\\
 Resize selected images along the y-axis, preserving 2d ratio.
 ~\\(\emph{eq. to} {\small \texttt{'-r2dy'}}).
 ~\\'interpolation' can be \{ -1=none (memory content) ~$|$~ 0=none ~$|$~ 1=nearest ~$|$~ 2=average ~$|$~ 3=linear ~$|$~ 4=grid ~$|$~ 5=bicubic ~$|$~ 6=lanczos \}.
@@ -5282,9 +5282,9 @@ according to the luminosity of their pixel values.
 
 \subsection{\emph{-puzzle\index{-puzzle}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_width$>$0,\_height$>$0,\_M$>$=1,\_N$>$=1,\_flexibility,\_center\_noise,\_height\_noise,\_resolution$>$=1}}\\~\\
+{\small \texttt{\_width$>$0,\_height$>$0,\_M$>$=1,\_N$>$=1,\_curvature,\_center\_noise,\_height\_noise,\_resolution$>$=1}}\\~\\
 Input puzzle binary mask with specified size and geometry.
-~\\~\\\textbf{Default values}: {\small \texttt{'width=height=512', 'M=N=5', 'flexibility=0.5', 'centering=0.5', 'height=0.5'} and \texttt{'resolution=64'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'width=height=512', 'M=N=5', 'curvature=0.5', 'centering=0.5', 'height=0.5'} and \texttt{'resolution=64'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def512.jpg}\\
 {\footnotesize \textbf{Example 512~:} \texttt{-puzzle ,}}
 \end{center}

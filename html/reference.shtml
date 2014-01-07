@@ -2181,7 +2181,7 @@ width[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def228.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --resize2dx 100,2 -append x</div></div></td><td><tt>image.jpg --resize2dx 100,2 -append x</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-resize2dy</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-height[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac
+height[%]>=0,_interpolation,_boundary,_ax,_ay,_az,_ac
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Resize selected images along the y-axis, preserving 2d ratio.
@@ -4550,11 +4550,11 @@ _nb_scales>=1,_allow_rotation={ 0=none | 1=90 deg. | 2=180 deg. }
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def511.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16</div></div></td><td><tt>image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-puzzle</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_width>0,_height>0,_M>=1,_N>=1,_flexibility,_center_noise,_height_noise,_resolution>=1
+_width>0,_height>0,_M>=1,_N>=1,_curvature,_center_noise,_height_noise,_resolution>=1
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Input puzzle binary mask with specified size and geometry.
-<br/><br/><b>Default values</b>: 'width=height=512', 'M=N=5', 'flexibility=0.5', 'centering=0.5', 'height=0.5' and 'resolution=64'.
+<br/><br/><b>Default values</b>: 'width=height=512', 'M=N=5', 'curvature=0.5', 'centering=0.5', 'height=0.5' and 'resolution=64'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def512.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-puzzle ,</div></div></td><td><tt>-puzzle ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-quadratize_tiles</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">

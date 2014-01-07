@@ -2165,7 +2165,7 @@ _gmic_def()
 		return 0
 		;;
 		"-resize2dy" | "--resize2dy")
-		COMPREPLY=( $(compgen -W "height[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "height[%]>=0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-resize3dx" | "--resize3dx")
@@ -3133,7 +3133,7 @@ _gmic_def()
 		return 0
 		;;
 		"-puzzle" | "--puzzle")
-		COMPREPLY=( $(compgen -W "_width>0,_height>0,_M>=1,_N>=1,_flexibility,_center_noise,_height_noise,_resolution>=1 >") )
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_M>=1,_N>=1,_curvature,_center_noise,_height_noise,_resolution>=1 >") )
 		return 0
 		;;
 		"-quadratize_tiles" | "--quadratize_tiles")
@@ -3861,7 +3861,7 @@ _gmic_def()
 		return 0
 		;;
 		"-r2dy" | "--r2dy")
-		COMPREPLY=( $(compgen -W "height[%]>0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
+		COMPREPLY=( $(compgen -W "height[%]>=0,_interpolation,_boundary,_ax,_ay,_az,_ac >") )
 		return 0
 		;;
 		"-r3dx" | "--r3dx")
