@@ -585,7 +585,7 @@ Display current version number and exit.
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_command,\_camera\_index$>$=0,\_skip\_frames$>$=0,\_output\_filename}}\\~\\
 Apply specified command on live camera stream, and display it on display window [0].
-~\\~\\\textbf{Default values}: {\small \texttt{'command=""', 'camera\_index=0' (default camera),'skip\_frames=0'} and \texttt{'filename=""'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'command=""', 'camera\_index=0' (default camera), 'skip\_frames=0'} and \texttt{'filename=""'.}}
 
 
 \subsection{\emph{-apply\_files\index{-apply\_files}} }\vspace*{-0.5em}
@@ -608,8 +608,7 @@ Insert one or several frames from specified camera, with custom delay between fr
 
 \subsection{\emph{-command\index{-command}} (*)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\{ filename ~$|$~ http[s]://URL \},\_add\_debug\_info=\{ 0 ~$|$~ 1 \}}}~~~$|$\\
-\hspace*{2.2cm}{\small \texttt{"string"}}\\~\\
+{\small \texttt{\_add\_debug\_info=\{ 0 ~$|$~ 1 \},\{ filename ~$|$~ http[s]://URL ~$|$~ "string" \}}}\\~\\
 Import G'MIC custom commands from specified file, URL or string.
 ~\\(\emph{eq. to} {\small \texttt{'-m'}}).
 ~\\Imported commands are available directly after the '-command' invocation.
@@ -689,7 +688,7 @@ Render a channel-by-channel histogram.
 
 \subsection{\emph{-display\_parametric\index{-display\_parametric}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_width$>$32,\_height$>$32,\_outline\_opacity,\_vertex\_radius$>$=0,\_is\_antialiased=\{ 0 ~$|$~ 1 \},\_is\_decorated=\{ 0 ~$|$~ 1 \},\_xlabel,\_ylabel}}\\~\\
+{\small \texttt{\_width$>$0,\_height$>$0,\_outline\_opacity,\_vertex\_radius$>$=0,\_is\_antialiased=\{ 0 ~$|$~ 1 \},\_is\_decorated=\{ 0 ~$|$~ 1 \},\_xlabel,\_ylabel}}\\~\\
 Render 2d or 3d parametric curve or point clouds from selected image data.
 ~\\Curve points are defined as pixels of a 2 or 3-channel image.
 ~\\If the point image contains more than 3 channels, additional channels define the (R,G,B) color for each vertex.
@@ -1792,7 +1791,8 @@ Compute the pointwise orientation of vector-valued pixels in selected images.
 \subsection{\emph{-otsu\index{-otsu}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_nb\_levels$>$0}}\\~\\
-Hard-threshold image using Otsu's method.
+Hard-threshold selected images using Otsu's method.
+~\\The computed thresholds are returned as a list of values in the status.
 ~\\~\\\textbf{Default value}: {\small \texttt{'nb\_levels=256'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def147.jpg}\\
 {\footnotesize \textbf{Example 147~:} \texttt{image.jpg -luminance --otsu ,}}
@@ -5280,13 +5280,22 @@ according to the luminosity of their pixel values.
 {\footnotesize \textbf{Example 511~:} \texttt{image.jpg -r2dy 48 -repeat 16 -ball \{8+2*\$$>$\},@\{-RGB\} -*[-1] \{(1+\$$>$)/16\} -done -map\_sprites 16}}
 \end{center}
 
+\subsection{\emph{-puzzle\index{-puzzle}} }\vspace*{-0.5em}
+~\\\textbf{Arguments: } 
+{\small \texttt{\_width$>$0,\_height$>$0,\_M$>$=1,\_N$>$=1,\_flexibility,\_center\_noise,\_height\_noise,\_resolution$>$=1}}\\~\\
+Input puzzle binary mask with specified size and geometry.
+~\\~\\\textbf{Default values}: {\small \texttt{'width=height=512', 'M=N=5', 'flexibility=0.5', 'centering=0.5', 'height=0.5'} and \texttt{'resolution=64'.}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def512.jpg}\\
+{\footnotesize \textbf{Example 512~:} \texttt{-puzzle ,}}
+\end{center}
+
 \subsection{\emph{-quadratize\_tiles\index{-quadratize\_tiles}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{M$>$0,\_N$>$0}}\\~\\
 Quadratize MxN tiles on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'N=M'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def512.jpg}\\
-{\footnotesize \textbf{Example 512~:} \texttt{image.jpg --quadratize\_tiles 16}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def513.jpg}\\
+{\footnotesize \textbf{Example 513~:} \texttt{image.jpg --quadratize\_tiles 16}}
 \end{center}
 
 \subsection{\emph{-rotate\_tiles\index{-rotate\_tiles}} }\vspace*{-0.5em}
@@ -5294,8 +5303,8 @@ Quadratize MxN tiles on selected images.
 {\small \texttt{angle,\_M$>$0,N$>$0}}\\~\\
 Apply MxN tiled-rotation effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'M=8'} and \texttt{'N=M'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def513.jpg}\\
-{\footnotesize \textbf{Example 513~:} \texttt{image.jpg -to\_rgba -rotate\_tiles 10,8 -drop\_shadow 10,10 -display\_rgba}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def514.jpg}\\
+{\footnotesize \textbf{Example 514~:} \texttt{image.jpg -to\_rgba -rotate\_tiles 10,8 -drop\_shadow 10,10 -display\_rgba}}
 \end{center}
 
 \subsection{\emph{-shift\_tiles\index{-shift\_tiles}} }\vspace*{-0.5em}
@@ -5303,8 +5312,8 @@ Apply MxN tiled-rotation effect on selected images.
 {\small \texttt{M$>$0,\_N$>$0,\_amplitude}}\\~\\
 Apply MxN tiled-shift effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'N=M'} and \texttt{'amplitude=20'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def514.jpg}\\
-{\footnotesize \textbf{Example 514~:} \texttt{image.jpg --shift\_tiles 8,8,10}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def515.jpg}\\
+{\footnotesize \textbf{Example 515~:} \texttt{image.jpg --shift\_tiles 8,8,10}}
 \end{center}
 
 \subsection{\emph{-taquin\index{-taquin}} }\vspace*{-0.5em}
@@ -5312,8 +5321,8 @@ Apply MxN tiled-shift effect on selected images.
 {\small \texttt{M$>$0,\_N$>$0}}\\~\\
 Create MxN taquin puzzle from selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'N=M'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def515.jpg}\\
-{\footnotesize \textbf{Example 515~:} \texttt{image.jpg --taquin 8}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def516.jpg}\\
+{\footnotesize \textbf{Example 516~:} \texttt{image.jpg --taquin 8}}
 \end{center}
 
 \subsection{\emph{-tunnel\index{-tunnel}} }\vspace*{-0.5em}
@@ -5321,8 +5330,8 @@ Create MxN taquin puzzle from selected images.
 {\small \texttt{\_level$>$=0,\_factor$>$0,\_cx,\_cy,\_opacity,\_angle}}\\~\\
 Apply tunnel effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'level=9', 'factor=80\%', 'cx=cy=0.5', 'opacity=1'} and \texttt{'angle=0'}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def516.jpg}\\
-{\footnotesize \textbf{Example 516~:} \texttt{image.jpg --tunnel 20}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def517.jpg}\\
+{\footnotesize \textbf{Example 517~:} \texttt{image.jpg --tunnel 20}}
 \end{center}
 \section{Artistic}
 
@@ -5333,8 +5342,8 @@ Apply tunnel effect on selected images.
 Apply box fitting effect on selected images, as displayed the web page:
 [http://www.complexification.net/gallery/machines/boxFittingImg/]
 ~\\~\\\textbf{Default values}: {\small \texttt{'min\_box\_size=1', 'max\_box\_size=0', 'initial\_density=0.1'} and \texttt{'nb\_tries=3'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def517.jpg}\\
-{\footnotesize \textbf{Example 517~:} \texttt{image.jpg --boxfitting ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def518.jpg}\\
+{\footnotesize \textbf{Example 518~:} \texttt{image.jpg --boxfitting ,}}
 \end{center}
 
 \subsection{\emph{-cartoon\index{-cartoon}} }\vspace*{-0.5em}
@@ -5342,8 +5351,8 @@ Apply box fitting effect on selected images, as displayed the web page:
 {\small \texttt{\_smoothness,\_sharpening,\_threshold$>$=0,\_thickness$>$=0,\_color$>$=0,quantization$>$0}}\\~\\
 Apply cartoon effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'smoothness=3', 'sharpening=150', 'threshold=20', 'thickness=0.25', 'color=1.5'} and \texttt{'quantization=8'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def518.jpg}\\
-{\footnotesize \textbf{Example 518~:} \texttt{image.jpg --cartoon 3,80,15}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def519.jpg}\\
+{\footnotesize \textbf{Example 519~:} \texttt{image.jpg --cartoon 3,80,15}}
 \end{center}
 
 \subsection{\emph{-circlism\index{-circlism}} }\vspace*{-0.5em}
@@ -5351,8 +5360,8 @@ Apply cartoon effect on selected images.
 {\small \texttt{\_radius\_min$>$0,\_radius\_max$>$0,\_smoothness[\%]$>$=0,\_radius\_linearity$>$=0,\_location\_linearity$>$=0,\_shape=\{0=squares ~$|$~ 1=diamonds ~$|$~ 2=circle \}}}\\~\\
 Apply circlism effect on selected images (effect inspired by Ben Heine).
 ~\\~\\\textbf{Default values}: {\small \texttt{'radius\_min=2', 'radius\_max=20', 'smoothness=1', 'radius\_linearity=0.4', 'location\_linearity=3'} and \texttt{'shape=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def519.jpg}\\
-{\footnotesize \textbf{Example 519~:} \texttt{image.jpg --circlism ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def520.jpg}\\
+{\footnotesize \textbf{Example 520~:} \texttt{image.jpg --circlism ,}}
 \end{center}
 
 \subsection{\emph{-color\_ellipses\index{-color\_ellipses}} }\vspace*{-0.5em}
@@ -5360,8 +5369,8 @@ Apply circlism effect on selected images (effect inspired by Ben Heine).
 {\small \texttt{\_count$>$0,\_radius$>$=0,\_opacity$>$=0}}\\~\\
 Add random color ellipses to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'count=400', 'radius=5'} and \texttt{'opacity=0.1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def520.jpg}\\
-{\footnotesize \textbf{Example 520~:} \texttt{image.jpg --color\_ellipses ,,0.15}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def521.jpg}\\
+{\footnotesize \textbf{Example 521~:} \texttt{image.jpg --color\_ellipses ,,0.15}}
 \end{center}
 
 \subsection{\emph{-cubism\index{-cubism}} }\vspace*{-0.5em}
@@ -5369,8 +5378,8 @@ Add random color ellipses to selected images.
 {\small \texttt{\_density$>$=0,0$<$=\_thickness$<$=50,\_max\_angle,\_opacity,\_smoothness$>$=0}}\\~\\
 Apply cubism effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'density=50', 'thickness=10', 'max\_angle=75', 'opacity=0.7'} and \texttt{'smoothness=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def521.jpg}\\
-{\footnotesize \textbf{Example 521~:} \texttt{image.jpg --cubism ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def522.jpg}\\
+{\footnotesize \textbf{Example 522~:} \texttt{image.jpg --cubism ,}}
 \end{center}
 
 \subsection{\emph{-draw\_whirl\index{-draw\_whirl}} }\vspace*{-0.5em}
@@ -5378,8 +5387,8 @@ Apply cubism effect on selected images.
 {\small \texttt{\_amplitude$>$=0}}\\~\\
 Apply whirl drawing effect on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'amplitude=100'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def522.jpg}\\
-{\footnotesize \textbf{Example 522~:} \texttt{image.jpg --draw\_whirl ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def523.jpg}\\
+{\footnotesize \textbf{Example 523~:} \texttt{image.jpg --draw\_whirl ,}}
 \end{center}
 
 \subsection{\emph{-drawing\index{-drawing}} }\vspace*{-0.5em}
@@ -5387,8 +5396,8 @@ Apply whirl drawing effect on selected images.
 {\small \texttt{\_amplitude$>$=0}}\\~\\
 Apply drawing effect on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'amplitude=200'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def523.jpg}\\
-{\footnotesize \textbf{Example 523~:} \texttt{image.jpg --drawing ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def524.jpg}\\
+{\footnotesize \textbf{Example 524~:} \texttt{image.jpg --drawing ,}}
 \end{center}
 
 \subsection{\emph{-drop\_shadow\index{-drop\_shadow}} }\vspace*{-0.5em}
@@ -5396,8 +5405,8 @@ Apply drawing effect on selected images.
 {\small \texttt{\_offset\_x[\%],\_offset\_y[\%],\_smoothness[\%]$>$=0,0$<$=\_curvature$<$=1,\_expand\_size=\{ 0 ~$|$~ 1 \}}}\\~\\
 Drop shadow behind selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'offset\_x=20', 'offset\_y=offset\_x', 'smoothness=5', 'curvature=0'} and \texttt{'expand\_size=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def524.jpg}\\
-{\footnotesize \textbf{Example 524~:} \texttt{image.jpg -drop\_shadow 10,20,5,0.5 -expand\_xy 20,0 -display\_rgba}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def525.jpg}\\
+{\footnotesize \textbf{Example 525~:} \texttt{image.jpg -drop\_shadow 10,20,5,0.5 -expand\_xy 20,0 -display\_rgba}}
 \end{center}
 
 \subsection{\emph{-ellipsionism\index{-ellipsionism}} }\vspace*{-0.5em}
@@ -5405,8 +5414,8 @@ Drop shadow behind selected images.
 {\small \texttt{\_R$>$0[\%],\_r$>$0[\%],\_smoothness$>$=0[\%],\_opacity,\_outline$>$0,\_density$>$0}}\\~\\
 Apply ellipsionism filter to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'R=10', 'r=3', 'smoothness=1\%', 'opacity=0.7', 'outlise=8'} and \texttt{'density=0.6'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def525.jpg}\\
-{\footnotesize \textbf{Example 525~:} \texttt{image.jpg --ellipsionism ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def526.jpg}\\
+{\footnotesize \textbf{Example 526~:} \texttt{image.jpg --ellipsionism ,}}
 \end{center}
 
 \subsection{\emph{-fire\_edges\index{-fire\_edges}} }\vspace*{-0.5em}
@@ -5414,8 +5423,8 @@ Apply ellipsionism filter to selected images.
 {\small \texttt{\_edges$>$=0,0$<$=\_attenuation$<$=1,\_smoothness$>$=0,\_threshold$>$=0,\_nb\_frames$>$0,\_starting\_frame$>$=0,frame\_skip$>$=0}}\\~\\
 Generate fire effect from edges of selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'edges=0.7', 'attenuation=0.25', 'smoothness=0.5', 'threshold=25', 'nb\_frames=1', 'starting\_frame=20'} and \texttt{'frame\_skip=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def526.jpg}\\
-{\footnotesize \textbf{Example 526~:} \texttt{image.jpg -fire\_edges ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def527.jpg}\\
+{\footnotesize \textbf{Example 527~:} \texttt{image.jpg -fire\_edges ,}}
 \end{center}
 
 \subsection{\emph{-glow\index{-glow}} }\vspace*{-0.5em}
@@ -5423,8 +5432,8 @@ Generate fire effect from edges of selected images.
 {\small \texttt{\_amplitude$>$=0}}\\~\\
 Add soft glow on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'amplitude=1\%'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def527.jpg}\\
-{\footnotesize \textbf{Example 527~:} \texttt{image.jpg --glow ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def528.jpg}\\
+{\footnotesize \textbf{Example 528~:} \texttt{image.jpg --glow ,}}
 \end{center}
 
 \subsection{\emph{-halftone\index{-halftone}} }\vspace*{-0.5em}
@@ -5432,8 +5441,8 @@ Add soft glow on selected images.
 {\small \texttt{nb\_levels$>$=2,\_size\_dark$>$=2,\_size\_bright$>$=2,\_shape=\{ 0=square ~$|$~ 1=diamond ~$|$~ 2=circle ~$|$~ 3=inv-square ~$|$~ 4=inv-diamond ~$|$~ 5=inv-circle \},\_smoothness[\%]$>$=0}}\\~\\
 Apply halftone dithering to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_levels=5', 'size\_dark=8', 'size\_bright=8', 'shape=5'} and \texttt{'smoothnesss=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def528.jpg}\\
-{\footnotesize \textbf{Example 528~:} \texttt{image.jpg --halftone ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def529.jpg}\\
+{\footnotesize \textbf{Example 529~:} \texttt{image.jpg --halftone ,}}
 \end{center}
 
 \subsection{\emph{-hardsketchbw\index{-hardsketchbw}} }\vspace*{-0.5em}
@@ -5441,8 +5450,8 @@ Apply halftone dithering to selected images.
 {\small \texttt{\_amplitude$>$=0,\_density$>$=0,\_opacity,0$<$=\_edge\_threshold$<$=100,\_is\_fast=\{ 0 ~$|$~ 1 \}}}\\~\\
 Apply hard B\&W sketch effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=1000', 'sampling=3', 'opacity=0.1', 'edge\_threshold=20'} and \texttt{'is\_fast=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def529.jpg}\\
-{\footnotesize \textbf{Example 529~:} \texttt{image.jpg --hardsketchbw 200,70,0.1,10 -median[-1] 2 --local -reverse -blur[-1] 3 -blend overlay -endlocal}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def530.jpg}\\
+{\footnotesize \textbf{Example 530~:} \texttt{image.jpg --hardsketchbw 200,70,0.1,10 -median[-1] 2 --local -reverse -blur[-1] 3 -blend overlay -endlocal}}
 \end{center}
 
 \subsection{\emph{-hearts\index{-hearts}} }\vspace*{-0.5em}
@@ -5450,8 +5459,8 @@ Apply hard B\&W sketch effect on selected images.
 {\small \texttt{\_density$>$=0}}\\~\\
 Apply heart effect on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'density=10'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def530.jpg}\\
-{\footnotesize \textbf{Example 530~:} \texttt{image.jpg --hearts ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def531.jpg}\\
+{\footnotesize \textbf{Example 531~:} \texttt{image.jpg --hearts ,}}
 \end{center}
 
 \subsection{\emph{-houghsketchbw\index{-houghsketchbw}} }\vspace*{-0.5em}
@@ -5459,8 +5468,8 @@ Apply heart effect on selected images.
 {\small \texttt{\_density$>$=0,\_radius$>$0,0$<$=\_threshold$<$=100,0$<$=\_opacity$<$=1,\_votesize[\%]$>$0}}\\~\\
 Apply hough B\&W sketch effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'density=8', 'radius=5', 'threshold=80', 'opacity=0.1'} and \texttt{'votesize=100\%'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def531.jpg}\\
-{\footnotesize \textbf{Example 531~:} \texttt{image.jpg --houghsketchbw ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def532.jpg}\\
+{\footnotesize \textbf{Example 532~:} \texttt{image.jpg --houghsketchbw ,}}
 \end{center}
 
 \subsection{\emph{-lightrays\index{-lightrays}} }\vspace*{-0.5em}
@@ -5468,8 +5477,8 @@ Apply hough B\&W sketch effect on selected images.
 {\small \texttt{100$<$=\_density$<$=0,\_cx,\_cy,\_ray\_length$>$=0,\_ray\_attenuation$>$=0}}\\~\\
 Generate ray lights from the edges of selected images.
 ~\\Defaults values : 'density=50\%', 'cx=0.5', 'cy=0.5', 'ray\_length=0.9' and 'ray\_attenuation=0.5'.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def532.jpg}\\
-{\footnotesize \textbf{Example 532~:} \texttt{image.jpg --lightrays , -+ -c 0,255}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def533.jpg}\\
+{\footnotesize \textbf{Example 533~:} \texttt{image.jpg --lightrays , -+ -c 0,255}}
 \end{center}
 
 \subsection{\emph{-light\_relief\index{-light\_relief}} }\vspace*{-0.5em}
@@ -5478,8 +5487,8 @@ Generate ray lights from the edges of selected images.
 Apply relief light to selected images.
 ~\\~\\\textbf{Default values(s)}: {\small \texttt{'ambient\_light=0.3', 'specular\_lightness=0.5', 'specular\_size=0.2', 'darkness=0', 'xl=0.2', 'yl=zl=0.5',}}
 ~\\'zscale=1', 'opacity=1' and 'opacity\_bumpmap=0'.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def533.jpg}\\
-{\footnotesize \textbf{Example 533~:} \texttt{image.jpg --blur 2 -light\_relief[-1] 0.3,4,0.1,0}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def534.jpg}\\
+{\footnotesize \textbf{Example 534~:} \texttt{image.jpg --blur 2 -light\_relief[-1] 0.3,4,0.1,0}}
 \end{center}
 
 \subsection{\emph{-mosaic\index{-mosaic}} }\vspace*{-0.5em}
@@ -5487,14 +5496,14 @@ Apply relief light to selected images.
 {\small \texttt{\_density$>$=0,\_edges=\{ 0 ~$|$~ 1 \}}}\\~\\
 Create random mosaic from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'density=0.8'} and \texttt{'edges=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def534.jpg}\\
-{\footnotesize \textbf{Example 534~:} \texttt{image.jpg --mosaic ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def535.jpg}\\
+{\footnotesize \textbf{Example 535~:} \texttt{image.jpg --mosaic ,}}
 \end{center}
 
 \subsection{\emph{-old\_photo\index{-old\_photo}} }\vspace*{-0.5em}
 Apply old photo effect on selected images.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def535.jpg}\\
-{\footnotesize \textbf{Example 535~:} \texttt{image.jpg --old\_photo}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def536.jpg}\\
+{\footnotesize \textbf{Example 536~:} \texttt{image.jpg --old\_photo}}
 \end{center}
 
 \subsection{\emph{-pencilbw\index{-pencilbw}} }\vspace*{-0.5em}
@@ -5502,8 +5511,8 @@ Apply old photo effect on selected images.
 {\small \texttt{\_size$>$=0,\_amplitude$>$=0}}\\~\\
 Apply B\&W pencil effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'size=0.3'} and \texttt{'amplitude=60'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def536.jpg}\\
-{\footnotesize \textbf{Example 536~:} \texttt{image.jpg --pencilbw ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def537.jpg}\\
+{\footnotesize \textbf{Example 537~:} \texttt{image.jpg --pencilbw ,}}
 \end{center}
 
 \subsection{\emph{-polaroid\index{-polaroid}} }\vspace*{-0.5em}
@@ -5511,8 +5520,8 @@ Apply B\&W pencil effect on selected images.
 {\small \texttt{\_size1$>$=0,\_size2$>$=0}}\\~\\
 Create polaroid effect in selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'size1=10'} and \texttt{'size2=20'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def537.jpg}\\
-{\footnotesize \textbf{Example 537~:} \texttt{image.jpg -to\_rgba -polaroid 5,30 -rotate 20 -drop\_shadow , -display\_rgba}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def538.jpg}\\
+{\footnotesize \textbf{Example 538~:} \texttt{image.jpg -to\_rgba -polaroid 5,30 -rotate 20 -drop\_shadow , -display\_rgba}}
 \end{center}
 
 \subsection{\emph{-polygonize\index{-polygonize}} }\vspace*{-0.5em}
@@ -5520,8 +5529,8 @@ Create polaroid effect in selected images.
 {\small \texttt{\_warp\_amplitude$>$=0,\_smoothness[\%]$>$=0,\_min\_area[\%]$>$=0,\_resolution\_x[\%]$>$0,\_resolution\_y[\%]$>$0}}\\~\\
 Apply polygon effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'warp\_amplitude=300', 'smoothness=2\%', 'min\_area=0.1\%', 'resolution\_x=resolution\_y=10\%'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def538.jpg}\\
-{\footnotesize \textbf{Example 538~:} \texttt{image.jpg --polygonize ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def539.jpg}\\
+{\footnotesize \textbf{Example 539~:} \texttt{image.jpg --polygonize ,}}
 \end{center}
 
 \subsection{\emph{-poster\_edges\index{-poster\_edges}} }\vspace*{-0.5em}
@@ -5529,8 +5538,8 @@ Apply polygon effect on selected images.
 {\small \texttt{0$<$=\_edge\_threshold$<$=100,0$<$=\_edge\_shade$<$=100,\_edge\_thickness$>$=0,\_edge\_antialiasing$>$=0,0$<$=\_posterization\_level$<$=15,\_posterization\_antialiasing$>$=0}}\\~\\
 Apply poster edges effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'edge\_threshold=40', 'edge\_shade=5', 'edge\_thickness=0.5', 'edge\_antialiasing=10', 'posterization\_level=12'} and \texttt{'posterization\_antialiasing=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def539.jpg}\\
-{\footnotesize \textbf{Example 539~:} \texttt{image.jpg --poster\_edges ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def540.jpg}\\
+{\footnotesize \textbf{Example 540~:} \texttt{image.jpg --poster\_edges ,}}
 \end{center}
 
 \subsection{\emph{-poster\_hope\index{-poster\_hope}} }\vspace*{-0.5em}
@@ -5538,8 +5547,8 @@ Apply poster edges effect on selected images.
 {\small \texttt{\_smoothness$>$=0}}\\~\\
 Apply Hope stencil poster effect on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'smoothness=3'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def540.jpg}\\
-{\footnotesize \textbf{Example 540~:} \texttt{image.jpg --poster\_hope ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def541.jpg}\\
+{\footnotesize \textbf{Example 541~:} \texttt{image.jpg --poster\_hope ,}}
 \end{center}
 
 \subsection{\emph{-rodilius\index{-rodilius}} }\vspace*{-0.5em}
@@ -5547,8 +5556,8 @@ Apply Hope stencil poster effect on selected images.
 {\small \texttt{0$<$=\_amplitude$<$=100,\_0$<$=thickness$<$=100,\_sharpness$>$=0,\_nb\_orientations$>$0,\_offset,\_color\_mode=\{ 0=darker ~$|$~ 1=brighter \}}}\\~\\
 Apply rodilius (fractalius-like) filter on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=10', 'thickness=10', 'sharpness=400', 'nb\_orientations=7', 'offset=0'} and \texttt{'color\_mode=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def541.jpg}\\
-{\footnotesize \textbf{Example 541~:} \texttt{image.jpg --rodilius 12,10,300,10 -normalize\_local[-1] 10,6}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def542.jpg}\\
+{\footnotesize \textbf{Example 542~:} \texttt{image.jpg --rodilius 12,10,300,10 -normalize\_local[-1] 10,6}}
 \end{center}
 
 \subsection{\emph{-stained\_glass\index{-stained\_glass}} }\vspace*{-0.5em}
@@ -5556,16 +5565,16 @@ Apply rodilius (fractalius-like) filter on selected images.
 {\small \texttt{\_edges[\%]$>$=0, shading$>$=0, is\_thin\_separators=\{ 0 ~$|$~ 1 \}}}\\~\\
 Generate stained glass from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'edges=40\%', 'shading=0.2'} and \texttt{'is\_precise=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def542.jpg}\\
-{\footnotesize \textbf{Example 542~:} \texttt{image.jpg --stained\_glass ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def543.jpg}\\
+{\footnotesize \textbf{Example 543~:} \texttt{image.jpg --stained\_glass ,}}
 \end{center}
 
 \subsection{\emph{-star\index{-star}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_width$>$0,\_height$>$0}}\\~\\
 Input star binary mask with specified size.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def543.jpg}\\
-{\footnotesize \textbf{Example 543~:} \texttt{-star ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def544.jpg}\\
+{\footnotesize \textbf{Example 544~:} \texttt{-star ,}}
 \end{center}
 
 \subsection{\emph{-stars\index{-stars}} }\vspace*{-0.5em}
@@ -5573,8 +5582,8 @@ Input star binary mask with specified size.
 {\small \texttt{\_density[\%]$>$=0,\_depth$>$=0,\_size$>$0,\_nb\_branches$>$=1,0$<$=\_thickness$<$=1,\_smoothness[\%]$>$=0,\_R,\_G,\_B,\_opacity}}\\~\\
 Add random stars to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'density=10\%', 'depth=1', 'size=32', 'nb\_branches=5', 'thickness=0.38', 'smoothness=0.5', 'R=G=B=200'} and \texttt{'opacity=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def544.jpg}\\
-{\footnotesize \textbf{Example 544~:} \texttt{image.jpg -stars ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def545.jpg}\\
+{\footnotesize \textbf{Example 545~:} \texttt{image.jpg -stars ,}}
 \end{center}
 
 \subsection{\emph{-sketchbw\index{-sketchbw}} }\vspace*{-0.5em}
@@ -5584,8 +5593,8 @@ Add random stars to selected images.
 ~\\Apply sketch effect to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_orients=2', 'start\_angle=45', 'angle\_range=180', 'length=30', 'threshold=1', 'opacity=0.03',}}
 ~\\'bgfactor=0', 'density=0.6', 'sharpness=0.1', 'anisotropy=0.6', 'smoothness=0.25', 'coherence=1', 'is\_boost=0' and 'is\_curved=1'.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def545.jpg}\\
-{\footnotesize \textbf{Example 545~:} \texttt{image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endlocal}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def546.jpg}\\
+{\footnotesize \textbf{Example 546~:} \texttt{image.jpg --sketchbw 1 --local -reverse -blur[-1] 3 -blend overlay -endlocal}}
 \end{center}
 
 \subsection{\emph{-sponge\index{-sponge}} }\vspace*{-0.5em}
@@ -5593,8 +5602,8 @@ Add random stars to selected images.
 {\small \texttt{\_size$>$0}}\\~\\
 Apply sponge effect on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'size=13'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def546.jpg}\\
-{\footnotesize \textbf{Example 546~:} \texttt{image.jpg --sponge ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def547.jpg}\\
+{\footnotesize \textbf{Example 547~:} \texttt{image.jpg --sponge ,}}
 \end{center}
 
 \subsection{\emph{-stencil\index{-stencil}} }\vspace*{-0.5em}
@@ -5602,8 +5611,8 @@ Apply sponge effect on selected images.
 {\small \texttt{\_radius[\%]$>$=0,\_smoothness$>$=0,\_iterations$>$=0}}\\~\\
 Apply stencil filter on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'radius=3', 'smoothness=1'} and \texttt{'iterations=8'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def547.jpg}\\
-{\footnotesize \textbf{Example 547~:} \texttt{image.jpg --stencil 1,10,3}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def548.jpg}\\
+{\footnotesize \textbf{Example 548~:} \texttt{image.jpg --stencil 1,10,3}}
 \end{center}
 
 \subsection{\emph{-stencilbw\index{-stencilbw}} }\vspace*{-0.5em}
@@ -5611,8 +5620,8 @@ Apply stencil filter on selected images.
 {\small \texttt{\_edges$>$=0,\_smoothness$>$=0}}\\~\\
 Apply B\&W stencil effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'edges=15'} and \texttt{'smoothness=10'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def548.jpg}\\
-{\footnotesize \textbf{Example 548~:} \texttt{image.jpg --stencilbw 40,4}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def549.jpg}\\
+{\footnotesize \textbf{Example 549~:} \texttt{image.jpg --stencilbw 40,4}}
 \end{center}
 
 \subsection{\emph{-tetris\index{-tetris}} }\vspace*{-0.5em}
@@ -5620,8 +5629,8 @@ Apply B\&W stencil effect on selected images.
 {\small \texttt{\_scale$>$0}}\\~\\
 Apply tetris effect on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'scale=10'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def549.jpg}\\
-{\footnotesize \textbf{Example 549~:} \texttt{image.jpg --tetris 10}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def550.jpg}\\
+{\footnotesize \textbf{Example 550~:} \texttt{image.jpg --tetris 10}}
 \end{center}
 
 \subsection{\emph{-warhol\index{-warhol}} }\vspace*{-0.5em}
@@ -5629,8 +5638,8 @@ Apply tetris effect on selected images.
 {\small \texttt{\_M$>$0,\_N$>$0,\_smoothness$>$=0,\_color$>$=0}}\\~\\
 Create MxN Andy Warhol-like artwork from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'M=3', 'N=M', 'smoothness=2'} and \texttt{'color=20'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def550.jpg}\\
-{\footnotesize \textbf{Example 550~:} \texttt{image.jpg --warhol 5,3,3,40}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def551.jpg}\\
+{\footnotesize \textbf{Example 551~:} \texttt{image.jpg --warhol 5,3,3,40}}
 \end{center}
 
 \subsection{\emph{-weave\index{-weave}} }\vspace*{-0.5em}
@@ -5639,8 +5648,8 @@ Create MxN Andy Warhol-like artwork from selected images.
 Apply weave effect to the selected images.
 ~\\'angle' can be \{ 0=0 deg. ~$|$~ 1=22.5 deg. ~$|$~ 2=45 deg. ~$|$~ 3=67.5 deg. \}.
 ~\\~\\\textbf{Default values}: {\small \texttt{'density=6', 'thickness=65', 'shadow=40', 'shading=0.5', 'fibers\_amplitude=0', 'fibers\_smoothness=0', 'angle=0'} and \texttt{'curvature\_x=curvature\_y=0'}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def551.jpg}\\
-{\footnotesize \textbf{Example 551~:} \texttt{image.jpg --weave ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def552.jpg}\\
+{\footnotesize \textbf{Example 552~:} \texttt{image.jpg --weave ,}}
 \end{center}
 
 \subsection{\emph{-whirls\index{-whirls}} }\vspace*{-0.5em}
@@ -5648,8 +5657,8 @@ Apply weave effect to the selected images.
 {\small \texttt{\_texture$>$=0,\_smoothness$>$=0,\_darkness$>$=0,\_lightness$>$=0}}\\~\\
 Add random whirl texture to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'texture=3', 'smoothness=6', 'darkness=0.5'} and \texttt{'lightness=1.8'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def552.jpg}\\
-{\footnotesize \textbf{Example 552~:} \texttt{image.jpg --whirls ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def553.jpg}\\
+{\footnotesize \textbf{Example 553~:} \texttt{image.jpg --whirls ,}}
 \end{center}
 \section{Warpings}
 
@@ -5659,8 +5668,8 @@ Add random whirl texture to selected images.
 {\small \texttt{\_cx,\_cy,\_n$>$0,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \}}}\\~\\
 Apply euclidean to polar transform on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'cx=cy=0.5', 'n=1'} and \texttt{'boundary=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def553.jpg}\\
-{\footnotesize \textbf{Example 553~:} \texttt{image.jpg --euclidean2polar ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def554.jpg}\\
+{\footnotesize \textbf{Example 554~:} \texttt{image.jpg --euclidean2polar ,}}
 \end{center}
 
 \subsection{\emph{-deform\index{-deform}} }\vspace*{-0.5em}
@@ -5668,8 +5677,8 @@ Apply euclidean to polar transform on selected images.
 {\small \texttt{\_amplitude$>$=0}}\\~\\
 Apply random smooth deformation on selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'amplitude=10'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def554.jpg}\\
-{\footnotesize \textbf{Example 554~:} \texttt{image.jpg --deform[0] 10 --deform[0] 20}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def555.jpg}\\
+{\footnotesize \textbf{Example 555~:} \texttt{image.jpg --deform[0] 10 --deform[0] 20}}
 \end{center}
 
 \subsection{\emph{-fisheye\index{-fisheye}} }\vspace*{-0.5em}
@@ -5677,8 +5686,8 @@ Apply random smooth deformation on selected images.
 {\small \texttt{\_x,\_y,0$<$=\_radius$<$=100,\_amplitude$>$=0}}\\~\\
 Apply fish-eye deformation on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'x=y=50', 'radius=50'} and \texttt{'amplitude=1.2'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def555.jpg}\\
-{\footnotesize \textbf{Example 555~:} \texttt{image.jpg --fisheye ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def556.jpg}\\
+{\footnotesize \textbf{Example 556~:} \texttt{image.jpg --fisheye ,}}
 \end{center}
 
 \subsection{\emph{-flower\index{-flower}} }\vspace*{-0.5em}
@@ -5686,8 +5695,8 @@ Apply fish-eye deformation on selected images.
 {\small \texttt{\_amplitude,\_frequency,\_offset\_r[\%],\_angle,\_cx,\_cy,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \}}}\\~\\
 Apply flower deformation on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=30', 'frequency=6', 'offset\_r=0', 'angle=0', 'cx=cy=0.5'} and \texttt{'boundary=2'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def556.jpg}\\
-{\footnotesize \textbf{Example 556~:} \texttt{image.jpg -flower ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def557.jpg}\\
+{\footnotesize \textbf{Example 557~:} \texttt{image.jpg -flower ,}}
 \end{center}
 
 \subsection{\emph{-kaleidoscope\index{-kaleidoscope}} }\vspace*{-0.5em}
@@ -5695,8 +5704,8 @@ Apply flower deformation on selected images.
 {\small \texttt{\_cx,\_cy,\_radius,\_angle,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \}}}\\~\\
 Create kaleidoscope effect from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'cx=cy=0.5', 'radius=100', 'angle=30'} and \texttt{'boundary=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def557.jpg}\\
-{\footnotesize \textbf{Example 557~:} \texttt{image.jpg --kaleidoscope ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def558.jpg}\\
+{\footnotesize \textbf{Example 558~:} \texttt{image.jpg --kaleidoscope ,}}
 \end{center}
 
 \subsection{\emph{-map\_sphere\index{-map\_sphere}} }\vspace*{-0.5em}
@@ -5704,8 +5713,8 @@ Create kaleidoscope effect from selected images.
 {\small \texttt{\_width$>$0,\_height$>$0,\_radius,\_dilation$>$0,\_fading$>$=0,\_fading\_power$>$=0}}\\~\\
 Map selected images on a sphere.
 ~\\~\\\textbf{Default values}: {\small \texttt{'width=height=512', 'radius=100', 'dilation=0.5', 'fading=0'} and \texttt{'fading\_power=0.5'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def558.jpg}\\
-{\footnotesize \textbf{Example 558~:} \texttt{image.jpg --map\_sphere ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def559.jpg}\\
+{\footnotesize \textbf{Example 559~:} \texttt{image.jpg --map\_sphere ,}}
 \end{center}
 
 \subsection{\emph{-polar2euclidean\index{-polar2euclidean}} }\vspace*{-0.5em}
@@ -5713,8 +5722,8 @@ Map selected images on a sphere.
 {\small \texttt{\_cx,\_cy,\_n$>$0,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \}}}\\~\\
 Apply polar to euclidean transform on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'cx=cy=0.5', 'n=1'} and \texttt{'boundary=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def559.jpg}\\
-{\footnotesize \textbf{Example 559~:} \texttt{image.jpg --euclidean2polar , -mirror[-1] x -polar2euclidean[-1] ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def560.jpg}\\
+{\footnotesize \textbf{Example 560~:} \texttt{image.jpg --euclidean2polar , -mirror[-1] x -polar2euclidean[-1] ,}}
 \end{center}
 
 \subsection{\emph{-raindrops\index{-raindrops}} }\vspace*{-0.5em}
@@ -5722,8 +5731,8 @@ Apply polar to euclidean transform on selected images.
 {\small \texttt{\_amplitude,\_density$>$=0,\_wavelength$>$=0,\_merging\_steps$>$=0}}\\~\\
 Apply raindrops deformation on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=80','density=0.1', 'wavelength=1'} and \texttt{'merging\_steps=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def560.jpg}\\
-{\footnotesize \textbf{Example 560~:} \texttt{image.jpg --raindrops ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def561.jpg}\\
+{\footnotesize \textbf{Example 561~:} \texttt{image.jpg --raindrops ,}}
 \end{center}
 
 \subsection{\emph{-ripple\index{-ripple}} }\vspace*{-0.5em}
@@ -5731,8 +5740,8 @@ Apply raindrops deformation on selected images.
 {\small \texttt{\_amplitude,\_frequency,\_shape=\{ 0=bloc ~$|$~ 1=triangle ~$|$~ 2=sine ~$|$~ 3=sine+ ~$|$~ 4=random \},\_angle,\_offset}}\\~\\
 Apply ripple deformation on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=10', 'frequency=10', 'shape=2', 'angle=0'} and \texttt{'offset=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def561.jpg}\\
-{\footnotesize \textbf{Example 561~:} \texttt{image.jpg --ripple ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def562.jpg}\\
+{\footnotesize \textbf{Example 562~:} \texttt{image.jpg --ripple ,}}
 \end{center}
 
 \subsection{\emph{-rotoidoscope\index{-rotoidoscope}} }\vspace*{-0.5em}
@@ -5740,8 +5749,8 @@ Apply ripple deformation on selected images.
 {\small \texttt{\_cx,\_cy,\_tiles$>$0,\_smoothness[\%]$>$=0,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \}}}\\~\\
 Create rotational kaleidoscope effect from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'cx=cy=50\%', 'tiles=10', 'smoothness=1'} and \texttt{'boundary=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def562.jpg}\\
-{\footnotesize \textbf{Example 562~:} \texttt{image.jpg --rotoidoscope ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def563.jpg}\\
+{\footnotesize \textbf{Example 563~:} \texttt{image.jpg --rotoidoscope ,}}
 \end{center}
 
 \subsection{\emph{-symmetrize\index{-symmetrize}} }\vspace*{-0.5em}
@@ -5749,8 +5758,8 @@ Create rotational kaleidoscope effect from selected images.
 {\small \texttt{\_x[\%],\_y[\%],\_angle,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \},\_is\_antisymmetry=\{ 0 ~$|$~ 1 \},\_swap\_sides=\{ 0 ~$|$~ 1 \}}}\\~\\
 Symmetrize selected image regarding specified axis.
 ~\\~\\\textbf{Default values}: {\small \texttt{'x=y=50\%', 'angle=90', 'boundary=1', 'is\_antisymmetry=0'} and \texttt{'swap\_sides=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def563.jpg}\\
-{\footnotesize \textbf{Example 563~:} \texttt{image.jpg --symmetrize 50\%,50\%,45 --symmetrize[-1] 50\%,50\%,-45}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def564.jpg}\\
+{\footnotesize \textbf{Example 564~:} \texttt{image.jpg --symmetrize 50\%,50\%,45 --symmetrize[-1] 50\%,50\%,-45}}
 \end{center}
 
 \subsection{\emph{-transform\_polar\index{-transform\_polar}} }\vspace*{-0.5em}
@@ -5758,8 +5767,8 @@ Symmetrize selected image regarding specified axis.
 {\small \texttt{"expr\_radius",\_"expr\_angle",\_x\_center,\_y\_center,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann \}}}\\~\\
 Apply user-defined transform on polar representation of selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'expr\_radius=R-r', 'expr\_rangle=a', 'x\_center=y\_center=50'} and \texttt{'boundary=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def564.jpg}\\
-{\footnotesize \textbf{Example 564~:} \texttt{image.jpg --transform\_polar[0] R*(r/R)\textasciicircum 2,a --transform\_polar[0] r,2*a}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def565.jpg}\\
+{\footnotesize \textbf{Example 565~:} \texttt{image.jpg --transform\_polar[0] R*(r/R)\textasciicircum 2,a --transform\_polar[0] r,2*a}}
 \end{center}
 
 \subsection{\emph{-twirl\index{-twirl}} }\vspace*{-0.5em}
@@ -5767,8 +5776,8 @@ Apply user-defined transform on polar representation of selected images.
 {\small \texttt{\_amplitude,\_cx,\_cy,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \}}}\\~\\
 Apply twirl deformation on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=1', 'cx=cy=0.5'} and \texttt{'boundary=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def565.jpg}\\
-{\footnotesize \textbf{Example 565~:} \texttt{image.jpg --twirl 0.6}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def566.jpg}\\
+{\footnotesize \textbf{Example 566~:} \texttt{image.jpg --twirl 0.6}}
 \end{center}
 
 \subsection{\emph{-warp\_perspective\index{-warp\_perspective}} }\vspace*{-0.5em}
@@ -5776,8 +5785,8 @@ Apply twirl deformation on selected images.
 {\small \texttt{\_x-angle,\_y-angle,\_zoom$>$0,\_x-center,\_y-center,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \}}}\\~\\
 Warp selected images with perspective deformation.
 ~\\~\\\textbf{Default values}: {\small \texttt{'x-angle=1.5', 'y-angle=0', 'zoom=1', 'x-center=y-center=50'} and \texttt{'boundary=2'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def566.jpg}\\
-{\footnotesize \textbf{Example 566~:} \texttt{image.jpg --warp\_perspective ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def567.jpg}\\
+{\footnotesize \textbf{Example 567~:} \texttt{image.jpg --warp\_perspective ,}}
 \end{center}
 
 \subsection{\emph{-water\index{-water}} }\vspace*{-0.5em}
@@ -5785,8 +5794,8 @@ Warp selected images with perspective deformation.
 {\small \texttt{\_amplitude$>$=0,\_smoothness$>$=0}}\\~\\
 Apply water deformation on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=30'} and \texttt{'smoothness=1.5'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def567.jpg}\\
-{\footnotesize \textbf{Example 567~:} \texttt{image.jpg --water ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def568.jpg}\\
+{\footnotesize \textbf{Example 568~:} \texttt{image.jpg --water ,}}
 \end{center}
 
 \subsection{\emph{-wave\index{-wave}} }\vspace*{-0.5em}
@@ -5794,8 +5803,8 @@ Apply water deformation on selected images.
 {\small \texttt{\_amplitude$>$=0,\_frequency$>$=0,\_center\_x,\_center\_y}}\\~\\
 Apply wave deformation on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=4', 'frequency=0.4'} and \texttt{'center\_x=center\_y=50'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def568.jpg}\\
-{\footnotesize \textbf{Example 568~:} \texttt{image.jpg --wave ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def569.jpg}\\
+{\footnotesize \textbf{Example 569~:} \texttt{image.jpg --wave ,}}
 \end{center}
 
 \subsection{\emph{-wind\index{-wind}} }\vspace*{-0.5em}
@@ -5803,8 +5812,8 @@ Apply wave deformation on selected images.
 {\small \texttt{\_amplitude$>$=0,\_angle,0$<$=\_attenuation$<$=1,\_threshold}}\\~\\
 Apply wind effect on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=20', 'angle=0', 'attenuation=0.7'} and \texttt{'threshold=20'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def569.jpg}\\
-{\footnotesize \textbf{Example 569~:} \texttt{image.jpg --wind ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def570.jpg}\\
+{\footnotesize \textbf{Example 570~:} \texttt{image.jpg --wind ,}}
 \end{center}
 
 \subsection{\emph{-zoom\index{-zoom}} }\vspace*{-0.5em}
@@ -5812,8 +5821,8 @@ Apply wind effect on selected images.
 {\small \texttt{\_factor,\_cx,\_cy,\_cz,\_boundary=\{ 0=dirichlet ~$|$~ 1=neumann ~$|$~ 2=cyclic \}}}\\~\\
 Apply zoom factor to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'factor=1', 'cx=cy=cz=0.5'} and \texttt{'boundary=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def570.jpg}\\
-{\footnotesize \textbf{Example 570~:} \texttt{image.jpg --zoom[0] 0.6 --zoom[0] 1.5}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def571.jpg}\\
+{\footnotesize \textbf{Example 571~:} \texttt{image.jpg --zoom[0] 0.6 --zoom[0] 1.5}}
 \end{center}
 \section{Degradations}
 
@@ -5823,8 +5832,8 @@ Apply zoom factor to selected images.
 {\small \texttt{\_density$>$=0,\_amplitude,\_relief=\{ 0 ~$|$~ 1 \}}}\\~\\
 Add random cracks to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'density=0.2', 'amplitude=40'} and \texttt{'relief=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def571.jpg}\\
-{\footnotesize \textbf{Example 571~:} \texttt{image.jpg --cracks 0.2,60,1}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def572.jpg}\\
+{\footnotesize \textbf{Example 572~:} \texttt{image.jpg --cracks 0.2,60,1}}
 \end{center}
 
 \subsection{\emph{-light\_patch\index{-light\_patch}} }\vspace*{-0.5em}
@@ -5832,8 +5841,8 @@ Add random cracks to selected images.
 {\small \texttt{\_density$>$0,\_darkness$>$=0,\_lightness$>$=0}}\\~\\
 Add light patches to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'density=10', 'darkness=0.9'} and \texttt{'lightness=1.7'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def572.jpg}\\
-{\footnotesize \textbf{Example 572~:} \texttt{image.jpg --light\_patch 20,0.9,4}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def573.jpg}\\
+{\footnotesize \textbf{Example 573~:} \texttt{image.jpg --light\_patch 20,0.9,4}}
 \end{center}
 
 \subsection{\emph{-noise\_hurl\index{-noise\_hurl}} }\vspace*{-0.5em}
@@ -5841,8 +5850,8 @@ Add light patches to selected images.
 {\small \texttt{\_amplitude$>$=0}}\\~\\
 Add hurl noise to selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'amplitude=10'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def573.jpg}\\
-{\footnotesize \textbf{Example 573~:} \texttt{image.jpg --noise\_hurl ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def574.jpg}\\
+{\footnotesize \textbf{Example 574~:} \texttt{image.jpg --noise\_hurl ,}}
 \end{center}
 
 \subsection{\emph{-pixelize\index{-pixelize}} }\vspace*{-0.5em}
@@ -5850,8 +5859,8 @@ Add hurl noise to selected images.
 {\small \texttt{\_scale\_x$>$0,\_scale\_y$>$0,\_scale\_z$>$0}}\\~\\
 Pixelize selected images with specified scales.
 ~\\~\\\textbf{Default values}: {\small \texttt{'scale\_x=20'} and \texttt{'scale\_y=scale\_z=scale\_x'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def574.jpg}\\
-{\footnotesize \textbf{Example 574~:} \texttt{image.jpg --pixelize ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def575.jpg}\\
+{\footnotesize \textbf{Example 575~:} \texttt{image.jpg --pixelize ,}}
 \end{center}
 
 \subsection{\emph{-shade\_stripes\index{-shade\_stripes}} }\vspace*{-0.5em}
@@ -5859,8 +5868,8 @@ Pixelize selected images with specified scales.
 {\small \texttt{\_frequency$>$=0,\_direction=\{ 0=horizontal ~$|$~ 1=vertical \},\_darkness$>$=0,\_lightness$>$=0}}\\~\\
 Add shade stripes to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'frequency=5', 'direction=1', 'darkness=0.8'} and \texttt{'lightness=2'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def575.jpg}\\
-{\footnotesize \textbf{Example 575~:} \texttt{image.jpg --shade\_stripes 30}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def576.jpg}\\
+{\footnotesize \textbf{Example 576~:} \texttt{image.jpg --shade\_stripes 30}}
 \end{center}
 
 \subsection{\emph{-shadow\_patch\index{-shadow\_patch}} }\vspace*{-0.5em}
@@ -5868,8 +5877,8 @@ Add shade stripes to selected images.
 {\small \texttt{\_opacity$>$=0}}\\~\\
 Add shadow patches to selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'opacity=0.7'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def576.jpg}\\
-{\footnotesize \textbf{Example 576~:} \texttt{image.jpg --shadow\_patch 0.4}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def577.jpg}\\
+{\footnotesize \textbf{Example 577~:} \texttt{image.jpg --shadow\_patch 0.4}}
 \end{center}
 
 \subsection{\emph{-spread\index{-spread}} }\vspace*{-0.5em}
@@ -5877,8 +5886,8 @@ Add shadow patches to selected images.
 {\small \texttt{\_dx$>$=0,\_dy$>$=0,\_dz$>$=0}}\\~\\
 Spread pixel values of selected images randomly along x,y and z.
 ~\\~\\\textbf{Default values}: {\small \texttt{'dx=3', 'dy=dx'} and \texttt{'dz=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def577.jpg}\\
-{\footnotesize \textbf{Example 577~:} \texttt{image.jpg --spread 3}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def578.jpg}\\
+{\footnotesize \textbf{Example 578~:} \texttt{image.jpg --spread 3}}
 \end{center}
 
 \subsection{\emph{-stripes\_y\index{-stripes\_y}} }\vspace*{-0.5em}
@@ -5886,8 +5895,8 @@ Spread pixel values of selected images randomly along x,y and z.
 {\small \texttt{\_frequency$>$=0}}\\~\\
 Add vertical stripes to selected images.
 ~\\~\\\textbf{Default value}: {\small \texttt{'frequency=10'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def578.jpg}\\
-{\footnotesize \textbf{Example 578~:} \texttt{image.jpg --stripes\_y ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def579.jpg}\\
+{\footnotesize \textbf{Example 579~:} \texttt{image.jpg --stripes\_y ,}}
 \end{center}
 
 \subsection{\emph{-texturize\_canvas\index{-texturize\_canvas}} }\vspace*{-0.5em}
@@ -5895,14 +5904,14 @@ Add vertical stripes to selected images.
 {\small \texttt{\_amplitude$>$=0,\_fibrousness$>$=0,\_emboss\_level$>$=0}}\\~\\
 Add paint canvas texture to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'amplitude=20', 'fibrousness=3'} and \texttt{'emboss\_level=0.6'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def579.jpg}\\
-{\footnotesize \textbf{Example 579~:} \texttt{image.jpg --texturize\_canvas ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def580.jpg}\\
+{\footnotesize \textbf{Example 580~:} \texttt{image.jpg --texturize\_canvas ,}}
 \end{center}
 
 \subsection{\emph{-texturize\_paper\index{-texturize\_paper}} }\vspace*{-0.5em}
 Add paper texture to selected images.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def580.jpg}\\
-{\footnotesize \textbf{Example 580~:} \texttt{image.jpg --texturize\_paper}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def581.jpg}\\
+{\footnotesize \textbf{Example 581~:} \texttt{image.jpg --texturize\_paper}}
 \end{center}
 
 \subsection{\emph{-vignette\index{-vignette}} }\vspace*{-0.5em}
@@ -5910,8 +5919,8 @@ Add paper texture to selected images.
 {\small \texttt{\_strength$>$=0,0$<$=\_radius\_min$<$=100,0$<$=\_radius\_max$<$=100}}\\~\\
 Add vignette effect to selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'strength=100', 'radius\_min=70'} and \texttt{'radius\_max=90'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def581.jpg}\\
-{\footnotesize \textbf{Example 581~:} \texttt{image.jpg --vignette ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def582.jpg}\\
+{\footnotesize \textbf{Example 582~:} \texttt{image.jpg --vignette ,}}
 \end{center}
 
 \subsection{\emph{-watermark\_visible\index{-watermark\_visible}} }\vspace*{-0.5em}
@@ -5919,8 +5928,8 @@ Add vignette effect to selected images.
 {\small \texttt{\_text,0$<$\_opacity$<$1,\_size$>$0,\_angle,\_mode=\{ 0=remove ~$|$~ 1=add \},\_smoothness$>$=0}}\\~\\
 Add or remove a visible watermark on selected images (value range must be [0,255]).
 ~\\~\\\textbf{Default values}: {\small \texttt{'text=(c) G'MIC', 'opacity=0.3', 'size=57', 'angle=25', 'mode=1'} and \texttt{'smoothness=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def582.jpg}\\
-{\footnotesize \textbf{Example 582~:} \texttt{image.jpg --watermark\_visible ,0.7}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def583.jpg}\\
+{\footnotesize \textbf{Example 583~:} \texttt{image.jpg --watermark\_visible ,0.7}}
 \end{center}
 \section{Blending and fading}
 
@@ -5936,42 +5945,42 @@ multiply ~$|$~ negation ~$|$~ or ~$|$~ overlay ~$|$~ pinlight ~$|$~ red ~$|$~ re
 screen ~$|$~ shapeaverage ~$|$~ shapeaverage0 ~$|$~ softburn ~$|$~ softdodge ~$|$~ softlight ~$|$~ stamp ~$|$~ subtract ~$|$~ value ~$|$~
 vividlight ~$|$~ xor \}.
 ~\\~\\\textbf{Default values}: {\small \texttt{'blending\_mode=alpha', 'opacity=1'} and \texttt{'revert\_layers=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def583.jpg}\\
-{\footnotesize \textbf{Example 583~:} \texttt{image.jpg --drop\_shadow , -resize2dy[-1] 200 -rotate[-1] 20 --blend alpha -drgba[-2]}}
-\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def584.jpg}\\
-{\footnotesize \textbf{Example 584~:} \texttt{image.jpg -testimage2d \{w\},\{h\} -blend overlay}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def584.jpg}\\
+{\footnotesize \textbf{Example 584~:} \texttt{image.jpg --drop\_shadow , -resize2dy[-1] 200 -rotate[-1] 20 --blend alpha -drgba[-2]}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def585.jpg}\\
-{\footnotesize \textbf{Example 585~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex add,alpha,and,average,blue,burn,darken}}
+{\footnotesize \textbf{Example 585~:} \texttt{image.jpg -testimage2d \{w\},\{h\} -blend overlay}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def586.jpg}\\
-{\footnotesize \textbf{Example 586~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex difference,divide,dodge,exclusion,freeze,grainextract,grainmerge}}
+{\footnotesize \textbf{Example 586~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex add,alpha,and,average,blue,burn,darken}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def587.jpg}\\
-{\footnotesize \textbf{Example 587~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex green,hardlight,hardmix,hue,interpolation,lighten,lightness}}
+{\footnotesize \textbf{Example 587~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex difference,divide,dodge,exclusion,freeze,grainextract,grainmerge}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def588.jpg}\\
-{\footnotesize \textbf{Example 588~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex linearburn,linearlight,luminance,multiply,negation,or,overlay}}
+{\footnotesize \textbf{Example 588~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex green,hardlight,hardmix,hue,interpolation,lighten,lightness}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def589.jpg}\\
-{\footnotesize \textbf{Example 589~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex pinlight,red,reflect,saturation,screen,shapeaverage,softburn}}
+{\footnotesize \textbf{Example 589~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex linearburn,linearlight,luminance,multiply,negation,or,overlay}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def590.jpg}\\
-{\footnotesize \textbf{Example 590~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor}}
+{\footnotesize \textbf{Example 590~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex pinlight,red,reflect,saturation,screen,shapeaverage,softburn}}
+\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def591.jpg}\\
+{\footnotesize \textbf{Example 591~:} \texttt{-m "ex : \$""=arg -repeat \$""\% --blend[0,1] \$\{arg\{\$$>$+1\}\} -text\_outline[-1] Mode:\textbackslash " \textbackslash "\$\{arg\{\$$>$+1\}\},2,2,24,2,1,255 -done" image.jpg -testimage2d \{w\},\{h\} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor}}
 \end{center}
 
 \subsection{\emph{-blend\_edges\index{-blend\_edges}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{smoothness[\%]$>$=0}}\\~\\
 Blend selected images togethers using 'edges' mode.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def591.jpg}\\
-{\footnotesize \textbf{Example 591~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --blend\_edges 0.8}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def592.jpg}\\
+{\footnotesize \textbf{Example 592~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --blend\_edges 0.8}}
 \end{center}
 
 \subsection{\emph{-blend\_fade\index{-blend\_fade}} }\vspace*{-0.5em}
 Blend selected images together using a given fading pattern (defined as the latest image).
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def592.jpg}\\
-{\footnotesize \textbf{Example 592~:} \texttt{image.jpg -testimage2d \{w\},\{h\} 100\%,100\%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend\_fade}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def593.jpg}\\
+{\footnotesize \textbf{Example 593~:} \texttt{image.jpg -testimage2d \{w\},\{h\} 100\%,100\%,1,1,'cos(y/10)' -normalize[-1] 0,1 --blend\_fade}}
 \end{center}
 
 \subsection{\emph{-blend\_median\index{-blend\_median}} }\vspace*{-0.5em}
 Blend selected images together using 'median' mode.
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def593.jpg}\\
-{\footnotesize \textbf{Example 593~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --mirror[0] y --blend\_median}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def594.jpg}\\
+{\footnotesize \textbf{Example 594~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --mirror[0] y --blend\_median}}
 \end{center}
 
 \subsection{\emph{-fade\_diamond\index{-fade\_diamond}} }\vspace*{-0.5em}
@@ -5979,8 +5988,8 @@ Blend selected images together using 'median' mode.
 {\small \texttt{0$<$=\_start$<$=100,0$<$=\_end$<$=100}}\\~\\
 Create diamond fading from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'start=80'} and \texttt{'end=90'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def594.jpg}\\
-{\footnotesize \textbf{Example 594~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_diamond 80,85}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def595.jpg}\\
+{\footnotesize \textbf{Example 595~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_diamond 80,85}}
 \end{center}
 
 \subsection{\emph{-fade\_linear\index{-fade\_linear}} }\vspace*{-0.5em}
@@ -5988,8 +5997,8 @@ Create diamond fading from selected images.
 {\small \texttt{\_angle,0$<$=\_start$<$=100,0$<$=\_end$<$=100}}\\~\\
 Create linear fading from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'angle=45', 'start=30'} and \texttt{'end=70'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def595.jpg}\\
-{\footnotesize \textbf{Example 595~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_linear 45,48,52}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def596.jpg}\\
+{\footnotesize \textbf{Example 596~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_linear 45,48,52}}
 \end{center}
 
 \subsection{\emph{-fade\_radial\index{-fade\_radial}} }\vspace*{-0.5em}
@@ -5997,8 +6006,8 @@ Create linear fading from selected images.
 {\small \texttt{0$<$=\_start$<$=100,0$<$=\_end$<$=100}}\\~\\
 Create radial fading from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'start=30'} and \texttt{'end=70'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def596.jpg}\\
-{\footnotesize \textbf{Example 596~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_radial 30,70}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def597.jpg}\\
+{\footnotesize \textbf{Example 597~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_radial 30,70}}
 \end{center}
 
 \subsection{\emph{-fade\_x\index{-fade\_x}} }\vspace*{-0.5em}
@@ -6006,8 +6015,8 @@ Create radial fading from selected images.
 {\small \texttt{0$<$=\_start$<$=100,0$<$=\_end$<$=100}}\\~\\
 Create horizontal fading from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'start=30'} and \texttt{'end=70'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def597.jpg}\\
-{\footnotesize \textbf{Example 597~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_x 30,70}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def598.jpg}\\
+{\footnotesize \textbf{Example 598~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_x 30,70}}
 \end{center}
 
 \subsection{\emph{-fade\_y\index{-fade\_y}} }\vspace*{-0.5em}
@@ -6015,8 +6024,8 @@ Create horizontal fading from selected images.
 {\small \texttt{0$<$=\_start$<$=100,0$<$=\_end$<$=100}}\\~\\
 Create vertical fading from selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'start=30'} and \texttt{'end=70'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def598.jpg}\\
-{\footnotesize \textbf{Example 598~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_y 30,70}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def599.jpg}\\
+{\footnotesize \textbf{Example 599~:} \texttt{image.jpg -testimage2d \{w\},\{h\} --fade\_y 30,70}}
 \end{center}
 
 \subsection{\emph{-fade\_z\index{-fade\_z}} }\vspace*{-0.5em}
@@ -6035,8 +6044,8 @@ Create transversal fading from selected images.
 Animate filter from starting parameters to ending parameters or animate selected images
 in a display window.
 ~\\~\\\textbf{Default value}: {\small \texttt{'delay=30'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def599.jpg}\\
-{\footnotesize \textbf{Example 599~:} \texttt{image.jpg -animate flower,"0,3","20,8",9}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def600.jpg}\\
+{\footnotesize \textbf{Example 600~:} \texttt{image.jpg -animate flower,"0,3","20,8",9}}
 \end{center}
 
 \subsection{\emph{-morph\index{-morph}} }\vspace*{-0.5em}
@@ -6044,8 +6053,8 @@ in a display window.
 {\small \texttt{nb\_frames$>$0,\_smoothness$>$=0,\_precision$>$0}}\\~\\
 Create morphing sequence between selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'smoothness=0.1'} and \texttt{'precision=5'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def600.jpg}\\
-{\footnotesize \textbf{Example 600~:} \texttt{image.jpg --rotate 20,1,1,50\%,50\% -morph 9}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def601.jpg}\\
+{\footnotesize \textbf{Example 601~:} \texttt{image.jpg --rotate 20,1,1,50\%,50\% -morph 9}}
 \end{center}
 
 \subsection{\emph{-register\_nonrigid\index{-register\_nonrigid}} }\vspace*{-0.5em}
@@ -6053,8 +6062,8 @@ Create morphing sequence between selected images.
 {\small \texttt{\_smoothness$>$=0,\_precision$>$0,\_nb\_scale$>$=0}}\\~\\
 Register selected images with non-rigid warp.
 ~\\~\\\textbf{Default values}: {\small \texttt{'smoothness=0.2', 'precision=6'} and \texttt{'nb\_scale=0(auto)'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def601.jpg}\\
-{\footnotesize \textbf{Example 601~:} \texttt{image.jpg --rotate 20,1,1,50\%,50\% --register\_nonrigid , -remove[-2]}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def602.jpg}\\
+{\footnotesize \textbf{Example 602~:} \texttt{image.jpg --rotate 20,1,1,50\%,50\% --register\_nonrigid , -remove[-2]}}
 \end{center}
 
 \subsection{\emph{-register\_rigid\index{-register\_rigid}} }\vspace*{-0.5em}
@@ -6062,8 +6071,8 @@ Register selected images with non-rigid warp.
 {\small \texttt{\_smoothness$>$=0}}\\~\\
 Register selected images with rigid warp.
 ~\\~\\\textbf{Default value}: {\small \texttt{'smoothness=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def602.jpg}\\
-{\footnotesize \textbf{Example 602~:} \texttt{image.jpg --shift 30,20 --register\_rigid , -remove[-2]}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def603.jpg}\\
+{\footnotesize \textbf{Example 603~:} \texttt{image.jpg --shift 30,20 --register\_rigid , -remove[-2]}}
 \end{center}
 
 \subsection{\emph{-transition\_plasma\index{-transition\_plasma}} }\vspace*{-0.5em}
@@ -6071,8 +6080,8 @@ Register selected images with rigid warp.
 {\small \texttt{\_nb\_frames$>$=2,\_scale$>$=0,\_smoothness[\%]$>$=0}}\\~\\
 Create plasma transition sequence between consecutive images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_frames=10', 'scale=5'} and \texttt{'smoothness=0.5\%'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def603.jpg}\\
-{\footnotesize \textbf{Example 603~:} \texttt{image.jpg -testimage2d \{w\},\{h\} -transition\_plasma 9}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def604.jpg}\\
+{\footnotesize \textbf{Example 604~:} \texttt{image.jpg -testimage2d \{w\},\{h\} -transition\_plasma 9}}
 \end{center}
 
 \subsection{\emph{-transition3d\index{-transition3d}} }\vspace*{-0.5em}
@@ -6081,8 +6090,8 @@ Create plasma transition sequence between consecutive images.
 Create 3d transition sequence between selected consecutive images.
 ~\\'axis\_x', 'axis\_y' and 'axis\_z' can be set as mathematical expressions, depending on 'x' and 'y'.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_frames=10', 'nb\_xtiles=nb\_ytiles=3', 'axis\_x=1', 'axis\_y=1', 'axis\_z=0'} and \texttt{'is\_antialias=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def604.jpg}\\
-{\footnotesize \textbf{Example 604~:} \texttt{image.jpg --blur 5 -transition3d 9 -drgba}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def605.jpg}\\
+{\footnotesize \textbf{Example 605~:} \texttt{image.jpg --blur 5 -transition3d 9 -drgba}}
 \end{center}
 \section{Interactive demos}
 
@@ -6206,7 +6215,7 @@ Launch the image waves demo.
 \subsection{\emph{-x\_whirl\index{-x\_whirl}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_opacity$>$=0}}\\~\\
-Launch the fractal whirl demo.
+Launch the fractal whirls demo.
 ~\\~\\\textbf{Default values}: {\small \texttt{'opacity=0.2'.}}
 
 \section{PINK-library operators}
@@ -6222,10 +6231,10 @@ Save selected images as P5-coded PPM files (PINK extension for 3d volumetric ima
 Pink wrapper name,p1, .. ,pn (requires the PINK library to be installed).
 ~\\(http://pinkhq.com/)
 prepares input, calls external "name input p1 ... pn output" and reads output (/tmp)
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def605.jpg}\\
-{\footnotesize \textbf{Example 605~:} \texttt{image.jpg --pink asfr,5 -pink[0] asf,5}}
-\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def606.jpg}\\
-{\footnotesize \textbf{Example 606~:} \texttt{image.jpg --blur 2 -pink maxima,4}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def606.jpg}\\
+{\footnotesize \textbf{Example 606~:} \texttt{image.jpg --pink asfr,5 -pink[0] asf,5}}
+\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def607.jpg}\\
+{\footnotesize \textbf{Example 607~:} \texttt{image.jpg --blur 2 -pink maxima,4}}
 \end{center}
 
 \subsection{\emph{-pink\_grayskel\index{-pink\_grayskel}} }\vspace*{-0.5em}
@@ -6234,8 +6243,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/grayskel\_8c.html)
 ~\\Grayscale homotopic skeleton (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'lambda=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def607.jpg}\\
-{\footnotesize \textbf{Example 607~:} \texttt{image.jpg --pink\_grayskel , --pink\_grayskel[0] ,10 --pink\_grayskel[0] ,100 -append\_tiles 2}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def608.jpg}\\
+{\footnotesize \textbf{Example 608~:} \texttt{image.jpg --pink\_grayskel , --pink\_grayskel[0] ,10 --pink\_grayskel[0] ,100 -append\_tiles 2}}
 \end{center}
 
 \subsection{\emph{-pink\_heightmaxima\index{-pink\_heightmaxima}} }\vspace*{-0.5em}
@@ -6244,8 +6253,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/heightmaxima\_8c.html)
 ~\\Heightmaxima filtering (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'height=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def608.jpg}\\
-{\footnotesize \textbf{Example 608~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def609.jpg}\\
+{\footnotesize \textbf{Example 609~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]}}
 \end{center}
 
 \subsection{\emph{-pink\_heightminima\index{-pink\_heightminima}} }\vspace*{-0.5em}
@@ -6254,8 +6263,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/heightminima\_8c.html)
 ~\\Heightminima filtering (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'height=1'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def609.jpg}\\
-{\footnotesize \textbf{Example 609~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def610.jpg}\\
+{\footnotesize \textbf{Example 610~:} \texttt{image.jpg --blur 2 --pink\_heightminima ,15 --pink\_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]}}
 \end{center}
 
 \subsection{\emph{-pink\_htkern\index{-pink\_htkern}} }\vspace*{-0.5em}
@@ -6265,8 +6274,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 ~\\(http://pinkhq.com/htkernu\_8c.html)
 ~\\Grayscale ultimate homotopic thinning/thickening without condition (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'type=""'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def610.jpg}\\
-{\footnotesize \textbf{Example 610~:} \texttt{image.jpg --pink\_htkern ,u --pink\_htkern[0] , ---[-1,-2] -remove[0]}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def611.jpg}\\
+{\footnotesize \textbf{Example 611~:} \texttt{image.jpg --pink\_htkern ,u --pink\_htkern[0] , ---[-1,-2] -remove[0]}}
 \end{center}
 
 \subsection{\emph{-pink\_lvkern\index{-pink\_lvkern}} }\vspace*{-0.5em}
@@ -6276,8 +6285,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 ~\\(http://pinkhq.com/lvkernu\_8c.html)
 ~\\Grayscale ultimate leveling thinning/thickening without condition (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'type=""'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def611.jpg}\\
-{\footnotesize \textbf{Example 611~:} \texttt{image.jpg -pink\_lvkern ,u}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def612.jpg}\\
+{\footnotesize \textbf{Example 612~:} \texttt{image.jpg -pink\_lvkern ,u}}
 \end{center}
 
 \subsection{\emph{-pink\_reg\_minima\index{-pink\_reg\_minima}} }\vspace*{-0.5em}
@@ -6286,8 +6295,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/minima\_8c.html)
 ~\\Regional minima (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def612.jpg}\\
-{\footnotesize \textbf{Example 612~:} \texttt{image.jpg --blur 2 -pink\_reg\_minima ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def613.jpg}\\
+{\footnotesize \textbf{Example 613~:} \texttt{image.jpg --blur 2 -pink\_reg\_minima ,}}
 \end{center}
 
 \subsection{\emph{-pink\_skelcurv\index{-pink\_skelcurv}} }\vspace*{-0.5em}
@@ -6296,10 +6305,10 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/skelcurv\_8c.html)
 ~\\Curvilinear binary skeleton guided by a priority function or image (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'prio=0', 'connectivity=4'} and \texttt{'inhibit=""'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def613.jpg}\\
-{\footnotesize \textbf{Example 613~:} \texttt{image.jpg -threshold 50\% \{w\},\{h\} -fill[-1] 'if(x$>$w/2,255,0)' tp=@\{-path\_tmp\} -output[-1] \$\{tp\}/inhibit.pgm -remove[-1] --pink\_skelcurv[0] , --pink\_skelcurv[0] ,,\$\{tp\}/inhibit.pgm -exec "rm "\$\{tp\}"/inhibit.pgm"}}
-\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def614.jpg}\\
-{\footnotesize \textbf{Example 614~:} \texttt{image.jpg -threshold 50\% --pink\_skelcurv , --pink\_skelcurv[-2] ,8}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def614.jpg}\\
+{\footnotesize \textbf{Example 614~:} \texttt{image.jpg -threshold 50\% \{w\},\{h\} -fill[-1] 'if(x$>$w/2,255,0)' tp=@\{-path\_tmp\} -output[-1] \$\{tp\}/inhibit.pgm -remove[-1] --pink\_skelcurv[0] , --pink\_skelcurv[0] ,,\$\{tp\}/inhibit.pgm -exec "rm "\$\{tp\}"/inhibit.pgm"}}
+\\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def615.jpg}\\
+{\footnotesize \textbf{Example 615~:} \texttt{image.jpg -threshold 50\% --pink\_skelcurv , --pink\_skelcurv[-2] ,8}}
 \end{center}
 
 \subsection{\emph{-pink\_skelend\index{-pink\_skelend}} }\vspace*{-0.5em}
@@ -6308,8 +6317,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/skelend\_8c.html)
 ~\\Homotopic skeleton of a 2d or 3d binary image with dynamic detection of end points (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4'} and \texttt{'n=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def615.jpg}\\
-{\footnotesize \textbf{Example 615~:} \texttt{image.jpg -threshold 50\% --pink\_skelend , --pink\_skelend[-2] ,-1}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def616.jpg}\\
+{\footnotesize \textbf{Example 616~:} \texttt{image.jpg -threshold 50\% --pink\_skelend , --pink\_skelend[-2] ,-1}}
 \end{center}
 
 \subsection{\emph{-pink\_skeleton\index{-pink\_skeleton}} }\vspace*{-0.5em}
@@ -6318,8 +6327,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/skeleton\_8c.html)
 ~\\Ultimate binary skeleton guided by a priority image (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'prio=0', 'connectivity=4'} and \texttt{'inhibit=""'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def616.jpg}\\
-{\footnotesize \textbf{Example 616~:} \texttt{image.jpg -threshold 50\% --pink\_skeleton[-1] ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def617.jpg}\\
+{\footnotesize \textbf{Example 617~:} \texttt{image.jpg -threshold 50\% --pink\_skeleton[-1] ,}}
 \end{center}
 
 \subsection{\emph{-pink\_skelpar\index{-pink\_skelpar}} }\vspace*{-0.5em}
@@ -6328,8 +6337,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/skelpar\_8c.html)
 ~\\Parallel binary skeleton (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'algorithm=4', 'nsteps=-1'} and \texttt{'inhibit=""'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def617.jpg}\\
-{\footnotesize \textbf{Example 617~:} \texttt{image.jpg -threshold 50\% --pink\_skelpar[-1] 0 --pink\_skelpar[-1] 2}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def618.jpg}\\
+{\footnotesize \textbf{Example 618~:} \texttt{image.jpg -threshold 50\% --pink\_skelpar[-1] 0 --pink\_skelpar[-1] 2}}
 \end{center}
 
 \subsection{\emph{-pink\_wshed\index{-pink\_wshed}} }\vspace*{-0.5em}
@@ -6338,8 +6347,8 @@ prepares input, calls external "name input p1 ... pn output" and reads output (/
 (http://pinkhq.com/wshedtopo\_8c.html)
 ~\\Watershed (requires the PINK library to be installed).
 ~\\~\\\textbf{Default values}: {\small \texttt{'connectivity=4', 'inverse=0'} and \texttt{'height=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def618.jpg}\\
-{\footnotesize \textbf{Example 618~:} \texttt{image.jpg --pink\_wshed ,1,5 -pink\_wshed[0] ,,5}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def619.jpg}\\
+{\footnotesize \textbf{Example 619~:} \texttt{image.jpg --pink\_wshed ,1,5 -pink\_wshed[0] ,,5}}
 \end{center}
 \section{Convenience functions}
 
@@ -6645,8 +6654,8 @@ Return feature for a specified region.
 ~\\Argument 'feature' is a string that corresponds to the way the feature would
 be asked for the entire image.
 ~\\~\\\textbf{Default value}: {\small \texttt{'default\_value=0'.}}
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def619.jpg}\\
-{\footnotesize \textbf{Example 619~:} \texttt{image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@\{"-region\_feature[0,1] 10,\textbackslash "\{ia\}\textbackslash ""\} sum=@\{"-region\_feature[0,1] 10,\textbackslash "@\{-1,+\}\textbackslash ""\}}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def620.jpg}\\
+{\footnotesize \textbf{Example 620~:} \texttt{image.jpg --luminance -quantize[-1] 2 -label[-1] 0,1 mean=@\{"-region\_feature[0,1] 10,\textbackslash "\{ia\}\textbackslash ""\} sum=@\{"-region\_feature[0,1] 10,\textbackslash "@\{-1,+\}\textbackslash ""\}}}
 \end{center}
 
 \subsection{\emph{-reset\index{-reset}} }\vspace*{-0.5em}
@@ -6733,8 +6742,8 @@ Return the estimated noise variance of the last selected image.
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_scorefile,\_number\_of\_sessions$>$=0}}\\~\\
 Generate score board for the GPT championship (GREYC Poker Tour).
-\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def620.jpg}\\
-{\footnotesize \textbf{Example 620~:} \texttt{-gpt ,}}
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def621.jpg}\\
+{\footnotesize \textbf{Example 621~:} \texttt{-gpt ,}}
 \end{center}
 \section{Commands shortcuts}
 $\bullet$~'\texttt{-h}' (*)~is equivalent to~~'\texttt{-help}'.\\
