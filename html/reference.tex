@@ -10,7 +10,7 @@
 \setlength{\hoffset}{-0.8cm} 
 \setcounter{tocdepth}{1} 
 \sloppy{} 
-\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.8.2 (beta)}\\\vspace*{1cm}}\end{center}}}} 
+\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.8.2}\\\vspace*{1cm}}\end{center}}}} 
 \author{\Large \bf David Tschumperl\'e} 
 \renewcommand\indexname{Index of commands} 
 \makeindex 
@@ -48,7 +48,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
  
  gmic: GREYC's Magic for Image Computing. 
  
-        Version 1.5.8.2 (beta), Copyright (c) 2008-2013, David Tschumperl\'e 
+        Version 1.5.8.2, Copyright (c) 2008-2014, David Tschumperl\'e 
         (http://gmic.sourceforge.net) 
 \chapter{Usage} 
 \small
@@ -5282,9 +5282,9 @@ according to the luminosity of their pixel values.
 
 \subsection{\emph{-puzzle\index{-puzzle}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_width$>$0,\_height$>$0,\_M$>$=1,\_N$>$=1,\_curvature,\_center\_noise,\_height\_noise,\_resolution$>$=1}}\\~\\
+{\small \texttt{\_width$>$0,\_height$>$0,\_M$>$=1,\_N$>$=1,\_curvature,\_centering,\_connectors\_variability,\_resolution$>$=1}}\\~\\
 Input puzzle binary mask with specified size and geometry.
-~\\~\\\textbf{Default values}: {\small \texttt{'width=height=512', 'M=N=5', 'curvature=0.5', 'centering=0.5', 'height=0.5'} and \texttt{'resolution=64'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'width=height=512', 'M=N=5', 'curvature=0.5', 'centering=0.5', 'connectors\_variability=0.5'} and \texttt{'resolution=64'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def512.jpg}\\
 {\footnotesize \textbf{Example 512~:} \texttt{-puzzle ,}}
 \end{center}

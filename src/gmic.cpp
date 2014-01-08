@@ -2085,9 +2085,9 @@ gmic& gmic::add_commands(const char *const data_commands,
         move_to(commands_has_arguments[ind],pos[ind]);
       if (commands_file) { // Insert code with debug infos.
         if (commands_files.width()<2)
-          l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
+          l_debug_info = cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
         else
-          l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
+          l_debug_info = cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
                                             line_number,commands_files.width()-1);
         debug_info[0] = 1; debug_info[l_debug_info+1] = ' ';
         ((CImg<char>(debug_info,l_debug_info+2,1,1,1,true),body)>'x').move_to(commands[ind],pos[ind]++);
@@ -2101,9 +2101,9 @@ gmic& gmic::add_commands(const char *const data_commands,
       commands_has_arguments[ind](p,0) |= (char)gmic_command_has_arguments(body);
       if (commands_file && !is_last_slash) { // Insert code with debug infos.
         if (commands_files.width()<2)
-          l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
+          l_debug_info = cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x",line_number);
         else
-          l_debug_info = std::cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
+          l_debug_info = cimg_snprintf(debug_info+1,sizeof(debug_info)-2,"%x,%x",
                                             line_number,commands_files.width()-1);
         debug_info[0] = 1; debug_info[l_debug_info+1] = ' ';
         ((commands[ind][p],CImg<char>(debug_info,l_debug_info+2,1,1,1,true),body)>'x').move_to(commands[ind][p]);

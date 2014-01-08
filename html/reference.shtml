@@ -57,7 +57,7 @@
 <a id="section0"><h2><font color="brown"><u>Version</u></font></h2></a> 
 <pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing. 
  
-       Version 1.5.8.2 (beta), Copyright (c) 2008-2013, David Tschumperle 
+       Version 1.5.8.2, Copyright (c) 2008-2014, David Tschumperle 
        (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>) 
 </pre> 
 <h2><a id="section1"><font color="brown"><u>Usage</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
@@ -4550,11 +4550,11 @@ _nb_scales>=1,_allow_rotation={ 0=none | 1=90 deg. | 2=180 deg. }
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def511.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16</div></div></td><td><tt>image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-puzzle</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_width>0,_height>0,_M>=1,_N>=1,_curvature,_center_noise,_height_noise,_resolution>=1
+_width>0,_height>0,_M>=1,_N>=1,_curvature,_centering,_connectors_variability,_resolution>=1
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Input puzzle binary mask with specified size and geometry.
-<br/><br/><b>Default values</b>: 'width=height=512', 'M=N=5', 'curvature=0.5', 'centering=0.5', 'height=0.5' and 'resolution=64'.
+<br/><br/><b>Default values</b>: 'width=height=512', 'M=N=5', 'curvature=0.5', 'centering=0.5', 'connectors_variability=0.5' and 'resolution=64'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def512.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-puzzle ,</div></div></td><td><tt>-puzzle ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-quadratize_tiles</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">

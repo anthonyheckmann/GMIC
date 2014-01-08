@@ -3141,7 +3141,8 @@ orientation :
 #@gmic : $ image.jpg -luminance --otsu ,
 otsu : -check "isint(${1=256}) && $1>0"
   -e[^-1] "Hard-threshold image$? using Otsu's method, with $1 histogram levels."
-  -v - -n 0,{$1-1} -repeat @# -l[$>]
+  -v - -repeat @# -l[$>]
+    im={im} iM={iM} -n 0,{$1-1}
     --histogram $1 total=@{-1,+}
     --*[-1] 'x' sum=@{-1,+} -rm[-1]
     sumB=0 wB=0 wF=0 varMax=0 threshold=0
@@ -3157,6 +3158,7 @@ otsu : -check "isint(${1=256}) && $1>0"
       -if {$varBetween>$varMax} varMax=$varBetween threshold=$> -endif
     -done
     -rm[-1] -ge[-1] $threshold
+    threshold={im+$threshold*($iM-$im)/($1-1)}
     -if $> -u @{},$threshold -else -u $threshold -endif
   -endl -done -v +
 

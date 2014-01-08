@@ -3133,7 +3133,7 @@ _gmic_def()
 		return 0
 		;;
 		"-puzzle" | "--puzzle")
-		COMPREPLY=( $(compgen -W "_width>0,_height>0,_M>=1,_N>=1,_curvature,_center_noise,_height_noise,_resolution>=1 >") )
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_M>=1,_N>=1,_curvature,_centering,_connectors_variability,_resolution>=1 >") )
 		return 0
 		;;
 		"-quadratize_tiles" | "--quadratize_tiles")
