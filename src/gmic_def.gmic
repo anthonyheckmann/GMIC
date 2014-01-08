@@ -15474,7 +15474,7 @@ gimp_imagegrid :
 #@gimp : Output each piece on a different layer = _bool(0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/01/06</i>.</small>")
 gimp_puzzle :
-  -repeat @# -l[$>]
+  -repeat @# -l[$<]
     w={w} h={h} -to_rgb
     -puzzle $w,$h,$1,$2,$3,$4,$5
     --b[-1] $6%,0 -gradient[-1] xy -+[-2,-1] -n[-1] -$7,$7 -+[0,-1]  # Relief.
