@@ -250,7 +250,7 @@ _help_header_latex :
 \n
 \n gmic: GREYC's Magic for Image Computing.
 \n
-\n        Version "$strver$strbeta", Copyright (c) 2008-2013, David Tschumperl\\'e
+\n        Version "$strver$strbeta", Copyright (c) 2008-2014, David Tschumperl\\'e
 \n        (http://gmic.sourceforge.net)
 \n\\chapter{Usage}
 "
@@ -343,7 +343,7 @@ _help_header_html :
 \n<a id=\"section0\"><h2><font color=\"brown\"><u>Version</u></font></h2></a>
 \n<pre><font color=\"blue\">gmic</font>: GREYC's Magic for Image Computing.
 \n
-\n       Version "$strver$strbeta", Copyright (c) 2008-2013, David Tschumperle
+\n       Version "$strver$strbeta", Copyright (c) 2008-2014, David Tschumperle
 \n       (<a href=\"http://gmic.sourceforge.net\">http://gmic.sourceforge.net</a>)
 \n</pre>
 "
@@ -389,7 +389,7 @@ __help_header_ascii :
   -e[] "
 \n gmic: GREYC's Magic for Image Computing.
 \n
-\n        Version "$strver$strbeta", Copyright (c) 2008-2013, David Tschumperle.
+\n        Version "$strver$strbeta", Copyright (c) 2008-2014, David Tschumperle.
 \n        (http://gmic.sourceforge.net)"
   -v -
 
@@ -15260,10 +15260,10 @@ gimp_gmicky_preview :
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
 #@gimp : - <b>2013/12/07</b> : version <i>1.5.8.0</i>.\n
-#@gimp : - <span foreground="purple"><b>2013/12/16</b> : version <i>1.5.8.1</i> (Current stable).</span>\n
+#@gimp : - <span foreground="purple"><b>2014/01/08</b> : version <i>1.5.8.2</i> (Current stable).</span>\n
 #@gimp : "}
 #@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157638511994515/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/16</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/01/08</i>.</small>")
 
 #@gimp _<b>Arrays &amp; tiles</b>
 #--------------------------------

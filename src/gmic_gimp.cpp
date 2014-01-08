@@ -3219,7 +3219,7 @@ void gmic_query() {
                          "G'MIC",                    // help
                          "David Tschumperl\303\251", // author
                          "David Tschumperl\303\251", // copyright
-                         "2013",                     // date
+                         "2014",                     // date
                          "_G'MIC...",                // menu_path
                          "RGB*, GRAY*",              // image_types
                          GIMP_PLUGIN,                // type
