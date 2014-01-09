@@ -3158,7 +3158,7 @@ otsu : -check "isint(${1=256}) && $1>0"
       -if {$varBetween>$varMax} varMax=$varBetween threshold=$> -endif
     -done
     -rm[-1] -ge[-1] $threshold
-    threshold={im+$threshold*($iM-$im)/($1-1)}
+    threshold={$im+$threshold*($iM-$im)/($1-1)}
     -if $> -u @{},$threshold -else -u $threshold -endif
   -endl -done -v +
 
