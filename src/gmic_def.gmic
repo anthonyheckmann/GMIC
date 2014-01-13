@@ -9131,14 +9131,18 @@ shift_tiles : -check "${2=$1}>=0" -skip ${3=20}
     $1,$2,1,2 -noise[-1] $3 -r[-1] [-2],[-2],1,2 -warp[-2] [-1],1,1,0 -rm[-1]
   -endl -done -v +
 
-#@gmic taquin : M>0,_N>0
+#@gmic taquin : M>0,_N>0,_remove_one_tile={ 0=none | 1=first | 2=last | 3=random }
 #@gmic : Create MxN taquin puzzle from selected images.
-#@gmic : Default value: 'N=M'.
+#@gmic : Default value: 'N=M' and 'remove_on_tile=0'.
 #@gmic : $ image.jpg --taquin 8
-taquin : -skip ${2=$1}
+taquin : -check "isint($1) && $1>0 & isint(${2=$1}) && $2>0" -skip ${3=0}
  -e[^-1] "Create $1x$2 taquin puzzle from image $?."
  -v - -repeat @# -l[$>] nm=@{0,n}
-   -split_tiles $1,$2,1 -repeat {$1*$2} -mv[$>] {?(@#)} -done -append_tiles $1,$2
+   -split_tiles $1,$2 -r @{-min_wh},100%,100%,0
+   -if {$3==3} -f[-1] 0 -endif
+   -repeat {$1*$2} -mv[$>] {?(@#)} -done
+   -if {$3==1} -f[0] 0 -elif {$3==2} -f[-1] 0 -endif
+   -append_tiles $1,$2
  -nm $nm,1 -endl -done -v +
 
 #@gmic tunnel : _level>=0,_factor>0,_cx,_cy,_opacity,_angle
@@ -15043,7 +15047,7 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Claude Bulin</i> <small>(packaging)</small>
 #@gimp : <b> -</b> <i>Aur&#233;lien Ceyden</i> <small>(packaging)</small>
 #@gimp : <b> -</b> <i>Fran&#231;ois Collard</i> <small>(testing)</small>
-#@gimp : <b> -</b> <i>Patrick David</i> <small>(testing)</small>
+#@gimp : <b> -</b> <i>Patrick David</i> <small>(testing &amp; filters)</small>
 #@gimp : <b> -</b> <i>Maxime Daisy</i> <small>(code &amp; testing)</small>
 #@gimp : <b> -</b> <i>Iain Fergusson</i> <small>(filters)</small>
 #@gimp : <b> -</b> <i>Roberto Ferramosca</i> <small>(packaging)</small>
@@ -15110,7 +15114,7 @@ gimp_logo_ca :
 #@gimp : For most users, there will be only one URL listed there."}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/06/03</i>.</small>")
 gimp_display_filter_sources :
-  -if @# -k[0] -f 0 -else 256,256 -endif
+  -if @# -k[0] -remove_opacity -f 0 -else 256,256 -endif
   -l[] -gimp_filter_sources -y x -a y -onfail (0) -endl
   -text[0] "Enabled external sources:\n--------------------------------",5,5,13,1,255
   -if @{-is_windows} path=@{-path_user}/ -else path=@{-path_user}/. -endif
@@ -15528,10 +15532,13 @@ gimp_puzzle :
 gimp_puzzle_preview :
   -gimp_puzzle ${1-15},0
 
-#@gimp Taquin : taquin, taquin(1)
+#@gimp Taquin : gimp_taquin, gimp_taquin(1)
 #@gimp : X-tiles = int(7,1,20)
 #@gimp : Y-tiles = int(7,1,20)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
+#@gimp : Remove tile = choice("None","First","Last","Random")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/01/13</i>.</small>")
+gimp_taquin :
+  -to_a -taquin $*
 
 #@gimp Tileable rotation : gimp_rotate_tileable, gimp_rotate_tileable(1)
 #@gimp : Angle = float(45,0,360)
