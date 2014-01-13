@@ -17692,9 +17692,12 @@ gimp_laplacian_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 _gimp_local_orientation :
-  -b $1% -gradient_orientation 2 -complex2polar -rm[0--1:2]
-  -c $2%,$3%
-  -if $4 -negative -endif
+  -repeat @# -l[$>] -split_opacity -l[0]
+    -b $1% -gradient_orientation 2 -complex2polar -rm[0--1:2]
+    -c $2%,$3%
+    -if $4 -negative -endif
+    -n 0,255
+  -endl -a c -endl -done
 
 gimp_local_orientation :
   -apply_channels "-_gimp_local_orientation $1,$2,$3,$4",$5,1
@@ -17751,6 +17754,7 @@ gimp_segment_watershed_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/04/07</i>.</small>")
 gimp_skeleton :
+  -remove_opacity
   -if {!$4} -norm -endif
   -b $2%
   -if $1 -thinning -else -skeleton $3% -endif
