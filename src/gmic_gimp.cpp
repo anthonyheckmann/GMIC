@@ -2875,11 +2875,12 @@ bool create_dialog_gui() {
 
   // Create main dialog window with buttons.
   char dialog_title[64] = { 0 };
-  cimg_snprintf(dialog_title,sizeof(dialog_title),"%s %u bits - %d.%d.%d.%d%s",
+  cimg_snprintf(dialog_title,sizeof(dialog_title),"%s %d.%d.%d.%d%s - %s %u bits",
                 t("G'MIC for GIMP"),
-                sizeof(void*)==8?64:32,
                 gmic_version/1000,(gmic_version/100)%10,(gmic_version/10)%10,gmic_version%10,
-                gmic_is_beta?" (beta)":"");
+                gmic_is_beta?" (beta)":"",
+                cimg::stros(),
+                sizeof(void*)==8?64:32);
 
   dialog_window = gimp_dialog_new(dialog_title,"gmic",0,(GtkDialogFlags)0,0,0,NULL);
   gimp_window_set_transient(GTK_WINDOW(dialog_window));
