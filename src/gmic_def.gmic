@@ -22465,7 +22465,6 @@ gmicol_rotate :
 #@gmicol clone("Burn")
 #@gmicol clone("Contrast swiss mask")
 #@gmicol clone("Drop shadow")
-#@gmicol clone("Drop shadow 3d")
 #@gmicol clone("Equalize shadow")
 #@gmicol clone("Light glow")
 #@gmicol clone("Light patch")

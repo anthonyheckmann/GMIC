@@ -1121,12 +1121,16 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
   const unsigned int patch_size2 = patch_size*patch_size;
   unsigned int _lookup_size = lookup_size, nb_lookups = 0, nb_fails = 0, nb_saved_patches = 0;
   bool is_strict_search = true;
+  const float one = 1;
 
   CImg<floatT> confidences(nmask), priorities(dx,dy,1,2,-1), pC;
   CImg<unsigned int> saved_patches;
   CImg<ucharT> pM, pN;  // Pre-declare patch variables (avoid iterative memory alloc/dealloc).
   CImg<T> pP, pbest;
   if (blend_size && blend_scales) saved_patches.assign(4,256);
+
+  CImg<floatT> weights(patch_size,patch_size,1,1,0);
+  weights.draw_gaussian((float)p1,(float)p1,patch_size/15.0f,&one)/=patch_size2;
 
   while (true) {
 
@@ -1163,8 +1167,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
             ny = _ny/nn;
 
           // Compute confidence term.
-          nmask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pM);
-          confidences._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
+          nmask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pM);
+          confidences._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pC);
           confidence_term = 0;
           const unsigned char *ptrM = pM.data();
           cimg_for(pC,ptrC,float) confidence_term+=*ptrC**(ptrM++);
@@ -1173,18 +1177,29 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
 
           // Compute data term.
           _inpaint_patch_crop(ox+x-p1,oy+y-p1,ox+x+p2,oy+y+p2,2).move_to(pP);
-          float max_ix = 0, max_iy = 0, max_ng = 0;
+          float mean_ix2 = 0, mean_ixiy = 0, mean_iy2 = 0;
+
           CImg_3x3(I,T);
           CImg_3x3(_M,unsigned char);
-          cimg_forC(pP,c) cimg_for3x3(pP,p,q,0,c,I,T) { // Compute max gradient norm inside patch.
+          cimg_forC(pP,c) cimg_for3x3(pP,p,q,0,c,I,T) { // Compute weight-mean of structure tensor inside patch.
             cimg_get3x3(pM,p,q,0,0,_M,unsigned char);
             const float
               ix = _Mnc*_Mcc*(Inc-Icc),
               iy = _Mcn*_Mcc*(Icn-Icc),
-              ng = ix*ix + iy*iy;
-            if (ng>max_ng) { max_ix = ix; max_iy = iy; max_ng = ng; }
+              w = weights(p,q);
+            mean_ix2 += w*ix*ix;
+            mean_ixiy += w*ix*iy;
+            mean_iy2 += w*iy*iy;
           }
-          data_term = cimg::abs(-max_iy*nx + max_ix*ny);
+          const float  // Compute main eigenvalue / eigenvector of the mean structure tensor.
+            e = mean_ix2 + mean_iy2,
+            f = std::sqrt(cimg::max(0,e*e - 4*(mean_ix2*mean_iy2 - mean_ixiy*mean_ixiy))),
+            lambda = 0.5*(e+f),
+            theta = (float)std::atan2(lambda-mean_ix2,mean_ixiy),
+            ng = std::sqrt(lambda),
+            ux = std::cos(theta),
+            uy = std::sin(theta);
+          data_term = ng*cimg::abs(-uy*nx + ux*ny);
           priorities(x,y,1) = data_term;
         }
         const float priority = confidence_term*data_term;
@@ -1345,10 +1360,9 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       const int b2 = (int)blend_width/2, b1 = (int)blend_width - b2 - 1;
       CImg<floatT>
         blended = _inpaint_patch_crop(ox,oy,ox+dx-1,oy+dy-1,0),
-        cumul(dx,dy,1,1),
-        weights(blend_width,blend_width,1,1,0);
-      const float one = 1;
-      weights.draw_gaussian((float)b1,(float)b1,blend_width/4.0f,&one);
+        cumul(dx,dy,1,1);
+      weights.assign(blend_width,blend_width,1,1,0).
+        draw_gaussian((float)b1,(float)b1,blend_width/4.0f,&one);
       cimg_forXY(cumul,x,y) cumul(x,y) = mask(x+ox,y+oy)?0.0f:1.0f;
       blended.mul(cumul);
 
