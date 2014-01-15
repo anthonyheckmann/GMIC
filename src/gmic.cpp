@@ -1191,22 +1191,10 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
             mean_ixiy += w*ix*iy;
             mean_iy2 += w*iy*iy;
           }
-          const float
+          const float // Compute tensor-directed data term.
             ux = mean_ix2*(-ny) + mean_ixiy*nx,
             uy = mean_ixiy*(-ny) + mean_iy2*nx;
-          data_term = std::sqrt(ux*ux + uy*uy);  // Tensor-directed data term.
-
-          /*
-            const float  // Compute main eigenvalue / eigenvector of the mean structure tensor.
-            e = mean_ix2 + mean_iy2,
-            f = std::sqrt(cimg::max(0,e*e - 4*(mean_ix2*mean_iy2 - mean_ixiy*mean_ixiy))),
-            lambda = 0.5*(e+f),
-            theta = (float)std::atan2(lambda-mean_ix2,mean_ixiy),
-            ng = std::sqrt(lambda),
-            ux = std::cos(theta),
-            uy = std::sin(theta);
-          data_term = ng*cimg::abs(-uy*nx + ux*ny);
-          */
+          data_term = std::sqrt(ux*ux + uy*uy);
           priorities(x,y,1) = data_term;
         }
         const float priority = confidence_term*data_term;
@@ -1812,7 +1800,7 @@ static DWORD WINAPI gmic_parallel(void *arg)
     st.exception._command_help.assign(e._command_help);
     st.exception._message.assign(e._message);
   }
-  return 0;
+  pthread_exit(0);
 }
 
 // Return Levenshtein distance between two strings.
