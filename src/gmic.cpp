@@ -11975,7 +11975,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           int err = 0;
 #if cimg_use_tiff
           static const TIFFErrorHandler default_handler = TIFFSetWarningHandler(0);
-          if (verbosity>0) TIFFSetWarningHandler(default_handler);
+          if (verbosity>0 || is_debug) TIFFSetWarningHandler(default_handler);
           else TIFFSetWarningHandler(0);
 #endif
           if ((err=std::sscanf(options,"%f,%f,%f",&first_frame,&last_frame,&step))>0) {
