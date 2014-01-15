@@ -57,7 +57,7 @@
 <a id="section0"><h2><font color="brown"><u>Version</u></font></h2></a> 
 <pre><font color="blue">gmic</font>: GREYC's Magic for Image Computing. 
  
-       Version 1.5.8.2, Copyright (c) 2008-2014, David Tschumperle 
+       Version 1.5.8.3 (beta), Copyright (c) 2008-2014, David Tschumperle 
        (<a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net</a>) 
 </pre> 
 <h2><a id="section1"><font color="brown"><u>Usage</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
@@ -4582,11 +4582,11 @@ M>0,_N>0,_amplitude
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def515.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --shift_tiles 8,8,10</div></div></td><td><tt>image.jpg --shift_tiles 8,8,10</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-taquin</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-M>0,_N>0
+M>0,_N>0,_remove_tile={ 0=none | 1=first | 2=last | 3=random },_relief,_border_thickness[%],_border_outline[%],_outline_color
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Create MxN taquin puzzle from selected images.
-<br/><br/><b>Default value</b>: 'N=M'.
+<br/><br/><b>Default value</b>: 'N=M', 'relief=50', 'border_thickness=5', 'border_outline=0' and 'remove_tile=0'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def516.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --taquin 8</div></div></td><td><tt>image.jpg --taquin 8</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-tunnel</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">

@@ -3149,7 +3149,7 @@ _gmic_def()
 		return 0
 		;;
 		"-taquin" | "--taquin")
-		COMPREPLY=( $(compgen -W "M>0,_N>0 >") )
+		COMPREPLY=( $(compgen -W "M>0,_N>0,_remove_tile={0=none|1=first|2=last|3=random},_relief,_border_thickness[%],_border_outline[%],_outline_color >") )
 		return 0
 		;;
 		"-tunnel" | "--tunnel")

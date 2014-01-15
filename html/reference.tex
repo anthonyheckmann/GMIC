@@ -10,7 +10,7 @@
 \setlength{\hoffset}{-0.8cm} 
 \setcounter{tocdepth}{1} 
 \sloppy{} 
-\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.8.2}\\\vspace*{1cm}}\end{center}}}} 
+\title{\fbox{\parbox{\textwidth}{\begin{center}\vspace*{2cm}\includegraphics[width=12cm]{logo3.jpg}\\\vspace*{1cm}{\Huge \textbf{The Handbook}\\{\small Version 1.5.8.3 (beta)}\\\vspace*{1cm}}\end{center}}}} 
 \author{\Large \bf David Tschumperl\'e} 
 \renewcommand\indexname{Index of commands} 
 \makeindex 
@@ -48,7 +48,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
  
  gmic: GREYC's Magic for Image Computing. 
  
-        Version 1.5.8.2, Copyright (c) 2008-2014, David Tschumperl\'e 
+        Version 1.5.8.3 (beta), Copyright (c) 2008-2014, David Tschumperl\'e 
         (http://gmic.sourceforge.net) 
 \chapter{Usage} 
 \small
@@ -5318,9 +5318,9 @@ Apply MxN tiled-shift effect on selected images.
 
 \subsection{\emph{-taquin\index{-taquin}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{M$>$0,\_N$>$0}}\\~\\
+{\small \texttt{M$>$0,\_N$>$0,\_remove\_tile=\{ 0=none ~$|$~ 1=first ~$|$~ 2=last ~$|$~ 3=random \},\_relief,\_border\_thickness[\%],\_border\_outline[\%],\_outline\_color}}\\~\\
 Create MxN taquin puzzle from selected images.
-~\\~\\\textbf{Default value}: {\small \texttt{'N=M'.}}
+~\\~\\\textbf{Default value}: {\small \texttt{'N=M', 'relief=50', 'border\_thickness=5', 'border\_outline=0'} and \texttt{'remove\_tile=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def516.jpg}\\
 {\footnotesize \textbf{Example 516~:} \texttt{image.jpg --taquin 8}}
 \end{center}

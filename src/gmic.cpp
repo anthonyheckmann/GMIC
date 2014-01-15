@@ -1191,7 +1191,13 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
             mean_ixiy += w*ix*iy;
             mean_iy2 += w*iy*iy;
           }
-          const float  // Compute main eigenvalue / eigenvector of the mean structure tensor.
+          const float
+            ux = mean_ix2*(-ny) + mean_ixiy*nx,
+            uy = mean_ixiy*(-ny) + mean_iy2*nx;
+          data_term = std::sqrt(ux*ux + uy*uy);  // Tensor-directed data term.
+
+          /*
+            const float  // Compute main eigenvalue / eigenvector of the mean structure tensor.
             e = mean_ix2 + mean_iy2,
             f = std::sqrt(cimg::max(0,e*e - 4*(mean_ix2*mean_iy2 - mean_ixiy*mean_ixiy))),
             lambda = 0.5*(e+f),
@@ -1200,6 +1206,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
             ux = std::cos(theta),
             uy = std::sin(theta);
           data_term = ng*cimg::abs(-uy*nx + ux*ny);
+          */
           priorities(x,y,1) = data_term;
         }
         const float priority = confidence_term*data_term;
