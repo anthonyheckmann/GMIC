@@ -316,22 +316,6 @@ CImg<T> get_div(const char *const expression) const {
   return (+*this).div(expression);
 }
 
-CImg<T>& gmic_rol(const float n) {
-  return rol((unsigned int)n);
-}
-
-CImg<T> get_gmic_rol(const float n) const {
-  return get_rol((unsigned int)n);
-}
-
-CImg<T>& gmic_ror(const float n) {
-  return ror((unsigned int)n);
-}
-
-CImg<T> get_gmic_ror(const float n) const {
-  return get_ror((unsigned int)n);
-}
-
 template<typename t>
 const CImg<T>& gmic_symmetric_eigen(CImg<t>& val, CImg<t>& vec) const {
   if (spectrum()!=3 && spectrum()!=6) return symmetric_eigen(val,vec);
@@ -627,7 +611,7 @@ static CImg<T> append_CImg3d(const CImgList<T>& images) {
         nbi = cimg::float2uint((float)*(ptrs[l]++)),
         _nbi = nbi<5?nbi:nbi==5?2:nbi/3;
       *(ptrd++) = (T)cimg::uint2float(nbi);
-      for (unsigned int i = 0; i<_nbi; ++i) *(ptrd++) = *(ptrs[l]++) + poff;
+      for (unsigned int i = 0; i<_nbi; ++i) *(ptrd++) = (T)(*(ptrs[l]++) + poff);
       for (unsigned int i = nbi-_nbi; i; --i) *(ptrd++) = *(ptrs[l]++);
     }
     poff+=nbv;
@@ -746,7 +730,7 @@ CImg<T>& reverse_CImg3d() {
   const unsigned int nbv = (unsigned int)*(p++), nbp = (unsigned int)*(p++);
   p+=3*nbv;
   for (unsigned int i = 0; i<nbp; ++i) {
-    const unsigned int nb = *(p++);
+    const unsigned int nb = (unsigned int)*(p++);
     switch(nb) {
     case 2: case 3: cimg::swap(p[0],p[1]); break;
     case 6: cimg::swap(p[0],p[1],p[2],p[4],p[3],p[5]); break;
@@ -1184,8 +1168,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
           cimg_forC(pP,c) cimg_for3x3(pP,p,q,0,c,I,T) { // Compute weight-mean of structure tensor inside patch.
             cimg_get3x3(pM,p,q,0,0,_M,unsigned char);
             const float
-              ix = _Mnc*_Mcc*(Inc-Icc),
-              iy = _Mcn*_Mcc*(Icn-Icc),
+              ix = (float)(_Mnc*_Mcc*(Inc-Icc)),
+              iy = (float)(_Mcn*_Mcc*(Icn-Icc)),
               w = weights(p,q);
             mean_ix2 += w*ix*ix;
             mean_ixiy += w*ix*iy;
@@ -1229,7 +1213,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
           const T *_pP = pP._data;
           const float *_pC = pC._data;
           cimg_for(pM,_pM,unsigned char) { if (*_pM) {
-              cimg_forC(pC,c) { ssd+=cimg::sqr(*_pC-*_pP); _pC+=patch_size2; _pP+=patch_size2; }
+              cimg_forC(pC,c) { ssd+=cimg::sqr((Tfloat)*_pC-(Tfloat)*_pP); _pC+=patch_size2; _pP+=patch_size2; }
               if (ssd>=best_ssd) break;
               _pC-=pC._spectrum*patch_size2;
               _pP-=pC._spectrum*patch_size2;
@@ -1330,10 +1314,10 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         ion = std::sqrt(iox*iox+ioy*ioy);
       float iin = 0;
       cimg_forC(*this,c) {
-        cimg_get3x3(*this,x,y,0,c,I,T);
+        cimg_get3x3(*this,x,y,0,c,I,float);
         const float
-          iix = cimg::max(Inc-Icc,Icc-Ipc),
-          iiy = cimg::max(Icn-Icc,Icc-Icp);
+          iix = (float)cimg::max(Inc-Icc,Icc-Ipc),
+          iiy = (float)cimg::max(Icn-Icc,Icc-Icp);
         iin+=std::log(1+iix*iix+iiy*iiy);
       }
       iin/=_spectrum;
@@ -1800,7 +1784,11 @@ static DWORD WINAPI gmic_parallel(void *arg)
     st.exception._command_help.assign(e._command_help);
     st.exception._message.assign(e._message);
   }
+#if cimg_OS!=2
   pthread_exit(0);
+#else
+  return 0;
+#endif
 }
 
 // Return Levenshtein distance between two strings.
@@ -3719,6 +3707,9 @@ template<typename T>
 gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                    CImgList<T> &images, CImgList<char> &images_names,
                    unsigned int (&variables_sizes)[256]) {
+
+  typedef typename cimg::superset<T,float>::type Tfloat;
+  typedef typename cimg::superset<T,long>::type Tlong;
   const unsigned int initial_scope_size = scope.size();
   bool is_endlocal = false;
   char end;
@@ -4075,7 +4066,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-add",
                                operator+=,
                                "Add %g%s to image%s",
-                               value,ssep,gmic_selection,T,
+                               value,ssep,gmic_selection,Tfloat,
                                operator+=,
                                "Add image [%d] to image%s",
                                ind[0],gmic_selection,
@@ -4185,7 +4176,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-and",
                                operator&=,
                                "Compute bitwise AND of image%s by %g%s",
-                               gmic_selection,value,ssep,T,
+                               gmic_selection,value,ssep,Tlong,
                                operator&=,
                                "Compute bitwise AND of image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -4309,7 +4300,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-bsr",
                                operator>>=,
                                "Compute bitwise right shift of image%s by %g%s",
-                               gmic_selection,value,ssep,T,
+                               gmic_selection,value,ssep,Tlong,
                                operator>>=,
                                "Compute bitwise right shift of image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -4321,7 +4312,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-bsl",
                                operator<<=,
                                "Compute bitwise left shift of image%s by %g%s",
-                               gmic_selection,value,ssep,T,
+                               gmic_selection,value,ssep,Tlong,
                                operator<<=,
                                "Compute bitwise left shift of image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -5223,7 +5214,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-div",
                                operator/=,
                                "Divide image%s by %g%s",
-                               gmic_selection,value,ssep,double,
+                               gmic_selection,value,ssep,Tfloat,
                                div,
                                "Divide image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -7136,7 +7127,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-mul",
                                operator*=,
                                "Multiply image%s by %g%s",
-                               gmic_selection,value,ssep,double,
+                               gmic_selection,value,ssep,Tfloat,
                                mul,
                                "Multiply image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -7182,7 +7173,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-mmul",
                                operator*=,
                                "Multiply matrix/vector%s by %g%s",
-                               gmic_selection,value,ssep,double,
+                               gmic_selection,value,ssep,Tfloat,
                                operator*=,
                                "Multiply matrix/vector%s by matrix/vector image [%d]",
                                gmic_selection,ind[0],
@@ -7275,7 +7266,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-mdiv",
                                operator/=,
                                "Divide matrix/vector%s by %g%s",
-                               gmic_selection,value,ssep,double,
+                               gmic_selection,value,ssep,Tfloat,
                                operator/=,
                                "Divide matrix/vector%s by matrix/vector image [%d]",
                                gmic_selection,ind[0],
@@ -7970,7 +7961,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-or",
                                operator|=,
                                "Compute bitwise OR of image%s by %g%s",
-                               gmic_selection,value,ssep,T,
+                               gmic_selection,value,ssep,Tlong,
                                operator|=,
                                "Compute bitwise OR of image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -8174,7 +8165,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-pow",
                                pow,
                                "Compute image%s to the power of %g%s",
-                               gmic_selection,value,ssep,double,
+                               gmic_selection,value,ssep,Tfloat,
                                pow,
                                "Compute image%s to the power of image [%d]",
                                gmic_selection,ind[0],
@@ -8990,9 +8981,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
           // Bitwise left rotation.
           gmic_arithmetic_item("-rol",
-                               gmic_rol,
+                               rol,
                                "Compute bitwise left rotation of image%s by %g%s",
-                               gmic_selection,(int)value,ssep,T,
+                               gmic_selection,value,ssep,unsigned int,
                                rol,
                                "Compute bitwise left rotation of image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -9002,9 +8993,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
           // Bitwise right rotation.
           gmic_arithmetic_item("-ror",
-                               gmic_ror,
+                               ror,
                                "Compute bitwise right rotation of image%s by %g%s",
-                               gmic_selection,value,ssep,T,
+                               gmic_selection,value,ssep,unsigned int,
                                ror,
                                "Compute bitwise right rotation of image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -9503,7 +9494,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-sub",
                                operator-=,
                                "Subtract %g%s to image%s",
-                               value,ssep,gmic_selection,T,
+                               value,ssep,gmic_selection,Tfloat,
                                operator-=,
                                "Subtract image [%d] to image%s",
                                ind[0],gmic_selection,
@@ -10818,7 +10809,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           gmic_arithmetic_item("-xor",
                                operator^=,
                                "Compute bitwise XOR of image%s by %g%s",
-                               gmic_selection,value,ssep,T,
+                               gmic_selection,value,ssep,Tlong,
                                operator^=,
                                "Compute bitwise XOR of image%s by image [%d]",
                                gmic_selection,ind[0],
@@ -12130,8 +12121,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if (input_images.size()==1) {
             if (input_images[0].is_CImg3d(false))
               std::fprintf(cimg::output()," (%u vertices, %u primitives).",
-                           cimg::float2uint(input_images(0,6)),
-                           cimg::float2uint(input_images(0,7)));
+                           cimg::float2uint((float)input_images(0,6)),
+                           cimg::float2uint((float)input_images(0,7)));
             else
               std::fprintf(cimg::output()," (1 image %dx%dx%dx%d).",
                            input_images[0].width(),input_images[0].height(),
