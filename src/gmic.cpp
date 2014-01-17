@@ -4232,7 +4232,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                  seph=='x') ||
                 (std::sscanf(argument,"%f,%f,%f,%f,%f,%f,%4095[0-9.eE,+-]%c",
                              &xmin,&xmax,&ymin,&ymax,&siz,&opacity,color,&end)==7 &&
-                 (pattern=~0U)) ||
+                 (bool)(pattern=~0U)) ||
                 (*color=0,std::sscanf(argument,"%f,%f,%f,%f,%f,%f,0%c%x,%4095[0-9.eE,+-]%c",
                                       &xmin,&xmax,&ymin,&ymax,&siz,&opacity,
                                       &seph,&pattern,color,&end)==9 && seph=='x')) {
@@ -5660,7 +5660,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             *argx = *argy = *argR = *argr = *color = 0;
             float x = 0, y = 0, R = 0, r = 0, angle = 0, opacity = 1;
             char sepx = 0, sepy = 0, sepR = 0, sepr = 0, seph = 0;
-            unsigned int pattern = 0;
+            unsigned int pattern = ~0U;
             if ((std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-]%c",
                              argx,argy,argR,&end)==3 ||
                  std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-],"
@@ -5678,7 +5678,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   seph=='x') ||
                  (std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-],"
                               "%255[0-9.eE%+-],%f,%f,%4095[0-9.eE,+-]%c",
-                              argx,argy,argR,argr,&angle,&opacity,color,&end)==7 && !(pattern=0))||
+                              argx,argy,argR,argr,&angle,&opacity,color,&end)==7 && (bool)(pattern=~0U))||
                  (*color=0,std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-],"
                                        "%255[0-9.eE%+-],%f,%f,0%c%x,%4095[0-9.eE,+-]%c",
                                        argx,argy,argR,argr,&angle,&opacity,&seph,&pattern,
@@ -6148,7 +6148,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                               &ymin,&ymax,&opacity,&seph,&pattern,&end)==11 && seph=='x') ||
                  (std::sscanf(argument,"'%1023[^']',%f,%u,%u,%lf,%lf,%lf,%lf,%f,%4095[0-9.eE,+-]%c",
                               formula,&resolution,&plot_type,&vertex_type,&xmin,&xmax,&ymin,&ymax,
-                              &opacity,color,&end)==10 && (pattern=~0U)) ||
+                              &opacity,color,&end)==10 && (bool)(pattern=~0U)) ||
                  (*color=0,std::sscanf(argument,"'%1023[^']',%f,%u,%u,%lf,%lf,%lf,%lf,%f,0%c%x,"
                                        "%4095[0-9.eE,+-]%c",
                                        formula,&resolution,&plot_type,&vertex_type,&xmin,&xmax,
@@ -6205,7 +6205,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                                      "%4095[0-9.eE,+-]%c",
                                      indices,&plot_type,&vertex_type,&ymin,&ymax,&opacity,
                                      color,&end)==7 &&
-                         (pattern=~0U)) ||
+                         (bool)(pattern=~0U)) ||
                         (*color=0,std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%u,%u,%lf,%lf,"
                                               "%f,0%c%x,%4095[0-9.eE,+-]%c",
                                               indices,&plot_type,&vertex_type,&ymin,&ymax,
@@ -6940,7 +6940,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   seph=='x') ||
                  (std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-],"
                               "%255[0-9.eE%+-],%f,%4095[0-9.eE,+-]%c",
-                              argx,argy,argx1,argy1,&opacity,color,&end)==6 && (pattern=~0U)) ||
+                              argx,argy,argx1,argy1,&opacity,color,&end)==6 && (bool)(pattern=~0U)) ||
                  (*color=0,std::sscanf(argument,"%255[0-9.eE%+-],%255[0-9.eE%+-],%255[0-9.eE%+-],"
                                        "%255[0-9.eE%+-],%f,0%c%x,%4095[0-9.eE,+-]%c",
                                        argx,argy,argx1,argy1,&opacity,&seph,
@@ -8460,7 +8460,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                               &opacity,&seph,&pattern,&end)==7 && seph=='x') ||
                  (std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%u,%f,%4095[0-9.eE,+-]%c",
                               indices,&sampling,&factor,&is_arrows,&opacity,color,&end)==6 &&
-                  (pattern=~0U)) ||
+                  (bool)(pattern=~0U)) ||
                  (*color=0,std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%u,"
                                        "%f,0%c%x,%4095[0-9.eE,+-]%c",
                                        indices,&sampling,&factor,&is_arrows,
@@ -11068,7 +11068,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     std::memcpy(command_code_text+128," ... ",5);
                     std::memcpy(command_code_text+133,command_code+ls-130,131);
                   } else std::strcpy(command_code_text,command_code);
-                  for (char *ptrs = command_code_text, *ptrd = ptrs; *ptrs || (*ptrd=0); ++ptrs)
+                  for (char *ptrs = command_code_text, *ptrd = ptrs; *ptrs || (bool)(*ptrd=0); ++ptrs)
                     if (*ptrs==1) while (*ptrs!=' ') ++ptrs; else *(ptrd++) = *ptrs;
                   debug(images,"Found custom command '%s: %s' (%s).",
                         custom_command,command_code_text,
@@ -11325,7 +11325,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                     std::memcpy(command_code_text+128," ... ",5);
                     std::memcpy(command_code_text+133,substituted_command.data()+l-130,131);
                   } else std::strcpy(command_code_text,substituted_command.data());
-                 for (char *ptrs = command_code_text, *ptrd = ptrs; *ptrs || (*ptrd=0); ++ptrs)
+                  for (char *ptrs = command_code_text, *ptrd = ptrs; *ptrs || (bool)(*ptrd=0); ++ptrs)
                     if (*ptrs==1) while (*ptrs!=' ') ++ptrs; else *(ptrd++) = *ptrs;
                   debug(images,"Expand command line for command '%s' to: '%s'.",
                         custom_command,command_code_text);
@@ -11966,7 +11966,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           int err = 0;
 #if cimg_use_tiff
           static const TIFFErrorHandler default_handler = TIFFSetWarningHandler(0);
-          if (verbosity>0) TIFFSetWarningHandler(default_handler);
+          if (verbosity>0 || is_debug) TIFFSetWarningHandler(default_handler);
           else TIFFSetWarningHandler(0);
 #endif
           if ((err=std::sscanf(options,"%f,%f,%f",&first_frame,&last_frame,&step))>0) {
