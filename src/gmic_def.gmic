@@ -22462,6 +22462,7 @@ gmicol_rotate :
 #-----------------------
 
 #@gmicol clone("Droste")
+#@gmicol clone("Frame [blur]")
 #@gmicol clone("Frame [cube]")
 
 #@gmicol clone("Frame [fuzzy]")
