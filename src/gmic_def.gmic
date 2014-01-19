@@ -14657,7 +14657,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -load_gmic http://docgmic.tuxfamily.org/zonderr.gmic
 
   # Merge them together.
-  -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y -a y -discard 13
+  -i[0] (10) -i[2--1] ({"'\n#@gimp ________________\n'"}) -y -a y -discard 13 -replace 9,32
   -s +,{'"#@gimp"'}
   -repeat {int((@#-1)/2)} -a[{$>+1},{$>+2}] y -done
   -nm[0] !header
@@ -14680,7 +14680,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
       -if {@{0,6}=={'_'}} --rows[0] 9,100% -rows[0] 0,8 # Treat a localized filter as a regular filter.
       -else --rows[0] 6,100% -rows[0] 0,5
       -endif
-      -replace[-1] 9,32 -autocrop[-1] 32 -mv[-1] 1
+      -autocrop[-1] 32 -mv[-1] 1
 
       -if {@{1,0}!={':'}} # Found a new filter or folder definition.
         -l[1]
