@@ -19145,6 +19145,22 @@ gimp_droste_preview :
   -ellipse $5%,$6%,3,3,0,1,0,0,255,255 -ellipse $5%,$6%,3,3,0,1,0xFFFFFFFF,0,0,0,255
   -ellipse $7%,$8%,3,3,0,1,0,255,255,255 -ellipse $7%,$8%,3,3,0,1,0xFFFFFFFF,0,0,0,255
 
+#@gimp Frame [blur] : gimp_frame_blur, gimp_frame_blur(1)
+#@gimp : Size = float(20,0,100)
+#@gimp : Blur = float(5,0,10)
+#@gimp : Crop = float(0,0,100)
+#@gimp : Outline size = float(1,0,5)
+#@gimp : Outline color = color(0,0,0,255)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/01/19</i>.</small>")
+gimp_frame_blur :
+  -repeat @# -l[$>] -to_rgba
+    --r {100+$1}%,{100+$1}%,1,100%,3 -b[1] $2%
+    -z[0] $3%,$3%,{100-$3}%,{100-3}%
+    s={$4%*max(w,h)} -frame[0] $s,$s,${5-8}
+    -j[1] [0],{(w-@{0,w})/2},{(h-@{0,h})/2}
+    -rm[0]
+  -endl -done
+
 #@gimp Frame [cube] : frame_cube, frame_cube(1)
 #@gimp : Depth = float(3,0,30)
 #@gimp : X-center = float(0,-2,2)
