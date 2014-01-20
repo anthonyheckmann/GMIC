@@ -19151,7 +19151,7 @@ gimp_droste_preview :
 #@gimp : Blur = float(5,0,10)
 #@gimp : Roundness = float(0,0,1)
 #@gimp : Apply color balance = bool(0)
-#@gimp : Color = color(128,128,128)
+#@gimp : Balance color = color(128,128,128)
 #@gimp : Normalization = choice("None","Stretch","Equalize")
 #@gimp : sep = separator()
 #@gimp : Outline size = float(5,0,50)
