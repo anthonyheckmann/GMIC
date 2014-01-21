@@ -1203,26 +1203,89 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       y0 = cimg::max(p1,target_y-l1),
       x1 = cimg::min(width()-1-p2,target_x+l2),
       y1 = cimg::min(height()-1-p2,target_y+l2);
-    for (int y = y0; y<=y1; y+=lookup_increment)
-      for (int x = x0; x<=x1; x+=lookup_increment) {
-        if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
-        else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
-        if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
-          _inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
-          float ssd = 0;
-          const T *_pP = pP._data;
-          const float *_pC = pC._data;
-          cimg_for(pM,_pM,unsigned char) { if (*_pM) {
-              cimg_forC(pC,c) { ssd+=cimg::sqr((Tfloat)*_pC-(Tfloat)*_pP); _pC+=patch_size2; _pP+=patch_size2; }
-              if (ssd>=best_ssd) break;
-              _pC-=pC._spectrum*patch_size2;
-              _pP-=pC._spectrum*patch_size2;
+
+    // Heuristic : try to find already reconstructed neighbors to get good lookup regions.
+    CImg<unsigned int> lookup_candidates(2,256);
+    unsigned int nb_lookup_candidates = 0, *ptr_lookup_candidates = lookup_candidates.data();
+    const unsigned int *ptr_saved_patches = saved_patches.data();
+    for (unsigned int k = 0; k<nb_saved_patches; ++k) {
+      const unsigned int
+        src_x = *(ptr_saved_patches++),
+        src_y = *(ptr_saved_patches++),
+        dest_x = *(ptr_saved_patches++),
+        dest_y = *(ptr_saved_patches++);
+      if ((int)dest_x>=x0 && (int)dest_y>=y0 && (int)dest_x<=x1 && (int)dest_y<=y1) {
+        const int
+          off_x = target_x - dest_x,
+          off_y = target_y - dest_y;
+        *(ptr_lookup_candidates++) = src_x + off_x;
+        *(ptr_lookup_candidates++) = src_y + off_y;
+        if (++nb_lookup_candidates>=lookup_candidates._height) lookup_candidates.resize(2,-200,1,1,0);
+
+        /*
+        CImg<ucharT> visu(*this,false);
+        visu.draw_circle(target_x,target_y,3,CImg<ucharT>::vector(255,0,0).data(),0.8).
+          draw_circle(dest_x,dest_y,3,CImg<ucharT>::vector(0,255,0).data(),0.8).
+          draw_circle(src_x,src_y,3,CImg<ucharT>::vector(0,255,255).data(),0.8).
+          draw_circle(src_x + off_x,src_y + off_y,3,CImg<ucharT>::vector(255,0,255).data(),0.8);
+                visu.display("DEBUG visu");
+        */
+
+      }
+    }
+    //    std::fprintf(stderr,"DEBUG : Candidates : %u\n",nb_lookup_candidates);
+
+    if (nb_lookup_candidates) { // Fast random search.
+      ptr_lookup_candidates = lookup_candidates.data();
+      for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
+        const int
+          xl = (int)*(ptr_lookup_candidates++),
+          yl = (int)*(ptr_lookup_candidates++);
+        for (unsigned int N = 0; N<3000/nb_lookup_candidates; ++N) {
+          const int
+            x = N?cimg::min(width()-1-p2,cimg::max(p1,(int)cimg::round(xl + l2*cimg::crand()))):xl,
+            y = N?cimg::min(height()-1-p2,cimg::max(p1,(int)cimg::round(yl + l2*cimg::crand()))):yl;
+          if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
+          else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
+          if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
+            _inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
+            float ssd = 0;
+            const T *_pP = pP._data;
+            const float *_pC = pC._data;
+            cimg_for(pM,_pM,unsigned char) { if (*_pM) {
+                cimg_forC(pC,c) { ssd+=cimg::sqr((Tfloat)*_pC-(Tfloat)*_pP); _pC+=patch_size2; _pP+=patch_size2; }
+                if (ssd>=best_ssd) break;
+                _pC-=pC._spectrum*patch_size2;
+                _pP-=pC._spectrum*patch_size2;
+              }
+              ++_pC; ++_pP;
             }
-            ++_pC; ++_pP;
+            if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
           }
-          if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
         }
       }
+    } else { // Exhaustive search.
+      for (int y = y0; y<=y1; y+=lookup_increment)
+        for (int x = x0; x<=x1; x+=lookup_increment) {
+          if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
+          else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
+          if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
+            _inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
+            float ssd = 0;
+            const T *_pP = pP._data;
+            const float *_pC = pC._data;
+            cimg_for(pM,_pM,unsigned char) { if (*_pM) {
+                cimg_forC(pC,c) { ssd+=cimg::sqr((Tfloat)*_pC-(Tfloat)*_pP); _pC+=patch_size2; _pP+=patch_size2; }
+                if (ssd>=best_ssd) break;
+                _pC-=pC._spectrum*patch_size2;
+                _pP-=pC._spectrum*patch_size2;
+              }
+              ++_pC; ++_pP;
+            }
+            if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
+          }
+        }
+    }
 
     if (best_x<0) { // If no candidate found.
       priorities(target_x-ox,target_y-oy,0)/=10; // Reduce its priority (lower data_term).
@@ -1261,6 +1324,10 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         if (++nb_saved_patches>=saved_patches._height) saved_patches.resize(4,-200,1,1,0);
       }
     }
+
+    //    static CImgDisplay disp_debug;
+    //    disp_debug.display(*this).set_title("DEBUG");
+
   }
   nmask.assign();  // Free some unused memory resources.
   priorities.assign();
