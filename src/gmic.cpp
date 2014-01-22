@@ -1241,7 +1241,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
     */
 
     // Begin patch lookup.
-    CImg<boolT> is_visited(width(),height(),1,1,false);
+
+    //    CImg<boolT> is_visited(width(),height(),1,1,false);
     ptr_lookup_candidates = lookup_candidates.data();
     for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
       const int
@@ -1250,7 +1251,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         x0 = cimg::max(p1,xl-l1), y0 = cimg::max(p1,yl-l1),
         x1 = cimg::min(width()-1-p2,xl+l2), y1 = cimg::min(height()-1-p2,yl+l2);
       for (int y = y0; y<=y1; ++y)
-        for (int x = x0; x<=x1; ++x) if (!is_visited(x,y)) {
+        //        for (int x = x0; x<=x1; ++x) if (!is_visited(x,y)) {
+        for (int x = x0; x<=x1; ++x) {
             if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
             else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
             if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
@@ -1268,8 +1270,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
               }
               if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
             }
-            is_visited(x,y) = true;
-          }
+            //            is_visited(x,y) = true;
+        }
     }
 
     if (best_x<0) { // If no best patch found.
