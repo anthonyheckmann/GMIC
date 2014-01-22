@@ -5530,11 +5530,11 @@ inn :
     -endif
   -endl -done -v +
 
-#@gmic inpaint : [mask] : [mask],_patch_size>=1,_lookup_size>=1,_lookup_increment>=1,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={ 0 | 1 } : (+)
+#@gmic inpaint : [mask] : [mask],_patch_size>=1,_lookup_size>=1,_lookup_factor>=0,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={ 0 | 1 } : (+)
 #@gmic : Inpaint selected images by specified mask.
 #@gmic : If no patch size is specified, inpainting is done using a fast averaging-algorithm.
 #@gmic : Otherwise, it used a patch-based reconstruction method, that can be very time consuming.
-#@gmic : Default values : 'patch_size', 'lookup_size=22', 'lookup_increment=1', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=0'.
+#@gmic : Default values : 'patch_size', 'lookup_size=22', 'lookup_factor=0.5', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=1'.
 #@gmic : $ image.jpg 100%,100% -ellipse 50%,50%,30,30,0,1,255 -ellipse 20%,20%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]
 #@gmic : $ image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],17,24,2,30,0 -remove[1]
 
@@ -20325,10 +20325,10 @@ gimp_inpaint_diffusion_preview :
   -if {!$7" && "@#>1} -rm[0] -endif
 
 #@gimp Inpaint [patch-based] : gimp_inpaint_patch, gimp_no_preview
-#@gimp : Patch size = int(11,1,64)
-#@gimp : Lookup factor = float(3,1,16)
-#@gimp : Lookup increment = int(2,1,10)
-#@gimp : Blend size = int(16,0,200)
+#@gimp : Patch size = int(7,1,64)
+#@gimp : Lookup size = float(16,1,32)
+#@gimp : Lookup factor = float(0.1,0,1)
+#@gimp : Blend size = float(1.2,0,5)
 #@gimp : Blend threshold = float(0,0,1)
 #@gimp : Blend decay = float(0.05,0,0.5)
 #@gimp : Blend scales = int(10,1,20)
@@ -20343,13 +20343,13 @@ gimp_inpaint_patch :
   -if $9 # Mask by color.
     -repeat @# -l[$>]
       --select_color 0,${10-13}
-      -$inpaint[0] [1],$1,{$1*$2},${3-8}
+      -$inpaint[0] [1],$1,{$1*$2},$3,{$4*$1},${5-8}
       -rm[1]
     -endl -done
   -else # Mask by top layer.
     -if {@#==1} -return -endif
     -to_a[0] -channels[0] 100% -ge[0] 50%
-    -$inpaint[^0] [0],$1,{$1*$2},${3-8}
+    -$inpaint[^0] [0],$1,{$1*$2},$3,{$4*$1},${5-8}
     -to_a[0] -f[0] 0
   -endif
 

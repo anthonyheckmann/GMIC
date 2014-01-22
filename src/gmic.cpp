@@ -1040,7 +1040,7 @@ CImg<T> get_inpaint(const CImg<t>& mask) const {
 
 template<typename t>
 CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
-                       const unsigned int lookup_size=22, const unsigned int lookup_increment=1,
+                       const unsigned int lookup_size=22, const float lookup_factor=1,
                        const unsigned int blend_size=0, const float blend_threshold=0.5f,
                        const float blend_decay=0.02, const unsigned int blend_scales=10,
                        const bool is_blend_outer=false) {
@@ -1064,11 +1064,12 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                                 "inpaint_patch() : Specified lookup size is 0, must be strictly "
                                 "positive.",
                                 cimg_instance);
-  if (!lookup_increment)
+  if (lookup_factor<0)
     throw CImgArgumentException(_cimg_instance
-                                "inpaint_patch() : Specified lookup increment is 0, must be "
-                                "strictly positive.",
-                                cimg_instance);
+                                "inpaint_patch() : Specified lookup factor %g is negative, must be "
+                                "positive.",
+                                cimg_instance,
+                                lookup_factor);
   if (blend_decay<0)
     throw CImgArgumentException(_cimg_instance
                                 "inpaint_patch() : Specified blend decay %g is negative, must be "
@@ -1108,11 +1109,9 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
   const float one = 1;
 
   CImg<floatT> confidences(nmask), priorities(dx,dy,1,2,-1), pC;
-  CImg<unsigned int> saved_patches;
+  CImg<unsigned int> saved_patches(4,256);
   CImg<ucharT> pM, pN;  // Pre-declare patch variables (avoid iterative memory alloc/dealloc).
   CImg<T> pP, pbest;
-  if (blend_size && blend_scales) saved_patches.assign(4,256);
-
   CImg<floatT> weights(patch_size,patch_size,1,1,0);
   weights.draw_gaussian((float)p1,(float)p1,patch_size/15.0f,&one)/=patch_size2;
 
@@ -1197,9 +1196,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       move_to(pM);
     float best_ssd = cimg::type<float>::max();
     int best_x = -1, best_y = -1;
-    const int l2 = (int)_lookup_size/2, l1 = (int)_lookup_size - l2 - 1;
 
-    // Try to locate already reconstructed neighbors, in order to get good source regions for patch lookup.
+    // Locate already reconstructed neighbors (if any), to get good origins for patch lookup.
     CImg<unsigned int> lookup_candidates(2,256);
     unsigned int nb_lookup_candidates = 0, *ptr_lookup_candidates = lookup_candidates.data();
     const unsigned int *ptr_saved_patches = saved_patches.data();
@@ -1218,60 +1216,60 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       }
     }
 
-    if (nb_lookup_candidates) { // Lookup candidates found -> fast random search.
-      ptr_lookup_candidates = lookup_candidates.data();
-      for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
-        const int
-          xl = (int)*(ptr_lookup_candidates++),
-          yl = (int)*(ptr_lookup_candidates++);
-        const unsigned int Nmax = cimg::round(lookup_size*lookup_size/(10*nb_lookup_candidates),1,1);
-        for (unsigned int N = 0; N<Nmax; ++N) {
-          const int
-            x = N?cimg::min(width()-1-p2,cimg::max(p1,(int)cimg::round(xl + l2*cimg::crand()))):xl,
-            y = N?cimg::min(height()-1-p2,cimg::max(p1,(int)cimg::round(yl + l2*cimg::crand()))):yl;
-          if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
-          else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
-          if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
-            _inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
-            float ssd = 0;
-            const T *_pP = pP._data;
-            const float *_pC = pC._data;
-            cimg_for(pM,_pM,unsigned char) { if (*_pM) {
-                cimg_forC(pC,c) { ssd+=cimg::sqr((Tfloat)*_pC-(Tfloat)*_pP); _pC+=patch_size2; _pP+=patch_size2; }
-                if (ssd>=best_ssd) break;
-                _pC-=pC._spectrum*patch_size2;
-                _pP-=pC._spectrum*patch_size2;
-              }
-              ++_pC; ++_pP;
-            }
-            if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
-          }
-        }
-      }
-    } else { // No lookup candidates -> exhaustive search.
+    unsigned int final_lookup_size = 0;
+    if (nb_lookup_candidates) {
+      final_lookup_size = (unsigned int)cimg::round(_lookup_size*lookup_factor/std::sqrt(nb_lookup_candidates),1,1);
+    } else {  // If no candidates, target pixel is the center of the lookup region.
+      *(ptr_lookup_candidates++) = target_x;
+      *(ptr_lookup_candidates++) = target_y;
+      nb_lookup_candidates = 1;
+      final_lookup_size = _lookup_size;
+    }
+    const int l2 = (int)final_lookup_size/2, l1 = (int)final_lookup_size - l2 - 1;
+
+    /*
+    CImg<ucharT> visu(*this,false);
+    for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
       const int
-        x0 = cimg::max(p1,target_x-l1), y0 = cimg::max(p1,target_y-l1),
-        x1 = cimg::min(width()-1-p2,target_x+l2), y1 = cimg::min(height()-1-p2,target_y+l2);
-      for (int y = y0; y<=y1; y+=lookup_increment)
-        for (int x = x0; x<=x1; x+=lookup_increment) {
-          if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
-          else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
-          if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
-            _inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
-            float ssd = 0;
-            const T *_pP = pP._data;
-            const float *_pC = pC._data;
-            cimg_for(pM,_pM,unsigned char) { if (*_pM) {
-                cimg_forC(pC,c) { ssd+=cimg::sqr((Tfloat)*_pC-(Tfloat)*_pP); _pC+=patch_size2; _pP+=patch_size2; }
-                if (ssd>=best_ssd) break;
-                _pC-=pC._spectrum*patch_size2;
-                _pP-=pC._spectrum*patch_size2;
+        xl = lookup_candidates(0,C),
+        yl = lookup_candidates(1,C);
+      visu.draw_rectangle(xl-l1,yl-l1,xl+l2,yl+l2,CImg<ucharT>::vector(0,255,0).data(),0.5f);
+    }
+    visu.draw_rectangle(target_x-p1,target_y-p1,target_x+p2,target_y+p2,CImg<ucharT>::vector(255,0,0).data(),0.5f);
+    static CImgDisplay disp_debug;
+    disp_debug.display(visu).set_title("DEBUG");
+    */
+
+    // Begin patch lookup.
+    CImg<boolT> is_visited(width(),height(),1,1,false);
+    ptr_lookup_candidates = lookup_candidates.data();
+    for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
+      const int
+        xl = (int)*(ptr_lookup_candidates++),
+        yl = (int)*(ptr_lookup_candidates++),
+        x0 = cimg::max(p1,xl-l1), y0 = cimg::max(p1,yl-l1),
+        x1 = cimg::min(width()-1-p2,xl+l2), y1 = cimg::min(height()-1-p2,yl+l2);
+      for (int y = y0; y<=y1; ++y)
+        for (int x = x0; x<=x1; ++x) if (!is_visited(x,y)) {
+            if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
+            else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
+            if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
+              _inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,0).move_to(pC);
+              float ssd = 0;
+              const T *_pP = pP._data;
+              const float *_pC = pC._data;
+              cimg_for(pM,_pM,unsigned char) { if (*_pM) {
+                  cimg_forC(pC,c) { ssd+=cimg::sqr((Tfloat)*_pC-(Tfloat)*_pP); _pC+=patch_size2; _pP+=patch_size2; }
+                  if (ssd>=best_ssd) break;
+                  _pC-=pC._spectrum*patch_size2;
+                  _pP-=pC._spectrum*patch_size2;
+                }
+                ++_pC; ++_pP;
               }
-              ++_pC; ++_pP;
+              if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
             }
-            if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
+            is_visited(x,y) = true;
           }
-        }
     }
 
     if (best_x<0) { // If no best patch found.
@@ -1302,19 +1300,14 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                                 target_y-oy-(int)patch_size,0,0,
                                 target_x-ox+3*p2/2,
                                 target_y-oy+3*p2/2,0,0,-1);
-      if (blend_size && blend_scales) { // If blending activated, remember patch positions.
-        unsigned int *ptr_saved_patches = saved_patches.data(0,nb_saved_patches);
-        *(ptr_saved_patches++) = best_x;
-        *(ptr_saved_patches++) = best_y;
-        *(ptr_saved_patches++) = target_x;
-        *ptr_saved_patches = target_y;
-        if (++nb_saved_patches>=saved_patches._height) saved_patches.resize(4,-200,1,1,0);
-      }
+      // Remember patch positions.
+      unsigned int *ptr_saved_patches = saved_patches.data(0,nb_saved_patches);
+      *(ptr_saved_patches++) = best_x;
+      *(ptr_saved_patches++) = best_y;
+      *(ptr_saved_patches++) = target_x;
+      *ptr_saved_patches = target_y;
+      if (++nb_saved_patches>=saved_patches._height) saved_patches.resize(4,-200,1,1,0);
     }
-
-    //    static CImgDisplay disp_debug;
-    //    disp_debug.display(*this).set_title("DEBUG");
-
   }
   nmask.assign();  // Free some unused memory resources.
   priorities.assign();
@@ -1454,11 +1447,11 @@ CImg<T> _inpaint_patch_crop(const int x0, const int y0, const int x1, const int 
 
 template<typename t>
 CImg<T> get_inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
-                          const unsigned int lookup_size=22, const unsigned int lookup_increment=1,
+                          const unsigned int lookup_size=22, const float lookup_factor=1,
                           const unsigned int blend_size=0, const float blend_threshold=0.5,
                           const float blend_decay=0.02f, const unsigned int blend_scales=10,
                           const bool is_blend_outer=false) const {
-  return (+*this).inpaint_patch(mask,patch_size,lookup_size,lookup_increment,
+  return (+*this).inpaint_patch(mask,patch_size,lookup_size,lookup_factor,
                                 blend_size,blend_threshold,blend_decay,blend_scales,is_blend_outer);
 }
 
@@ -6760,9 +6753,9 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Inpaint.
           if (!std::strcmp("-inpaint",command)) {
             gmic_substitute_args();
-            float patch_size = 11, lookup_size = 22, lookup_increment = 1,
+            float patch_size = 11, lookup_size = 22, lookup_factor = 0.5,
               blend_size = 0, blend_threshold = 0, blend_decay = 0.05f, blend_scales = 10;
-            unsigned int is_blend_outer = 0;
+            unsigned int is_blend_outer = 1;
             CImg<unsigned int> ind;
             char sep = 0;
             if (std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]%c%c",indices,&sep,&end)==2 &&
@@ -6781,46 +6774,45 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f%c",
                                     indices,&patch_size,&lookup_size,&end)==3 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_increment,&end)==4 ||
+                                    indices,&patch_size,&lookup_size,&lookup_factor,&end)==4 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    indices,&patch_size,&lookup_size,&lookup_factor,
                                     &blend_size,&end)==5 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    indices,&patch_size,&lookup_size,&lookup_factor,
                                     &blend_size,&blend_threshold,&end)==6 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    indices,&patch_size,&lookup_size,&lookup_factor,
                                     &blend_size,&blend_threshold,&blend_decay,&end)==7 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    indices,&patch_size,&lookup_size,&lookup_factor,
                                     &blend_size,&blend_threshold,&blend_decay,&blend_scales,&end)==8 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f,%u%c",
-                                    indices,&patch_size,&lookup_size,&lookup_increment,
+                                    indices,&patch_size,&lookup_size,&lookup_factor,
                                     &blend_size,&blend_threshold,&blend_decay,&blend_scales,
                                     &is_blend_outer,&end)==9) &&
                        (ind=selection2cimg(indices,images.size(),images_names,"-inpaint",true,
                                            false,CImg<char>::empty())).height()==1 &&
-                       patch_size>=0.5 && lookup_size>=0.5 && lookup_increment>=0.5 &&
+                       patch_size>=0.5 && lookup_size>=0.5 && lookup_factor>=0 &&
                        blend_size>=0 && blend_threshold>=0 && blend_threshold<=1 &&
                        blend_decay>=0 && blend_scales>=0.5 && is_blend_outer<=1) {
               const CImg<T> mask = gmic_image_arg(*ind);
               patch_size = cimg::round(patch_size);
               lookup_size = cimg::round(lookup_size);
-              lookup_increment = cimg::round(lookup_increment);
               blend_size = cimg::round(blend_size);
               blend_scales = cimg::round(blend_scales);
               print(images,"Inpaint image%s masked by image [%d], with patch size %g, "
-                    "lookup size %g, lookup increment %g, blend size %g, blend threshold %g, "
+                    "lookup size %g, lookup factor %g, blend size %g, blend threshold %g, "
                     "blend decay %g, %g blend scale%s and outer blending %s.",
                     gmic_selection,*ind,
-                    patch_size,lookup_size,lookup_increment,
+                    patch_size,lookup_size,lookup_factor,
                     blend_size,blend_threshold,blend_decay,blend_scales,blend_scales!=1?"s":"",
                     is_blend_outer?"enabled":"disabled");
               cimg_forY(selection,l)
                 gmic_apply(images[selection[l]],
                            inpaint_patch(mask,
                                          (unsigned int)patch_size,(unsigned int)lookup_size,
-                                         (unsigned int)lookup_increment,
+                                         lookup_factor,
                                          (unsigned int)blend_size,blend_threshold,blend_decay,
                                          (unsigned int)blend_scales,(bool)is_blend_outer));
             } else arg_error("inpaint");
