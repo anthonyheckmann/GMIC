@@ -3180,7 +3180,11 @@ CImg<char> gmic::substitute_item(const char *const source,
       // Substitute '@*' -> number of available cpus.
       } else if (*nsource=='@' && nsource[1]=='*') {
         nsource+=2;
+#ifdef gmic_is_parallel
         cimg_snprintf(substr,substr.width(),"%u",cimg::nb_cpus());
+#else
+        *substr = '1'; substr[1] = 0;
+#endif
         CImg<char>(substr.data(),std::strlen(substr)).move_to(substituted_items);
 
       // Substitute '@^' -> current level of verbosity.
