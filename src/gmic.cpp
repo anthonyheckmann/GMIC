@@ -1197,51 +1197,35 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       move_to(pM);
     float best_ssd = cimg::type<float>::max();
     int best_x = -1, best_y = -1;
-    const int
-      l2 = (int)_lookup_size/2, l1 = (int)_lookup_size - l2 - 1,
-      x0 = cimg::max(p1,target_x-l1),
-      y0 = cimg::max(p1,target_y-l1),
-      x1 = cimg::min(width()-1-p2,target_x+l2),
-      y1 = cimg::min(height()-1-p2,target_y+l2);
+    const int l2 = (int)_lookup_size/2, l1 = (int)_lookup_size - l2 - 1;
 
-    // Heuristic : try to find already reconstructed neighbors to get good lookup regions.
+    // Try to locate already reconstructed neighbors, in order to get good source regions for patch lookup.
     CImg<unsigned int> lookup_candidates(2,256);
     unsigned int nb_lookup_candidates = 0, *ptr_lookup_candidates = lookup_candidates.data();
     const unsigned int *ptr_saved_patches = saved_patches.data();
+    const int
+      x0 = target_x - (int)patch_size, y0 = target_y - (int)patch_size,
+      x1 = target_x + (int)patch_size, y1 = target_y + (int)patch_size;
     for (unsigned int k = 0; k<nb_saved_patches; ++k) {
       const unsigned int
-        src_x = *(ptr_saved_patches++),
-        src_y = *(ptr_saved_patches++),
-        dest_x = *(ptr_saved_patches++),
-        dest_y = *(ptr_saved_patches++);
+        src_x = *(ptr_saved_patches++), src_y = *(ptr_saved_patches++),
+        dest_x = *(ptr_saved_patches++), dest_y = *(ptr_saved_patches++);
       if ((int)dest_x>=x0 && (int)dest_y>=y0 && (int)dest_x<=x1 && (int)dest_y<=y1) {
-        const int
-          off_x = target_x - dest_x,
-          off_y = target_y - dest_y;
+        const int off_x = target_x - dest_x, off_y = target_y - dest_y;
         *(ptr_lookup_candidates++) = src_x + off_x;
         *(ptr_lookup_candidates++) = src_y + off_y;
         if (++nb_lookup_candidates>=lookup_candidates._height) lookup_candidates.resize(2,-200,1,1,0);
-
-        /*
-        CImg<ucharT> visu(*this,false);
-        visu.draw_circle(target_x,target_y,3,CImg<ucharT>::vector(255,0,0).data(),0.8).
-          draw_circle(dest_x,dest_y,3,CImg<ucharT>::vector(0,255,0).data(),0.8).
-          draw_circle(src_x,src_y,3,CImg<ucharT>::vector(0,255,255).data(),0.8).
-          draw_circle(src_x + off_x,src_y + off_y,3,CImg<ucharT>::vector(255,0,255).data(),0.8);
-                visu.display("DEBUG visu");
-        */
-
       }
     }
-    //    std::fprintf(stderr,"DEBUG : Candidates : %u\n",nb_lookup_candidates);
 
-    if (nb_lookup_candidates) { // Fast random search.
+    if (nb_lookup_candidates) { // Lookup candidates found -> fast random search.
       ptr_lookup_candidates = lookup_candidates.data();
       for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
         const int
           xl = (int)*(ptr_lookup_candidates++),
           yl = (int)*(ptr_lookup_candidates++);
-        for (unsigned int N = 0; N<3000/nb_lookup_candidates; ++N) {
+        const unsigned int Nmax = cimg::round(lookup_size*lookup_size/(10*nb_lookup_candidates),1,1);
+        for (unsigned int N = 0; N<Nmax; ++N) {
           const int
             x = N?cimg::min(width()-1-p2,cimg::max(p1,(int)cimg::round(xl + l2*cimg::crand()))):xl,
             y = N?cimg::min(height()-1-p2,cimg::max(p1,(int)cimg::round(yl + l2*cimg::crand()))):yl;
@@ -1264,7 +1248,10 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
           }
         }
       }
-    } else { // Exhaustive search.
+    } else { // No lookup candidates -> exhaustive search.
+      const int
+        x0 = cimg::max(p1,target_x-l1), y0 = cimg::max(p1,target_y-l1),
+        x1 = cimg::min(width()-1-p2,target_x+l2), y1 = cimg::min(height()-1-p2,target_y+l2);
       for (int y = y0; y<=y1; y+=lookup_increment)
         for (int x = x0; x<=x1; x+=lookup_increment) {
           if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
@@ -1287,7 +1274,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         }
     }
 
-    if (best_x<0) { // If no candidate found.
+    if (best_x<0) { // If no best patch found.
       priorities(target_x-ox,target_y-oy,0)/=10; // Reduce its priority (lower data_term).
       if (++nb_fails>=4) { // If too much consecutive fails :
         nb_fails = 0;
@@ -1301,7 +1288,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
           else return *this; // Pathological case, probably a weird mask.
         }
       }
-    } else { // Candidate found : reconstruct missing part on the target patch.
+    } else { // Best patch found -> reconstruct missing part on the target patch.
       _lookup_size = lookup_size;
       nb_lookups = nb_fails = 0;
       _inpaint_patch_crop(best_x-p1,best_y-p1,best_x+p2,best_y+p2,0).move_to(pbest);
