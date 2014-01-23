@@ -20343,13 +20343,17 @@ gimp_inpaint_patch :
   -if $9 # Mask by color.
     -repeat @# -l[$>]
       --select_color 0,${10-13}
-      -$inpaint[0] [1],$1,{$1*$2},$3,{$4*$1},${5-8}
+      -if {@.>=1583} -$inpaint[0] [1],$1,{$1*$2},$3,{$4*$1},${5-8}
+      -else -$inpaint[0] [1],$1,{$1*$2},{round(1+$3)},{$4*$1},${5-8}
+      -endif
       -rm[1]
     -endl -done
   -else # Mask by top layer.
     -if {@#==1} -return -endif
     -to_a[0] -channels[0] 100% -ge[0] 50%
-    -$inpaint[^0] [0],$1,{$1*$2},$3,{$4*$1},${5-8}
+    -if {@.>=1583} -$inpaint[^0] [0],$1,{$1*$2},$3,{$4*$1},${5-8}
+    -else -$inpaint[^0] [0],$1,{$1*$2},{round(1+$3)},{$4*$1},${5-8}
+    -endif
     -to_a[0] -f[0] 0
   -endif
 

@@ -1983,7 +1983,7 @@ gmic& gmic::print(const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(16384);
+  CImg<char> message(16384,1,1,1,0);
   cimg_vsnprintf(message,message.width(),format,ap);
   gmic_ellipsize(message,message.width());
   va_end(ap);
@@ -2004,7 +2004,7 @@ gmic& gmic::warn(const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024+512);
+  CImg<char> message(1024+512,1,1,1,0);
   cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string().data());
   cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,message.width());
@@ -2025,7 +2025,7 @@ gmic& gmic::warn(const char *format, ...) {
 gmic& gmic::error(const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024+512);
+  CImg<char> message(1024+512,1,1,1,0);
   if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_files[debug_filename].data(),
@@ -2054,7 +2054,7 @@ gmic& gmic::debug(const char *format, ...) {
   if (!is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024);
+  CImg<char> message(1024,1,1,1,0);
   cimg_vsnprintf(message,message.width(),format,ap);
   gmic_ellipsize(message,message.width());
   va_end(ap);
@@ -2103,9 +2103,9 @@ gmic& gmic::add_commands(const char *const data_commands,
   for (const char *data = data_commands; *data; is_last_slash = _is_last_slash, line_number+=is_newline?1:0) {
 
     // Read new line.
-    char *_line = line;
-    const char *const line_end = line.end();
-    while (*data!='\n' && *data && _line<line_end) *(_line++) = *(data++); *_line = 0;
+    char *_line = line, *const line_end = line.end();
+    while (*data!='\n' && *data && _line<line_end) *(_line++) = *(data++);
+    if (_line<line_end) *_line = 0; else *(line_end-1) = 0;
     if (*data=='\n') { is_newline = true; ++data; } else is_newline = false; // Skip next '\n'.
 
     // Replace non-usual characters by spaces.
@@ -2113,10 +2113,13 @@ gmic& gmic::add_commands(const char *const data_commands,
     _line = line; if (*_line=='#') *_line = 0; else do { // Remove comments.
         if ((_line=std::strchr(_line,'#')) && *(_line-1)==' ') { *--_line = 0; break; }
       } while (_line++);
+
     // Remove useless trailing spaces.
     char *linee = line.data() + std::strlen(line) - 1;
-    while (*linee==' ' && linee>=line) --linee; *(linee+1) = 0;
+    while (linee>=line && *linee==' ') --linee; *(linee+1) = 0;
     char *lines = line; while (*lines==' ') ++lines; // Remove useless leading spaces.
+    if (!*lines) continue; // Empty line.
+
     // Check if last character is a '\'...
     _is_last_slash = false;
     for (_line = linee; *_line=='\\' && _line>=lines; --_line) _is_last_slash = !_is_last_slash;
@@ -2375,7 +2378,7 @@ gmic& gmic::print(const CImgList<T>& list, const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(16384);
+  CImg<char> message(16384,1,1,1,0);
   cimg_vsnprintf(message,message.width(),format,ap);
   gmic_ellipsize(message,message.width());
   va_end(ap);
@@ -2396,7 +2399,7 @@ gmic& gmic::print(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(16384);
+  CImg<char> message(16384,1,1,1,0);
   cimg_vsnprintf(message,message.width(),format,ap);
   gmic_ellipsize(message,message.width());
   va_end(ap);
@@ -2420,7 +2423,7 @@ gmic& gmic::warn(const CImgList<T>& list, const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024+512);
+  CImg<char> message(1024+512,1,1,1,0);
   cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string().data());
   cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,message.width());
@@ -2442,7 +2445,7 @@ gmic& gmic::warn(const CImgList<T>& list, const CImg<unsigned int>& scope_select
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024+512);
+  CImg<char> message(1024+512,1,1,1,0);
   cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string(scope_selection).data());
   cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
   gmic_ellipsize(message,message.width());
@@ -2469,7 +2472,7 @@ template<typename T>
 gmic& gmic::error(const CImgList<T>& list, const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024+512);
+  CImg<char> message(1024+512,1,1,1,0);
   if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_files[debug_filename].data(),
@@ -2500,7 +2503,7 @@ gmic& gmic::error(const char *const command, const CImgList<T>& list,
                   const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024+512);
+  CImg<char> message(1024+512,1,1,1,0);
   if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_files[debug_filename].data(),
@@ -2531,7 +2534,7 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
                   const char *const format, ...) {
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024+512);
+  CImg<char> message(1024+512,1,1,1,0);
   if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,512,"*** Error in %s (file '%s', %sline %u) *** ",
                   scope2string().data(),commands_files[debug_filename].data(),
@@ -2565,7 +2568,7 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
 template<typename T>
 gmic& gmic::_arg_error(const CImgList<T>& list, const char *const command,
                        const char *const argument) {
-  CImg<char> message(1024);
+  CImg<char> message(1024,1,1,1,0);
   if (debug_filename<commands_files.size() && debug_line!=~0U)
     cimg_snprintf(message,message.width(),
                   "*** Error in %s (file '%s', %sline %u) *** Command '-%s': Invalid argument '%s'.",
@@ -2599,7 +2602,7 @@ gmic& gmic::debug(const CImgList<T>& list, const char *format, ...) {
   if (!is_debug) return *this;
   va_list ap;
   va_start(ap,format);
-  CImg<char> message(1024);
+  CImg<char> message(1024,1,1,1,0);
   cimg_vsnprintf(message,message.width(),format,ap);
   gmic_ellipsize(message,message.width());
   va_end(ap);
