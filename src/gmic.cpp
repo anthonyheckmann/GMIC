@@ -1233,16 +1233,17 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       const int
         xl = lookup_candidates(0,C),
         yl = lookup_candidates(1,C);
-      visu.draw_rectangle(xl-l1,yl-l1,xl+l2,yl+l2,CImg<ucharT>::vector(0,255,0).data(),0.5f);
+      visu.draw_rectangle(xl-l1,yl-l1,xl+l2,yl+l2,CImg<ucharT>::vector(0,255,0).data(),0.2f);
     }
     visu.draw_rectangle(target_x-p1,target_y-p1,target_x+p2,target_y+p2,CImg<ucharT>::vector(255,0,0).data(),0.5f);
     static CImgDisplay disp_debug;
     disp_debug.display(visu).set_title("DEBUG");
+    static int foo = 30;
+    if (!(foo%5)) visu.save("video.ppm",foo);
+    ++foo;
     */
 
     // Begin patch lookup.
-
-    //    CImg<boolT> is_visited(width(),height(),1,1,false);
     ptr_lookup_candidates = lookup_candidates.data();
     for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
       const int
@@ -1251,7 +1252,6 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         x0 = cimg::max(p1,xl-l1), y0 = cimg::max(p1,yl-l1),
         x1 = cimg::min(width()-1-p2,xl+l2), y1 = cimg::min(height()-1-p2,yl+l2);
       for (int y = y0; y<=y1; ++y)
-        //        for (int x = x0; x<=x1; ++x) if (!is_visited(x,y)) {
         for (int x = x0; x<=x1; ++x) {
             if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
             else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
@@ -1270,7 +1270,6 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
               }
               if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
             }
-            //            is_visited(x,y) = true;
         }
     }
 
