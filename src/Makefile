@@ -98,7 +98,7 @@ ifeq ($(CC),clang++)
 OPT_CFLAGS = -O1
 endif
 ifeq ($(CC),icc)
-OPT_CFLAGS = -O3 -ipo -no-prec-div -override-limits
+OPT_CFLAGS = -fast
 endif
 
 # Flags to enable parallel processing.
