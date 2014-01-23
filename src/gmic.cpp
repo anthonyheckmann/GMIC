@@ -1833,7 +1833,7 @@ static DWORD WINAPI gmic_parallel(void *arg)
     st.exception._command_help.assign(e._command_help);
     st.exception._message.assign(e._message);
   }
-#if cimg_OS!=2
+#if defined(gmic_is_parallel) && cimg_OS!=2
   pthread_exit(0);
 #else
   return 0;
@@ -3180,11 +3180,7 @@ CImg<char> gmic::substitute_item(const char *const source,
       // Substitute '@*' -> number of available cpus.
       } else if (*nsource=='@' && nsource[1]=='*') {
         nsource+=2;
-#ifdef gmic_is_parallel
         cimg_snprintf(substr,substr.width(),"%u",cimg::nb_cpus());
-#else
-        *substr = '1'; substr[1] = 0;
-#endif
         CImg<char>(substr.data(),std::strlen(substr)).move_to(substituted_items);
 
       // Substitute '@^' -> current level of verbosity.
@@ -8150,6 +8146,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #endif // #if cimg_OS!=2
 #else
               gmic_parallel<T>((void*)&_threads_data[l]);
+
 #endif // #ifdef gmic_is_parallel
           }
 
