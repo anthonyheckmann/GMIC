@@ -1238,10 +1238,12 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       visu.draw_rectangle(xl-l1,yl-l1,xl+l2,yl+l2,CImg<ucharT>::vector(0,255,0).data(),0.2f);
     }
     visu.draw_rectangle(target_x-p1,target_y-p1,target_x+p2,target_y+p2,CImg<ucharT>::vector(255,0,0).data(),0.5f);
-    static CImgDisplay disp_debug;
-    disp_debug.display(visu).set_title("DEBUG");
-    static int foo = 30;
-    if (!(foo%5)) visu.save("video.ppm",foo);
+    static int foo = 0;
+    if (!(foo%3)) {
+      visu.save("video.ppm",foo);
+      static CImgDisplay disp_debug;
+      disp_debug.display(visu).set_title("DEBUG");
+    }
     ++foo;
     */
 
