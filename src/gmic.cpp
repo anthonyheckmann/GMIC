@@ -1109,11 +1109,12 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
   const float one = 1;
 
   CImg<floatT> confidences(nmask), priorities(dx,dy,1,2,-1), pC;
-  CImg<unsigned int> saved_patches(4,256);
+  CImg<unsigned int> saved_patches(4,256), is_visited(width(),height(),1,1,0);
   CImg<ucharT> pM, pN;  // Pre-declare patch variables (avoid iterative memory alloc/dealloc).
   CImg<T> pP, pbest;
   CImg<floatT> weights(patch_size,patch_size,1,1,0);
   weights.draw_gaussian((float)p1,(float)p1,patch_size/15.0f,&one)/=patch_size2;
+  unsigned int target_index = 0;
 
   while (true) {
 
@@ -1196,6 +1197,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       move_to(pM);
     float best_ssd = cimg::type<float>::max();
     int best_x = -1, best_y = -1;
+    ++target_index;
 
     // Locate already reconstructed neighbors (if any), to get good origins for patch lookup.
     CImg<unsigned int> lookup_candidates(2,256);
@@ -1252,7 +1254,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         x0 = cimg::max(p1,xl-l1), y0 = cimg::max(p1,yl-l1),
         x1 = cimg::min(width()-1-p2,xl+l2), y1 = cimg::min(height()-1-p2,yl+l2);
       for (int y = y0; y<=y1; ++y)
-        for (int x = x0; x<=x1; ++x) {
+        for (int x = x0; x<=x1; ++x) if (is_visited(x,y)!=target_index) {
             if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
             else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
             if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
@@ -1270,7 +1272,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
               }
               if (ssd<best_ssd) { best_ssd = ssd; best_x = x; best_y = y; }
             }
-        }
+            is_visited(x,y) = target_index;
+          }
     }
 
     if (best_x<0) { // If no best patch found.
@@ -1313,6 +1316,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
   nmask.assign();  // Free some unused memory resources.
   priorities.assign();
   confidences.assign();
+  is_visited.assign();
 
   // Blend inpainting result (if requested), using multi-scale blending algorithm.
   if (blend_size && blend_scales) {
@@ -1814,7 +1818,7 @@ struct st_gmic_parallel {
 #else
   HANDLE thread_id;
 #endif // #if cimg_OS!=2
-#endif // #ifdef gmic_parallel
+#endif // #ifdef gmic_is_parallel
 };
 
 template<typename T>

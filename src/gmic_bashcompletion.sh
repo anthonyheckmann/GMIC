@@ -2393,7 +2393,7 @@ _gmic_def()
 		return 0
 		;;
 		"-inpaint" | "--inpaint")
-		COMPREPLY=( $(compgen -W "[mask] [mask],_patch_size>=1,_lookup_size>=1,_lookup_increment>=1,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={0|1}") )
+		COMPREPLY=( $(compgen -W "[mask] [mask],_patch_size>=1,_lookup_size>=1,_lookup_factor>=0,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={0|1}") )
 		return 0
 		;;
 		"-inpaint_flow" | "--inpaint_flow")
