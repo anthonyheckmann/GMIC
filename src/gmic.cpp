@@ -1214,6 +1214,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         const int off_x = target_x - dest_x, off_y = target_y - dest_y;
         *(ptr_lookup_candidates++) = src_x + off_x;
         *(ptr_lookup_candidates++) = src_y + off_y;
+        is_visited(src_x,src_y) = target_index;
         if (++nb_lookup_candidates>=lookup_candidates._height) lookup_candidates.resize(2,-200,1,1,0);
       }
     }
@@ -1229,7 +1230,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
     }
     const int l2 = (int)final_lookup_size/2, l1 = (int)final_lookup_size - l2 - 1;
 
-    /*
+#ifdef gmic_debug
     CImg<ucharT> visu(*this,false);
     for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
       const int
@@ -1245,7 +1246,7 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       disp_debug.display(visu).set_title("DEBUG");
     }
     ++foo;
-    */
+#endif
 
     // Begin patch lookup.
     ptr_lookup_candidates = lookup_candidates.data();
