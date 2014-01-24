@@ -1214,7 +1214,9 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         const int off_x = target_x - dest_x, off_y = target_y - dest_y;
         *(ptr_lookup_candidates++) = src_x + off_x;
         *(ptr_lookup_candidates++) = src_y + off_y;
-        is_visited(src_x,src_y) = target_index;
+
+        //        is_visited.draw_rectangle(src_x-p1,src_y-p1,0,0,src_x+p2,src_y+p2,0,0,target_index,1);
+
         if (++nb_lookup_candidates>=lookup_candidates._height) lookup_candidates.resize(2,-200,1,1,0);
       }
     }
