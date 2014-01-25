@@ -2643,7 +2643,7 @@ gmic& gmic::debug(const CImgList<T>& list, const char *format, ...) {
 template<typename T>
 inline bool gmic_is_valid_pointer(const T *const ptr) {
 #if cimg_OS==1
-  const int result = access((const char *)ptr,F_OK);
+  const int result = access((const char*)ptr,F_OK);
   if (result==-1 && errno==EFAULT) return false;
 #elif cimg_OS==2
   return !IsBadReadPtr((void*)ptr,1);
