@@ -3550,7 +3550,8 @@ CImg<char> gmic::substitute_item(const char *const source,
             if (!subset[1]) {
               cimg::split_filename(images_names[nind].data(),substr);
               const char *const basename = cimg::basename(substr);
-              if (substr.data()!=basename) std::strcpy(substr,basename);
+              if (substr.data()!=basename)
+                substr.draw_image(CImg<char>::string(basename));
             } else is_substitution_done = false;
             break;
           case 'x' :
@@ -10369,8 +10370,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if (!std::strcmp("-unroll",command)) {
             gmic_substitute_args();
             char axis = 'y';
-            if (!argument[1] && (*argument=='x' || *argument=='y' ||
-                                 *argument=='z' || *argument=='c')) {
+            if ((*argument=='x' || *argument=='y' ||
+                 *argument=='z' || *argument=='c') && !argument[1]) {
               axis = *argument;
               ++position;
             }
