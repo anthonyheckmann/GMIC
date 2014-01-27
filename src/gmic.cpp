@@ -2667,6 +2667,8 @@ const CImg<T>& gmic::check_image(const CImgList<T>& list, const CImg<T>& img) {
   else error(list,"Image list contains an invalid shared image (%d,%d,%d,%d) "
              "(references a deallocated buffer).",
              img.width(),img.height(),img.depth(),img.spectrum());
+#else
+  cimg::unused(list);
 #endif
   return img;
 }
