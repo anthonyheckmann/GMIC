@@ -2659,13 +2659,15 @@ CImg<T>& gmic::check_image(const CImgList<T>& list, CImg<T>& img) {
 
 template<typename T>
 const CImg<T>& gmic::check_image(const CImgList<T>& list, const CImg<T>& img) {
-  if (!img.is_shared() || gmic_is_valid_pointer(img.data())) return img;
-  if (is_debug) error(list,"Image list contains an invalid shared image (%p,%d,%d,%d,%d) "
-                      "(references a deallocated buffer).",
-                      img.data(),img.width(),img.height(),img.depth(),img.spectrum());
-  else error(list,"Image list contains an invalid shared image (%d,%d,%d,%d) "
-             "(references a deallocated buffer).",
-             img.width(),img.height(),img.depth(),img.spectrum());
+  if (is_debug) {
+    if (!img.is_shared() || gmic_is_valid_pointer(img.data())) return img;
+    if (is_debug) error(list,"Image list contains an invalid shared image (%p,%d,%d,%d,%d) "
+                        "(references a deallocated buffer).",
+                        img.data(),img.width(),img.height(),img.depth(),img.spectrum());
+    else error(list,"Image list contains an invalid shared image (%d,%d,%d,%d) "
+               "(references a deallocated buffer).",
+               img.width(),img.height(),img.depth(),img.spectrum());
+  }
   return img;
 }
 
