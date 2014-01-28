@@ -3214,7 +3214,7 @@ Inpaint selected images by specified mask.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def293.jpg}\\
 {\footnotesize \textbf{Example 293~:} \texttt{image.jpg 100\%,100\% -ellipse 50\%,50\%,30,30,0,1,255 -ellipse 20\%,20\%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def294.jpg}\\
-{\footnotesize \textbf{Example 294~:} \texttt{image.jpg 100\%,100\% -circle 30\%,30\%,30,1,255,0,255 -circle 70\%,70\%,50,1,255,0,255 --inpaint[0] [1],17,24,0.5,30,0 -remove[1]}}
+{\footnotesize \textbf{Example 294~:} \texttt{image.jpg 100\%,100\% -circle 30\%,30\%,30,1,255,0,255 -circle 70\%,70\%,50,1,255,0,255 --inpaint[0] [1],5,15,0.5,9,0 -remove[1]}}
 \end{center}
 
 \subsection{\emph{-inpaint\_flow\index{-inpaint\_flow}} }\vspace*{-0.5em}
@@ -3278,8 +3278,8 @@ Apply iterations of the mean curvature flow on selected images.
 
 \subsection{\emph{-median\index{-median}} (+)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{radius$>$=0}}\\~\\
-Apply median filter of specified radius on selected images.
+{\small \texttt{size$>$=0}}\\~\\
+Apply median filter on selected images with structuring element size x size.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def302.jpg}\\
 {\footnotesize \textbf{Example 302~:} \texttt{image.jpg --median 5}}
 \end{center}

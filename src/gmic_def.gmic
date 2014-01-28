@@ -10742,17 +10742,20 @@ transition3d : -check "isint(${1=10}) && $1>=2 && isint(${2=3}) && $2>0 && isint
 #
 #-----------------------------
 
-#@gmic demo
+#@gmic demo : _run_in_parallel={ 0=no | 1=yes | 2=auto }
 #@gmic : Show a menu to select and view all G'MIC interactive demos.
-demo :
+demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   -e[] "\n
 ------ G'MIC demos menu -----------------\n
 ----\n
 ---- Mouse button to select a demo.\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
   -v - -l[]
+  parallel_mode={2-if($1!=2,$1,@*>2)}
   300,420,1,3 --plasma[-1] 1,1,5 -n[-1] 0,230 -sh[-1] 0,1 -/[-1] 2.2 -rm[-1] -water[-1] 100 -*[-1] 0.15
   100%,100%,1,3
   0 -text[-1] "1- Blobs editor\n"\
@@ -10825,11 +10828,12 @@ demo :
     -if {$y>=0} y={max(0,min(26,int(($y-$y0)/13)))} -j[0] [{if($selected>=0,5,4)}],0,{$y0+13*$y},0,0,0.2 -endif # Menu location.
 
     -w[0] -wait 20
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[0] 200%,200% -elif {@{!,CTRLLEFT}&&@{!,C}} -w[0] 100%,100% -endif
 
     -if {(@{!,b}&1)&&$selected<0} selected=$y # Selection
     -elif {!@{!,b}}
       -if {$selected>=0&&$y==$selected}
-      -m "com : -v 0 "@{-arg\ {1+$y},$commands} -parallel 1,"-l[] -com -v -1 -rm -endl" -uncommand com
+      -m "com : -v 0 "@{-arg\ {1+$y},$commands} -parallel $parallel_mode,"-l[] -com -v -1 -rm -endl" -uncommand com
       -endif
       selected=-1
     -endif

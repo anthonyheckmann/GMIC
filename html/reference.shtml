@@ -2752,7 +2752,7 @@ scale>0
 <br/>Otherwise, it used a patch-based reconstruction method, that can be very time consuming.
 <br/><br/><b>Default values</b>: 'patch_size', 'lookup_size=22', 'lookup_factor=0.5', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=1'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def293.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg 100%,100% -ellipse 50%,50%,30,30,0,1,255 -ellipse 20%,20%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]</div></div></td><td><tt>image.jpg 100%,100% -ellipse 50%,50%,30,30,0,1,255 -ellipse 20%,20%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]</tt></td></tr>
-<tr><td width="40"><div><a href="img/gmic_def294.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],17,24,0.5,30,0 -remove[1]</div></div></td><td><tt>image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],17,24,0.5,30,0 -remove[1]</tt></td></tr>
+<tr><td width="40"><div><a href="img/gmic_def294.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],5,15,0.5,9,0 -remove[1]</div></div></td><td><tt>image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],5,15,0.5,9,0 -remove[1]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-inpaint_flow</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _nb_iter1>=0,_nb_iter2>=0,_dt>=0,_alpha,_sigma
@@ -2806,10 +2806,10 @@ _nb_iter>=0,_dt,_sequence_flag={ 0 | 1 }
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def301.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --meancurvature_flow 20</div></div></td><td><tt>image.jpg --meancurvature_flow 20</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-median (+)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-radius>=0
+size>=0
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Apply median filter of specified radius on selected images.
+<p style="margin-left:100px"><tt>Apply median filter on selected images with structuring element size x size.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def302.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --median 5</div></div></td><td><tt>image.jpg --median 5</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-normalize_local</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">

@@ -2421,7 +2421,7 @@ _gmic_def()
 		return 0
 		;;
 		"-median" | "--median")
-		COMPREPLY=( $(compgen -W "radius>=0 >") )
+		COMPREPLY=( $(compgen -W "size>=0 >") )
 		return 0
 		;;
 		"-normalize_local" | "--normalize_local")
