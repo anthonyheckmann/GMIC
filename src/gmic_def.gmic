@@ -15278,9 +15278,10 @@ gimp_gmicky_preview :
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
 #@gimp : - <b>2013/12/07</b> : version <i>1.5.8.0</i>.\n
 #@gimp : - <span foreground="purple"><b>2014/01/08</b> : version <i>1.5.8.2</i> (Current stable).</span>\n
+#@gimp : - <b>2014/01/28</b> : version <i>1.5.8.3</i> (Current beta).\n
 #@gimp : "}
-#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157638741634925/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/01/08</i>.</small>")
+#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157639728004585/")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/01/28</i>.</small>")
 
 #@gimp _<b>Arrays &amp; tiles</b>
 #--------------------------------
@@ -22798,12 +22799,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-foo :
-  (5.5,2.5,3,3,7.5,4.5,4,4,0,8.5,4,6)
-  (3,13,8.5,12.5,15,12.5,7,13.5,14,19,10.5,12,17.5,12,14)
-  (17,3.5,14.5,7.5)
-
-  -e @{0,ia}
-  -e @{1,ia}
-  -e @{2,ia}
