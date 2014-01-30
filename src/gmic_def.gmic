@@ -8372,7 +8372,7 @@ sprites3d :
     -y -a y
   -endl -done -rm[-1] -v +
 
-#@gmic star3d : nb_branches>0,0<=thickness<=1
+#@gmic star3d : _nb_branches>0,0<=_thickness<=1
 #@gmic : Input 3d star at (0,0,0), with specified geometry.
 #@gmic : Default values: 'nb_branches=5' and 'thickness=0.38'.
 #@gmic : $ -star3d , --primitives3d 1 -color3d[-2] @{-RGB}
@@ -9685,13 +9685,14 @@ stained_glass : -check "${1=40%}>=0 && ${2=0.2}>=0" -skip ${3=0}
     -n[-1] 0,1  -^[-1] $2 -*
   -endl -done -v +
 
-#@gmic star : _width>0,_height>0
+#@gmic star : _width>0,_height>0,_nb_branches>0,0<=_thickness<=1
 #@gmic : Input star binary mask with specified size.
+#@gmic : Default values: 'width=height=512', 'nb_branches=5' and 'thickness=0.38'.
 #@gmic : $ -star ,
-star : -check "${1=512}>=1 && ${2=$1}>=1"
-  -e[^-1] "Input $1x$2 star binary mask."
+star : -check "${1=512}>=1 && ${2=$1}>=1 && ${3=5}>0 && ${4=0.5}>=0 && $4<=1"
+  -e[^-1] "Input $1x$2 star binary mask, with $3 branches and thickness $4."
   -v - -l[]
-    -star3d 5,0.5 -col3d 1 -c3d -n3d -*3d $1,$2
+    -star3d $3,$4 -col3d 1 -c3d -n3d -*3d $1,$2
     $1,$2 -object3d[-1] [-2],50%,50%,0,1,2 -rm[-2]
     -nm "[Heart binary mask]"
   -endl -v +
