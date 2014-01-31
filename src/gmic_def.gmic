@@ -8382,7 +8382,7 @@ star3d : -check "${1=5}>0 && ${2=0.38}>=0 && $2<=1"
   N={2*$1} ({'CImg3d'}) -+[-1] 0.5 ({$N+1};$N)
   ({-pi/2};{3*pi/2}) -r[-1] 1,{$N+1},1,1,3 -rows[-1] 0,{h-2} --sin[-1] -cos[-2] -a[-2,-1] x
   (1,1;$2,$2) -*[-2,-1] -z[-1] 0,2 -r[-1] 3,{h+1},1,1,0
-  (3,$N,1,0;3,$N,$N,{$N-1}) -r[-1] 4,$N,1,1,3 -=[-1] 0,2,100%
+  (3,$N,1,0;3,$N,$N,{$N-1}) -r[-1] 4,$N,1,1,3 -round[-1] -=[-1] 0,2,100%
   3,$N,1,1,200 1,$N,1,1,1 -y[-6,-4--2] -a[-6--1] y -nm[-1] [3d\ star]
   -v +
 
@@ -9687,9 +9687,10 @@ stained_glass : -check "${1=40%}>=0 && ${2=0.2}>=0" -skip ${3=0}
 
 #@gmic star : _width>0,_height>0,_nb_branches>0,0<=_thickness<=1
 #@gmic : Input star binary mask with specified size.
+#@gmic : Default values: 'width=height=512', 'nb_branches=5' and 'thickness=0.38'.
 #@gmic : $ -star ,
 star : -check "${1=512}>=1 && ${2=$1}>=1 && ${3=5}>0 && ${4=0.5}>=0 && $4<=1"
-  -e[^-1] "Input $1x$2 star binary mask with $3 branches and thickness $4."
+  -e[^-1] "Input $1x$2 star binary mask, with $3 branches and thickness $4."
   -v - -l[]
     -star3d $3,$4 -col3d 1 -c3d -n3d -*3d $1,$2
     $1,$2 -object3d[-1] [-2],50%,50%,0,1,2 -rm[-2]
