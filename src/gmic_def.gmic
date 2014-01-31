@@ -17405,7 +17405,7 @@ gimp_mix_cmyk :
 gimp_mix_cmyk_preview :
   -gimp_split_preview "-gimp_mix_cmyk $*",$-1
 
-#@gimp Select / replace color : gimp_select_color, gimp_select_color_preview(1)
+#@gimp Select/replace color : gimp_select_color, gimp_select_color_preview(1)
 #@gimp : Similarity space = choice(0,"RGB[A]","RGB","YCbCr","Red","Green","Blue","Opacity","Luminance","Blue & Red chrominances","Hue","Saturation")
 #@gimp : Tolerance = float(20,0,100)
 #@gimp : Smoothness = float(0,0,10)
@@ -22377,9 +22377,8 @@ gmicol_rotate :
 #@gmicol clone("Mixer [HSV]")
 #@gmicol clone("Mixer [Lab]")
 #@gmicol clone("Mixer [CMYK]")
-#@gmicol clone("Replace color")
 #@gmicol clone("RGB tone")
-#@gmicol clone("Select color")
+#@gmicol clone("Select/replace color")
 #@gmicol clone("Sepia")
 #@gmicol clone("Tone presets")
 #@gmicol clone("User-defined")
