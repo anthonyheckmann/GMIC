@@ -5261,7 +5261,10 @@ _nb_frames>=2,_nb_xtiles>0,_nb_ytiles>0,_axis_x,_axis_y,_axis_z,_is_antialias
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def605.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --blur 5 -transition3d 9 -drgba</div></div></td><td><tt>image.jpg --blur 5 -transition3d 9 -drgba</tt></td></tr>
 </table></tt></p><br/><h3><a id="subsection20"><font color="purple">** <u>Interactive demos</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
 <p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-demo</b>:</font>
+<p style="margin-left:150px"><tt><i><font color="purple">
+_run_in_parallel={ 0=no | 1=yes | 2=auto }
 
+</font></i></tt></p>
 <p style="margin-left:100px"><tt>Show a menu to select and view all G'MIC interactive demos.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-x_blobs</b>:</font>
 

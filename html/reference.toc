@@ -663,7 +663,7 @@
 \contentsline {subsection}{\numberline {2.20.8}\emph {-x\_histogram} }{374}{subsection.2.20.8}
 \contentsline {subsection}{\numberline {2.20.9}\emph {-x\_hough} }{374}{subsection.2.20.9}
 \contentsline {subsection}{\numberline {2.20.10}\emph {-x\_jawbreaker} }{374}{subsection.2.20.10}
-\contentsline {subsection}{\numberline {2.20.11}\emph {-x\_life} }{374}{subsection.2.20.11}
+\contentsline {subsection}{\numberline {2.20.11}\emph {-x\_life} }{375}{subsection.2.20.11}
 \contentsline {subsection}{\numberline {2.20.12}\emph {-x\_light} }{375}{subsection.2.20.12}
 \contentsline {subsection}{\numberline {2.20.13}\emph {-x\_mandelbrot} }{375}{subsection.2.20.13}
 \contentsline {subsection}{\numberline {2.20.14}\emph {-x\_metaballs3d} }{375}{subsection.2.20.14}
@@ -673,7 +673,7 @@
 \contentsline {subsection}{\numberline {2.20.18}\emph {-x\_paint} }{375}{subsection.2.20.18}
 \contentsline {subsection}{\numberline {2.20.19}\emph {-x\_plasma} }{375}{subsection.2.20.19}
 \contentsline {subsection}{\numberline {2.20.20}\emph {-x\_quantize\_rgb} }{375}{subsection.2.20.20}
-\contentsline {subsection}{\numberline {2.20.21}\emph {-x\_reflection3d} }{375}{subsection.2.20.21}
+\contentsline {subsection}{\numberline {2.20.21}\emph {-x\_reflection3d} }{376}{subsection.2.20.21}
 \contentsline {subsection}{\numberline {2.20.22}\emph {-x\_rubber3d} }{376}{subsection.2.20.22}
 \contentsline {subsection}{\numberline {2.20.23}\emph {-x\_shadebobs} }{376}{subsection.2.20.23}
 \contentsline {subsection}{\numberline {2.20.24}\emph {-x\_spline} }{376}{subsection.2.20.24}
@@ -683,7 +683,7 @@
 \contentsline {subsection}{\numberline {2.20.28}\emph {-x\_whirl} }{376}{subsection.2.20.28}
 \contentsline {section}{\numberline {2.21}PINK-library operators}{376}{section.2.21}
 \contentsline {subsection}{\numberline {2.21.1}\emph {-output\_pink3d} }{376}{subsection.2.21.1}
-\contentsline {subsection}{\numberline {2.21.2}\emph {-pink} }{376}{subsection.2.21.2}
+\contentsline {subsection}{\numberline {2.21.2}\emph {-pink} }{377}{subsection.2.21.2}
 \contentsline {subsection}{\numberline {2.21.3}\emph {-pink\_grayskel} }{377}{subsection.2.21.3}
 \contentsline {subsection}{\numberline {2.21.4}\emph {-pink\_heightmaxima} }{378}{subsection.2.21.4}
 \contentsline {subsection}{\numberline {2.21.5}\emph {-pink\_heightminima} }{379}{subsection.2.21.5}

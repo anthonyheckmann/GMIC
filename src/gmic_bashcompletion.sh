@@ -3464,6 +3464,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "_nb_frames>=2,_nb_xtiles>0,_nb_ytiles>0,_axis_x,_axis_y,_axis_z,_is_antialias >") )
 		return 0
 		;;
+		"-demo" | "--demo")
+		COMPREPLY=( $(compgen -W "_run_in_parallel={0=no|1=yes|2=auto} >") )
+		return 0
+		;;
 		"-x_jawbreaker" | "--x_jawbreaker")
 		COMPREPLY=( $(compgen -W "0<_width<20,0<_height<20,0<_balls<=8 >") )
 		return 0
