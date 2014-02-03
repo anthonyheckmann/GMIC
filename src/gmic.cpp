@@ -1119,18 +1119,13 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
   while (true) {
 
     // Extract mask border points and compute priorities to find target point.
-    unsigned int nb_border_points = 0, nxm0 = dx, nym0 = dy, nxm1 = 0, nym1 = 0;
+    unsigned int nb_border_points = 0;
     float target_confidence = -1, target_priority = -1;
     int target_x = -1, target_y = -1;
     CImg_5x5(M,unsigned char);
+
     cimg_for_in5x5(nmask,xm0,ym0,xm1,ym1,x,y,0,0,M,unsigned char)
       if (!Mcc && (Mcp || Mcn || Mpc || Mnc)) { // Found mask border point.
-
-        // Try to update bounding box coordinates.
-        if (x<(int)nxm0) nxm0 = (unsigned int)x;
-        if (x>(int)nxm1) nxm1 = (unsigned int)x;
-        if (y<(int)nym0) nym0 = (unsigned int)y;
-        if (y>(int)nym1) nym1 = (unsigned int)y;
 
         float confidence_term = -1, data_term = -1;
         if (priorities(x,y)>=0) { // If priority has already been computed.
@@ -1189,7 +1184,6 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         ++nb_border_points;
       }
     if (!nb_border_points) break; // No more mask border points to inpaint!
-    xm0 = nxm0; ym0 = nym0; xm1 = nxm1; ym1 = nym1; // Set new bounding box coordinates.
 
     // Find best patch candidate to fill target point.
     _inpaint_patch_crop(target_x-p1,target_y-p1,target_x+p2,target_y+p2,0).move_to(pP);
