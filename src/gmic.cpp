@@ -1185,14 +1185,6 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
       }
     if (!nb_border_points) break; // No more mask border points to inpaint!
 
-    // Find best patch candidate to fill target point.
-    _inpaint_patch_crop(target_x-p1,target_y-p1,target_x+p2,target_y+p2,0).move_to(pP);
-    nmask._inpaint_patch_crop(target_x-ox-p1,target_y-oy-p1,target_x-ox+p2,target_y-oy+p2,0).
-      move_to(pM);
-    float best_ssd = cimg::type<float>::max();
-    int best_x = -1, best_y = -1;
-    ++target_index;
-
     // Locate already reconstructed neighbors (if any), to get good origins for patch lookup.
     CImg<unsigned int> lookup_candidates(2,256);
     unsigned int nb_lookup_candidates = 0, *ptr_lookup_candidates = lookup_candidates.data();
@@ -1233,15 +1225,22 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
     }
     visu.draw_rectangle(target_x-p1,target_y-p1,target_x+p2,target_y+p2,CImg<ucharT>::vector(255,0,0).data(),0.5f);
     static int foo = 0;
-    if (!(foo%3)) {
-      visu.save("video.ppm",foo);
+    if (!(foo%1)) {
+      //      visu.save("video.ppm",foo);
       static CImgDisplay disp_debug;
       disp_debug.display(visu).set_title("DEBUG");
     }
     ++foo;
 #endif
 
-    // Begin patch lookup.
+    // Find best patch candidate to fill target point.
+    _inpaint_patch_crop(target_x-p1,target_y-p1,target_x+p2,target_y+p2,0).move_to(pP);
+    nmask._inpaint_patch_crop(target_x-ox-p1,target_y-oy-p1,target_x-ox+p2,target_y-oy+p2,0).
+      move_to(pM);
+    float best_ssd = cimg::type<float>::max();
+    int best_x = -1, best_y = -1;
+    ++target_index;
+
     ptr_lookup_candidates = lookup_candidates.data();
     for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
       const int
