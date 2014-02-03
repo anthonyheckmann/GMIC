@@ -22792,15 +22792,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-foo :
-  -repeat @# -l[$>]
-
-
-    -star {2%*$1*min(w,h)},,5,0.5
-    -star @{0,2%*($1-$2)*min(w,h)},,5,0.5
-    -r[-2,-1] 50%,50%,1,1,2
-    -r[-2,-1] [0],[0],1,1,0,0,0.5,0.5
-    --[-2] [-1]
-
-  -endl -done
