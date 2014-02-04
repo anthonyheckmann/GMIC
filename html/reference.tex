@@ -4818,7 +4818,7 @@ Convert selected 3d objects as sprites clouds, where the specified 2d sprite is 
 
 \subsection{\emph{-star3d\index{-star3d}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{nb\_branches$>$0,0$<$=thickness$<$=1}}\\~\\
+{\small \texttt{\_nb\_branches$>$0,0$<$=\_thickness$<$=1}}\\~\\
 Input 3d star at (0,0,0), with specified geometry.
 ~\\~\\\textbf{Default values}: {\small \texttt{'nb\_branches=5'} and \texttt{'thickness=0.38'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def471.jpg}\\
@@ -5571,8 +5571,9 @@ Generate stained glass from selected images.
 
 \subsection{\emph{-star\index{-star}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_width$>$0,\_height$>$0}}\\~\\
+{\small \texttt{\_width$>$0,\_height$>$0,\_nb\_branches$>$0,0$<$=\_thickness$<$=1}}\\~\\
 Input star binary mask with specified size.
+~\\~\\\textbf{Default values}: {\small \texttt{'width=height=512', 'nb\_branches=5'} and \texttt{'thickness=0.38'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def544.jpg}\\
 {\footnotesize \textbf{Example 544~:} \texttt{-star ,}}
 \end{center}

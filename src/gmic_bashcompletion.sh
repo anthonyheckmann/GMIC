@@ -2957,7 +2957,7 @@ _gmic_def()
 		return 0
 		;;
 		"-star3d" | "--star3d")
-		COMPREPLY=( $(compgen -W "nb_branches>0,0<=thickness<=1 >") )
+		COMPREPLY=( $(compgen -W "_nb_branches>0,0<=_thickness<=1 >") )
 		return 0
 		;;
 		"-streamline3d" | "--streamline3d")
@@ -3257,7 +3257,7 @@ _gmic_def()
 		return 0
 		;;
 		"-star" | "--star")
-		COMPREPLY=( $(compgen -W "_width>0,_height>0 >") )
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_nb_branches>0,0<=_thickness<=1 >") )
 		return 0
 		;;
 		"-stars" | "--stars")
