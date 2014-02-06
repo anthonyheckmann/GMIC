@@ -1222,7 +1222,7 @@ void convert_image_float2uchar(CImg<float>& img) {
 
 // Calibrate any image to fit the number of required channels (GRAY,GRAYA, RGB or RGBA).
 //---------------------------------------------------------------------------------------
-void calibrate_image(CImg<float>& img, const unsigned int channels, const bool preview) {
+void calibrate_image(CImg<float>& img, const unsigned int channels, const bool is_preview) {
   if (!img || !channels) return;
   switch (channels) {
 
@@ -1231,7 +1231,7 @@ void calibrate_image(CImg<float>& img, const unsigned int channels, const bool p
     case 1 : // from GRAY
       break;
     case 2 : // from GRAYA
-      if (preview) {
+      if (is_preview) {
         float *ptr_r = img.data(0,0,0,0), *ptr_a = img.data(0,0,0,1);
         cimg_forXY(img,x,y) {
           const unsigned int a = (unsigned int)*(ptr_a++), i = 96 + (((x^y)&8)<<3);
@@ -1246,7 +1246,7 @@ void calibrate_image(CImg<float>& img, const unsigned int channels, const bool p
       break;
     case 4 : // from RGBA
       img.get_shared_channels(0,2).RGBtoYCbCr();
-      if (preview) {
+      if (is_preview) {
         float *ptr_r = img.data(0,0,0,0), *ptr_a = img.data(0,0,0,3);
         cimg_forXY(img,x,y) {
           const unsigned int a = (unsigned int)*(ptr_a++), i = 96 + (((x^y)&8)<<3);
@@ -1285,7 +1285,7 @@ void calibrate_image(CImg<float>& img, const unsigned int channels, const bool p
       img.resize(-100,-100,1,3);
       break;
     case 2: // from GRAYA
-      if (preview) {
+      if (is_preview) {
         float *ptr_r = img.data(0,0,0,0), *ptr_a = img.data(0,0,0,1);
         cimg_forXY(img,x,y) {
           const unsigned int a = (unsigned int)*(ptr_a++), i = 96 + (((x^y)&8)<<3);
@@ -1298,7 +1298,7 @@ void calibrate_image(CImg<float>& img, const unsigned int channels, const bool p
     case 3: // from RGB
       break;
     case 4: // from RGBA
-      if (preview) {
+      if (is_preview) {
         float *ptr_r = img.data(0,0,0,0), *ptr_g = img.data(0,0,0,1),
           *ptr_b = img.data(0,0,0,2), *ptr_a = img.data(0,0,0,3);
         cimg_forXY(img,x,y) {
@@ -1449,7 +1449,7 @@ CImg<int> get_input_layers(CImgList<T>& images) {
 
 // Return the G'MIC command line needed to run the selected filter.
 //-----------------------------------------------------------------
-const char* get_commands_line(const bool preview) {
+const char* get_commands_line(const bool is_preview) {
   const unsigned int
     filter = get_current_filter(),
     nbparams = get_filter_nbparams(filter);
@@ -1461,7 +1461,7 @@ const char* get_commands_line(const bool preview) {
   case 3: case 4 : CImg<char>("-",1).move_to(lres); break;                // Very verbose.
   default: CImg<char>("-debug -",8).move_to(lres);                        // Debug.
   }
-  const CImg<char> &command_item = (preview?gmic_preview_commands[filter]:gmic_commands[filter]);
+  const CImg<char> &command_item = (is_preview?gmic_preview_commands[filter]:gmic_commands[filter]);
   if (command_item) {
     lres.insert(command_item);
     if (nbparams) {
