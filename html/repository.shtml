@@ -42,20 +42,6 @@
         </tr></table>
     </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
 
-  <div id="bloc_option"><div id="top_bleu"><div id="text_top">Fedora</div></div>
-    <div id="center"><div id="text_centre_intro">
-        Josef Radinger has set up binary packages for Fedora users.
-        Check out his repository to get them :
-        <ul>
-          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/16/i386/repoview/">Fedora 16, i386.</a></li>
-          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/17/i386/repoview/">Fedora 17, i386.</a></li>
-          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/18/i386/repoview/">Fedora 18, i386.</a></li>
-          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/16/x86_64/repoview/">Fedora 16, x86_64.</a></li>
-          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/17/x86_64/repoview/">Fedora 17, x86_64.</a></li>
-          <li><a href="http://www.nosuchhost.net/~cheese/fedora/packages/18/x86_64/repoview/">Fedora 18, x86_64.</a></li>
-        </ul>
-    </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
-
   <div id="bloc_option"><div id="top_bleu"><div id="text_top">Git repository</div></div>
     <div id="center"><div id="text_centre_intro">
         The source code of <b><font color="#000066">G'MIC</font></b> is hosted on a <a href="http://git-scm.com/"><i>git</i></a> repository with public access.
