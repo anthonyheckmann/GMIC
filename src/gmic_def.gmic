@@ -10852,6 +10852,8 @@ x_blobs :
 ------ Blobs editor --------------------------\n
 ----\n
 ---- Mouse to insert/move/delete blobs.\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------------------"
@@ -10864,11 +10866,13 @@ x_blobs :
   # Start event loop.
   moving=-1
   -do
-    x=@{!,x} y=@{!,y} b=@{!,b} nearest=-1
+    x={@{!,x}*@{0,w}/@{!,w}}
+    y={@{!,y}*@{0,h}/@{!,h}}
+    b=@{!,b} nearest=-1
 
     # Render image of blobs and find nearest blob to mouse pointer.
     -if {@#>1}
-      @{!,w},@{!,h},1,2
+      @{0,w},@{0,h},1,2
       -repeat @{1,h}
         r={@{1,2}*(1+@{1,3}*cos(@{1,4}+@{1,5}*@|*1000))}
         -ellipse[-1] @{1,0,1},$r,$r,0,1,@{1,6-7}
@@ -10878,7 +10882,9 @@ x_blobs :
       -b[-1] 15
       --norm[-1] --ge[-1] 50 -le[-2] 40 -*[-3,-1]
       --*[0,-1] -rm[-2] -rv[-2,-1] -*[-1] 1.6 -c[-1] 0,255 -+[-2,-1]
-      -w[-1] {w},{h} -rm[-1]
+      -w[-1]
+      -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+      -rm[-1]
     -else
       --text_outline[0] "G'MIC Blobs Editor",65,40,24,3,1,200,128,255
       -t[-1] "* Left mouse button : Create and move blobs.\n\n\
@@ -10887,7 +10893,9 @@ x_blobs :
               * Key 'ESC' or 'Q' : Quit.\n\n\
               * Colors and sizes of appearing blobs are\n   chosen randomly",\
              60,120,13,1,255
-      -w[-1] {w},{h} -rm[-1]
+      -w[-1]
+      -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+      -rm[-1]
     -endif
     -wait 20
 
@@ -10898,7 +10906,7 @@ x_blobs :
         -if {$moving<0} moving=$nearest -endif
         -=[1] $x,0,$moving -=[1] $y,1,$moving
         -else # Insert new blob.
-          (@{!,x},@{!,y},{?(20,50)},{?(-0.3,0.3)},{?(0,pi/2)},{?(0,0.009)},{?(64,255)},{?(64,255)}) -a[^0] y
+          ($x,$y,{?(20,50)},{?(-0.3,0.3)},{?(0,pi/2)},{?(0,0.009)},{?(64,255)},{?(64,255)}) -a[^0] y
           moving={h-1}
         -endif
     -elif {$b&2} # Remove existing blob.
@@ -10918,6 +10926,8 @@ x_bouncing :
   -e[] "\n
 ------ Bouncing balls ------------------------------\n
 ----\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------------------"
@@ -10954,7 +10964,9 @@ x_bouncing :
 
     --rows[-1] {h-2*70},{h-1-70} -mirror[-1] y -*[-1] [{$N+1}]
     -j[-2] [-1],0,@{-2,h-71},0,0,0.5 -rm[-1]
-    -w[-1] -rm[-1] -wait 20
+    -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+    -rm[-1] -wait 20
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -w 0 -rm -endl -v +
 
@@ -10964,6 +10976,8 @@ x_fire : -skip "${1=G'MIC}"
   -e[] "\n
 ------ Fire effect ----------------------\n
 ----\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
@@ -10987,7 +11001,9 @@ x_fire : -skip "${1=G'MIC}"
     -*3d[-1] 0.25,0.16,1 -object3d[0] [-1],50%,50%,0,1,3,0,0
     -rm[-1]
     angle={$angle+3}                                                 # Update 3d angle.
-    -w[-1] -rm[-1] -wait 40                                          # Display 3d object.
+    -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+    -rm[-1] -wait 40
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
 
   # Exit properly.
@@ -11000,15 +11016,17 @@ x_fireworks :
   -e[] "\n
 ------ Fireworks -----------------------\n
 ----\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
   -v - -l[]
   time=0
-  (0;64^0;32^128;0) -r 256,128,1,3,3          # [-2] = Background (color gradient).
-  [-1]                                        # [-1] = Rendered image.
-  -w[-1] 512,256,0,"[G'MIC] Fireworks"        # Display window.
-  -do                                         # Start animation loop.
+  (0;64^0;32^128;0) -r 256,128,1,3,3            # [-2] = Background (color gradient).
+  [-1]                                          # [-1] = Rendered image.
+  -w[-1] {1.5*w},{1.5*h},0,"[G'MIC] Fireworks"  # Display window.
+  -do                                           # Start animation loop.
     time={$time-1}
     -if {@#==2\ ||\ $time<0} # Insert new rocket.
       -i[0] ({?(w)},\        # X-position
@@ -11042,6 +11060,7 @@ x_fireworks :
       -if $to_be_removed -rm[$i] -else i={$i+1} -endif  # If processed rocket has to be removed.
     -done
     -w[-1] -wait 20  # Display rendered frame.
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {3*w},{3*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {1.5*w},{1.5*h} -endif
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -endl -k[-1] -w[] 0 -v +
 
@@ -11053,6 +11072,8 @@ x_fisheye :
 ----\n
 ---- Mouse pointer moves fish-eye center.\n
 ---- Mouse buttons set fish-eye size.\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
@@ -11066,7 +11087,7 @@ x_fisheye :
   -torus3d 20,6 -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} --r3d[-1] 1,0,0,90
   -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} -+3d[-1] 15 -+3d[-2,-1] -db3d 0 -c3d[-1]
   R=30
-  -w[-2] {2*@{-2,w}},{2*@{-2,h}},0,"[G'MIC] Fish-eye effect"
+  -w[-2] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G'MIC] Fish-eye effect"
   -do
     -wait 40
     -if {@{!,b}==1} R={min(80,$R+8)} -endif
@@ -11075,11 +11096,10 @@ x_fisheye :
     -if {@{!,x}>=0}
     -fisheye[-1] {@{!,x}*100/@{!,w}},{@{!,y}*100/@{!,h}},$R
     -endif
-    -w[-1] -rm[-1]
+    -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {3*w},{3*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {1.5*w},{1.5*h} -endif
+    -rm[-1]
     -if {@!==0" || "@{!,ESC}" || "@{!,Q}} -rm[-2,-1] -w 0 -v + -return -endif
-    -if {(@{!,CTRLLEFT}" || "@{!,CTRLRIGHT})" && "@{!,D}} -w[] {@{!,w}*1.5},{@{!,h}*1.5} -wait -1 -endif
-    -if {(@{!,CTRLLEFT}" || "@{!,CTRLRIGHT})" && "@{!,C}} -w[] {@{!,w}/1.5},{@{!,h}/1.5} -wait -1 -endif
-    -if {(@{!,CTRLLEFT}" || "@{!,CTRLRIGHT})" && "@{!,R}} -w[] @{0,w},@{0,h} -wait -1 -endif
   -while 1
 
 #@gmic x_fourier
@@ -11089,6 +11109,9 @@ x_fourier :
 ------ Fourier-filtering ----------------------------------------\n
 ----\n
 ---- Mouse buttons on the right image to set min/max frequencies.\n
+---- Keys 'CTRL+D' to increase window size.\n
+---- Keys 'CTRL+C' to decrease window size.\n
+---- Keys 'CTRL+R' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------------------------------"
@@ -11590,6 +11613,8 @@ x_light :
 ----\n
 ---- Move light position with mouse.\n
 ---- Mouse buttons fade light in/out.\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
@@ -11630,7 +11655,9 @@ x_light :
     --z[-1] $X,$Y,{$X+@{-2,w}-1},{$Y+@{-2,h}-1}
     -warp[-1] [-3],1,0,1
     -r[-1] 100%,100%,1,3 -+[-1] [-4] -c[-1] 0,255
-    -w[-1] {1.5*w},{1.5*h}
+    -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {3*w},{3*h}
+    -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {1.5*w},{1.5*h} -endif
     -rm[-1] -if {@{!,x}>=0" && "!@{!,b}} -wait -else -wait 20 -endif
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -w[] 0 -rm[-3--1] -v +
@@ -11693,6 +11720,8 @@ x_metaballs3d :
 ------ 3d metaballs ---------------------------------------\n
 ----\n
 ---- Mouse button or 'SPACE' key to switch rendering mode.\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------------------------"
@@ -11721,7 +11750,9 @@ x_metaballs3d :
       --dilate[-1] 3 --j[0] [-2],5,3,0,0,1,[-1],255 -mv[-1] 1 -rm[2,-2,-1]
     -endif
     --object3d[1] [-2],50%,50%,0,1,{if(!$mode,3,$mode)},0,0,300,0,0,-500,0.1,1.5
-    -w[-1] -rm[-3--1] -wait 20
+    -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+    -rm[-3--1] -wait 20
     -if {@{!,b}||@{!,SPACE}} mode={($mode+if(@{!,b}&2,-1,1))%6} -wait -1 -rm[1] -i[1] 0 -endif
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -rm -w 0 -endl -v +
@@ -11896,6 +11927,8 @@ x_pacman :
 ---- Eating a banana earns 5000 pts.\n
 ----\n
 ---- Arrow keys to control pacman.\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 --------------------------------------------------------------"
@@ -12000,7 +12033,9 @@ x_pacman :
       -endif
       -if {$oscore>0} -j[-1] [score$nscore],$xscore,$yscore,0,0,$oscore,[scorem$nscore],255 oscore={$oscore-0.04} yscore={$yscore-1} -endif
       -j[-1] [gate],158,223,0,0,0.6
-      -w[-1] -rm[-1]
+      -w[-1]
+      -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+      -rm[-1]
 
       # Manage ghosts displacements and collisions.
       -repeat 4
@@ -12326,6 +12361,8 @@ x_plasma :
   -e[] "\n
 ------ Plasma effect --------------------\n
 ----\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
@@ -12345,7 +12382,7 @@ x_plasma :
   M={w}
 
   # Start animation loop.
-  -w[] {2*@{0,w}},{2*@{0,h}},0,"[G'MIC] Plasma effect"
+  -w[] {1.5*@{0,w}},{1.5*@{0,h}},0,"[G'MIC] Plasma effect"
   t=0 tt={-1.5*@{0,w}}
   -do
     tic=@|
@@ -12374,8 +12411,9 @@ x_plasma :
     -if {$tt>=$M} tt={-1.5*@{0,w}} -endif
 
     # Display rendered frame.
-    -w[-1] -rm[-1]
-    -wait 20
+    -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {3*w},{3*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {1.5*w},{1.5*h} -endif
+    -rm[-1] -wait 20
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -rm[{-2*$N-2}--1] -w[] 0 -endl -v +
 
@@ -12398,6 +12436,8 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
 ---- Key 'M' init colormap with median-cut algorithm.\n
 ---- Key 'SPACE' does a single iteration of k-means and pauses.\n
 ---- Key 'ENTER' runs k-means algorithm.\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 --------------------------------------------------------------"
@@ -12452,7 +12492,10 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
       0 -text[-1] "Colors: "@{centroids,w},2,0,13,1,255,255,255 --dilate[-1] 3 -j[-3] [-2],2,2,0,0,1,[-1],255
       -rm[-2,-1] -nm[-1] visu_centroids -j[visu] [visu_centroids],5,310
     -endif
-    -w[visu] -1,-1,0,"[G'MIC] RGB quantization"
+    -l[visu]
+    -w -1,-1,0,"[G'MIC] RGB quantization"
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+    -endl
 
     # Check for user's interactions.
     x={int(@{!,x}*@{visu,w}/@{!,w})}
@@ -12539,6 +12582,8 @@ x_reflection3d :
   -e[] "\n
 ------ 3d reflection --------------------\n
 ----\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
@@ -12558,7 +12603,7 @@ x_reflection3d :
 
   # Start animation loop.
   xb=0 xl=0 anim=0
-  -w[] 300,300,0,"[G'MIC] 3d reflection"
+  -w[] 256,256,0,"[G'MIC] 3d reflection"
   -do
 
     tic=@|
@@ -12581,7 +12626,9 @@ x_reflection3d :
     -object3d[-1] [-4],$xf%,$yf%,0,1,4,0,0
 
     # Display frame and update animation variables.
-    -w[-1] -rm[-1]
+    -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+    -rm[-1]
     xb={($xb+6)&255}
     xl={($xl-6)&255}
     anim={$anim+1}
@@ -12597,6 +12644,8 @@ x_rubber3d :
   -e[] "\n
 ------ 3d rubber object -----------------\n
 ----\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
@@ -12607,12 +12656,15 @@ x_rubber3d :
   256,256,64,3
   {w},{h},1,3,'if(c==0,x,if(c==1,y,y*@{1,d}/h))'
   {w},{h},1,3
+  -w[] {w},{h},0,"[G'MIC] 3d rubber object"
   frame=0
   -do
     {w},{h},1,3 -fc[-1] 16,32,32 -object3d[-1] [0],50%,50%,0,1,3,0,0 -j[1] [-1],0,0,$frame -rm[-1]
     -r3d[0] 0.1,1,0.6,{3*cos(@|*1.25)} -r3d[0] 1,0.2,0.6,-1
     --warp[1] [2],0,0 -*[3] 0.8 -*[-1] 0.2 -+[3,-1]
-    -w[-1] {1.2*w},{1.2*h},0,"[G'MIC] 3d rubber object" -wait 20
+    -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+    -wait 20
     -sh[2] 2,2 --[-1] 1 -and[-1] {@{1,d}-1} -rm[-1]
     frame={($frame-1)%@{1,d}}
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
@@ -13004,6 +13056,8 @@ x_waves :
 ----\n
 ---- Left mouse button to drop balls.\n
 ---- Right mouse button to rotate view.\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -----------------------------------------"
@@ -13016,7 +13070,7 @@ x_waves :
     --mirror y --mirror x -+ -n 0,255
   -endl -else -k[0] -r[0] 100,100,1,3,2 -endif
   -i[0] (20;80;0^20;80;0^20;80;0) -r[0] 400,300,1,3,3 -water[0] 100,2
-  -w[0] @{0,w*1.25},@{0,h*1.25},0,"[G'MIC] Image waves"
+  -w[0] @{0,w},@{0,h},0,"[G'MIC] Image waves"
   w={w} -elevation3d[-1] 0 -rv3d[-1]
   -sh[-1] 8,{7+3*i[6]},0,0 -r[-1] 3,{h/3},1,1,-1
   (0,1,0;1,0,1;0,1,0) -/[-1] 2
@@ -13035,7 +13089,9 @@ x_waves :
     -endl [4] -sprites3d[-2,-1] -+3d[-2,-1] -endif
     --3d[-1] {$w/2},{$w/2} -*3d[-1] @{0,0.9*max(w,h)/$w} # Center and scale 3d object.
     -r3d[-1] 0,0,1,{if(@{!,b}&2,-@{!,x}*360/@{!,w},@|*30)} -r3d[-1] 1,0,0,-120 # Get rotated 3d object.
-    --object3d[0] [-1],50%,65%,30,1,3,0,0 -w[-1] -rm[-2,-1] -wait 20
+    --object3d[0] [-1],50%,65%,30,1,3,0,0 -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
+    -rm[-2,-1] -wait 20
     -if {@{!,b}&1||(@|-$time0)>1} ({?*$w};{?*$w};70;0) -a[5,-1] x time0={@|-?} -endif # Insert new ball.
     -if @{5,h} -l[5,-1] # Manage ball motion and collision.
       -sh[0] 2,2,0,0 -sh[0] 3,3,0,0 --[-2] [-1] -+[-1] 0.2 -rm[-2,-1]
@@ -13053,17 +13109,21 @@ x_whirl : -check ${1=0.2}>=0
   -e[] "\n
 ------ Fractal whirls ----------------------------\n
 ----\n
+---- Keys 'CTRL+D' to double window size.\n
+---- Keys 'CTRL+C' to reset window size.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 --------------------------------------------------"
   -v -
-  5,5,1,3 256,256,1,3 [-1] -w[-1] 480,480,0,"[G'MIC] Fractal whirls"
+  5,5,1,3 256,256,1,3 [-1] -w[-1] 384,384,0,"[G'MIC] Fractal whirls"
   tangle=0 tzoom=0 xc={(w-@{-3,w})/2} yc={(h-@{-3,h})/2}
   -do
     -rand[-3] 0,255 -j[-2] [-3],$xc,$yc,0,0
     -rotate[-2] {8*sin($tangle)},0,0,{w/2+?(-2,2)},{h/2},{1.03+0.02*sin($tzoom)}
     tangle={$tangle+0.001} tzoom={$tzoom+0.02}
-    -j[-1] [-2],0,0,0,0,$1 -w[-1] -wait 20
+    -j[-1] [-2],0,0,0,0,$1 -w[-1]
+    -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {3*w},{3*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {1.5*w},{1.5*h} -endif
+    -wait 20
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
   -rm[-3,-2] -w[] 0 -v +
 
