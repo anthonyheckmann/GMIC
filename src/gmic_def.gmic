@@ -20360,6 +20360,8 @@ gimp_inpaint_diffusion_preview :
 #@gimp : Mask type = choice(1,"Opaque regions in top layer","Mask by color")
 #@gimp : note = note("<small>If <i>Mask by color</i> has been selected :</small>")
 #@gimp : Mask color = color(255,0,0,255)
+#@gimp : sep = separator(), note = note("<small>A quick tutorial on how to use this filter can be found here:</small>")
+#@gimp : link = link("G'MIC Inpainting tutorial on Patrick David's blog.","http://blog.patdavid.net/2014/02/getting-around-in-gimp-gmic-inpainting.html")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i> and <i>Maxime Daisy</i>.      Latest update: <i>2013/03/25</i>.</small>")
 gimp_inpaint_patch :
   -if {@.>=1581} inpaint=inpaint -else inpaint=repair -endif
