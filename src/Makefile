@@ -418,8 +418,8 @@ ifneq ($(OS),Darwin)
 #	cp -f ../zart/zart $(DESTDIR)$(USR)/bin/zart
 	mkdir -p $(DESTDIR)$(USR)/lib
 	cp -f libgmic.so $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio3
-	ln -s libgmic.so._gmic_versio3 $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio2
-	ln -s libgmic.so._gmic_versio2 $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio1
+	ln -s libgmic.so._gmic_versio3 $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio1
+#	ln -s libgmic.so._gmic_versio3 $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio1
 	ln -s libgmic.so._gmic_versio1 $(DESTDIR)$(USR)/lib/libgmic.so
 endif
 	mkdir -p $(DESTDIR)$(USR)/share/man/
@@ -434,7 +434,7 @@ uninstall:
 	rm -f $(DESTDIR)$(USR)/bin/gmic
 	rm -f $(DESTDIR)$(USR)/include/gmic.h
 	rm -f $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio3
-	rm -f $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio2
+#	rm -f $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio2
 	rm -f $(DESTDIR)$(USR)/lib/libgmic.so._gmic_versio1
 	rm -f $(DESTDIR)$(USR)/lib/libgmic.so
 	rm -rf $(DESTDIR)$(USR)/share/doc/gmic/

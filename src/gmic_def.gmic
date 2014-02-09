@@ -14698,7 +14698,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
 
   # Copy latest command definitions on sourceforge server if necessary.
   -if {$1==@.}
-    -v + -e[] "> Upload latest version of commands on Sourceforge server.\n" -v -
+    -v + -e[] "> Upload latest version ("@{-strver}") of commands on Sourceforge server.\n" -v -
     -x "scp "$HOME/work/src/gmic/src/gmic_def.gmic" ronounours,gmic@web.sourceforge.net:htdocs/gmic_def."$1
   -endif
 
