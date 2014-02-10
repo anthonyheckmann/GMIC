@@ -7683,10 +7683,10 @@ imageblocks3d : -skip ${1=5}
     -s3d[-1]
 
     # Set vertex altitudes.
-    --norm[0] -y[-1]
+    --norm[0] -y[-1] -n[-1] 0,$1
     -r[3] 24,@{3,round(w*h/24)},1,1,-1
-    -if {$1<0} -n[-1] $1,0 -j[3] [-1],2 -j[3] [-1],5 -j[3] [-1],8 -j[3] [-1],11
-    -else -n[-1] 0,$1 -j[3] [-1],14 -j[3] [-1],17 -j[3] [-1],20 -j[3] [-1],23
+    -if {$1<0} -j[3] [-1],2 -j[3] [-1],5 -j[3] [-1],8 -j[3] [-1],11
+    -else -j[3] [-1],14 -j[3] [-1],17 -j[3] [-1],20 -j[3] [-1],23
     -endif
     -rm[-1] -y[3]
 
@@ -20848,7 +20848,7 @@ gimp_render3d :
 
 #@gimp 3d blocks : gimp_blocks3d, gimp_blocks3d(1)
 #@gimp : Resolution = int(32,1,128)
-#@gimp : Elevation = float(2,0,5)
+#@gimp : Elevation = float(2,-5,5)
 #@gimp : Size = float(1.5,0,3)
 #@gimp : Angle = float(30,0,360)
 #@gimp : Tilt = float(60,0,90)
@@ -20861,8 +20861,10 @@ gimp_blocks3d :
     W={w} H={h} M={max(w,h)}
     -if {w>h} -r2dx $1 -else -r2dy $1 -endif
     w={w} h={h} m={max(w,h)}
-    -imageblocks3d -$2
-    --3d[-1] {$w/2},{$h/2} -*3d {$3*$M/$m},{$3*$M/$m},{$2*$3*$M/$m}
+    -if {$2>0} -mirror y -endif
+    -imageblocks3d $2
+    --3d[-1] {$w/2},{$h/2} -*3d {$3*$M/$m},{$3*$M/$m},{abs($2)*$3*$M/$m}
+    -if {$2>0} -r3d 1,0,0,180 -endif
     -r3d 0,0,1,$4 -r3d 1,0,0,$5
 
     # Render object.
