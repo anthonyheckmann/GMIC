@@ -14761,7 +14761,8 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
           -autocrop[0] 32
 
           -if {@#>1} # Found new filter.
-            -calibrate_name[0] --replace[0] 32,{'~'} name=$path@{-1,t} -rm[-1]
+            -calibrate_name[0] --replace[0] 32,{'~'}
+            name=$path@{-1,t} -rm[-1]
             merge_request=1
             nb_filters={$nb_filters+1}
             -i[0,1] (32) -a y

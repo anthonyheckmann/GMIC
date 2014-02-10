@@ -40,9 +40,10 @@
     <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%"><tr><td>
     <tr>
     <td><a href="http://downloads.sourceforge.net/gmic/gmic_gimp_win32.exe"><image src="img/download_butt.png" border="0"></image></a><td>
-    <td><a href="http://downloads.sourceforge.net/gmic/gmic_gimp_win32.exe"><font size="3">Download G'MIC plug-in for GIMP (Windows 32 and 64 bits).</font></a><br/>
+    <td><a href="http://downloads.sourceforge.net/gmic/gmic_gimp_win32.exe"><font size="3">Download G'MIC plug-in for GIMP (Windows 32 bits, works on 64 bits).</font></a><br/>
     (installer)<br/>
-    (alternative: <a href="http://downloads.sourceforge.net/gmic/gmic_gimp_win32.zip">zip file</a>)</td>
+    (alternative 1: <a href="http://downloads.sourceforge.net/gmic/gmic_gimp_win32.zip">zip file (32 bits, works on 64 bits)</a>)</br>
+    (alternative 2: <a href="http://www.aljacom.com/~gmic/">zip file (64 bits only)</a>)</td>
     </tr>
     <tr>
     <td><a href="http://downloads.sourceforge.net/gmic/gmic_gimp_linux32.zip"><image src="img/download_butt.png" border="0"></image></a><td>
