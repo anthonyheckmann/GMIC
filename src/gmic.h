@@ -46,7 +46,7 @@
 */
 #include <locale>
 #ifndef gmic_version
-#define gmic_version 1583
+#define gmic_version 1584
 
 // Define environment variables.
 #ifndef gmic_split_compilation

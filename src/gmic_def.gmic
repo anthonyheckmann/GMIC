@@ -20854,13 +20854,15 @@ gimp_render3d :
 #@gimp : Angle = float(30,0,360)
 #@gimp : Tilt = float(60,0,90)
 #@gimp : FOV = float(45,1,90)
+#@gimp : sep = separator()
 #@gimp : X-light = float(0,-100,100)
 #@gimp : Y-light = float(-50,-100,100)
 #@gimp : Z-light = float(-100,-100,0)
 #@gimp : Specular lightness = float(0.5,0,1)
 #@gimp : Specular shininess = float(0.7,0,3)
 #@gimp : Use light = bool(1)
-#@gimp : Outline = bool(1)
+#@gimp : Add outline = bool(1)
+#@gimp : Outline color = color(0,0,0,255)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/10</i>.</small>")
 gimp_blocks3d :
   -repeat @# -l[$>]
@@ -20884,11 +20886,13 @@ gimp_blocks3d :
     -if $14
       [-1],[-1],1,3,-1
       -object3d[-1] [0],50%,50%,0,1,3,0,1 -rm[0]
-      -gradient[-1] xy,1 -+[-2,-1] -norm[-1] -eq[-1] 0
-
-      # Merge both images.
-      -sh[0] 0,2 -*[-1] [-2] -rm[-2,-1]
-
+      -gradient[-1] xy,1 -+[-2,-1] -norm[-1] -neq[-1] 0
+      --r[-1] 100%,100%,1,4
+      -sh[-1] 0,0 -*[-1] $15 -rm[-1]
+      -sh[-1] 1,1 -*[-1] $16 -rm[-1]
+      -sh[-1] 2,2 -*[-1] $17 -rm[-1]
+      -sh[-1] 3,3 -*[-1] $18 -rm[-1]
+      -j[0] [-1],0,0,0,0,1,[-2] -rm[-2,-1]
     -else -rm[0]
     -endif
 
