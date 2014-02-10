@@ -19761,7 +19761,7 @@ gimp_equalize_shadow_preview :
 _gimp_lightglow :
   mode=@{-arg\ 1+$3,burn,dodge,freeze,grainmerge,hardlight,interpolation,lighten,multiply,overlay,reflect,softlight,stamp,value}
   -repeat @#
-    --gradient_norm[-1] -ge[-1] {100-$1}% -distance[-1] 1 -^[-1] $2 -*[-1] -1 -n[-1] 0,255 -blend $mode,$1
+    --gradient_norm[-1] -ge[-1] {100-$1}% -distance[-1] 1 -^[-1] $2 -*[-1] -1 -n[-1] 0,255 -blend $mode,$4
   -mv[-1] 0 -done
 
 gimp_lightglow :
@@ -19929,12 +19929,12 @@ gimp_hearts_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/11/26</i>.</small>")
 gimp_lava :
-  -norm -repeat @# -l[$>]
+  -repeat @# -l[$>] -split_opacity -l[0] -norm
     100%,100% -plasma[-1] 1,1,{16-$1} -smooth[-1] $2,0,1,$3,$3,0.8,90 -*
     -gradient_norm -n 0,255
     -equalize -map 3
     -sharpen $4
-  -endl -done
+  -endl -a c -endl -done
 
 gimp_lava_preview :
   -gimp_split_preview "-gimp_lava $*",$-1
