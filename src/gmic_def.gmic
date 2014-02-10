@@ -7666,6 +7666,35 @@ image6cube3d :
     -+3d[-6--1] -nm[-1] "[3d image cube]"
   -mv[-1] 0 -done -v +
 
+#@gmic imageblocks3d : _maximum_elevation
+#@gmic : Generate 3d blocks from selected images.
+#@gmic : Default value: 'elevation_factor=1'.
+#@gmic : $ image.jpg -r2dy 32 -imageblock3d -20 -m3d 3
+imageblocks3d : -skip ${1=5}
+  -e[^-1] "Generate 3d blocks from image$?, with maximum elevation $1."
+  -v - -to_rgb -repeat @# -l[$>]
+    w={w} h={h}
+
+    # Create 3d object template.
+    -l[] -box3d 1,1,0
+    -repeat {$w-1} --+3d[-1] 1,0,0 -done -+3d
+    -repeat {$h-1} --+3d[-1] 0,1,0 -done -+3d
+    -endl
+    -s3d[-1]
+
+    # Set vertex altitudes.
+    --norm[0] -y[-1]
+    -r[3] 24,@{3,round(w*h/24)},1,1,-1
+    -if {$1<0} -n[-1] $1,0 -j[3] [-1],2 -j[3] [-1],5 -j[3] [-1],8 -j[3] [-1],11
+    -else -n[-1] 0,$1 -j[3] [-1],14 -j[3] [-1],17 -j[3] [-1],20 -j[3] [-1],23
+    -endif
+    -rm[-1] -y[3]
+
+    # Set primitive colors.
+    -rm[-2] -r[0] @{0,w*h},1,1,100%,-1 -permute[0] cxyz -r[0] 600%,100%,1,1,0,2 -y[0] -mv[0] -1
+    -a y
+  -endl -done -v +
+
 #@gmic imagecube3d
 #@gmic : Generate 3d mapped cubes from selected images.
 #@gmic : $ image.jpg -imagecube3d
