@@ -10607,7 +10607,7 @@ fade_z : -skip ${1=30},${2=70}
 #@gmic : in a display window.
 #@gmic : Default value: 'delay=30'.
 #@gmic : $ image.jpg -animate flower,"0,3","20,8",9
-animate : -skip ${1=30},${2=0},${3=""},${4=0},${5=1},"${6=}"
+animate : -skip ${1=30},${2=0},${3=""},${4=10},${5=1},"${6=}"
   -if {isval($1)}
     -if $2 -e[0--4] "Animate image$?, with a delay of $1 ms, and ping-pong mode."
     -else -e[0--4] "Animate image$?, with a delay of $1 ms."
@@ -20865,6 +20865,7 @@ gimp_render3d :
 #@gimp : Specular shininess = float(0.7,0,3)
 #@gimp : Use light = bool(1)
 #@gimp : Antialiasing = bool(1)
+#@gimp : Centering = bool(1)
 #@gimp : Outline color = color(0,0,0,128)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/10</i>.</small>")
 gimp_blocks3d :
@@ -20877,7 +20878,7 @@ gimp_blocks3d :
     --3d[-1] {$w/2},{$h/2} f={$4*$M/($m*(2-$14))} -*3d $f,$f,{$f*abs($3)}
     -if {$3>0} -r3d 1,0,0,180 -endif
     -r3d 0,0,1,$5 -r3d 1,0,0,$6
-    -c3d
+    -if $15 -c3d -endif
 
     # Render object.
     -if $14 {2*$M},{2*$M},1,4,-1 -else $M,$M,1,4,-1 -endif
@@ -20887,15 +20888,15 @@ gimp_blocks3d :
     -sh[-1] 100%,100% -+[-1] 1 -*[-1] 255 -rm[-1]
 
     # Render object outline
-    -if $18
+    -if $19
       [-1],[-1],1,3,-1
       -object3d[-1] [0],50%,50%,0,1,3,0,1 -rm[0]
       -gradient[-1] xy,1 -+[-2,-1] -norm[-1] -neq[-1] 0
       --r[-1] 100%,100%,1,3
-      -sh[-1] 0,0 -*[-1] $15 -rm[-1]
-      -sh[-1] 1,1 -*[-1] $16 -rm[-1]
-      -sh[-1] 2,2 -*[-1] $17 -rm[-1]
-      -j[0] [-1],0,0,0,0,{$18/255},[-2] -rm[-2,-1]
+      -sh[-1] 0,0 -*[-1] $16 -rm[-1]
+      -sh[-1] 1,1 -*[-1] $17 -rm[-1]
+      -sh[-1] 2,2 -*[-1] $18 -rm[-1]
+      -j[0] [-1],0,0,0,0,{$19/255},[-2] -rm[-2,-1]
     -else -rm[0]
     -endif
 
