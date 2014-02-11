@@ -7666,13 +7666,12 @@ image6cube3d :
     -+3d[-6--1] -nm[-1] "[3d image cube]"
   -mv[-1] 0 -done -v +
 
-#@gmic imageblocks3d : _maximum_elevation,_smoothness[%]>=0,_use_last_image_as_elevation_map={ 0 | 1 }
+#@gmic imageblocks3d : _maximum_elevation,_smoothness[%]>=0
 #@gmic : Generate 3d blocks from selected images.
-#@gmic : Default values: 'elevation_factor=1', 'smoothness=0' and 'use_last_imaye_as_elevation_map=0'.
-#@gmic : $ image.jpg -r2dy 32 -imageblock3d -20 -m3d 3
+#@gmic : Default values: 'elevation_factor=1' and 'smoothness=0'.
+#@gmic : $ image.jpg -resize2dy 32 -imageblock3d -20 -m3d 3
 imageblocks3d : -check ${2=0}>=0 -skip ${1=5},${3=0}
-  -v - s0= s1=" [use last image as elevation map]" -v +
-  -e[^-1] "Generate 3d blocks from image$?, with maximum elevation $1 and smoothness $2"${s{$3>0}}"."
+  -e[^-1] "Generate 3d blocks from image$?, with maximum elevation $1 and smoothness $2."
   -v - -to_rgb -repeat @# -l[$>]
     w={w} h={h}
 
@@ -7684,7 +7683,8 @@ imageblocks3d : -check ${2=0}>=0 -skip ${1=5},${3=0}
     -s3d[-1]
 
     # Set vertex altitudes.
-    --norm[0] -b[-1] $2 -y[-1] -n[-1] 0,$1
+    --norm[0] -b[-1] $2
+    -y[-1] -n[-1] 0,$1
     -r[3] 24,@{3,round(w*h/24)},1,1,-1
     -if {$1<0} -j[3] [-1],2 -j[3] [-1],5 -j[3] [-1],8 -j[3] [-1],11
     -else -j[3] [-1],14 -j[3] [-1],17 -j[3] [-1],20 -j[3] [-1],23
