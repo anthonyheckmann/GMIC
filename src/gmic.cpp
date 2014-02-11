@@ -3765,7 +3765,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
   typedef typename cimg::superset<T,float>::type Tfloat;
   typedef typename cimg::superset<T,long>::type Tlong;
-  const unsigned int initial_scope_size = scope.size();
+  const unsigned int initial_scope_size = scope.size(), initial_debug_line = debug_line;
   bool is_endlocal = false;
   char end;
 
@@ -12294,6 +12294,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
     }
     error(images,error_message);
   }
+  debug_line = initial_debug_line;
   return *this;
 }
 
