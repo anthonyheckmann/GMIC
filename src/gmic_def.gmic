@@ -15264,8 +15264,8 @@ gimp_display_filter_sources :
 
 #@gimp Friends Hall of Fame : _none_, gimp_friends
 #@gimp : note = note{"\n<span foreground="purple" underline="single">Donators :</span>"}
-#@gimp : note = note{" <b>-</b> We've received <b>16</b> donations from <b>G'MIC</b> mega-enthusiasts so far.
-#@gimp :               You could be the 17th donator :)"}
+#@gimp : note = note{" <b>-</b> We've received <b>17</b> donations from <b>G'MIC</b> mega-enthusiasts so far.
+#@gimp :               You could be the 18th donator :)"}
 #@gimp : note = note{"<b><small>Note:</small></b> Donations are mainly used to help us making G'MIC more visible
 #@gimp :              (cover expenses for open-source events, for instance). Also, it will motivate
 #@gimp :              us to design more new image filters and effects. Feel free to donate
@@ -15273,22 +15273,23 @@ gimp_display_filter_sources :
 #@gimp : link = link{"Make a donation to the G'MIC project","http://sourceforge.net/donate/index.php?group_id=234931"}
 #@gimp : sep = separator()
 #@gimp : note = note{" <b>-</b> A big hug goes to these donators (recently received first) :"}
-#@gimp : link = link(0,"[1] Matthias Zepper","http://www.matthias-zepper.de/")
-#@gimp : link = link(0,"[2] Christian Mariucci","")
-#@gimp : link = link(0,"[3] M. R.","")
-#@gimp : link = link(0,"[4] Mark Link","")
-#@gimp : link = link(0,"[5] Rolf Steinort","http://blog.meetthegimp.org/")
-#@gimp : link = link(0,"[6] Pat David","http://blog.patdavid.net/")
-#@gimp : link = link(0,"[7] Daniel Tauro","https://plus.google.com/112357088505488756823/posts")
-#@gimp : link = link(0,"[8] Ben Langhinrichs","http://geniisoft.com/")
-#@gimp : link = link(0,"[9] Paolo Pedaletti","http://www.openlabs.it/")
-#@gimp : link = link(0,"[10] Ricardo Corin","http://blog.photomontager.com")
-#@gimp : link = link(0,"[11] James Prichard","https://plus.google.com/115953666279509959258")
-#@gimp : link = link(0,"[12] Matt Jones","https://plus.google.com/116658221461047313647")
-#@gimp : link = link(0,"[13] Eddy Vervest","http://www.flickr.com/people/twekkel/")
-#@gimp : link = link(0,"[14] Steven Shupe","http://www.flickr.com/photos/ssshupe/")
-#@gimp : link = link(0,"[15] Flavio Casadei Della Chiesa","http://www.flaviocdc.net/wiki/")
-#@gimp : link = link(0,"[16] Lyle Kroll","http://www.artwanted.com/artist.cfm?artid=10918")
+#@gimp : link = link(0,"[1] Herbert Malle","")
+#@gimp : link = link(0,"[2] Matthias Zepper","http://www.matthias-zepper.de/")
+#@gimp : link = link(0,"[3] Christian Mariucci","")
+#@gimp : link = link(0,"[4] M. R.","")
+#@gimp : link = link(0,"[5] Mark Link","")
+#@gimp : link = link(0,"[6] Rolf Steinort","http://blog.meetthegimp.org/")
+#@gimp : link = link(0,"[7] Pat David","http://blog.patdavid.net/")
+#@gimp : link = link(0,"[8] Daniel Tauro","https://plus.google.com/112357088505488756823/posts")
+#@gimp : link = link(0,"[9] Ben Langhinrichs","http://geniisoft.com/")
+#@gimp : link = link(0,"[10] Paolo Pedaletti","http://www.openlabs.it/")
+#@gimp : link = link(0,"[11] Ricardo Corin","http://blog.photomontager.com")
+#@gimp : link = link(0,"[12] James Prichard","https://plus.google.com/115953666279509959258")
+#@gimp : link = link(0,"[13] Matt Jones","https://plus.google.com/116658221461047313647")
+#@gimp : link = link(0,"[14] Eddy Vervest","http://www.flickr.com/people/twekkel/")
+#@gimp : link = link(0,"[15] Steven Shupe","http://www.flickr.com/photos/ssshupe/")
+#@gimp : link = link(0,"[16] Flavio Casadei Della Chiesa","http://www.flaviocdc.net/wiki/")
+#@gimp : link = link(0,"[17] Lyle Kroll","http://www.artwanted.com/artist.cfm?artid=10918")
 #@gimp : sep = separator()
 #@gimp : note = note{"\n<span foreground="purple" underline="single">Postcard senders :</span>"}
 #@gimp : note = note{" <b>-</b> We've received <b>21</b> postcards from <b>G'MIC</b> enthusiasts so far.
