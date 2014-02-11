@@ -20863,6 +20863,8 @@ gimp_render3d :
 #@gimp : Angle = float(30,0,360)
 #@gimp : Tilt = float(60,0,90)
 #@gimp : FOV = float(45,1,90)
+#@gimp : X-centering = float(50,0,100)
+#@gimp : Y-centering = float(50,0,100)
 #@gimp : sep = separator()
 #@gimp : X-light = float(0,-100,100)
 #@gimp : Y-light = float(-50,-100,100)
@@ -20871,7 +20873,6 @@ gimp_render3d :
 #@gimp : Specular shininess = float(0.7,0,3)
 #@gimp : Use light = bool(1)
 #@gimp : Antialiasing = bool(1)
-#@gimp : Centering = bool(1)
 #@gimp : Outline color = color(0,0,0,128)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/10</i>.</small>")
 gimp_blocks3d :
@@ -20881,33 +20882,32 @@ gimp_blocks3d :
     w={w} h={h} m={max(w,h)}
     -if {$3>0} -mirror y -endif
     -imageblocks3d $3,$2%
-    --3d[-1] {$w/2},{$h/2} f={$4*$M/($m*(2-$14))} -*3d $f,$f,{$f*abs($3)}
+    --3d[-1] {$w/2},{$h/2} f={$4*$M/($m*(2-$16))} -*3d $f,$f,{$f*abs($3)}
     -if {$3>0} -r3d 1,0,0,180 -endif
     -r3d 0,0,1,$5 -r3d 1,0,0,$6
-    -if $15 -c3d -endif
 
     # Render object.
-    -if $14 {2*$M},{2*$M},1,4,-1 -else $M,$M,1,4,-1 -endif
+    -if $16 {2*$M},{2*$M},1,4,-1 -else $M,$M,1,4,-1 -endif
     f3d={0.5*w/tan($7*pi/360)} -f3d $f3d
-    -l3d {$8*$f3d},{$9*$f3d},{$10*$f3d} -sl3d $11 -ss3d $12
-    -object3d[-1] [0],50%,50%,0,1,{if($13,3,2)},0,1
+    -l3d {$10*$f3d},{$11*$f3d},{$12*$f3d} -sl3d $13 -ss3d $14
+    -object3d[-1] [0],$8%,$9%,0,1,{if($15,3,2)},0,1
     -sh[-1] 100%,100% -+[-1] 1 -*[-1] 255 -rm[-1]
 
     # Render object outline
-    -if $19
+    -if $20
       [-1],[-1],1,3,-1
-      -object3d[-1] [0],50%,50%,0,1,3,0,1 -rm[0]
+      -object3d[-1] [0],$8%,$9%,0,1,3,0,1 -rm[0]
       -gradient[-1] xy,1 -+[-2,-1] -norm[-1] -neq[-1] 0
       --r[-1] 100%,100%,1,3
-      -sh[-1] 0,0 -*[-1] $16 -rm[-1]
-      -sh[-1] 1,1 -*[-1] $17 -rm[-1]
-      -sh[-1] 2,2 -*[-1] $18 -rm[-1]
-      -j[0] [-1],0,0,0,0,{$19/255},[-2] -rm[-2,-1]
+      -sh[-1] 0,0 -*[-1] $17 -rm[-1]
+      -sh[-1] 1,1 -*[-1] $18 -rm[-1]
+      -sh[-1] 2,2 -*[-1] $19 -rm[-1]
+      -j[0] [-1],0,0,0,0,{$20/255},[-2] -rm[-2,-1]
     -else -rm[0]
     -endif
 
     -replace_color 0,0,-1,-1,-1,0,0,0,0,0
-    -if $14 -r 50%,50%,1,4,2 -endif
+    -if $16 -r 50%,50%,1,4,2 -endif
     -c 0,255
   -endl -done
 
