@@ -7668,12 +7668,14 @@ image6cube3d :
 
 #@gmic imageblocks3d : _maximum_elevation,_smoothness[%]>=0
 #@gmic : Generate 3d blocks from selected images.
-#@gmic : Default values: 'elevation_factor=1' and 'smoothness=0'.
+#@gmic : Transparency of selected images is taken into account.
+#@gmic : Default values: 'maximum_elevation=10' and 'smoothness=0'.
 #@gmic : $ image.jpg -resize2dy 32 -imageblock3d -20 -m3d 3
-imageblocks3d : -check ${2=0}>=0 -skip ${1=5},${3=0}
+imageblocks3d : -check ${2=0}>=0 -skip ${1=10},${3=0}
   -e[^-1] "Generate 3d blocks from image$?, with maximum elevation $1 and smoothness $2."
-  -v - -to_rgb -repeat @# -l[$>]
+  -v - -repeat @# -l[$>]
     w={w} h={h}
+    -split_opacity -to_rgb[0] is_opacity={@#==2}
 
     # Create 3d object template.
     -l[] -box3d 1,1,0
@@ -7685,14 +7687,18 @@ imageblocks3d : -check ${2=0}>=0 -skip ${1=5},${3=0}
     # Set vertex altitudes.
     --norm[0] -b[-1] $2
     -y[-1] -n[-1] 0,$1
-    -r[3] 24,@{3,round(w*h/24)},1,1,-1
-    -if {$1<0} -j[3] [-1],2 -j[3] [-1],5 -j[3] [-1],8 -j[3] [-1],11
-    -else -j[3] [-1],14 -j[3] [-1],17 -j[3] [-1],20 -j[3] [-1],23
+    -r[-5] 24,@{-5,round(w*h/24)},1,1,-1
+    -if {$1<0} -j[-5] [-1],2 -j[-5] [-1],5 -j[-5] [-1],8 -j[-5] [-1],11
+    -else -j[-5] [-1],14 -j[-5] [-1],17 -j[-5] [-1],20 -j[-5] [-1],23
     -endif
-    -rm[-1] -y[3]
+    -rm[-1] -y[-4]
 
     # Set primitive colors.
     -rm[-2] -r[0] @{0,w*h},1,1,100%,-1 -permute[0] cxyz -r[0] 600%,100%,1,1,0,2 -y[0] -mv[0] -1
+
+    # Set primitive opacities.
+    -if $is_opacity -rm[-1] -mv[0] @# -/[-1] 255 -y[-1] -r[-1] 6,100%,1,1 -y[-1] -endif
+
     -a y
   -endl -done -v +
 
