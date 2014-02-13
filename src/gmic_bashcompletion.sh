@@ -525,6 +525,7 @@ _gmic_def()
 	      -gyroid3d --gyroid3d\
 	      -histogram3d --histogram3d\
 	      -image6cube3d --image6cube3d\
+	      -imageblocks3d --imageblocks3d\
 	      -imagecube3d --imagecube3d\
 	      -imageplane3d --imageplane3d\
 	      -imagepyramid3d --imagepyramid3d\
@@ -1358,6 +1359,7 @@ _gmic_def()
 	      gyroid3d\
 	      histogram3d\
 	      image6cube3d\
+	      imageblocks3d\
 	      imagecube3d\
 	      imageplane3d\
 	      imagepyramid3d\
@@ -2826,6 +2828,10 @@ _gmic_def()
 		;;
 		"-gyroid3d" | "--gyroid3d")
 		COMPREPLY=( $(compgen -W "_resolution>0,_zoom >") )
+		return 0
+		;;
+		"-imageblocks3d" | "--imageblocks3d")
+		COMPREPLY=( $(compgen -W "_maximum_elevation,_smoothness[%]>=0 >") )
 		return 0
 		;;
 		"-imagerubik3d" | "--imagerubik3d")

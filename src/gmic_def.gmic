@@ -7670,7 +7670,7 @@ image6cube3d :
 #@gmic : Generate 3d blocks from selected images.
 #@gmic : Transparency of selected images is taken into account.
 #@gmic : Default values: 'maximum_elevation=10' and 'smoothness=0'.
-#@gmic : $ image.jpg -resize2dy 32 -imageblock3d -20 -m3d 3
+#@gmic : $ image.jpg -resize2dy 32 -imageblocks3d -20 -m3d 3
 imageblocks3d : -check ${2=0}>=0 -skip ${1=10},${3=0}
   -e[^-1] "Generate 3d blocks from image$?, with maximum elevation $1 and smoothness $2."
   -v - -repeat @# -l[$>]
@@ -15194,6 +15194,7 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Tom Keil</i> <small>(testing, filters &amp; tutorials)</small>
 #@gimp : <b> -</b> <i>Andy Kelday</i> <small>(testing &amp; filters)</small>
 #@gimp : <b> -</b> <i>Angelo Lama</i> <small>(testing &amp; EKD integration)</small>
+#@gimp : <b> -</b> <i>John Lakkas</i> <small>(filters)</small>
 #@gimp : <b> -</b> <i>St&#233;phane de la Linuxerie</i> <small>(design)</small>
 #@gimp : <b> -</b> <i>Mark</i> <small>(translation)</small>
 #@gimp : <b> -</b> <i>Mahvin</i> <small>(testing &amp; design)</small>
@@ -22527,6 +22528,7 @@ gmicol_rotate :
 #@gmicol clone("CMYK tone")
 #@gmicol clone("Colormap")
 #@gmicol clone("Color balance")
+#@gmicol clone("Color grading")
 #@gmicol clone("Color temperature")
 #@gmicol clone("Curves")
 
