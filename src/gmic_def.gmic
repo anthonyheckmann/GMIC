@@ -15549,19 +15549,29 @@ _dice5 : -_dice3 -ellipse[-1] 25%,50%,5.2%,5.2%,0,1,255 -ellipse[-1] 75%,50%,5.2
 #@gimp : Opacity threshold = int(50,0,100)
 #@gimp : Minimal area = float(0.3,0,5)
 #@gimp : Connectivity = choice("Low","High")
-#@gimp : Output type = _choice(1,"Crop","Segmentation")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/07/11</i>.</small>")
+#@gimp : Output type = _choice(1,"Crop","Segmentation","Located crop","Located segmentation")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/14</i>.</small>")
 #@gimp : note = link("Filter explained here","http://gimpchat.com/viewtopic.php?f=28&t=7905")
 gimp_extract_objects :
   -if $5 min_area=$5% -else min_area=5 -endif
   -repeat @# -l[$<] -to_rgba
+    w={w} h={h}
     x={$1%*(w-1)}
     y={$2%*(h-1)}
     color=@{-at\ $x,$y}
-    -if $7 -replace_color $3,0,$color,0,0,0,0 -autocrop_components $4%,$min_area,$6,$7
-    -else
+    -if {$7==0} # Output: Crop.
       --replace_color $3,0,$color,0,0,0,0 -autocrop_components[-1] $4%,$min_area,$6,2
       -repeat {w} --z[0] @{1,i($>,0)},@{1,i($>,1)},@{1,i($>,3)},@{1,i($>,4)} -done -rm[0,1]
+    -elif {$7==1} # Output: Segmentation.
+      -replace_color $3,0,$color,0,0,0,0 -autocrop_components $4%,$min_area,$6,1
+    -elif {$7==2} # Output: Located crop.
+      --replace_color $3,0,$color,0,0,0,0 -autocrop_components[-1] $4%,$min_area,$6,2
+      -repeat {w} [0],[0],1,4 --z[0] @{1,i($>,0)},@{1,i($>,1)},@{1,i($>,3)},@{1,i($>,4)} -j[-2] [-1],@{1,i($>,0)},@{1,i($>,1)} -rm[-1] -done -rm[0,1]
+      $w,$h,1,4 -fc[-1] $color
+    -else # Output: Located segmentation.
+      -replace_color $3,0,$color,0,0,0,0 --autocrop_components $4%,$min_area,$6,2 -autocrop_components[0] $4%,$min_area,$6,1
+      -repeat {w} x={i($>,0)} y={i($>,1)} -l[$>] -i[0] $w,$h,1,4 -j[0] [1],$x,$y -rm[1] -endl -done -rm[-1]
+      $w,$h,1,4 -fc[-1] $color
     -endif
   -endl -done
 
@@ -22977,3 +22987,6 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+foo :
+  -foo

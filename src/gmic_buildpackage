@@ -334,7 +334,7 @@ echo GEMINI_DONE " &
 # cd .. &&
 # cp gmic_${VERSION}_i386.deb ${HOME}/work/src/$PAK &&
 # rm -f gmic_${VERSION}_i386.deb &&
-echo PICTOR_DONE
+echo ELARA_DONE
 
 # Wait for packages to be generated and copy them to Sourceforge FRS.
 #--------------------------------------------------------------------
