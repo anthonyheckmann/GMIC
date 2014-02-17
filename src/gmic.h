@@ -70,7 +70,7 @@
 #include cimg_include_file
 #if cimg_OS==2
 #include <process.h>
-#pragma comment(linker,"/STACK:16777216")
+##pragma comment(linker,"/STACK:16777216")
 #elif cimg_OS==1
 #include <cerrno>
 #endif // #if cimg_OS==2
