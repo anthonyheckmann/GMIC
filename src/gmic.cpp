@@ -3769,8 +3769,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                    CImgList<T> &images, CImgList<char> &images_names,
                    unsigned int variables_sizes[256]) {
 
+#ifdef gmic_float
   typedef typename cimg::superset<T,float>::type Tfloat;
   typedef typename cimg::superset<T,long>::type Tlong;
+#endif // #ifdef gmic_float
+
   const unsigned int initial_scope_size = scope.size(), initial_debug_line = debug_line;
   bool is_endlocal = false;
   char end;
@@ -3832,7 +3835,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               images_names.size(),images.size());
       if (!scope)
         error("Internal error: Scope is empty.");
-      if (scope.size()>256)
+      if (scope.size()>64)
         error("Internal error: Scope overflow (infinite recursion ?).");
 
       // Substitute expressions in current item.
