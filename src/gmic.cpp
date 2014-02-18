@@ -1183,15 +1183,15 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
             const float
               ixf = (float)(_Mnc*_Mcc*(Inc-Icc)),
               iyf = (float)(_Mcn*_Mcc*(Icn-Icc)),
-              nf = std::sqrt(ixf*ixf+iyf*iyf),
+              nf2 = ixf*ixf+iyf*iyf,
               ixb = (float)(_Mcc*_Mpc*(Icc-Ipc)),
               iyb = (float)(_Mcc*_Mcp*(Icc-Icp)),
-              nb = std::sqrt(ixb*ixb+iyb*iyb),
-              ix = nf>nb?ixf:ixb,
-              iy = nf>nb?iyf:iyb,
+              nb2 = ixb*ixb+iyb*iyb,
+              ix = nf2>nb2?ixf:ixb,
+              iy = nf2>nb2?iyf:iyb,
               w = weights(p,q);
             mean_ix2 += w*ix*ix;
-            mean_ixiy += w*ix*i y;
+            mean_ixiy += w*ix*iy;
             mean_iy2 += w*iy*iy;
           }
           const float // Compute tensor-directed data term.
