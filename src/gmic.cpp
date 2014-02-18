@@ -1158,11 +1158,11 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
           _inpaint_patch_crop(ox+x-p1,oy+y-p1,ox+x+p2,oy+y+p2,2).move_to(pP);
           float mean_ix2 = 0, mean_ixiy = 0, mean_iy2 = 0;
 
-          CImg_5x5(I,T);
-          CImg_5x5(_M, unsigned char);
-          cimg_forC(pP,c) cimg_for5x5(pP,p,q,0,c,I,T) { // Compute weight-mean of structure tensor inside patch.
-            cimg_get5x5(pM,p,q,0,0,_M,unsigned char);
-            const float
+          CImg_3x3(I,T);
+          CImg_3x3(_M, unsigned char);
+          cimg_forC(pP,c) cimg_for3x3(pP,p,q,0,c,I,T) { // Compute weight-mean of structure tensor inside patch.
+            cimg_get3x3(pM,p,q,0,0,_M,unsigned char);
+            /*            const float
               Scp = (_Mpb*Ipb + 2*_Mcb*Icb + _Mnb*Inb + 2*_Mpp*Ipp + 4*_Mcp*Icp + 2*_Mnp*Inp + _Mpc*Ipc + 2*_Mcc*Icc + _Mnc*Inc)/
               (1e-8f + _Mpb + 2*_Mcb + _Mnb + 2*_Mpp + 4*_Mcp + 2*_Mnp + _Mpc + 2*_Mcc + _Mnc),
               Spc = (_Mbp*Ibp + 2*_Mpp*Ipp + _Mcp*Icp + 2*_Mbc*Ibc + 4*_Mpc*Ipc + 2*_Mcc*Icc + _Mbn*Ibn + 2*_Mpn*Ipn + _Mcn*Icn)/
@@ -1171,15 +1171,14 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
               (1e-8f + _Mcp + 2*_Mnp + _Map + 2*_Mcc + 4*_Mnc + 2*_Mac + _Mcn + 2*_Mnn + _Man),
               Scn = (_Mpc*Ipc + 2*_Mcc*Icc + _Mnc*Inc + 2*_Mpn*Ipn + 4*_Mcn*Icn + 2*_Mnn*Inn + _Mpa*Ipa + 2*_Mca*Ica + _Mna*Ina)/
               (1e-8f + _Mpc + 2*_Mcc + _Mnc + 2*_Mpn + 4*_Mcn + 2*_Mnn + _Mpa + 2*_Mca + _Mna),
-              ix = Snc - Spc,
-              iy = Scn - Scp,
+              ix = _Mnc*_Mcp*(Snc - Spc),
+              iy = _Mcn*_Mpc*(Scn - Scp),
               w = weights(p,q);
-            //            cimg_get3x3(pM,p,q,0,0,_M,unsigned char);
-            /*const float
+            */
+            const float
               ix = (float)(_Mnc*_Mcc*(Inc-Icc)),
               iy = (float)(_Mcn*_Mcc*(Icn-Icc)),
               w = weights(p,q);
-            */
             mean_ix2 += w*ix*ix;
             mean_ixiy += w*ix*iy;
             mean_iy2 += w*iy*iy;
@@ -11631,7 +11630,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             std::memcpy(s_values_text.data(),s_values.data(),32);
             std::memcpy(s_values_text.data()+32," ... ",5);
             std::memcpy(s_values_text.data()+37,s_values.data()+l-34,35);  // Last '\0' is included.
-          } else std::strcpy(s_values_text.data(),s_values);
+          } else std::strcpy(s_values_text,s_values);
           print(images,"Input image at position%s, with values '%s'",
                 gmic_selection,s_values_text.data());
         } else
