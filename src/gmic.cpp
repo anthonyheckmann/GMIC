@@ -1183,12 +1183,10 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
             const float
               ixf = (float)(_Mnc*_Mcc*(Inc-Icc)),
               iyf = (float)(_Mcn*_Mcc*(Icn-Icc)),
-              nf2 = ixf*ixf+iyf*iyf,
               ixb = (float)(_Mcc*_Mpc*(Icc-Ipc)),
               iyb = (float)(_Mcc*_Mcp*(Icc-Icp)),
-              nb2 = ixb*ixb+iyb*iyb,
-              ix = nf2>nb2?ixf:ixb,
-              iy = nf2>nb2?iyf:iyb,
+              ix = cimg::abs(ixf)>cimg::abs(ixb)?ixf:ixb,
+              iy = cimg::abs(iyf)>cimg::abs(iyb)?iyf:iyb,
               w = weights(p,q);
             mean_ix2 += w*ix*ix;
             mean_ixiy += w*ix*iy;
