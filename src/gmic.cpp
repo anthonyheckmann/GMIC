@@ -1175,9 +1175,18 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
               iy = _Mcn*_Mpc*(Scn - Scp),
               w = weights(p,q);
             */
-            const float
+            /*            const float
               ix = (float)(_Mnc*_Mcc*(Inc-Icc)),
               iy = (float)(_Mcn*_Mcc*(Icn-Icc)),
+              w = weights(p,q);
+            */
+            const float
+              ixf = (float)(_Mnc*_Mcc*(Inc-Icc)),
+              iyf = (float)(_Mcn*_Mcc*(Icn-Icc)),
+              ixb = (float)(_Mcc*_Mpc*(Icc-Ipc)),
+              iyb = (float)(_Mcc*_Mcp*(Icc-Icp)),
+              ix = cimg::abs(ixf)>cimg::abs(ixb)?ixf:ixb,
+              iy = cimg::abs(iyf)>cimg::abs(iyb)?iyf:iyb,
               w = weights(p,q);
             mean_ix2 += w*ix*ix;
             mean_ixiy += w*ix*iy;
