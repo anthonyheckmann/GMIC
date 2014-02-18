@@ -1158,14 +1158,28 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
           _inpaint_patch_crop(ox+x-p1,oy+y-p1,ox+x+p2,oy+y+p2,2).move_to(pP);
           float mean_ix2 = 0, mean_ixiy = 0, mean_iy2 = 0;
 
-          CImg_3x3(I,T);
-          CImg_3x3(_M,unsigned char);
-          cimg_forC(pP,c) cimg_for3x3(pP,p,q,0,c,I,T) { // Compute weight-mean of structure tensor inside patch.
-            cimg_get3x3(pM,p,q,0,0,_M,unsigned char);
+          CImg_5x5(I,T);
+          CImg_5x5(_M, unsigned char);
+          cimg_forC(pP,c) cimg_for5x5(pP,p,q,0,c,I,T) { // Compute weight-mean of structure tensor inside patch.
+            cimg_get5x5(pM,p,q,0,0,_M,unsigned char);
             const float
+              Scp = (_Mpb*Ipb + 2*_Mcb*Icb + _Mnb*Inb + 2*_Mpp*Ipp + 4*_Mcp*Icp + 2*_Mnp*Inp + _Mpc*Ipc + 2*_Mcc*Icc + _Mnc*Inc)/
+              (1e-8f + _Mpb + 2*_Mcb + _Mnb + 2*_Mpp + 4*_Mcp + 2*_Mnp + _Mpc + 2*_Mcc + _Mnc),
+              Spc = (_Mbp*Ibp + 2*_Mpp*Ipp + _Mcp*Icp + 2*_Mbc*Ibc + 4*_Mpc*Ipc + 2*_Mcc*Icc + _Mbn*Ibn + 2*_Mpn*Ipn + _Mcn*Icn)/
+              (1e-8f + _Mbp + 2*_Mpp + _Mcp + 2*_Mbc + 4*_Mpc + 2*_Mcc + _Mbn + 2*_Mpn + _Mcn),
+              Snc = (_Mcp*Icp + 2*_Mnp*Inp + _Map*Iap + 2*_Mcc*Icc + 4*_Mnc*Inc + 2*_Mac*Iac + _Mcn*Icn + 2*_Mnn*Inn + _Man*Ian)/
+              (1e-8f + _Mcp + 2*_Mnp + _Map + 2*_Mcc + 4*_Mnc + 2*_Mac + _Mcn + 2*_Mnn + _Man),
+              Scn = (_Mpc*Ipc + 2*_Mcc*Icc + _Mnc*Inc + 2*_Mpn*Ipn + 4*_Mcn*Icn + 2*_Mnn*Inn + _Mpa*Ipa + 2*_Mca*Ica + _Mna*Ina)/
+              (1e-8f + _Mpc + 2*_Mcc + _Mnc + 2*_Mpn + 4*_Mcn + 2*_Mnn + _Mpa + 2*_Mca + _Mna),
+              ix = Snc - Spc,
+              iy = Scn - Scp,
+              w = weights(p,q);
+            //            cimg_get3x3(pM,p,q,0,0,_M,unsigned char);
+            /*const float
               ix = (float)(_Mnc*_Mcc*(Inc-Icc)),
               iy = (float)(_Mcn*_Mcc*(Icn-Icc)),
               w = weights(p,q);
+            */
             mean_ix2 += w*ix*ix;
             mean_ixiy += w*ix*iy;
             mean_iy2 += w*iy*iy;
