@@ -22520,7 +22520,7 @@ gmicol_rotate :
 #@gmicol clone("Hard sketch")
 #@gmicol clone("Hough sketch")
 #@gmicol clone("Ink wash")
-#@gmicol clone("Multi-layer etch")
+##@gmicol clone("Multi-layer etch")
 #@gmicol clone("Pencil")
 #@gmicol clone("Pencil portrait")
 #@gmicol clone("Sketch")
