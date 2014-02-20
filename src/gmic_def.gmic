@@ -18256,6 +18256,62 @@ gimp_zoom :
 gimp_blur_angular :
   -apply_channels "-blur_angular $1%,$2,$3 -sharpen $4",$5,$6
 
+#@gimp Blur [depth-of-field] : gimp_blur_dof, gimp_blur_dof_preview(1)
+#@gimp : Blur amplitude = int(32,2,128)
+#@gimp : Blur type = choice(1,"Inner blur","Outer blur")
+#@gimp : sep = separator()
+#@gimp : X-center = float(50,0,100)
+#@gimp : Y-center = float(50,0,100)
+#@gimp : First radius = float(30,0,200)
+#@gimp : Second radius = float(30,0,200)
+#@gimp : Angle = float(0,0,180)
+#@gimp : Fading = float(0.5,0,1)
+#@gimp : sep = separator()
+#@gimp : Show guides = bool(1)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/20</i>.</small>")
+gimp_blur_dof :
+  -_$0 ${1-8},0
+
+_gimp_blur_dof :
+  -repeat @# -l[$>]
+    rmax={(w*w+h*h)^0.5} R={$5*$rmax/100} r={$6*$rmax/100}
+    t={$7*pi/180} u={cos($t)} v={sin($t)}
+    l1={($rmax/(1e-8+$R))^2} l2={($rmax/(1e-8+$r))^2}
+    a={$l1*($u)^2+$l2*($v)^2} b={$u*$v*($l1-$l2)} c={$l1*($v)^2+$l2*($u)^2}
+    100%,100%,1,1,'X=(x-$3*w/100)/max(w,h);Y=(y-$4*h/100)/max(w,h);f=$a*X*X+2*$b*X*Y+$c*Y*Y;v=exp(-f/2.5)'
+    d={min(1-$8,0.99)/2} -c[1] $d,{1-$d} --[1] $d -*[1] {($1-1)/(1-2*$d)}
+
+    -if $9 # Compute guides.
+      --isoline3d[1] {$1-1.5} -col3d[-1] 255,255,0
+      --isoline3d[1] {$1/2} -col3d[-1] 255,128,0
+      --isoline3d[1] 0.5 -col3d[-1] 255,0,0
+      -+3d[-3--1]
+    -endif
+
+    -round[1] 1
+    [0],[0],1,[0]
+
+    -repeat $1
+      --==[1] {if($2,$<,$>)}
+      -j[-2] [0],0,0,0,0,1,[-1],1 -rm[-1]
+      -b[0] {(1+$>)/60}%
+      -rprogress {$>*100/($1-1)}
+    -done
+    -rm[0,1]
+
+    -if $9  # Display guides
+      100%,100%,1,3 -object3d[-1] [0],0,0,0,1,1,0,0
+      -rm[0]
+      -circle[-1] $3%,$4%,3,1,255,255,255
+      --compose_channels[-1] + -neq[-1] 0 -dilate[-1] 3
+      -j[0] [-2],0,0,0,0,0.5,[-1],1 -rm[-2,-1]
+    -endif
+
+  -endl -done
+
+gimp_blur_dof_preview :
+  -_gimp_blur_dof $*
+
 #@gimp Blur [gaussian] : gimp_gaussian_blur, gimp_gaussian_blur_preview(0)
 #@gimp : XY-amplitude = float(3,0,20)
 #@gimp : X-amplitude = float(0,0,20)
@@ -22628,6 +22684,7 @@ gmicol_rotate :
 #----------------------------
 
 #@gmicol clone("Blur [angular]")
+#@gmicol clone("Blur [depth-of-field]")
 #@gmicol clone("Blur [gaussian]")
 #@gmicol clone("Blur [glow]")
 #@gmicol clone("Blur [linear]")
