@@ -1036,13 +1036,13 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
         cimg_for3x3(_mask,x,y,0,0,M,t) if (Mcc && (!Mpp || !Mcp || !Mnp || !Mpc || !Mnc || !Mpn || !Mcn || !Mnn)) {
           is_pixel = true;
           const unsigned int
-            wpp = Mpp?0:1, wcp = Mcp?0:1, wnp = Mnp?0:1,
-            wpc = Mpc?0:1, wnc = Mnc?0:1,
-            wpn = Mpn?0:1, wcn = Mcn?0:1, wnn = Mnn?0:1,
-            sumw = wpp + 2*wcp + wnp + 2*wpc + 2*wnc + wpn + 2*wcn + wnn;
+            wpp = Mpp?0:1, wcp = Mcp?0:2, wnp = Mnp?0:1,
+            wpc = Mpc?0:2, wnc = Mnc?0:2,
+            wpn = Mpn?0:1, wcn = Mcn?0:2, wnn = Mnn?0:1,
+            sumw = wpp + wcp + wnp + wpc + wnc + wpn + wcn + wnn;
           cimg_forC(*this,k) {
             cimg_get3x3(*this,x,y,0,k,I,T);
-            (*this)(x,y,k) = (T)((wpp*Ipp + 2*wcp*Icp + wnp*Inp + 2*wpc*Ipc + 2*wnc*Inc + wpn*Ipn + 2*wcn*Icn + wnn*Inn)/(float)sumw);
+            (*this)(x,y,k) = (T)((wpp*Ipp + wcp*Icp + wnp*Inp + wpc*Ipc + wnc*Inc + wpn*Ipn + wcn*Icn + wnn*Inn)/(float)sumw);
           }
           _nmask(x,y) = 0;
         }
@@ -1109,29 +1109,29 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
                        !Mppn || !Mcpn || !Mnpn || !Mpcn || !Mccn || !Mncn || !Mpnn || !Mcnn || !Mnnn)) {
             is_pixel = true;
             const unsigned int
-              wppp = Mppp?0:1, wcpp = Mcpp?0:1, wnpp = Mnpp?0:1,
-              wpcp = Mpcp?0:1, wccp = Mccp?0:1, wncp = Mncp?0:1,
-              wpnp = Mpnp?0:1, wcnp = Mcnp?0:1, wnnp = Mnnp?0:1,
-              wppc = Mppc?0:1, wcpc = Mcpc?0:1, wnpc = Mnpc?0:1,
-              wpcc = Mpcc?0:1, wncc = Mncc?0:1,
-              wpnc = Mpnc?0:1, wcnc = Mcnc?0:1, wnnc = Mnnc?0:1,
-              wppn = Mppn?0:1, wcpn = Mcpn?0:1, wnpn = Mnpn?0:1,
-              wpcn = Mpcn?0:1, wccn = Mccn?0:1, wncn = Mncn?0:1,
-              wpnn = Mpnn?0:1, wcnn = Mcnn?0:1, wnnn = Mnnn?0:1,
-              sumw = wppp + 2*wcpp + wnpp + 2*wpcp + 4*wccp + 2*wncp + wpnp + 2*wcnp + wnnp +
-              2*wppc + 4*wcpc + 2*wnpc + 4*wpcc + 4*wncc + 2*wpnc + 4*wcnc + 2*wnnc +
-              wppn + 2*wcpn + wnpn + 2*wpcn + 4*wccn + 2*wncn + wpnn + 2*wcnn + wnnn;
+              wppp = Mppp?0:1, wcpp = Mcpp?0:2, wnpp = Mnpp?0:1,
+              wpcp = Mpcp?0:2, wccp = Mccp?0:4, wncp = Mncp?0:2,
+              wpnp = Mpnp?0:1, wcnp = Mcnp?0:2, wnnp = Mnnp?0:1,
+              wppc = Mppc?0:2, wcpc = Mcpc?0:4, wnpc = Mnpc?0:2,
+              wpcc = Mpcc?0:4, wncc = Mncc?0:4,
+              wpnc = Mpnc?0:2, wcnc = Mcnc?0:4, wnnc = Mnnc?0:2,
+              wppn = Mppn?0:1, wcpn = Mcpn?0:2, wnpn = Mnpn?0:1,
+              wpcn = Mpcn?0:2, wccn = Mccn?0:4, wncn = Mncn?0:2,
+              wpnn = Mpnn?0:1, wcnn = Mcnn?0:2, wnnn = Mnnn?0:1,
+              sumw = wppp + wcpp + wnpp + wpcp + wccp + wncp + wpnp + wcnp + wnnp +
+              wppc + wcpc + wnpc + wpcc + wncc + wpnc + wcnc + wnnc +
+              wppn + wcpn + wnpn + wpcn + wccn + wncn + wpnn + wcnn + wnnn;
             cimg_forC(*this,k) {
               cimg_get3x3x3(*this,x,y,z,k,I,T);
-              (*this)(x,y,z,k) = (T)((wppp*Ippp + 2*wcpp*Icpp + wnpp*Inpp +
-                                      2*wpcp*Ipcp + 4*wccp*Iccp + 2*wncp*Incp +
-                                      wpnp*Ipnp + 2*wcnp*Icnp + wnnp*Innp +
-                                      2*wppc*Ippc + 4*wcpc*Icpc + 2*wnpc*Inpc +
-                                      4*wpcc*Ipcc + 4*wncc*Incc +
-                                      2*wpnc*Ipnc + 4*wcnc*Icnc + 2*wnnc*Innc +
-                                      wppn*Ippn + 2*wcpn*Icpn + wnpn*Inpn +
-                                      2*wpcn*Ipcn + 4*wccn*Iccn + 2*wncn*Incn +
-                                      wpnn*Ipnn + 2*wcnn*Icnn + wnnn*Innn)/(float)sumw);
+              (*this)(x,y,z,k) = (T)((wppp*Ippp + wcpp*Icpp + wnpp*Inpp +
+                                      wpcp*Ipcp + wccp*Iccp + wncp*Incp +
+                                      wpnp*Ipnp + wcnp*Icnp + wnnp*Innp +
+                                      wppc*Ippc + wcpc*Icpc + wnpc*Inpc +
+                                      wpcc*Ipcc + wncc*Incc +
+                                      wpnc*Ipnc + wcnc*Icnc + wnnc*Innc +
+                                      wppn*Ippn + wcpn*Icpn + wnpn*Inpn +
+                                      wpcn*Ipcn + wccn*Iccn + wncn*Incn +
+                                      wpnn*Ipnn + wcnn*Icnn + wnnn*Innn)/(float)sumw);
             }
             _nmask(x,y,z) = 0;
           }
