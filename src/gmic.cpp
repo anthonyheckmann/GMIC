@@ -1009,25 +1009,80 @@ CImg<T>& inpaint(const CImg<t>& mask) {
                                 mask._spectrum,mask._data,
                                 _width,_height,_depth,_spectrum,_data);
   CImg<t> _mask(mask,false), _nmask(mask,false);
-  CImg_3x3(M,t); Mpp = Mnp = Mpn = Mnn = 0;
-  CImg_3x3(I,T); Ipp = Inp = Icc = Ipn = Inn = 0;
   bool is_pixel = false;
   do {
     is_pixel = false;
-    cimg_forZ(_mask,z) cimg_for3x3(_mask,x,y,z,0,M,t) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) {
-      is_pixel = true;
-      const float
-        wcp = Mcp?0.0f:1.0f,
-        wpc = Mpc?0.0f:1.0f,
-        wnc = Mnc?0.0f:1.0f,
-        wcn = Mcn?0.0f:1.0f,
-        sumw = wcp + wpc + wnc + wcn;
-      cimg_forC(*this,k) {
-        cimg_get3x3(*this,x,y,z,k,I,T);
-        (*this)(x,y,z,k) = (T)((wcp*Icp + wpc*Ipc + wnc*Inc + wcn*Icn)/sumw);
+
+    if (depth()==1) { // 2d image.
+      CImg_3x3(M,t);
+      CImg_3x3(I,T);
+
+      /*
+      // Average 2d (low-connectivity).
+      cimg_for3x3(_mask,x,y,0,0,M,t) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) {
+        is_pixel = true;
+        const unsigned int wcp = Mcp?0:1, wpc = Mpc?0:1, wnc = Mnc?0:1, wcn = Mcn?0:1,
+          sumw = wcp + wpc + wnc + wcn;
+        cimg_forC(*this,k) {
+          cimg_get3x3(*this,x,y,0,k,I,T);
+          (*this)(x,y,k) = (T)((wcp*Icp + wpc*Ipc + wnc*Inc + wcn*Icn)/(float)sumw);
+        }
+        _nmask(x,y) = 0;
       }
-      _nmask(x,y,z) = 0;
+
+      // Average 2d (high-connectivity).
+      cimg_for3x3(_mask,x,y,0,0,M,t) if (Mcc && (!Mpp || !Mcp || !Mnp || !Mpc || !Mnc || !Mpn || !Mcn || !Mnn)) {
+        is_pixel = true;
+        const unsigned int
+          wpp = Mpp?0:1, wcp = Mcp?0:1, wnp = Mnp?0:1,
+          wpc = Mpc?0:1, wnc = Mnc?0:1,
+          wpn = Mpn?0:1, wcn = Mcn?0:1, wnn = Mnn?0:1,
+          sumw = wpp + 2*wcp + wnp + 2*wpc + 2*wnc + wpn + 2*wcn + wnn;
+        cimg_forC(*this,k) {
+          cimg_get3x3(*this,x,y,0,k,I,T);
+          (*this)(x,y,k) = (T)((wpp*Ipp + 2*wcp*Icp + wnp*Inp + 2*wpc*Ipc + 2*wnc*Inc + wpn*Ipn + 2*wcn*Icn + wnn*Inn)/(float)sumw);
+        }
+        _nmask(x,y) = 0;
+      }
+      */
+
+      // Median 2d (high-connectivity).
+      cimg_for3x3(_mask,x,y,0,0,M,t) if (Mcc && (!Mpp || !Mcp || !Mnp || !Mpc || !Mnc || !Mpn || !Mcn || !Mnn)) {
+        is_pixel = true;
+        const unsigned int
+          wpp = Mpp?0:1, wcp = Mcp?0:1, wnp = Mnp?0:1,
+          wpc = Mpc?0:1, wnc = Mnc?0:1,
+          wpn = Mpn?0:1, wcn = Mcn?0:1, wnn = Mnn?0:1,
+          ind = (wpp + wcp + wnp + wpc + wnc + wpn + wcn + wnn)>>1;
+        cimg_forC(*this,k) {
+          cimg_get3x3(*this,x,y,0,k,I,T);
+          for (unsigned int i = 0; i<9; ++i) if (M[i]) I[i] = cimg::type<T>::max();
+          CImg<T>(I,9,1,1,1,true).sort();
+          (*this)(x,y,k) = I[ind];
+        }
+        _nmask(x,y) = 0;
+      }
+
+    } else { // 3d image.
+      CImg_3x3x3(M,t);
+      CImg_3x3x3(I,T);
+
+      // Average 3d (low connectivity).
+      cimg_for3x3x3(_mask,x,y,z,0,M,t) if (Mccc && (!Mpcc || !Mncc || !Mcpc || !Mcnc || !Mccp || !Mccn)) {
+        is_pixel = true;
+        const unsigned int
+          wcpc = Mcpc?0:1, wpcc = Mpcc?0:1, wccp = Mccp?0:1,
+          wncc = Mncc?0:1, wcnc = Mcnc?0:1, wccn = Mccn?0:1,
+          sumw = wcpc + wpcc + wccp + wncc + wcnc + wccn;
+        cimg_forC(*this,k) {
+          cimg_get3x3x3(*this,x,y,z,k,I,T);
+          (*this)(x,y,z,k) = (T)((wcpc*Icpc + wpcc*Ipcc + wccp*Iccp + wncc*Incc + wcnc*Icnc + wccn*Iccn)/(float)sumw);
+        }
+        _nmask(x,y,z) = 0;
+      }
+
     }
+
     _mask = _nmask;
   } while (is_pixel);
   return *this;
