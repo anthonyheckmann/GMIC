@@ -2223,7 +2223,7 @@ CImg<unsigned int> gmic::selection2cimg(const char *const string, const unsigned
     ctyper = is_selection?']':'}';
   CImg<bool> is_selected(1,indice_max,1,1,false);
 
-  const bool is_inverse = *string=='^';
+  bool is_inverse = *string=='^';
   const char *it = string + (is_inverse?1:0);
   for (bool stopflag = false; !stopflag; ) {
     CImg<char> name(256), item;
@@ -2243,7 +2243,10 @@ CImg<unsigned int> gmic::selection2cimg(const char *const string, const unsigned
         error("Command '%s': Invalid %s %c%s%c (syntax error after colon ':').",
               command,stype,ctypel,string,ctyper);
     }
-    if (std::sscanf(item,"%f%c",&ind0,&end)==1) { // Single indice.
+    if (!*item) { // Particular cases [:N] or [^:N].
+      if (is_inverse) { iind0 = 0; iind1 = -1; is_inverse = false; }
+      else continue;
+    } else if (std::sscanf(item,"%f%c",&ind0,&end)==1) { // Single indice.
       iind1 = iind0 = (int)cimg::round(ind0);
     } else if (std::sscanf(item,"%f-%f%c",&ind0,&ind1,&end)==2) { // Sequence between 2 indices.
       iind0 = (int)cimg::round(ind0);
