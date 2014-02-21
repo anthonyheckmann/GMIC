@@ -1010,6 +1010,7 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
                                 _width,_height,_depth,_spectrum,_data);
   CImg<t> _mask(mask,false), _nmask(mask,false);
   bool is_pixel = false;
+
   do {
     is_pixel = false;
 
@@ -1018,9 +1019,8 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
       CImg_3x3(I,T);
 
       switch (method) {
-
       case 0: // Average 2d (low-connectivity).
-        cimg_for3x3(_mask,x,y,0,0,M,t) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) {
+        cimg_for3x3(_mask,x,y,0,0,M,t) if (Mcc && (!Mcp || !Mpc || !Mnc || !Mcn)) {
           is_pixel = true;
           const unsigned int wcp = Mcp?0:1, wpc = Mpc?0:1, wnc = Mnc?0:1, wcn = Mcn?0:1,
             sumw = wcp + wpc + wnc + wcn;
@@ -1048,19 +1048,35 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
         }
         break;
 
+      case 2: { // Median 2d (low-connectivity).
+        T J[4];
+        cimg_for3x3(_mask,x,y,0,0,M,t)
+          if (Mcc && (!Mcp || !Mpc || !Mnc || !Mcn)) {
+            is_pixel = true;
+            cimg_forC(*this,k) {
+              cimg_get3x3(*this,x,y,0,k,I,T);
+              unsigned int ind = 0;
+              if (!Mcp) J[ind++] = Icp;
+              if (!Mpc) J[ind++] = Ipc;
+              if (!Mnc) J[ind++] = Inc;
+              if (!Mcn) J[ind++] = Icn;
+              (*this)(x,y,k) = CImg<T>(J,ind,1,1,1,true).kth_smallest(ind>>1);
+            }
+            _nmask(x,y) = 0;
+          }
+      } break;
+
       default: // Median 2d (high-connectivity).
+        T J[8];
         cimg_for3x3(_mask,x,y,0,0,M,t) if (Mcc && (!Mpp || !Mcp || !Mnp || !Mpc || !Mnc || !Mpn || !Mcn || !Mnn)) {
           is_pixel = true;
-          const unsigned int
-            wpp = Mpp?0:1, wcp = Mcp?0:1, wnp = Mnp?0:1,
-            wpc = Mpc?0:1, wnc = Mnc?0:1,
-            wpn = Mpn?0:1, wcn = Mcn?0:1, wnn = Mnn?0:1,
-            ind = (wpp + wcp + wnp + wpc + wnc + wpn + wcn + wnn)>>1;
           cimg_forC(*this,k) {
             cimg_get3x3(*this,x,y,0,k,I,T);
-            for (unsigned int i = 0; i<9; ++i) if (M[i]) I[i] = cimg::type<T>::max();
-            CImg<T>(I,9,1,1,1,true).sort();
-            (*this)(x,y,k) = I[ind];
+            unsigned int ind = 0;
+            if (!Mpp) J[ind++] = Ipp; if (!Mcp) J[ind++] = Icp; if (!Mnp) J[ind++] = Inp;
+            if (!Mpc) J[ind++] = Ipc; if (!Mnc) J[ind++] = Inc;
+            if (!Mpn) J[ind++] = Ipn; if (!Mcn) J[ind++] = Icn; if (!Mnn) J[ind++] = Inn;
+            (*this)(x,y,k) = CImg<T>(J,ind,1,1,1,true).kth_smallest(ind>>1);
           }
           _nmask(x,y) = 0;
         }
@@ -1071,8 +1087,7 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
       CImg_3x3x3(I,T);
 
       switch (method) {
-
-      case 0: // Average 3d (low connectivity).
+      case 0: // Average 3d (low-connectivity).
         cimg_for3x3x3(_mask,x,y,z,0,M,t) if (Mccc && (!Mccp || !Mcpc || !Mpcc || !Mncc || !Mcnc || !Mccn)) {
           is_pixel = true;
           const unsigned int
@@ -1087,28 +1102,7 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
         }
         break;
 
-      case 2: { // Median 3d (low-connectivity).
-        const T Tmax = cimg::type<T>::max();
-        CImg<T> J(6);
-        cimg_for3x3x3(_mask,x,y,z,0,M,t)
-          if (Mccc && (!Mccp || !Mcpc || !Mpcc || !Mncc || Mcnc || !Mccn)) {
-            is_pixel = true;
-            const unsigned int
-              wccp = Mccp?0:1, wcpc = Mcpc?0:1, wpcc = Mpcc?0:1,
-              wncc = Mncc?0:1, wcnc = Mcnc?0:1, wccn = Mccn?0:1,
-              ind = (wccp + wcpc + wpcc + wncc + wcnc + wccn)>>1;
-            cimg_forC(*this,k) {
-              cimg_get3x3x3(*this,x,y,z,k,I,T);
-              J[0] = Mccp?Tmax:Iccp; J[1] = Mcpc?Tmax:Icpc; J[2] = Mpcc?Tmax:Ipcc;
-              J[3] = Mncc?Tmax:Incc; J[4] = Mcnc?Tmax:Icnc; J[5] = Mccn?Tmax:Iccn;
-              J.sort();
-              (*this)(x,y,z,k) = I[ind];
-            }
-            _nmask(x,y,z) = 0;
-          }
-      } break;
-
-      default: // Median 3d (high-connectivity).
+      case 1: // Average 3d (high-connectivity).
         cimg_for3x3x3(_mask,x,y,z,0,M,t)
           if (Mccc && (!Mppp || !Mcpp || !Mnpp || !Mpcp || !Mccp || !Mncp || !Mpnp || !Mcnp || !Mnnp ||
                        !Mppc || !Mcpc || !Mnpc || !Mpcc || !Mncc || !Mpnc || !Mcnc || !Mnnc ||
@@ -1124,18 +1118,65 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
               wppn = Mppn?0:1, wcpn = Mcpn?0:1, wnpn = Mnpn?0:1,
               wpcn = Mpcn?0:1, wccn = Mccn?0:1, wncn = Mncn?0:1,
               wpnn = Mpnn?0:1, wcnn = Mcnn?0:1, wnnn = Mnnn?0:1,
-              ind = (wppp + wcpp + wnpp + wpcp + wccp + wncp + wpnp + wcnp + wnnp +
-                     wppc + wcpc + wnpc + wpcc + wncc + wpnc + wcnc + wnnc +
-                     wppn + wcpn + wnpn + wpcn + wccn + wncn + wpnn + wcnn + wnnn)>>1;
+              sumw = wppp + 2*wcpp + wnpp + 2*wpcp + 4*wccp + 2*wncp + wpnp + 2*wcnp + wnnp +
+              2*wppc + 4*wcpc + 2*wnpc + 4*wpcc + 4*wncc + 2*wpnc + 4*wcnc + 2*wnnc +
+              wppn + 2*wcpn + wnpn + 2*wpcn + 4*wccn + 2*wncn + wpnn + 2*wcnn + wnnn;
             cimg_forC(*this,k) {
               cimg_get3x3x3(*this,x,y,z,k,I,T);
-              for (unsigned int i = 0; i<27; ++i) if (M[i]) I[i] = cimg::type<T>::max();
-              CImg<T>(I,27,1,1,1,true).sort();
-              (*this)(x,y,z,k) = I[ind];
+              (*this)(x,y,z,k) = (T)((wppp*Ippp + 2*wcpp*Icpp + wnpp*Inpp +
+                                      2*wpcp*Ipcp + 4*wccp*Iccp + 2*wncp*Incp +
+                                      wpnp*Ipnp + 2*wcnp*Icnp + wnnp*Innp +
+                                      2*wppc*Ippc + 4*wcpc*Icpc + 2*wnpc*Inpc +
+                                      4*wpcc*Ipcc + 4*wncc*Incc +
+                                      2*wpnc*Ipnc + 4*wcnc*Icnc + 2*wnnc*Innc +
+                                      wppn*Ippn + 2*wcpn*Icpn + wnpn*Inpn +
+                                      2*wpcn*Ipcn + 4*wccn*Iccn + 2*wncn*Incn +
+                                      wpnn*Ipnn + 2*wcnn*Icnn + wnnn*Innn)/(float)sumw);
             }
             _nmask(x,y,z) = 0;
           }
         break;
+
+      case 2: { // Median 3d (low-connectivity).
+        T J[6];
+        cimg_for3x3x3(_mask,x,y,z,0,M,t)
+          if (Mccc && (!Mccp || !Mcpc || !Mpcc || !Mncc || !Mcnc || !Mccn)) {
+            is_pixel = true;
+            cimg_forC(*this,k) {
+              cimg_get3x3x3(*this,x,y,z,k,I,T);
+              unsigned int ind = 0;
+              if (!Mccp) J[ind++] = Iccp; if (!Mcpc) J[ind++] = Icpc; if (!Mpcc) J[ind++] = Ipcc;
+              if (!Mncc) J[ind++] = Incc; if (!Mcnc) J[ind++] = Icnc; if (!Mccn) J[ind++] = Iccn;
+              (*this)(x,y,z,k) = CImg<T>(J,ind,1,1,1,true).kth_smallest(ind>>1);
+            }
+            _nmask(x,y,z) = 0;
+          }
+      } break;
+
+      default: { // Median 3d (high-connectivity).
+        T J[26];
+        cimg_for3x3x3(_mask,x,y,z,0,M,t)
+          if (Mccc && (!Mppp || !Mcpp || !Mnpp || !Mpcp || !Mccp || !Mncp || !Mpnp || !Mcnp || !Mnnp ||
+                       !Mppc || !Mcpc || !Mnpc || !Mpcc || !Mncc || !Mpnc || !Mcnc || !Mnnc ||
+                       !Mppn || !Mcpn || !Mnpn || !Mpcn || !Mccn || !Mncn || !Mpnn || !Mcnn || !Mnnn)) {
+            is_pixel = true;
+            cimg_forC(*this,k) {
+              cimg_get3x3x3(*this,x,y,z,k,I,T);
+              unsigned int ind = 0;
+              if (!Mppp) J[ind++] = Ippp; if (!Mcpp) J[ind++] = Icpp; if (!Mnpp) J[ind++] = Inpp;
+              if (!Mpcp) J[ind++] = Ipcp; if (!Mccp) J[ind++] = Iccp; if (!Mncp) J[ind++] = Incp;
+              if (!Mpnp) J[ind++] = Ipnp; if (!Mcnp) J[ind++] = Icnp; if (!Mnnp) J[ind++] = Innp;
+              if (!Mppc) J[ind++] = Ippc; if (!Mcpc) J[ind++] = Icpc; if (!Mnpc) J[ind++] = Inpc;
+              if (!Mpcc) J[ind++] = Ipcc; if (!Mncc) J[ind++] = Incc;
+              if (!Mpnc) J[ind++] = Ipnc; if (!Mcnc) J[ind++] = Icnc; if (!Mnnc) J[ind++] = Innc;
+              if (!Mppn) J[ind++] = Ippn; if (!Mcpn) J[ind++] = Icpn; if (!Mnpn) J[ind++] = Inpn;
+              if (!Mpcn) J[ind++] = Ipcn; if (!Mccn) J[ind++] = Iccn; if (!Mncn) J[ind++] = Incn;
+              if (!Mpnn) J[ind++] = Ipnn; if (!Mcnn) J[ind++] = Icnn; if (!Mnnn) J[ind++] = Innn;
+              (*this)(x,y,z,k) = CImg<T>(J,ind,1,1,1,true).kth_smallest(ind>>1);
+            }
+            _nmask(x,y,z) = 0;
+          }
+      } break;
       }
     }
 
