@@ -5534,7 +5534,7 @@ inn :
 #@gmic : Inpaint selected images by specified mask.
 #@gmic : If no patch size is specified, inpainting is done using a fast averaging-algorithm.
 #@gmic : Otherwise, it used a patch-based reconstruction method, that can be very time consuming.
-#@gmic : Default values : 'patch_size', 'lookup_size=22', 'lookup_factor=0.5', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=1'.
+#@gmic : Default values : 'lookup_size=22', 'lookup_factor=0.5', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=1'.
 #@gmic : $ image.jpg 100%,100% -ellipse 50%,50%,30,30,0,1,255 -ellipse 20%,20%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]
 #@gmic : $ image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],5,15,0.5,9,0 -remove[1]
 
