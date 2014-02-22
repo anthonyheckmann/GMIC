@@ -1186,8 +1186,8 @@ CImg<T>& inpaint(const CImg<t>& mask, const unsigned int method=1) {
 }
 
 template<typename t>
-CImg<T> get_inpaint(const CImg<t>& mask) const {
-  return (+*this).inpaint(mask);
+CImg<T> get_inpaint(const CImg<t>& mask, const unsigned int method=1) const {
+  return (+*this).inpaint(mask,method);
 }
 
 template<typename t>
@@ -6940,18 +6940,22 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             gmic_substitute_args();
             float patch_size = 11, lookup_size = 22, lookup_factor = 0.5,
               blend_size = 0, blend_threshold = 0, blend_decay = 0.05f, blend_scales = 10;
-            unsigned int is_blend_outer = 1;
+            unsigned int is_blend_outer = 1, method = 1;
             CImg<unsigned int> ind;
             char sep = 0;
-            if (std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]%c%c",indices,&sep,&end)==2 &&
-                sep==']' &&
+            if (((std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]%c%c",indices,&sep,&end)==2 && sep==']') ||
+                 (std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%c%c",indices,&sep,&end)==2 && sep=='0') ||
+                 std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],0,%u%c",indices,&method,&end)==2) &&
                 (ind=selection2cimg(indices,images.size(),images_names,"-inpaint",true,
-                                    false,CImg<char>::empty())).height()==1) {
-              print(images,"Inpaint image%s masked by image [%u], with a fast algorithm.",
+                                    false,CImg<char>::empty())).height()==1 &&
+                method<=3) {
+              print(images,"Inpaint image%s masked by image [%u], with %s algorithm.",
                     gmic_selection,
-                    *ind);
+                    *ind,
+                    method==0?"low-connectivity average":method==1?"high-connectivity average":
+                    method==2?"low-connectivity median":"high-connectivity median");
               const CImg<T> mask = gmic_image_arg(*ind);
-              cimg_forY(selection,l) gmic_apply(images[selection[l]],inpaint(mask));
+              cimg_forY(selection,l) gmic_apply(images[selection[l]],inpaint(mask,method));
             } else if (((std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]%c%c",
                                      indices,&sep,&end)==2 && sep==']') ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f%c",
