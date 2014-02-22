@@ -8,6 +8,7 @@
 <ul> 
 <li>This document is distributed under the <a href="http://www.gnu.org/licenses/fdl-1.3.txt">GNU Free Documentation License</a>, version 1.3.</li> 
 <li>A <a href="gmic_reference.pdf">.pdf version</a> of this document is available.</li> 
+<li>We also suggest you read <a href="http://particularart.com/tools-and-toys/gmic/">this page</a>, written by <i>Gary Osgood</i> who provides a very clear and user-friendly explanation of most of the G'MIC basics.</li> 
 </ul> 
 <h2><a id="toc"><font color="brown"><u>Table of contents</u></font></a></h2> 
 <ul> 
@@ -2758,10 +2759,10 @@ scale>0
 [gmic]-1./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ Input black image at position [1] (1 image 425x329x1x1).
 [gmic]-2./__help/document_gmic/*repeat/*local/*if/*if/*if/*if/_document_gmic_example_html/*if/*local/foo/ Draw filled circle at (30%,30%) with radius 30 on images [0,1], with opacity 1 and color (255,0,255).
 [gmic]-2./__help/document_gmic/*repeat/*local/*if/*if/*if/*if/_document_gmic_example_html/*if/*local/foo/ Draw filled circle at (70%,70%) with radius 50 on images [0,1], with opacity 1 and color (255,0,255).
-[gmic]-2./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ [1m[0;31;59m*** Error in ./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ (file '../src/gmic_def.gmic', call from line 1560) *** Command '-inpaint': Invalid argument '[1],5,15,0.5,1,9,0'.[0;0;0m
+[gmic]-2./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ [1m[0;31;59m*** Error in ./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ (file '../src/gmic_def.gmic', call from line 1561) *** Command '-inpaint': Invalid argument '[1],5,15,0.5,1,9,0'.[0;0;0m
 [gmic]-1./__help/document_gmic/*repeat/ Abort G'MIC instance.
 
-[gmic] [0;31;59m[1m*** Error in ./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ (file '../src/gmic_def.gmic', call from line 1560) *** Command '-inpaint': Invalid argument '[1],5,15,0.5,1,9,0'.[0;0;0m
+[gmic] [0;31;59m[1m*** Error in ./__help/document_gmic/../_document_gmic_example_html/*if/*local/foo/ (file '../src/gmic_def.gmic', call from line 1561) *** Command '-inpaint': Invalid argument '[1],5,15,0.5,1,9,0'.[0;0;0m
 [gmic] Command '-inpaint' has the following description: 
 
     -inpaint (+):
