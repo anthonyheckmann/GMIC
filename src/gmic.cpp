@@ -1193,6 +1193,7 @@ CImg<T> get_inpaint(const CImg<t>& mask, const unsigned int method=1) const {
 template<typename t>
 CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                        const unsigned int lookup_size=22, const float lookup_factor=1,
+                       const unsigned int lookup_increment=1,
                        const unsigned int blend_size=0, const float blend_threshold=0.5f,
                        const float blend_decay=0.02, const unsigned int blend_scales=10,
                        const bool is_blend_outer=false) {
@@ -1222,6 +1223,11 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                                 "positive.",
                                 cimg_instance,
                                 lookup_factor);
+  if (!lookup_increment)
+    throw CImgArgumentException(_cimg_instance
+                                "inpaint_patch() : Specified lookup increment is 0, must be strictly "
+                                "positive.",
+                                cimg_instance);
   if (blend_decay<0)
     throw CImgArgumentException(_cimg_instance
                                 "inpaint_patch() : Specified blend decay %g is negative, must be "
@@ -1404,8 +1410,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         yl = (int)*(ptr_lookup_candidates++),
         x0 = cimg::max(p1,xl-l1), y0 = cimg::max(p1,yl-l1),
         x1 = cimg::min(width()-1-p2,xl+l2), y1 = cimg::min(height()-1-p2,yl+l2);
-      for (int y = y0; y<=y1; ++y)
-        for (int x = x0; x<=x1; ++x) if (is_visited(x,y)!=target_index) {
+      for (int y = y0; y<=y1; y+=lookup_increment)
+        for (int x = x0; x<=x1; x+=lookup_increment) if (is_visited(x,y)!=target_index) {
             if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
             else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
             if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
@@ -1604,10 +1610,11 @@ CImg<T> _inpaint_patch_crop(const int x0, const int y0, const int x1, const int 
 template<typename t>
 CImg<T> get_inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                           const unsigned int lookup_size=22, const float lookup_factor=1,
+                          const unsigned int lookup_increment=1,
                           const unsigned int blend_size=0, const float blend_threshold=0.5,
                           const float blend_decay=0.02f, const unsigned int blend_scales=10,
                           const bool is_blend_outer=false) const {
-  return (+*this).inpaint_patch(mask,patch_size,lookup_size,lookup_factor,
+  return (+*this).inpaint_patch(mask,patch_size,lookup_size,lookup_factor,lookup_increment,
                                 blend_size,blend_threshold,blend_decay,blend_scales,is_blend_outer);
 }
 
@@ -6938,7 +6945,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           // Inpaint.
           if (!std::strcmp("-inpaint",command)) {
             gmic_substitute_args();
-            float patch_size = 11, lookup_size = 22, lookup_factor = 0.5,
+            float patch_size = 11, lookup_size = 22, lookup_factor = 0.5, lookup_increment = 1,
               blend_size = 0, blend_threshold = 0, blend_decay = 0.05f, blend_scales = 10;
             unsigned int is_blend_outer = 1, method = 1;
             CImg<unsigned int> ind;
@@ -6965,21 +6972,23 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f%c",
                                     indices,&patch_size,&lookup_size,&lookup_factor,&end)==4 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_factor,
-                                    &blend_size,&end)==5 ||
+                                    indices,&patch_size,&lookup_size,&lookup_factor,&lookup_increment,&end)==5 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_factor,
-                                    &blend_size,&blend_threshold,&end)==6 ||
+                                    indices,&patch_size,&lookup_size,&lookup_factor,&lookup_increment,
+                                    &blend_size,&end)==6 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_factor,
-                                    &blend_size,&blend_threshold,&blend_decay,&end)==7 ||
+                                    indices,&patch_size,&lookup_size,&lookup_factor,&lookup_increment,
+                                    &blend_size,&blend_threshold,&end)==7 ||
                         std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f%c",
-                                    indices,&patch_size,&lookup_size,&lookup_factor,
-                                    &blend_size,&blend_threshold,&blend_decay,&blend_scales,&end)==8 ||
-                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f,%u%c",
-                                    indices,&patch_size,&lookup_size,&lookup_factor,
+                                    indices,&patch_size,&lookup_size,&lookup_factor,&lookup_increment,
+                                    &blend_size,&blend_threshold,&blend_decay,&end)==8 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f,%f%c",
+                                    indices,&patch_size,&lookup_size,&lookup_factor,&lookup_increment,
+                                    &blend_size,&blend_threshold,&blend_decay,&blend_scales,&end)==9 ||
+                        std::sscanf(argument,"[%255[a-zA-Z0-9_.%+-]],%f,%f,%f,%f,%f,%f,%f,%f,%u%c",
+                                    indices,&patch_size,&lookup_size,&lookup_factor,&lookup_increment,
                                     &blend_size,&blend_threshold,&blend_decay,&blend_scales,
-                                    &is_blend_outer,&end)==9) &&
+                                    &is_blend_outer,&end)==10) &&
                        (ind=selection2cimg(indices,images.size(),images_names,"-inpaint",true,
                                            false,CImg<char>::empty())).height()==1 &&
                        patch_size>=0.5 && lookup_size>=0.5 && lookup_factor>=0 &&
@@ -6988,13 +6997,14 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               const CImg<T> mask = gmic_image_arg(*ind);
               patch_size = cimg::round(patch_size);
               lookup_size = cimg::round(lookup_size);
+              lookup_increment = cimg::round(lookup_increment);
               blend_size = cimg::round(blend_size);
               blend_scales = cimg::round(blend_scales);
               print(images,"Inpaint image%s masked by image [%d], with patch size %g, "
-                    "lookup size %g, lookup factor %g, blend size %g, blend threshold %g, "
+                    "lookup size %g, lookup factor %g, lookup_increment %g, blend size %g, blend threshold %g, "
                     "blend decay %g, %g blend scale%s and outer blending %s.",
                     gmic_selection,*ind,
-                    patch_size,lookup_size,lookup_factor,
+                    patch_size,lookup_size,lookup_factor,lookup_increment,
                     blend_size,blend_threshold,blend_decay,blend_scales,blend_scales!=1?"s":"",
                     is_blend_outer?"enabled":"disabled");
               cimg_forY(selection,l)
@@ -7002,6 +7012,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                            inpaint_patch(mask,
                                          (unsigned int)patch_size,(unsigned int)lookup_size,
                                          lookup_factor,
+                                         (unsigned int)lookup_increment,
                                          (unsigned int)blend_size,blend_threshold,blend_decay,
                                          (unsigned int)blend_scales,(bool)is_blend_outer));
             } else arg_error("inpaint");

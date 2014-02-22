@@ -5534,9 +5534,10 @@ inn :
 #@gmic : Inpaint selected images by specified mask.
 #@gmic : If no patch size (or 0) is specified, inpainting is done using a fast average or median algorithm.
 #@gmic : Otherwise, it used a patch-based reconstruction method, that can be very time consuming.
+#@gmic : 'fast_method' can be { 0=low-connectivity average | 1=high-connectivity average | 2=low-connectivity median | 3=high-connectivity median }.
 #@gmic : Default values : 'patch_size=0', 'fast_method=1', 'lookup_size=22', 'lookup_factor=0.5', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=1'.
 #@gmic : $ image.jpg 100%,100% -ellipse 50%,50%,30,30,0,1,255 -ellipse 20%,20%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]
-#@gmic : $ image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],5,15,0.5,9,0 -remove[1]
+#@gmic : $ image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],5,15,0.5,1,9,0 -remove[1]
 
 #@gmic inpaint_flow : _nb_iter1>=0,_nb_iter2>=0,_dt>=0,_alpha,_sigma
 #@gmic : Apply iteration of the inpainting flow on selected images.
@@ -20535,7 +20536,8 @@ gimp_inpaint_patch :
   -if $9 # Mask by color.
     -repeat @# -l[$>]
       --select_color 0,${10-13}
-      -if {@.>=1583} -$inpaint[0] [1],$1,{$1*$2},$3,{$4*$1},${5-8}
+      -if {@.>=1584} -$inpaint[0] [1],$1,{$1*$2},$3,1,{$4*$1},${5-8}
+      -elif {@.>=1583} -$inpaint[0] [1],$1,{$1*$2},$3,{$4*$1},${5-8}
       -else -$inpaint[0] [1],$1,{$1*$2},{round(1+$3)},{$4*$1},${5-8}
       -endif
       -rm[1]
@@ -20543,7 +20545,8 @@ gimp_inpaint_patch :
   -else # Mask by top layer.
     -if {@#==1} -return -endif
     -to_a[0] -channels[0] 100% -ge[0] 50%
-    -if {@.>=1583} -$inpaint[^0] [0],$1,{$1*$2},$3,{$4*$1},${5-8}
+    -if {@.>=1584} -$inpaint[^0] [0],$1,{$1*$2},$3,1,{$4*$1},${5-8}
+    -elif {@.>=1583} -$inpaint[^0] [0],$1,{$1*$2},$3,{$4*$1},${5-8}
     -else -$inpaint[^0] [0],$1,{$1*$2},{round(1+$3)},{$4*$1},${5-8}
     -endif
     -to_a[0] -f[0] 0
