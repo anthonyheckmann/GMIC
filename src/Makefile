@@ -46,7 +46,7 @@
 #----------------------------------
 # Set correct variables and paths.
 #----------------------------------
-OS := $(uname)
+OS := $(shell uname)
 CC = g++
 ifeq ($(OS),Linux)
 OS = Unix
