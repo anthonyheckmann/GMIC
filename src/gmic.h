@@ -70,9 +70,21 @@
 #include cimg_include_file
 #if cimg_OS==2
 #include <process.h>
-#pragma comment(linker,"/STACK:8388608")
+#pragma comment(linker,"/STACK:16777216")
 #elif cimg_OS==1
 #include <cerrno>
+#include <sys/resource.h>
+static struct gmic_increase_stack {
+  gmic_increase_stack() {
+    const rlim_t requested_stack_size = 16*1024*1024;
+    struct rlimit rl;
+    const int result = getrlimit(RLIMIT_STACK,&rl);
+    if (!result && rl.rlim_cur<requested_stack_size) {
+      rl.rlim_cur = requested_stack_size;
+      setrlimit(RLIMIT_STACK,&rl);
+    }
+  }
+} _gmic_increase_stack;
 #endif // #if cimg_OS==2
 
 // Define some special character codes used for replacement in double quoted strings.
