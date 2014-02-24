@@ -18259,46 +18259,56 @@ gimp_blur_angular :
   -apply_channels "-blur_angular $1%,$2,$3 -sharpen $4",$5,$6
 
 #@gimp Blur [depth-of-field] : gimp_blur_dof, gimp_blur_dof_preview(1)
-#@gimp : Blur amplitude = int(32,2,128)
-#@gimp : Blur type = choice(1,"Inner blur","Outer blur")
+#@gimp : Blur amplitude = float(3,0,20)
+#@gimp : Invert blur = bool(0)
 #@gimp : sep = separator()
 #@gimp : X-center = float(50,0,100)
 #@gimp : Y-center = float(50,0,100)
 #@gimp : First radius = float(30,0,200)
 #@gimp : Second radius = float(30,0,200)
 #@gimp : Angle = float(0,0,180)
-#@gimp : Fading = float(0.5,0,1)
+#@gimp : Fading = float(1,0,1)
 #@gimp : sep = separator()
 #@gimp : Show guides = bool(1)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/20</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/24</i>.</small>")
 gimp_blur_dof :
   -_$0 ${1-8},0
 
 _gimp_blur_dof :
-  -repeat @# -l[$>]
+
+  -repeat @# -l[$>] -split_opacity -l[0]
     rmax={(w*w+h*h)^0.5} R={$5*$rmax/100} r={$6*$rmax/100}
     t={$7*pi/180} u={cos($t)} v={sin($t)}
     l1={($rmax/(1e-8+$R))^2} l2={($rmax/(1e-8+$r))^2}
     a={$l1*($u)^2+$l2*($v)^2} b={$u*$v*($l1-$l2)} c={$l1*($v)^2+$l2*($u)^2}
     100%,100%,1,1,'X=(x-$3*w/100)/max(w,h);Y=(y-$4*h/100)/max(w,h);f=$a*X*X+2*$b*X*Y+$c*Y*Y;v=exp(-f/2.5)'
-    d={min(1-$8,0.99)/2} -c[1] $d,{1-$d} --[1] $d -*[1] {($1-1)/(1-2*$d)}
+    d={min(1-$8,0.99)/2} -c[1] $d,{1-$d} --[1] $d
+    -*[1] {15/(1-2*$d)}
 
     -if $9 # Compute guides.
-      --isoline3d[1] {$1-1.5} -col3d[-1] 255,255,0
-      --isoline3d[1] {$1/2} -col3d[-1] 255,128,0
-      --isoline3d[1] 0.5 -col3d[-1] 255,0,0
-      -+3d[-3--1]
+      --isoline3d[1] 12.5 -col3d[-1] 255,255,0
+      --isoline3d[1] 5.5 -col3d[-1] 255,128,0
+      -+3d[-2--1]
     -endif
 
     -round[1] 1
-    [0],[0],1,[0]
+    [0],[0],1,@{0,s+1}
 
-    -repeat $1
-      --==[1] {if($2,$<,$>)}
-      -j[-2] [0],0,0,0,0,1,[-1],1 -rm[-1]
-      -b[0] {(1+$>)/60}%
-      -rprogress {$>*100/($1-1)}
+    sigma=0
+    -repeat 16
+      --==[1] {if($2,$>,$<)} -b[-1] 2%
+      -j[-2] [0],0,0,0,0,-1,[-1],1
+      -j[-2] [-1],0,0,0,100%,-1
+      -rm[-1]
+
+      nsigma={$1*((1+$>)/16)^1.5}
+      dsigma={sqrt($nsigma^2-$sigma^2)}
+      sigma=$nsigma
+      -b[0] $dsigma%
+
     -done
+
+    -s[-1] c,{-s+1} -/[-2,-1]
     -rm[0,1]
 
     -if $9  # Display guides
@@ -18309,7 +18319,7 @@ _gimp_blur_dof :
       -j[0] [-2],0,0,0,0,0.5,[-1],1 -rm[-2,-1]
     -endif
 
-  -endl -done
+  -endl -a c -endl -done
 
 gimp_blur_dof_preview :
   -_gimp_blur_dof $*
@@ -23048,3 +23058,20 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+toto :
+
+  --l[0] -repeat 4
+    --b[0] {5*$>}
+  -done -rm[0] -a x -endl
+
+  -l[0] sigma=0 -repeat 4
+    nsigma={5*$>}
+    dsigma={sqrt($nsigma^2-$sigma^2)}
+    sigma=$nsigma
+    --b[-1] $dsigma
+  -done -rm[0] -a x -endl
+
+  -a y
+#  --
+# -abs
