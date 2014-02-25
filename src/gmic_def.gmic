@@ -23070,20 +23070,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-toto :
-
-  --l[0] -repeat 4
-    --b[0] {5*$>}
-  -done -rm[0] -a x -endl
-
-  -l[0] sigma=0 -repeat 4
-    nsigma={5*$>}
-    dsigma={sqrt($nsigma^2-$sigma^2)}
-    sigma=$nsigma
-    --b[-1] $dsigma
-  -done -rm[0] -a x -endl
-
-  -a y
-#  --
-# -abs
