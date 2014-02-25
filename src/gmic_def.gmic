@@ -18260,69 +18260,81 @@ gimp_blur_angular :
 
 #@gimp Blur [depth-of-field] : gimp_blur_dof, gimp_blur_dof_preview(1)
 #@gimp : Blur amplitude = float(3,0,20)
+#@gimp : Blur precision = int(16,2,64)
+#@gimp : Depth-of-field type = choice{"Gaussian","User-defined (bottom layer)"}
 #@gimp : Invert blur = bool(0)
 #@gimp : sep = separator()
+#@gimp : note = note("<small><b>Gaussian depth-of-field:</b></small>")
 #@gimp : X-center = float(50,0,100)
 #@gimp : Y-center = float(50,0,100)
 #@gimp : First radius = float(30,0,200)
 #@gimp : Second radius = float(30,0,200)
 #@gimp : Angle = float(0,0,180)
-#@gimp : Fading = float(1,0,1)
+#@gimp : Sharpness = float(1,0,8)
+#@gimp : Preview guides = bool(1)
 #@gimp : sep = separator()
-#@gimp : Show guides = bool(1)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/24</i>.</small>")
+#@gimp : note = note("<small><b>User-defined depth-of-field:</b></small>")
+#@gimp : Gamma = float(0,-2,2)
+#@gimp : note = note("<small>You can specify your own depth-of-field image, as a <b>bottom layer</b> image whose luminance encodes the depth for each pixel.
+#@gimp : Don't forget to modify the <b>Input layers</b> combo-box to make this layer active for the filter.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/25</i>.</small>")
 gimp_blur_dof :
-  -_$0 ${1-8},0
-
-_gimp_blur_dof :
-
-  -repeat @# -l[$>] -split_opacity -l[0]
-    rmax={(w*w+h*h)^0.5} R={$5*$rmax/100} r={$6*$rmax/100}
-    t={$7*pi/180} u={cos($t)} v={sin($t)}
-    l1={($rmax/(1e-8+$R))^2} l2={($rmax/(1e-8+$r))^2}
-    a={$l1*($u)^2+$l2*($v)^2} b={$u*$v*($l1-$l2)} c={$l1*($v)^2+$l2*($u)^2}
-    100%,100%,1,1,'X=(x-$3*w/100)/max(w,h);Y=(y-$4*h/100)/max(w,h);f=$a*X*X+2*$b*X*Y+$c*Y*Y;v=exp(-f/2.5)'
-    d={min(1-$8,0.99)/2} -c[1] $d,{1-$d} --[1] $d
-    -*[1] {15/(1-2*$d)}
-
-    -if $9 # Compute guides.
-      --isoline3d[1] 12.5 -col3d[-1] 255,255,0
-      --isoline3d[1] 5.5 -col3d[-1] 255,128,0
-      -+3d[-2--1]
-    -endif
-
-    -round[1] 1
-    [0],[0],1,@{0,s+1}
-
-    sigma=0
-    -repeat 16
-      --==[1] {if($2,$>,$<)} -b[-1] 2%
-      -j[-2] [0],0,0,0,0,-1,[-1],1
-      -j[-2] [-1],0,0,0,100%,-1
-      -rm[-1]
-
-      nsigma={$1*((1+$>)/16)^1.5}
-      dsigma={sqrt($nsigma^2-$sigma^2)}
-      sigma=$nsigma
-      -b[0] $dsigma%
-
-    -done
-
-    -s[-1] c,{-s+1} -/[-2,-1]
-    -rm[0,1]
-
-    -if $9  # Display guides
-      100%,100%,1,3 -object3d[-1] [0],0,0,0,1,1,0,0
-      -rm[0]
-      -circle[-1] $3%,$4%,3,1,255,255,255
-      --compose_channels[-1] + -neq[-1] 0 -dilate[-1] 3
-      -j[0] [-2],0,0,0,0,0.5,[-1],1 -rm[-2,-1]
-    -endif
-
-  -endl -a c -endl -done
+  -_$0 ${1-10},0,$12
 
 gimp_blur_dof_preview :
   -_gimp_blur_dof $*
+
+_gimp_blur_dof :
+  -if {!$3}  # Gaussian DOF.
+    -repeat @# -l[$>] -if $11 -drgba -endif -split_opacity -l[0]
+      rmax={(w*w+h*h)^0.5} R={$7*$rmax/100} r={$8*$rmax/100}
+      t={$9*pi/180} u={cos($t)} v={sin($t)}
+      l1={($rmax/(1e-8+$R))^2} l2={($rmax/(1e-8+$r))^2}
+      a={$l1*($u)^2+$l2*($v)^2} b={$u*$v*($l1-$l2)} c={$l1*($v)^2+$l2*($u)^2}
+      100%,100%,1,1,'X=(x-$5*w/100)/max(w,h);Y=(y-$6*h/100)/max(w,h);f=$a*X*X+2*$b*X*Y+$c*Y*Y;exp(-f^$10/2.5)'
+      --[1] 1 -*[1] -$1 ms={im} Ms={iM}
+
+      -if $11 # With preview of guides.
+        --isoline3d[1] {0.1*$1} -col3d[-1] 255,255,0
+        --isoline3d[1] {0.5*$1} -col3d[-1] 255,128,0
+        -+3d[-2--1]
+        -__gimp_dof_blur[0,1] $2,$ms,$Ms,$4
+        [0],[0],1,3 -object3d[-1] [-2],0,0,0,1,1,0,0 -rm[-2]
+        -circle[-1] $5%,$6%,3,1,255,255,255
+        --compose_channels[-1] + -neq[-1] 0 -dilate[-1] 3
+        -j[0] [-2],0,0,0,0,0.5,[-1],1 -rm[-2,-1]
+      -else -__gimp_dof_blur[0,1] $2,$ms,$Ms,$4 # Without preview.
+      -endif
+    -endl -if $11 -k[0] -endif -a c -endl -done
+  -elif {@#>1} # User-defined DOF (as bottom layer).
+    -luminance[-1] -n[-1] 0,1 -pow[-1] {10^$12}
+    -repeat {@#-1} --r[-1] @{$>,w},@{$>,h},1,1,3 -l[$>,-1] -split_opacity[0]
+      -__gimp_dof_blur[0,-1] $2,0,$1,$4
+    -a c -endl -done -rm[-1]
+  -else -drgba -text_outline "Depth-of-field (bottom layer) is missing !",2,2,13,2,1,255
+  -endif
+
+# Render DOF blur (generic)
+# [0] = Input image
+# [1] = continuous DOF field (with same size as [0]).
+# $1 = nb quantization levels.
+# $2 = minimal blur level.
+# $3 = maximal blur level.
+# $4 = invert blur.
+__gimp_dof_blur :
+  -n[1] 0,{$1-1} -round[1]
+  [0],[0],1,@{0,s+1}
+  s=0
+  -repeat $1
+    --==[1] {if($4,$<,$>)} -b[-1] 2%
+    -j[-2] [0],0,0,0,0,-1,[-1],1
+    -j[-2] [-1],0,0,0,100%,-1
+    -rm[-1]
+     ns={$2+($3-$2)*($>+1)/($1-1)}
+     -b[0] {sqrt($ns^2-$s^2)}%
+     s=$ns
+  -done
+  -s[-1] c,{-s+1} -/[-2,-1] -rm[0,1]
 
 #@gimp Blur [gaussian] : gimp_gaussian_blur, gimp_gaussian_blur_preview(0)
 #@gimp : XY-amplitude = float(3,0,20)
