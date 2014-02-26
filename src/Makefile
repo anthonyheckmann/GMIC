@@ -64,7 +64,7 @@ else
 PLUGINDIR = `gimptool-2.0 --gimpplugindir`/plug-ins
 USR = /usr
 endif
-ifeq ($(OS),msys)
+ifeq ($(OSTYPE),msys)
 EXE = .exe
 endif
 
@@ -86,6 +86,9 @@ MANDATORY_CFLAGS+=$(IS_BETA_CFLAGS)
 ifeq ($(OS),Unix)
 MANDATORY_CFLAGS+= -Dcimg_use_vt100
 endif
+ifeq ($(OSTYPE),msys)
+MANDATORY_LDFLAGS = -Wl,--stack,16777216
+endif
 
 # Flags to enable debugging.
 DEBUG_CFLAGS = -Dcimg_verbosity=3 -g
@@ -104,7 +107,7 @@ endif
 # Flags to enable parallel processing.
 ifneq ($(OS),Darwin)
 PARALLEL_CFLAGS = -Dgmic_is_parallel
-ifneq ($(OS),msys)
+ifneq ($(OSTYPE),msys)
 PARALLEL_LDFLAGS = -lpthread
 endif
 endif
@@ -201,7 +204,7 @@ EXR_LDFLAGS = -lIlmImf -lHalf
 # (package 'libfftw3-dev' on Debian).
 FFTW_CFLAGS = -Dcimg_use_fftw3
 FFTW_LDFLAGS = -lfftw3 -lfftw3_threads
-ifeq ($(OS),msys)
+ifeq ($(OSTYPE),msys)
 FFTW_LDFLAGS = -lfftw3-3
 endif
 
@@ -267,7 +270,7 @@ STD_MACOSX_LDFLAGS = $(MANDATORY_LDFLAGS) $(X11_LDFLAGS) $(ZLIB_LDFLAGS) \
 # GIMP plug-in : Standard build.
 STD_GIMP_CFLAGS = $(MANDATORY_CFLAGS) $(CHECKIMAGE_CFLAGS) $(PARALLEL_CFLAGS) $(FFTW_CFLAGS) $(PNG_CFLAGS) $(ZLIB_CFLAGS) ${IS_BETA_CFLAGS} -Dcimg_display=0 -Dcimg_use_rng
 STD_GIMP_LDFLAGS = $(MANDATORY_LDFLAGS) $(PARALLEL_LDFLAGS) $(FFTW_LDFLAGS) $(PNG_LDFLAGS) $(ZLIB_LDFLAGS)
-ifeq ($(OS),msys)
+ifeq ($(OSTYPE),msys)
 STD_GIMP_LDFLAGS += -mwindows -lpthread
 endif
 

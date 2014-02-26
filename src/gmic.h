@@ -76,7 +76,7 @@
 #include <sys/resource.h>
 static struct gmic_increase_stack {
   gmic_increase_stack() {
-    const rlim_t requested_stack_size = 16*1024*1024;
+    const rlim_t requested_stack_size = 16777216;
     struct rlimit rl;
     const int result = getrlimit(RLIMIT_STACK,&rl);
     if (!result && rl.rlim_cur<requested_stack_size) {
