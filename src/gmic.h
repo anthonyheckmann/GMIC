@@ -70,7 +70,9 @@
 #include cimg_include_file
 #if cimg_OS==2
 #include <process.h>
+#ifdef _MSC_VER
 #pragma comment(linker,"/STACK:16777216")
+#endif
 #elif cimg_OS==1
 #include <cerrno>
 #include <sys/resource.h>
