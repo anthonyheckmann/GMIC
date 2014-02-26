@@ -15116,7 +15116,11 @@ gimp_logo_version1 : -skip "${1=Plug-in for GIMP}"
   -r[-1] [-2],[-2],1,4,0,0,0.5,0.5 -blend alpha
 
 gimp_logo_en :
-  -gimp_logo_version{round(?(1,3))} "Plug-in for GIMP\n    "[" "@{-strver}" "]
+  -if {narg($_gmic_is_beta)}
+    -gimp_logo_version{round(?(0.5,3.49))} "Plug-in for GIMP\n "[" "@{-strver}" beta "]
+  -else
+    -gimp_logo_version{round(?(0.5,3.49))} "Plug-in for GIMP\n    "[" "@{-strver}" "]
+  -endif
 
 #---------------------
 # French translations
@@ -22433,7 +22437,7 @@ gimp_solve_maze_preview :
 #@gmicol : note = link{"The G'MIC plug-in for GIMP","http://gmic.sourceforge.net/gimp.shtml"}
 #@gmicol : sep = separator(), note = note("<small>Authors: <i>S&#233;bastien Fourey, David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
 gmicol_logo_en :
-  -gimp_logo "    - Online -"
+  -gimp_logo_version{round(?(0.5,3.49))} "    - Online -\n    "[" "@{-strver}" "]
 
 #@gmicol clone("Contributors")
 
