@@ -4773,10 +4773,8 @@ scale2x :
   -e[^-1] "Double xy-dimensions of image$?, using Scale2x algorithm."
   -v - -repeat @# -l[$>]
     -r 200%,200%
-
-#    -apply_parallel_overlap
-     -f "dx=x&1;dy=y&1;A=j(0,-2,0,0,0,1);B=j(2,0,0,0,0,1);C=j(-2,0,0,0,0,1);D=j(0,2,0,0,0,1);"\
-        "!dy*(!dx*if(C==A&&C!=D&&A!=B,A,i) + dx*if(A==B&&A!=C&&B!=D,B,i)) + dy*(dx*if(B==D&&B!=A&&D!=C,D,i) + !dx*if(D==C&&D!=B&&C!=A,C,i))"
+    -f "dx=x&1;dy=y&1;A=j(0,-2,0,0,0,1);B=j(2,0,0,0,0,1);C=j(-2,0,0,0,0,1);D=j(0,2,0,0,0,1);"\
+       "!dy*(!dx*if(C==A&&C!=D&&A!=B,A,i) + dx*if(A==B&&A!=C&&B!=D,B,i)) + dy*(dx*if(B==D&&B!=A&&D!=C,D,i) + !dx*if(D==C&&D!=B&&C!=A,C,i))"
   -endl -done -v +
 
 #@gmic scale3x
@@ -5540,12 +5538,12 @@ inn :
     -endif
   -endl -done -v +
 
-#@gmic inpaint : [mask] : [mask],0,_fast_method : [mask],_patch_size>=1,_lookup_size>=1,_lookup_factor>=0,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={ 0 | 1 } : (+)
+#@gmic inpaint : [mask] : [mask],0,_fast_method : [mask],_patch_size>=1,_lookup_size>=1,_lookup_factor>=0,_lookup_increment!=0,_blend_size>=0,0<=_blend_threshold<=1,_blend_decay>=0,_blend_scales>=1,_is_blend_outer={ 0 | 1 } : (+)
 #@gmic : Inpaint selected images by specified mask.
 #@gmic : If no patch size (or 0) is specified, inpainting is done using a fast average or median algorithm.
 #@gmic : Otherwise, it used a patch-based reconstruction method, that can be very time consuming.
 #@gmic : 'fast_method' can be { 0=low-connectivity average | 1=high-connectivity average | 2=low-connectivity median | 3=high-connectivity median }.
-#@gmic : Default values : 'patch_size=0', 'fast_method=1', 'lookup_size=22', 'lookup_factor=0.5', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=1'.
+#@gmic : Default values : 'patch_size=0', 'fast_method=1', 'lookup_size=22', 'lookup_factor=0.5', 'lookup_increment=1', 'blend_size=0', 'blend_threshold=0', 'blend_decay=0.05', 'blend_scales=10' and 'is_blend_outer=1'.
 #@gmic : $ image.jpg 100%,100% -ellipse 50%,50%,30,30,0,1,255 -ellipse 20%,20%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]
 #@gmic : $ image.jpg 100%,100% -circle 30%,30%,30,1,255,0,255 -circle 70%,70%,50,1,255,0,255 --inpaint[0] [1],5,15,0.5,1,9,0 -remove[1]
 
@@ -8739,8 +8737,8 @@ _apply_parallel_overlap16 :
 #@gmic parallel : _wait_threads,"command1","command2",... : (*)
 #@gmic : Execute specified commands in parallel, each in a different thread.
 #@gmic : All running threads share the current list of images and the global variables.
-#@gmic : 'wait_threads' can be { 0=never | 1=at return point | 2=immediately }.
-#@gmic : Default value: 'wait_threads=2'.
+#@gmic : 'wait_threads' can be { 0=never | 1=when process returns | 2=when command returns | 3=immediately }.
+#@gmic : Default value: 'wait_threads=3'.
 #@gmic : $ image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"
 
 # The implementation below allows to use parallel as a regular command with selections.
@@ -13572,7 +13570,7 @@ compress_gmic :
   -e[] "" -v -
   head_std={'"#@gmic"'}
   -s -,10 N=@#
-  -repeat @#
+  -repeat @# -l[$<]
     -if {!($>%100)} -v + -e[] "\r  Process : "{round($>/$N*100)}% -v - -endif
     -if {i=={'#'}}
       head=@{-1,0-{min(5,h-1)}}
@@ -13582,7 +13580,7 @@ compress_gmic :
       -l[-1] -split +,32,35 -if {@#>2} -k[0] -endif -a y -endl
       -autocrop[-1] 32 -if {!w} -rm[-1] -continue -endif
     -endif
-  -mv[-1] 0 -done
+  -endl -done
   -i[1--2] (10) -a y
   -v + -e[] "\r Process : 100%"
 
@@ -13593,7 +13591,7 @@ compress_gmic_gimp :
   -e[] "" -v -
   head_std={'"#@gimp"'}
   -s -,10 N=@#
-  -repeat @#
+  -repeat @# -l[$<]
     -if {!($>%100)} -v + -e[] "\r  Process : "{round($>/$N*100)}% -v - -endif
     -if {i=={'#'}}
       head=@{-1,0-{min(5,h-1)}}
@@ -13603,7 +13601,7 @@ compress_gmic_gimp :
       -l[-1] -split +,32,35 -if {@#>2} -k[0] -endif -a y -endl
       -autocrop[-1] 32 -if {!w} -rm[-1] -continue -endif
     -endif
-  -mv[-1] 0 -done
+  -endl -done
   -i[1--2] (10) -a y
   -v + -e[] "\r Process : 100%"
 

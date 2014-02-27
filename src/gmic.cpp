@@ -579,7 +579,7 @@ static CImg<T> append_CImg3d(const CImgList<T>& images) {
     if (!img.is_CImg3d(false,error_message))
       throw CImgArgumentException("append_CImg3d(): image [%d] (%u,%u,%u,%u,%p) "
                                   "is not a CImg3d (%s).",
-                                  img._width,img._height,img._depth,img._spectrum,img._data,
+                                  l,img._width,img._height,img._depth,img._spectrum,img._data,
                                   error_message);
     siz+=img.size() - 8;
     nbv+=cimg::float2uint((float)img[6]);
@@ -1193,7 +1193,7 @@ CImg<T> get_inpaint(const CImg<t>& mask, const unsigned int method=1) const {
 template<typename t>
 CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                        const unsigned int lookup_size=22, const float lookup_factor=1,
-                       const unsigned int lookup_increment=1,
+                       const int lookup_increment=1,
                        const unsigned int blend_size=0, const float blend_threshold=0.5f,
                        const float blend_decay=0.02, const unsigned int blend_scales=10,
                        const bool is_blend_outer=false) {
@@ -1403,6 +1403,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
     int best_x = -1, best_y = -1;
     ++target_index;
 
+    const unsigned int _lookup_increment = (unsigned int)(lookup_increment>0?lookup_increment:nb_lookup_candidates>1?1:-lookup_increment);
+
     ptr_lookup_candidates = lookup_candidates.data();
     for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
       const int
@@ -1410,8 +1412,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         yl = (int)*(ptr_lookup_candidates++),
         x0 = cimg::max(p1,xl-l1), y0 = cimg::max(p1,yl-l1),
         x1 = cimg::min(width()-1-p2,xl+l2), y1 = cimg::min(height()-1-p2,yl+l2);
-      for (int y = y0; y<=y1; y+=lookup_increment)
-        for (int x = x0; x<=x1; x+=lookup_increment) if (is_visited(x,y)!=target_index) {
+      for (int y = y0; y<=y1; y+=_lookup_increment)
+        for (int x = x0; x<=x1; x+=_lookup_increment) if (is_visited(x,y)!=target_index) {
             if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
             else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
             if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
@@ -1610,7 +1612,7 @@ CImg<T> _inpaint_patch_crop(const int x0, const int y0, const int x1, const int 
 template<typename t>
 CImg<T> get_inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                           const unsigned int lookup_size=22, const float lookup_factor=1,
-                          const unsigned int lookup_increment=1,
+                          const int lookup_increment=1,
                           const unsigned int blend_size=0, const float blend_threshold=0.5,
                           const float blend_decay=0.02f, const unsigned int blend_scales=10,
                           const bool is_blend_outer=false) const {
@@ -3947,6 +3949,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
   // Allocate string variables, widely used afterwards
   // (prevents stack overflow on recursive calls while remaining thread-safe).
   CImgList<st_gmic_parallel<T> > threads_data;
+  static CImgList<st_gmic_parallel<T> > global_threads_data;
+
   CImg<char> _formula(4096), _message(1024), _title(256), _indices(256),
     _argx(256), _argy(256), _argz(256), _argc(256);
   char
@@ -7012,7 +7016,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                            inpaint_patch(mask,
                                          (unsigned int)patch_size,(unsigned int)lookup_size,
                                          lookup_factor,
-                                         (unsigned int)lookup_increment,
+                                         (int)lookup_increment,
                                          (unsigned int)blend_size,blend_threshold,blend_decay,
                                          (unsigned int)blend_scales,(bool)is_blend_outer));
             } else arg_error("inpaint");
@@ -8292,20 +8296,21 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if (!std::strcmp("-parallel",item)) {
             gmic_substitute_args();
             const char *_arg = argument, *_arg_text = argument_text;
-            unsigned int wait_mode = 2;
-            if ((*_arg=='0' || *_arg=='1' || *_arg=='2') && (_arg[1]==',' || !_arg[1])) {
+            unsigned int wait_mode = 3;
+            if ((*_arg=='0' || *_arg=='1' || *_arg=='2' || *_arg=='3') && (_arg[1]==',' || !_arg[1])) {
               wait_mode = (unsigned int)(*_arg-'0'); _arg+=2; _arg_text+=2;
             }
             CImgList<char> arguments = CImg<char>::string(_arg).get_split(',',false,false);
-            CImg<st_gmic_parallel<T> >(1,arguments.width()).move_to(threads_data);
-            CImg<st_gmic_parallel<T> > &_threads_data = threads_data.back();
+            CImg<st_gmic_parallel<T> >(1,arguments.width()).move_to(wait_mode>1?threads_data:global_threads_data);
+            CImg<st_gmic_parallel<T> > &_threads_data = wait_mode>1?threads_data.back():global_threads_data.back();
 
 #ifdef gmic_is_parallel
             print(images,"Execute %d command%s '%s' in parallel%s.",
                   arguments.width(),arguments.width()>1?"s":"",_arg_text,
-                  wait_mode==2?(arguments.width()>1?" and wait immediately they finish":
-                                " and wait immediately it finishes"):
-                  wait_mode==1?" and defer thread waiting at return point":"");
+                  wait_mode==3?" and wait for thread termination immediately":
+                  wait_mode==2?" and defer thread termination wait at command return point":
+                  wait_mode==1?" and defer thread termination wait at process return point":
+                  "and do not wait for thread termination");
 #else
             print(images,"Execute %d commands '%s' (run sequentially, "
                   "parallel computing disabled).",
@@ -8388,7 +8393,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #endif // #ifdef gmic_is_parallel
           }
 
-            if (wait_mode==2) { // Wait for thread termination.
+            if (wait_mode==3) { // Wait for thread termination immediately.
               cimg_forY(_threads_data,l) {
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
@@ -12450,6 +12455,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
     // Wait for remaining threads to finish.
 #ifdef gmic_is_parallel
+
+#ifdef gmic_float
+    // Add 'global' threads to the list of threads to finish.
+    if (scope.size()==1) global_threads_data.move_to(threads_data,~0U);
+#endif
+
     cimglist_for(threads_data,i) cimg_forY(threads_data[i],l) {
       if (!threads_data(i,l).wait_mode) {
         cimg::mutex(30);

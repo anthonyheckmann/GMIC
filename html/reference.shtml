@@ -376,11 +376,11 @@
     _ Usual functions: sin(), cos(), tan(), asin(), acos(), atan(), sinh(), cosh(), tanh(), 
        log(), log2(), log10(), exp(), sign(), abs(), atan2(), round(), narg(), arg(), 
        isval(), isnan(), isinf(), isint(), isbool(), rol() (left bit rotation), 
-       ror() (right bit rotation), min(), max(), sinc(), int(). 
+       ror() (right bit rotation), min(), max(), med(), kth(), sinc(), int(). 
        Function 'atan2()' is the version of atan() with two arguments 'y,x' (as in C/C++). 
        Function 'narg()' returns the number of specified arguments. 
        Function 'arg(i,a_1,..,a_n)' returns the ith argument a_i. 
-       Functions 'min()' and 'max()' can be called with an arbitrary number of arguments. 
+       Functions 'min()', 'max()', 'med()' and 'kth()' can be called with an arbitrary number of arguments. 
        Functions 'isval()', 'isnan()', 'isinf()', 'isbool()' can be used to test the type of 
        a given number or expression. 
     _ The variable names below are pre-defined. They can be overloaded if necessary. 
@@ -4366,8 +4366,8 @@ _wait_threads,"command1","command2",...
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Execute specified commands in parallel, each in a different thread.
 <br/>All running threads share the current list of images and the global variables.
-<br/>'wait_threads' can be { 0=never | 1=at return point | 2=immediately }.
-<br/><br/><b>Default value</b>: 'wait_threads=2'.
+<br/>'wait_threads' can be { 0=never | 1=when process returns | 2=when command returns | 3=immediately }.
+<br/><br/><b>Default value</b>: 'wait_threads=3'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def493.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"</div></div></td><td><tt>image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-progress (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">

@@ -399,11 +399,11 @@ G'MIC has been designed with portability in mind and runs on different platforms
     _ Usual functions: sin(), cos(), tan(), asin(), acos(), atan(), sinh(), cosh(), tanh(), 
        log(), log2(), log10(), exp(), sign(), abs(), atan2(), round(), narg(), arg(), 
        isval(), isnan(), isinf(), isint(), isbool(), rol() (left bit rotation), 
-       ror() (right bit rotation), min(), max(), sinc(), int(). 
+       ror() (right bit rotation), min(), max(), med(), kth(), sinc(), int(). 
        Function 'atan2()' is the version of atan() with two arguments 'y,x' (as in C/C++). 
        Function 'narg()' returns the number of specified arguments. 
        Function 'arg(i,a_1,..,a_n)' returns the ith argument a_i. 
-       Functions 'min()' and 'max()' can be called with an arbitrary number of arguments. 
+       Functions 'min()', 'max()', 'med()' and 'kth()' can be called with an arbitrary number of arguments. 
        Functions 'isval()', 'isnan()', 'isinf()', 'isbool()' can be used to test the type of 
        a given number or expression. 
     _ The variable names below are pre-defined. They can be overloaded if necessary. 
@@ -5073,8 +5073,8 @@ Execute following commands when an error is encountered in the body of the 'loca
 {\small \texttt{\_wait\_threads,"command1","command2",...}}\\~\\
 Execute specified commands in parallel, each in a different thread.
 ~\\All running threads share the current list of images and the global variables.
-~\\'wait\_threads' can be \{ 0=never ~$|$~ 1=at return point ~$|$~ 2=immediately \}.
-~\\~\\\textbf{Default value}: {\small \texttt{'wait\_threads=2'.}}
+~\\'wait\_threads' can be \{ 0=never ~$|$~ 1=when process returns ~$|$~ 2=when command returns ~$|$~ 3=immediately \}.
+~\\~\\\textbf{Default value}: {\small \texttt{'wait\_threads=3'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def493.jpg}\\
 {\footnotesize \textbf{Example 493~:} \texttt{image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"}}
 \end{center}
