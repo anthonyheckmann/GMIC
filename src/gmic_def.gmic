@@ -746,11 +746,11 @@ _help_usage :
 \n    _ Usual functions: sin(), cos(), tan(), asin(), acos(), atan(), sinh(), cosh(), tanh(),
 \n       log(), log2(), log10(), exp(), sign(), abs(), atan2(), round(), narg(), arg(),
 \n       isval(), isnan(), isinf(), isint(), isbool(), rol() (left bit rotation),
-\n       ror() (right bit rotation), min(), max(), sinc(), int().
+\n       ror() (right bit rotation), min(), max(), med(), kth(), sinc(), int().
 \n       Function 'atan2()' is the version of atan() with two arguments 'y,x' (as in C/C++).
 \n       Function 'narg()' returns the number of specified arguments.
 \n       Function 'arg(i,a_1,..,a_n)' returns the ith argument a_i.
-\n       Functions 'min()' and 'max()' can be called with an arbitrary number of arguments.
+\n       Functions 'min()', 'max()', 'med()' and 'kth()' can be called with an arbitrary number of arguments.
 \n       Functions 'isval()', 'isnan()', 'isinf()', 'isbool()' can be used to test the type of
 \n       a given number or expression.
 \n    _ The variable names below are pre-defined. They can be overloaded if necessary.
