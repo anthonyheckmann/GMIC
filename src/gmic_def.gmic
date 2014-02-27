@@ -1965,18 +1965,21 @@ _document_gmic_header_images : -skip $1
   -e[] "\n - Generate example images from set of commands '"$_name"'.\n"
   -v -
 
-_document_gmic_subsection_images : -_document_gmic_subsection_ascii
+_document_gmic_subsection_images :
+  -v +
+  -e[] "\n ** Section \#"$_subsection": "@{0,t}"."
+  -v -
 _document_gmic_declaration_images : _command_name=@{0,t}
 _document_gmic_description_images :
 
 _document_gmic_example_images :
   -v +
-  -e[] "    . Command '-"$_command_name"': $ "@{-1,t}
+  -e[] "    ["$_example"] Command '-"$_command_name"': $ "@{-1,t}
   -v -
   -if $_filename -else # Generate picture only if the file doesn't yet exist.
-     -m "foo : "@{-1,t}
-     -l[] -v -1 -reset -v -99 -foo -v -1 -_document_gmic -o $_filename,85 -rm -endl
-     -uncommand foo
+     -m "foo"$_example" : "@{-1,t}
+     -l[] -v -1 -reset -v -99 -foo$_example -v -1 -_document_gmic -o $_filename,85 -rm -endl
+     -uncommand foo$_example
   -endif
 
 _document_gmic_footer_images : -skip $1
