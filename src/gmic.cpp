@@ -3947,6 +3947,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
   // Allocate string variables, widely used afterwards
   // (prevents stack overflow on recursive calls while remaining thread-safe).
   CImgList<st_gmic_parallel<T> > threads_data;
+  static CImgList<st_gmic_parallel<T> > global_threads_data;
+
   CImg<char> _formula(4096), _message(1024), _title(256), _indices(256),
     _argx(256), _argy(256), _argz(256), _argc(256);
   char
@@ -8257,8 +8259,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               wait_mode = (unsigned int)(*_arg-'0'); _arg+=2; _arg_text+=2;
             }
             CImgList<char> arguments = CImg<char>::string(_arg).get_split(',',false,false);
-            CImg<st_gmic_parallel<T> >(1,arguments.width()).move_to(threads_data);
-            CImg<st_gmic_parallel<T> > &_threads_data = threads_data.back();
+            CImg<st_gmic_parallel<T> >(1,arguments.width()).move_to(wait_mode?threads_data:global_threads_data);
+            CImg<st_gmic_parallel<T> > &_threads_data = wait_mode?threads_data.back():global_threads_data.back();
 
 #ifdef gmic_is_parallel
             print(images,"Execute %d command%s '%s' in parallel%s.",
@@ -12410,6 +12412,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 
     // Wait for remaining threads to finish.
 #ifdef gmic_is_parallel
+
+#ifdef gmic_float
+    // Add 'global' threads to the list of threads to finish.
+    if (scope.size()==1) global_threads_data.move_to(threads_data,~0U);
+#endif
+
     cimglist_for(threads_data,i) cimg_forY(threads_data[i],l) {
       if (!threads_data(i,l).wait_mode) {
         cimg::mutex(30);

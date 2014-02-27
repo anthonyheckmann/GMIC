@@ -23077,3 +23077,12 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+
+titi :
+  -parallel 0,-demo
+
+toto :
+  -titi
+  -echo "ENCORE TOTO !"
+  -wait 4000
