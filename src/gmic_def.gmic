@@ -979,13 +979,15 @@ apply_camera : -skip "${1=},${4=}" -check "${2=0}>=0 && ${3=0}>=0"
     -rm[-1]
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}} -endl -v +
 
-#@gmic apply_files : "command",list_of_filenames,_output_prefix,_view_window={ 0 | 1 }
+#@gmic apply_files : "command",list_of_filenames,_output_prefix,_output_extension,_view_window={ 0 | 1 }
 #@gmic : Apply specified command on all specified image files, by reading them one by one,
 #@gmic : and save result by appending 'output_prefix' to each original filename.
 #@gmic : 'list_of_filenames' must be the list of filenames, separated by space.
 #@gmic : Thus, a specified filename cannot contain a spaces.
-#@gmic : Default value: 'output_prefix=gmic_' and 'view_window=0'.
-apply_files : -skip "${3=gmic_}",${4=0}
+#@gmic : If 'output_extension' is set, the output files are written using the specified extension instead of keeping
+#@gmic : the original one.
+#@gmic : Default value: 'output_prefix=gmic_', 'output_extension=""' and 'view_window=0'.
+apply_files : -skip "${3=gmic_}","${4=}",${5=0}
   -v -
   ({'"$2"'}) -autocrop[-1] 32 -replace[-1] 32,{','} files=@{-1,t}
   -if {w>128} -z[-1] 0,127 s_files=@{-1,t}... -else s_files=$files -endif
@@ -996,10 +998,11 @@ apply_files : -skip "${3=gmic_}",${4=0}
   -repeat $_nb_files -l[]
     file=${_file{$>+1}}
     _file=@{-basename\ $file}
-    -v + -e[] "\r - Image "{1+$>}/$_nb_files" ["$_file"]        " -v -
+    -if {narg("$4")} 0 -nm[-1] $_file output_file="$3"@{-1,b}."$4" -rm[-1] -else output_file="$3"$_file -endif
+    -v + -e[] "\r - Image "{1+$>}/$_nb_files" ["$_file"] -> ["$output_file"]                    " -v -
     $file -_apply_files
-    -o "$3"$_file
-    -if $4 -w[-1] @{-fitscreen\ {w},{h},{d}},1,0,-1,-1,$_file -endif
+    -o $output_file
+    -if $5 -w[-1] @{-fitscreen\ {w},{h},{d}},1,0,-1,-1,$_file -endif
     -rm
   -onfail -v + -e[] "\n - Error occured on file '"$file"'.\n" -v -
   -endl -done -uncommand _apply_files -v +
