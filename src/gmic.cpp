@@ -7772,8 +7772,12 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                       nfilename.data());
               }
             } else if (!cimg::strcasecmp(ext,"tiff") || !cimg::strcasecmp(ext,"tif")) {
+              const char *const stype = (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&end)==1 ||
+                                         (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&end)==2 && end==','))?argx:
+                cimg::type<T>::string();
               float _compression = 0;
-              if (std::sscanf(options,"%f%c",&_compression,&end)!=1) _compression = 0;
+              if (*argx) { if (std::sscanf(options.data()+std::strlen(stype),",%f%c",&_compression,&end)!=1) _compression = 0; }
+              else if (std::sscanf(options,"%f%c",&_compression,&end)!=1) _compression = 0;
               if (_compression<0) _compression = 0; else if (_compression>6) _compression = 6;
               const unsigned int compression = (unsigned int)cimg::round(_compression);
               CImgList<T> output_images(selection.height());
@@ -7789,25 +7793,57 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               cimg_forY(selection,l)
                 output_images[l].assign(images[selection[l]],output_images[l]?true:false);
               if (output_images.size()==1)
-                print(images,"Output image%s as file '%s', with %s compression "
+                print(images,"Output image%s as file '%s', with pixel type '%s' and %s compression "
                       "(1 image %dx%dx%dx%d).",
                       gmic_selection,
-                      _filename.data(),
+                      _filename.data(),stype,
                       compression==0?"no":compression==1?"CCITTRLE":compression==2?"CCITT4":
                       compression==3?"CCITT6":compression==4?"LZW":compression==5?"JPEG1":"JPEG2",
                       output_images[0].width(),output_images[0].height(),
                       output_images[0].depth(),output_images[0].spectrum());
-              else print(images,"Output image%s as file '%s', with %s compression.",
+              else print(images,"Output image%s as file '%s', with pixel type '%s' and %s compression.",
                          gmic_selection,
-                         _filename.data(),
+                         _filename.data(),stype,
                          compression==0?"no":compression==1?"CCITTRLE":compression==2?"CCITT4":
                          compression==3?"CCITT6":compression==4?"LZW":compression==5?"JPEG1":
                          "JPEG2");
               if (!output_images)
                 error(images,"Command '-output': File '%s', instance list (%u,%p) is empty.",
                       _filename.data(),output_images.size(),output_images.data());
-              if (output_images.size()==1) output_images[0].save_tiff(filename,compression);
-              else output_images.save_tiff(filename,compression);
+
+#define gmic_save_tiff(value_type,svalue_type) \
+              if (!std::strcmp(stype,svalue_type)) { \
+                if (output_images.size()==1) \
+                  CImg<value_type>(output_images[0], \
+                                   cimg::type<T>::string()==cimg::type<value_type>::string()). \
+                    save_tiff(filename,compression); \
+                else { \
+                  CImg<char> nfilename(4096); \
+                  cimglist_for(output_images,l) { \
+                    cimg::number_filename(filename,l,6,nfilename); \
+                    CImg<value_type>(output_images[l], \
+                                   cimg::type<T>::string()==cimg::type<value_type>::string()). \
+                      save_tiff(nfilename,compression); \
+                  } \
+                } \
+              }
+              gmic_save_tiff(bool,"bool")
+              else gmic_save_tiff(unsigned char,"uchar")
+                else gmic_save_tiff(unsigned char,"unsigned char")
+                  else gmic_save_tiff(char,"char")
+                    else gmic_save_tiff(unsigned short,"ushort")
+                      else gmic_save_tiff(unsigned short,"unsigned short")
+                        else gmic_save_tiff(short,"short")
+                          else gmic_save_tiff(unsigned int,"uint")
+                            else gmic_save_tiff(unsigned int,"unsigned int")
+                              else gmic_save_tiff(int,"int")
+                                else gmic_save_tiff(float,"float")
+                                  else gmic_save_tiff(double,"double")
+                                    else error(images,
+                                               "Command '-output': File '%s', invalid specified "
+                                               "pixel type '%s'.",
+                                               _filename.data(),stype);
+
             } else if (!cimg::strcasecmp(ext,"gif")) {
               float _fps = 0, _nb_loops = 0;
               CImgList<T> output_images(selection.height());
@@ -7956,17 +7992,21 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 error(images,"Command '-output': File '%s', instance list (%u,%p) is empty.",
                       _filename.data(),output_images.size(),output_images.data());
 
-#define gmic_save_raw(value_type,svalue_type)                           \
-              if (!std::strcmp(stype,svalue_type)) {                    \
-                if (output_images.size()==1)                            \
-                  CImg<value_type>(output_images[0]).save_raw(filename); \
-                else {                                                  \
-                  CImg<char> nfilename(4096);                           \
-                  cimglist_for(output_images,l) {                       \
-                    cimg::number_filename(filename,l,6,nfilename);      \
-                    CImg<value_type>(output_images[l]).save_raw(nfilename); \
-                  }                                                     \
-                }                                                       \
+#define gmic_save_raw(value_type,svalue_type) \
+              if (!std::strcmp(stype,svalue_type)) { \
+                if (output_images.size()==1) \
+                  CImg<value_type>(output_images[0], \
+                                   cimg::type<T>::string()==cimg::type<value_type>::string()). \
+                    save_raw(filename); \
+                else { \
+                  CImg<char> nfilename(4096); \
+                  cimglist_for(output_images,l) { \
+                    cimg::number_filename(filename,l,6,nfilename); \
+                    CImg<value_type>(output_images[l], \
+                                     cimg::type<T>::string()==cimg::type<value_type>::string()). \
+                                     save_raw(nfilename); \
+                  } \
+                } \
               }
               gmic_save_raw(bool,"bool")
               else gmic_save_raw(unsigned char,"uchar")

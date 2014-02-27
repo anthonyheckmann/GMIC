@@ -592,7 +592,7 @@ _help_usage :
 \n    . Video files: Only sub-frames of an image sequence may be loaded, using the input
 \n       expression 'filename.ext,[first_frame[%][,last_frame[%][,step]]]'.
 \n       Output framerate and bitrate (in Kb/s) can be also set by using the output expression
-\n       'file.mpg,_fps,_bitrate'.
+\n       'filename.mpg,_fps,_bitrate'.
 \n    . .cimg files : Only crops and sub-images of .cimg files can be loaded, using the input
 \n      expressions 'filename.cimg,N0,N1', 'filename.cimg,N0,N1,x0,x1',
 \n      'filename.cimg,N0,N1,x0,y0,x1,y1', 'filename.cimg,N0,N1,x0,y0,z0,x1,y1,z1',
@@ -602,13 +602,16 @@ _help_usage :
 \n       .raw files with input expresssion 'filename.raw[,type][,width][,height[,depth[,dim]]]]'.
 \n       If no dimensions are specified, the resulting image is a one-column vector with
 \n       maximum possible height. Pixel type can also be specified with the output
-\n       expression 'file.raw[,type]'.
+\n       expression 'filename.raw[,type]'.
 \n       'type' can be { bool | uchar | char | ushort | short | uint | int | float | double }.
 \n    . .yuv files: Image dimensions must be specified, and only sub-frames of an image
 \n       sequence may be loaded, using the input expression
 \n      'filename.yuv,width,height[,first_frame[,last_frame[,step]]]'.
 \n    . .tiff files: Only sub-images of multi-pages tiff files can be loaded, using the input
 \n       expression 'filename.tif,[first_frame,[last_frame,[step]]]'.
+\n       Output expression 'filename.tiff,[type[,compression]]' can be used to specify the
+\n       output pixel type, as well as the compression method. 'compression' can be
+\n       { 0=none | 1=CCITTRLE | 2=CCITT4 | 3=CCITT6 | 4=LZW | 5=JPEG1 | 6=JPEG2 }.
 \n    . .gif files: Animated gif files can be saved, using the input expression
 \n      'filename.gif,fps,nb_loops'.
 \n      Specify 'nb_loops=0' to get an infinite number of animation loops.
@@ -1515,7 +1518,7 @@ _display_warp : -check "${1=15}>0"
 #@gmic document_gmic : _format={ ascii | html | latex | xml | bash | images },_image_path,_write_wrapper={ 0 | 1 }
 #@gmic : Create documentation of .gmic command files (loaded as raw 'uchar' images), in specified format.
 #@gmic : Default values: 'format=ascii', 'image_path=""' and 'write_wrapper=1'.\n
-#@gmic : Example(s) : raw:file.gmic,uchar -document_gmic html,img
+#@gmic : Example(s) : raw:filename.gmic,uchar -document_gmic html,img
 document_gmic : -skip ${1="ascii"},${2=""},${3=1}
   -if {!@#} -return -endif
   -v -1
