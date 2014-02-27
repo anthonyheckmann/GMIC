@@ -1193,7 +1193,7 @@ CImg<T> get_inpaint(const CImg<t>& mask, const unsigned int method=1) const {
 template<typename t>
 CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                        const unsigned int lookup_size=22, const float lookup_factor=1,
-                       const unsigned int lookup_increment=1,
+                       const int lookup_increment=1,
                        const unsigned int blend_size=0, const float blend_threshold=0.5f,
                        const float blend_decay=0.02, const unsigned int blend_scales=10,
                        const bool is_blend_outer=false) {
@@ -1403,6 +1403,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
     int best_x = -1, best_y = -1;
     ++target_index;
 
+    const unsigned int _lookup_increment = (unsigned int)(lookup_increment>0?lookup_increment:nb_lookup_candidates>1?1:-lookup_increment);
+
     ptr_lookup_candidates = lookup_candidates.data();
     for (unsigned int C = 0; C<nb_lookup_candidates; ++C) {
       const int
@@ -1410,8 +1412,8 @@ CImg<T>& inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
         yl = (int)*(ptr_lookup_candidates++),
         x0 = cimg::max(p1,xl-l1), y0 = cimg::max(p1,yl-l1),
         x1 = cimg::min(width()-1-p2,xl+l2), y1 = cimg::min(height()-1-p2,yl+l2);
-      for (int y = y0; y<=y1; y+=lookup_increment)
-        for (int x = x0; x<=x1; x+=lookup_increment) if (is_visited(x,y)!=target_index) {
+      for (int y = y0; y<=y1; y+=_lookup_increment)
+        for (int x = x0; x<=x1; x+=_lookup_increment) if (is_visited(x,y)!=target_index) {
             if (is_strict_search) mask._inpaint_patch_crop(x-p1,y-p1,x+p2,y+p2,1).move_to(pN);
             else nmask._inpaint_patch_crop(x-ox-p1,y-oy-p1,x-ox+p2,y-oy+p2,0).move_to(pN);
             if ((is_strict_search && pN.sum()==0) || (!is_strict_search && pN.sum()==patch_size2)) {
@@ -1610,7 +1612,7 @@ CImg<T> _inpaint_patch_crop(const int x0, const int y0, const int x1, const int 
 template<typename t>
 CImg<T> get_inpaint_patch(const CImg<t>& mask, const unsigned int patch_size=11,
                           const unsigned int lookup_size=22, const float lookup_factor=1,
-                          const unsigned int lookup_increment=1,
+                          const int lookup_increment=1,
                           const unsigned int blend_size=0, const float blend_threshold=0.5,
                           const float blend_decay=0.02f, const unsigned int blend_scales=10,
                           const bool is_blend_outer=false) const {
@@ -7014,7 +7016,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                            inpaint_patch(mask,
                                          (unsigned int)patch_size,(unsigned int)lookup_size,
                                          lookup_factor,
-                                         (unsigned int)lookup_increment,
+                                         (int)lookup_increment,
                                          (unsigned int)blend_size,blend_threshold,blend_decay,
                                          (unsigned int)blend_scales,(bool)is_blend_outer));
             } else arg_error("inpaint");
