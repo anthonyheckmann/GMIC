@@ -579,7 +579,7 @@ static CImg<T> append_CImg3d(const CImgList<T>& images) {
     if (!img.is_CImg3d(false,error_message))
       throw CImgArgumentException("append_CImg3d(): image [%d] (%u,%u,%u,%u,%p) "
                                   "is not a CImg3d (%s).",
-                                  img._width,img._height,img._depth,img._spectrum,img._data,
+                                  l,img._width,img._height,img._depth,img._spectrum,img._data,
                                   error_message);
     siz+=img.size() - 8;
     nbv+=cimg::float2uint((float)img[6]);
