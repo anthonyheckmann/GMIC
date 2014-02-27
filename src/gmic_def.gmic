@@ -13564,7 +13564,7 @@ compress_gmic :
   -e[] "" -v -
   head_std={'"#@gmic"'}
   -s -,10 N=@#
-  -repeat @#
+  -repeat @# -l[$<]
     -if {!($>%100)} -v + -e[] "\r  Process : "{round($>/$N*100)}% -v - -endif
     -if {i=={'#'}}
       head=@{-1,0-{min(5,h-1)}}
@@ -13574,7 +13574,7 @@ compress_gmic :
       -l[-1] -split +,32,35 -if {@#>2} -k[0] -endif -a y -endl
       -autocrop[-1] 32 -if {!w} -rm[-1] -continue -endif
     -endif
-  -mv[-1] 0 -done
+  -endl -done
   -i[1--2] (10) -a y
   -v + -e[] "\r Process : 100%"
 
@@ -13585,7 +13585,7 @@ compress_gmic_gimp :
   -e[] "" -v -
   head_std={'"#@gimp"'}
   -s -,10 N=@#
-  -repeat @#
+  -repeat @# -l[$<]
     -if {!($>%100)} -v + -e[] "\r  Process : "{round($>/$N*100)}% -v - -endif
     -if {i=={'#'}}
       head=@{-1,0-{min(5,h-1)}}
@@ -13595,7 +13595,7 @@ compress_gmic_gimp :
       -l[-1] -split +,32,35 -if {@#>2} -k[0] -endif -a y -endl
       -autocrop[-1] 32 -if {!w} -rm[-1] -continue -endif
     -endif
-  -mv[-1] 0 -done
+  -endl -done
   -i[1--2] (10) -a y
   -v + -e[] "\r Process : 100%"
 
