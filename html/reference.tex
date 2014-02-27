@@ -3207,12 +3207,12 @@ Compute gradient-directed 2nd derivative of image(s).
 ~\\\textbf{Arguments: } 
 {\small \texttt{[mask]}}~~~$|$\\
 \hspace*{2.2cm}{\small \texttt{[mask],0,\_fast\_method}}~~~$|$\\
-\hspace*{2.2cm}{\small \texttt{[mask],\_patch\_size$>$=1,\_lookup\_size$>$=1,\_lookup\_factor$>$=0,\_blend\_size$>$=0,0$<$=\_blend\_threshold$<$=1,\_blend\_decay$>$=0,\_blend\_scales$>$=1,\_is\_blend\_outer=\{ 0 ~$|$~ 1 \}}}\\~\\
+\hspace*{2.2cm}{\small \texttt{[mask],\_patch\_size$>$=1,\_lookup\_size$>$=1,\_lookup\_factor$>$=0,\_lookup\_increment!=0,\_blend\_size$>$=0,0$<$=\_blend\_threshold$<$=1,\_blend\_decay$>$=0,\_blend\_scales$>$=1,\_is\_blend\_outer=\{ 0 ~$|$~ 1 \}}}\\~\\
 Inpaint selected images by specified mask.
 ~\\If no patch size (or 0) is specified, inpainting is done using a fast average or median algorithm.
 ~\\Otherwise, it used a patch-based reconstruction method, that can be very time consuming.
 ~\\'fast\_method' can be \{ 0=low-connectivity average ~$|$~ 1=high-connectivity average ~$|$~ 2=low-connectivity median ~$|$~ 3=high-connectivity median \}.
-~\\~\\\textbf{Default values}: {\small \texttt{'patch\_size=0', 'fast\_method=1', 'lookup\_size=22', 'lookup\_factor=0.5', 'blend\_size=0', 'blend\_threshold=0', 'blend\_decay=0.05', 'blend\_scales=10'} and \texttt{'is\_blend\_outer=1'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'patch\_size=0', 'fast\_method=1', 'lookup\_size=22', 'lookup\_factor=0.5', 'lookup\_increment=1', 'blend\_size=0', 'blend\_threshold=0', 'blend\_decay=0.05', 'blend\_scales=10'} and \texttt{'is\_blend\_outer=1'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def293.jpg}\\
 {\footnotesize \textbf{Example 293~:} \texttt{image.jpg 100\%,100\% -ellipse 50\%,50\%,30,30,0,1,255 -ellipse 20\%,20\%,30,10,0,1,255 --inpaint[-2] [-1] -remove[-2]}}
 \\\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def294.jpg}\\
