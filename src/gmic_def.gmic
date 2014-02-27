@@ -4767,10 +4767,8 @@ scale2x :
   -e[^-1] "Double xy-dimensions of image$?, using Scale2x algorithm."
   -v - -repeat @# -l[$>]
     -r 200%,200%
-
-#    -apply_parallel_overlap
-     -f "dx=x&1;dy=y&1;A=j(0,-2,0,0,0,1);B=j(2,0,0,0,0,1);C=j(-2,0,0,0,0,1);D=j(0,2,0,0,0,1);"\
-        "!dy*(!dx*if(C==A&&C!=D&&A!=B,A,i) + dx*if(A==B&&A!=C&&B!=D,B,i)) + dy*(dx*if(B==D&&B!=A&&D!=C,D,i) + !dx*if(D==C&&D!=B&&C!=A,C,i))"
+    -f "dx=x&1;dy=y&1;A=j(0,-2,0,0,0,1);B=j(2,0,0,0,0,1);C=j(-2,0,0,0,0,1);D=j(0,2,0,0,0,1);"\
+       "!dy*(!dx*if(C==A&&C!=D&&A!=B,A,i) + dx*if(A==B&&A!=C&&B!=D,B,i)) + dy*(dx*if(B==D&&B!=A&&D!=C,D,i) + !dx*if(D==C&&D!=B&&C!=A,C,i))"
   -endl -done -v +
 
 #@gmic scale3x
@@ -8733,8 +8731,8 @@ _apply_parallel_overlap16 :
 #@gmic parallel : _wait_threads,"command1","command2",... : (*)
 #@gmic : Execute specified commands in parallel, each in a different thread.
 #@gmic : All running threads share the current list of images and the global variables.
-#@gmic : 'wait_threads' can be { 0=never | 1=at return point | 2=immediately }.
-#@gmic : Default value: 'wait_threads=2'.
+#@gmic : 'wait_threads' can be { 0=never | 1=when process returns | 2=when command returns | 3=immediately }.
+#@gmic : Default value: 'wait_threads=3'.
 #@gmic : $ image.jpg [0] -parallel "-blur[0] 3","-mirror[1] c"
 
 # The implementation below allows to use parallel as a regular command with selections.
@@ -23077,12 +23075,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-
-titi :
-  -parallel 0,-demo
-
-toto :
-  -titi
-  -echo "ENCORE TOTO !"
-  -wait 4000

@@ -8254,20 +8254,21 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           if (!std::strcmp("-parallel",item)) {
             gmic_substitute_args();
             const char *_arg = argument, *_arg_text = argument_text;
-            unsigned int wait_mode = 2;
-            if ((*_arg=='0' || *_arg=='1' || *_arg=='2') && (_arg[1]==',' || !_arg[1])) {
+            unsigned int wait_mode = 3;
+            if ((*_arg=='0' || *_arg=='1' || *_arg=='2' || *_arg=='3') && (_arg[1]==',' || !_arg[1])) {
               wait_mode = (unsigned int)(*_arg-'0'); _arg+=2; _arg_text+=2;
             }
             CImgList<char> arguments = CImg<char>::string(_arg).get_split(',',false,false);
-            CImg<st_gmic_parallel<T> >(1,arguments.width()).move_to(wait_mode?threads_data:global_threads_data);
-            CImg<st_gmic_parallel<T> > &_threads_data = wait_mode?threads_data.back():global_threads_data.back();
+            CImg<st_gmic_parallel<T> >(1,arguments.width()).move_to(wait_mode>1?threads_data:global_threads_data);
+            CImg<st_gmic_parallel<T> > &_threads_data = wait_mode>1?threads_data.back():global_threads_data.back();
 
 #ifdef gmic_is_parallel
             print(images,"Execute %d command%s '%s' in parallel%s.",
                   arguments.width(),arguments.width()>1?"s":"",_arg_text,
-                  wait_mode==2?(arguments.width()>1?" and wait immediately they finish":
-                                " and wait immediately it finishes"):
-                  wait_mode==1?" and defer thread waiting at return point":"");
+                  wait_mode==3?" and wait for thread termination immediately":
+                  wait_mode==2?" and defer thread termination wait at command return point":
+                  wait_mode==1?" and defer thread termination wait at process return point":
+                  "and do not wait for thread termination");
 #else
             print(images,"Execute %d commands '%s' (run sequentially, "
                   "parallel computing disabled).",
@@ -8350,7 +8351,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
 #endif // #ifdef gmic_is_parallel
           }
 
-            if (wait_mode==2) { // Wait for thread termination.
+            if (wait_mode==3) { // Wait for thread termination immediately.
               cimg_forY(_threads_data,l) {
 #ifdef gmic_is_parallel
 #if cimg_OS!=2
