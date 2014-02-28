@@ -3017,8 +3017,9 @@ eigen2tensor :
     -endif
   -nm $nm,1 -endl -done -v +
 
-#@gmic endian : (*)
-#@gmic : Reverse data endianness of selected images.
+#@gmic endian : _datatype : (*)
+#@gmic : Reverse data endianness of selected images, eventually considering the pixel being of the specified datatype.
+#@gmic : 'datatype' can be { bool | uchar | char | ushort | short | uint | int | float | double }.
 
 #@gmic equalize : _nb_levels>0[%],_value_min[%],_value_max[%]
 #@gmic : Equalize histograms of selected images.

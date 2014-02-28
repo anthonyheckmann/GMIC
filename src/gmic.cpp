@@ -48,6 +48,33 @@
 
 // Additional arithmetic/boolean operators.
 
+CImg<T>& gmic_invert_endianness(const char *const stype) {
+
+#define _gmic_invert_endianness(value_type,svalue_type) \
+  if (!std::strcmp(stype,svalue_type)) \
+    if (cimg::type<T>::string()==cimg::type<value_type>::string()) invert_endianness(); \
+    else CImg<value_type>(*this).invert_endianness().move_to(*this);
+
+  _gmic_invert_endianness(bool,"bool")
+  else _gmic_invert_endianness(unsigned char,"uchar")
+    else _gmic_invert_endianness(unsigned char,"unsigned char")
+      else _gmic_invert_endianness(char,"char")
+        else _gmic_invert_endianness(unsigned short,"ushort")
+          else _gmic_invert_endianness(unsigned short,"unsigned short")
+            else _gmic_invert_endianness(short,"short")
+              else _gmic_invert_endianness(unsigned int,"uint")
+                else _gmic_invert_endianness(unsigned int,"unsigned int")
+                  else _gmic_invert_endianness(int,"int")
+                    else _gmic_invert_endianness(float,"float")
+                      else _gmic_invert_endianness(double,"double")
+                        else invert_endianness();
+  return *this;
+}
+
+CImg<T> get_gmic_invert_endianness(const char *const stype) const {
+  return (+*this).gmic_invert_endianness(stype);
+}
+
 template<typename t>
 CImg<T>& operator_eq(const t val) {
   cimg_for(*this,ptrd,T) *ptrd = (T)(*ptrd == (T)val);
@@ -5876,7 +5903,20 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
           }
 
           // Invert endianness.
-          gmic_simple_item("-endian",invert_endianness,"Invert data endianness of image%s.");
+          if (!std::strcmp("-endian",item)) {
+            gmic_substitute_args();
+            if (!std::strcmp(argument,"bool") || !std::strcmp(argument,"uchar") || !std::strcmp(argument,"unsigned char") ||
+                !std::strcmp(argument,"char") || !std::strcmp(argument,"ushort") || !std::strcmp(argument,"unsigned short") ||
+                !std::strcmp(argument,"short") || !std::strcmp(argument,"uint") || !std::strcmp(argument,"unsigned int") ||
+                !std::strcmp(argument,"int") || !std::strcmp(argument,"float") || !std::strcmp(argument,"double")) {
+              print(images,"Invert data endianness of image%s, with assumed pixel type '%s'.",
+                    gmic_selection,argument);
+              ++position;
+            } else print(images,"Invert data endianness of image%s.",
+                         gmic_selection);
+            cimg_forY(selection,l) gmic_apply(images[selection[l]],gmic_invert_endianness(argument));
+            is_released = false; continue;
+          }
 
 #ifdef gmic_float
 
