@@ -396,10 +396,10 @@ gmic_cli_standard: gmic.cpp
 
 def:
 	@echo "#ifndef gmic_gimp" > gmic_def.h
-	\gmic gmic_def.gmic raw:gmic_def.gmic,char -compress_gmic -o -.h | sed 's/float data_unnamed/char data_gmic_def/' | sed 's/ \};/, 0 \};\n\nunsigned int size_data_gmic_def = sizeof(data_gmic_def);\n/g' >> gmic_def.h
+	\gmic gmic_def.gmic raw:gmic_def.gmic,char -compress_gmic -o -.h,char | sed 's/unnamed/gmic_def/' | sed 's/ \};/, 0 \};\n\nunsigned int size_data_gmic_def = sizeof(data_gmic_def);\n/g' >> gmic_def.h
 	@echo "#else" >> gmic_def.h
-	\gmic gmic_def.gmic -update_gmic_gimp @.,0 raw:$(HOME)/.update@..gmic,char -compress_gmic_gimp -o -.h | sed 's/float data_unnamed/char data_gmic_def/' | sed 's/ \};/, 0 \};\n\nunsigned int size_data_gmic_def = sizeof(data_gmic_def);\n/g' >> gmic_def.h
-	\gmic -v - ../html/img/logoGMIC.ppm -permute cxyz -o -.h | sed 's/float data_unnamed/char data_gmic_logo/' >> gmic_def.h
+	\gmic gmic_def.gmic -update_gmic_gimp @.,0 raw:$(HOME)/.update@..gmic,char -compress_gmic_gimp -o -.h,char | sed 's/unnamed/gmic_def/' | sed 's/ \};/, 0 \};\n\nunsigned int size_data_gmic_def = sizeof(data_gmic_def);\n/g' >> gmic_def.h
+	\gmic -v - ../html/img/logoGMIC.ppm -permute cxyz -o -.h,uchar | sed 's/unnamed/gmic_logo/' >> gmic_def.h
 	@echo "unsigned int size_data_logo = sizeof(data_gmic_logo);" >> gmic_def.h
 	@echo "#endif" >> gmic_def.h
 	@echo >>gmic_def.h

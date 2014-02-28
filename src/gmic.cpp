@@ -7819,6 +7819,73 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                       ind,
                       nfilename.data());
               }
+            } else if (!cimg::strcasecmp(ext,"cpp") || !cimg::strcasecmp(ext,"c") || !cimg::strcasecmp(ext,"h")) {
+              const char *const stype = (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&(end=0))==1 ||
+                                         (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&end)==2 && end==','))?argx:
+                cimg::type<T>::string();
+              CImgList<T> output_images(selection.height());
+              CImgList<unsigned int> empty_indices;
+              cimg_forY(selection,l) if (!gmic_check(images[selection(l)]))
+                CImg<unsigned int>::vector(selection(l)).move_to(empty_indices);
+              if (empty_indices) {
+                const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
+                const char *const eselec = _eselec.data();
+                warn(images,"Command '-output': Image%s %s empty.",
+                     eselec,empty_indices.size()>1?"are":"is");
+              }
+              cimg_forY(selection,l)
+                output_images[l].assign(images[selection[l]],images[selection[l]]?true:false);
+              if (output_images.size()==1)
+                print(images,
+                      "Output image%s as file '%s', with pixel type '%s' (1 image %dx%dx%dx%d).",
+                      gmic_selection,
+                      _filename.data(),
+                      stype,
+                      output_images[0].width(),output_images[0].height(),
+                      output_images[0].depth(),output_images[0].spectrum());
+              else print(images,"Output image%s as file '%s', with pixel type '%s'.",
+                         gmic_selection,
+                         _filename.data(),
+                         stype);
+              if (!output_images)
+                error(images,"Command '-output': File '%s', instance list (%u,%p) is empty.",
+                      _filename.data(),output_images.size(),output_images.data());
+
+#define gmic_save_cpp(value_type,svalue_type) \
+              if (!std::strcmp(stype,svalue_type)) { \
+                if (output_images.size()==1) \
+                  CImg<value_type>(output_images[0], \
+                                   cimg::type<T>::string()==cimg::type<value_type>::string()). \
+                    save_cpp(filename); \
+                else { \
+                  CImg<char> nfilename(4096); \
+                  cimglist_for(output_images,l) { \
+                    cimg::number_filename(filename,l,6,nfilename); \
+                    CImg<value_type>(output_images[l], \
+                                     cimg::type<T>::string()==cimg::type<value_type>::string()). \
+                                     save_cpp(nfilename); \
+                  } \
+                } \
+              }
+              gmic_save_cpp(bool,"bool")
+              else gmic_save_cpp(unsigned char,"uchar")
+                else gmic_save_cpp(unsigned char,"unsigned char")
+                  else gmic_save_cpp(char,"char")
+                    else gmic_save_cpp(unsigned short,"ushort")
+                      else gmic_save_cpp(unsigned short,"unsigned short")
+                        else gmic_save_cpp(short,"short")
+                          else gmic_save_cpp(unsigned int,"uint")
+                            else gmic_save_cpp(unsigned int,"unsigned int")
+                              else gmic_save_cpp(int,"int")
+                                else gmic_save_cpp(unsigned int,"ulong")
+                                  else gmic_save_cpp(unsigned int,"unsigned long")
+                                    else gmic_save_cpp(int,"long")
+                                      else gmic_save_cpp(float,"float")
+                                        else gmic_save_cpp(double,"double")
+                                          else error(images,
+                                                     "Command '-output': File '%s', invalid specified "
+                                                     "pixel type '%s'.",
+                                                     _filename.data(),stype);
             } else if (!cimg::strcasecmp(ext,"tiff") || !cimg::strcasecmp(ext,"tif")) {
               const char *const stype = (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&(end=0))==1 ||
                                          (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&end)==2 && end==','))?argx:
