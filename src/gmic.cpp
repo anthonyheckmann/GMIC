@@ -7819,7 +7819,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                       ind,
                       nfilename.data());
               }
-            } else if (!cimg::strcasecmp(ext,"cpp") || !cimg::strcasecmp(ext,"c") || !cimg::strcasecmp(ext,"h")) {
+            } else if (!cimg::strcasecmp(ext,"cpp") || !cimg::strcasecmp(ext,"c") || !cimg::strcasecmp(ext,"hpp") || !cimg::strcasecmp(ext,"h")) {
               const char *const stype = (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&(end=0))==1 ||
                                          (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&end)==2 && end==','))?argx:
                 cimg::type<T>::string();
