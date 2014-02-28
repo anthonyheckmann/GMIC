@@ -227,11 +227,12 @@
        expression 'filename.ext,[first_frame[%][,last_frame[%][,step]]]'. 
        Output framerate and bitrate (in Kb/s) can be also set by using the output expression 
        'filename.mpg,_fps,_bitrate'. 
-    . .cimg files : Only crops and sub-images of .cimg files can be loaded, using the input 
+    . .cimg[z] files : Only crops and sub-images of .cimg files can be loaded, using the input 
       expressions 'filename.cimg,N0,N1', 'filename.cimg,N0,N1,x0,x1', 
       'filename.cimg,N0,N1,x0,y0,x1,y1', 'filename.cimg,N0,N1,x0,y0,z0,x1,y1,z1', 
       'filename.cimg,N0,N1,x0,y0,z0,c0,x1,y1,z1,c1'. 
       Specifying '-1' for one coordinates stands for the maximum possible value. 
+      Output expression 'filename.cimg[z][,stype]' can be used to force the output pixel type. 
     . .raw binary files: Image dimensions and input pixel type may be specified when loading 
        .raw files with input expresssion 'filename.raw[,type][,width][,height[,depth[,dim]]]]'. 
        If no dimensions are specified, the resulting image is a one-column vector with 
