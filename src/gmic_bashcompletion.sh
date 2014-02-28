@@ -1691,7 +1691,7 @@ _gmic_def()
 		return 0
 		;;
 		"-apply_files" | "--apply_files")
-		COMPREPLY=( $(compgen -W ""command",list_of_filenames,_output_prefix,_view_window={0|1} >") )
+		COMPREPLY=( $(compgen -W ""command",list_of_filenames,_output_prefix,_output_extension,_view_window={0|1} >") )
 		return 0
 		;;
 		"-camera" | "--camera")

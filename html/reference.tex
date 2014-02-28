@@ -241,7 +241,7 @@ G'MIC has been designed with portability in mind and runs on different platforms
     . Video files: Only sub-frames of an image sequence may be loaded, using the input 
        expression 'filename.ext,[first_frame[%][,last_frame[%][,step]]]'. 
        Output framerate and bitrate (in Kb/s) can be also set by using the output expression 
-       'file.mpg,_fps,_bitrate'. 
+       'filename.mpg,_fps,_bitrate'. 
     . .cimg files : Only crops and sub-images of .cimg files can be loaded, using the input 
       expressions 'filename.cimg,N0,N1', 'filename.cimg,N0,N1,x0,x1', 
       'filename.cimg,N0,N1,x0,y0,x1,y1', 'filename.cimg,N0,N1,x0,y0,z0,x1,y1,z1', 
@@ -251,13 +251,16 @@ G'MIC has been designed with portability in mind and runs on different platforms
        .raw files with input expresssion 'filename.raw[,type][,width][,height[,depth[,dim]]]]'. 
        If no dimensions are specified, the resulting image is a one-column vector with 
        maximum possible height. Pixel type can also be specified with the output 
-       expression 'file.raw[,type]'. 
+       expression 'filename.raw[,type]'. 
        'type' can be { bool | uchar | char | ushort | short | uint | int | float | double }. 
     . .yuv files: Image dimensions must be specified, and only sub-frames of an image 
        sequence may be loaded, using the input expression 
       'filename.yuv,width,height[,first_frame[,last_frame[,step]]]'. 
     . .tiff files: Only sub-images of multi-pages tiff files can be loaded, using the input 
        expression 'filename.tif,[first_frame,[last_frame,[step]]]'. 
+       Output expression 'filename.tiff,[type[,compression]]' can be used to specify the 
+       output pixel type, as well as the compression method. 'compression' can be 
+       { 0=none | 1=CCITTRLE | 2=CCITT4 | 3=CCITT6 | 4=LZW | 5=JPEG1 | 6=JPEG2 }. 
     . .gif files: Animated gif files can be saved, using the input expression 
       'filename.gif,fps,nb_loops'. 
       Specify 'nb_loops=0' to get an infinite number of animation loops. 
@@ -590,12 +593,14 @@ Apply specified command on live camera stream, and display it on display window 
 
 \subsection{\emph{-apply\_files\index{-apply\_files}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{"command",list\_of\_filenames,\_output\_prefix,\_view\_window=\{ 0 ~$|$~ 1 \}}}\\~\\
+{\small \texttt{"command",list\_of\_filenames,\_output\_prefix,\_output\_extension,\_view\_window=\{ 0 ~$|$~ 1 \}}}\\~\\
 Apply specified command on all specified image files, by reading them one by one,
 and save result by appending 'output\_prefix' to each original filename.
 ~\\'list\_of\_filenames' must be the list of filenames, separated by space.
 ~\\Thus, a specified filename cannot contain a spaces.
-~\\~\\\textbf{Default value}: {\small \texttt{'output\_prefix=gmic\_'} and \texttt{'view\_window=0'.}}
+~\\If 'output\_extension' is set, the output files are written using the specified extension instead of keeping
+the original one.
+~\\~\\\textbf{Default value}: {\small \texttt{'output\_prefix=gmic\_', 'output\_extension=""'} and \texttt{'view\_window=0'.}}
 
 
 \subsection{\emph{-camera\index{-camera}} (*)}\vspace*{-0.5em}
@@ -747,7 +752,7 @@ Render selected 2d warping fields.
 {\small \texttt{\_format=\{ ascii ~$|$~ html ~$|$~ latex ~$|$~ xml ~$|$~ bash ~$|$~ images \},\_image\_path,\_write\_wrapper=\{ 0 ~$|$~ 1 \}}}\\~\\
 Create documentation of .gmic command files (loaded as raw 'uchar' images), in specified format.
 ~\\~\\\textbf{Default values}: {\small \texttt{'format=ascii', 'image\_path=""'} and \texttt{'write\_wrapper=1'.\textbackslash n}}
-~\\Example(s) : raw:file.gmic,uchar -document\_gmic html,img
+~\\Example(s) : raw:filename.gmic,uchar -document\_gmic html,img
 
 
 \subsection{\emph{-echo\index{-echo}} (*)}\vspace*{-0.5em}

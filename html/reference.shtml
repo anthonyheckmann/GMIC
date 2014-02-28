@@ -226,7 +226,7 @@
     . Video files: Only sub-frames of an image sequence may be loaded, using the input 
        expression 'filename.ext,[first_frame[%][,last_frame[%][,step]]]'. 
        Output framerate and bitrate (in Kb/s) can be also set by using the output expression 
-       'file.mpg,_fps,_bitrate'. 
+       'filename.mpg,_fps,_bitrate'. 
     . .cimg files : Only crops and sub-images of .cimg files can be loaded, using the input 
       expressions 'filename.cimg,N0,N1', 'filename.cimg,N0,N1,x0,x1', 
       'filename.cimg,N0,N1,x0,y0,x1,y1', 'filename.cimg,N0,N1,x0,y0,z0,x1,y1,z1', 
@@ -236,13 +236,16 @@
        .raw files with input expresssion 'filename.raw[,type][,width][,height[,depth[,dim]]]]'. 
        If no dimensions are specified, the resulting image is a one-column vector with 
        maximum possible height. Pixel type can also be specified with the output 
-       expression 'file.raw[,type]'. 
+       expression 'filename.raw[,type]'. 
        'type' can be { bool | uchar | char | ushort | short | uint | int | float | double }. 
     . .yuv files: Image dimensions must be specified, and only sub-frames of an image 
        sequence may be loaded, using the input expression 
       'filename.yuv,width,height[,first_frame[,last_frame[,step]]]'. 
     . .tiff files: Only sub-images of multi-pages tiff files can be loaded, using the input 
        expression 'filename.tif,[first_frame,[last_frame,[step]]]'. 
+       Output expression 'filename.tiff,[type[,compression]]' can be used to specify the 
+       output pixel type, as well as the compression method. 'compression' can be 
+       { 0=none | 1=CCITTRLE | 2=CCITT4 | 3=CCITT6 | 4=LZW | 5=JPEG1 | 6=JPEG2 }. 
     . .gif files: Animated gif files can be saved, using the input expression 
       'filename.gif,fps,nb_loops'. 
       Specify 'nb_loops=0' to get an infinite number of animation loops. 
@@ -545,14 +548,16 @@ _command,_camera_index>=0,_skip_frames>=0,_output_filename
 <br/><br/><b>Default values</b>: 'command=""', 'camera_index=0' (default camera), 'skip_frames=0' and 'filename=""'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-apply_files</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
-"command",list_of_filenames,_output_prefix,_view_window={ 0 | 1 }
+"command",list_of_filenames,_output_prefix,_output_extension,_view_window={ 0 | 1 }
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply specified command on all specified image files, by reading them one by one,
 <br/>&nbsp;and save result by appending 'output_prefix' to each original filename.
 <br/>'list_of_filenames' must be the list of filenames, separated by space.
 <br/>Thus, a specified filename cannot contain a spaces.
-<br/><br/><b>Default value</b>: 'output_prefix=gmic_' and 'view_window=0'.
+<br/>If 'output_extension' is set, the output files are written using the specified extension instead of keeping
+<br/>&nbsp;the original one.
+<br/><br/><b>Default value</b>: 'output_prefix=gmic_', 'output_extension=""' and 'view_window=0'.
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-camera (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _camera_index>=0,_nb_frames>0,_skip_frames>=0,release_camera={ 0 | 1 },_capture_width>=0,_capture_height>=0
@@ -689,7 +694,7 @@ _format={ ascii | html | latex | xml | bash | images },_image_path,_write_wrappe
 <p style="margin-left:100px"><tt>Create documentation of .gmic command files (loaded as raw 'uchar' images), in specified format.
 <br/><br/><b>Default values</b>: 'format=ascii', 'image_path=""' and 'write_wrapper=1'.
 
-<br/>Example(s) : raw:file.gmic,uchar -document_gmic html,img
+<br/>Example(s) : raw:filename.gmic,uchar -document_gmic html,img
 </tt></p><p style="margin-left:20px"><font color="green">&nbsp;&nbsp;<b>-echo (*)</b>:</font>
 <p style="margin-left:150px"><tt><i><font color="purple">
 message
