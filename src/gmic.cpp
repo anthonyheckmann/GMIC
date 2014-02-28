@@ -65,9 +65,12 @@ CImg<T>& gmic_invert_endianness(const char *const stype) {
               else _gmic_invert_endianness(unsigned int,"uint")
                 else _gmic_invert_endianness(unsigned int,"unsigned int")
                   else _gmic_invert_endianness(int,"int")
-                    else _gmic_invert_endianness(float,"float")
-                      else _gmic_invert_endianness(double,"double")
-                        else invert_endianness();
+                    else _gmic_invert_endianness(unsigned int,"ulong")
+                      else _gmic_invert_endianness(unsigned int,"unsigned long")
+                        else _gmic_invert_endianness(int,"long")
+                          else _gmic_invert_endianness(float,"float")
+                            else _gmic_invert_endianness(double,"double")
+                              else invert_endianness();
   return *this;
 }
 
@@ -5908,7 +5911,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             if (!std::strcmp(argument,"bool") || !std::strcmp(argument,"uchar") || !std::strcmp(argument,"unsigned char") ||
                 !std::strcmp(argument,"char") || !std::strcmp(argument,"ushort") || !std::strcmp(argument,"unsigned short") ||
                 !std::strcmp(argument,"short") || !std::strcmp(argument,"uint") || !std::strcmp(argument,"unsigned int") ||
-                !std::strcmp(argument,"int") || !std::strcmp(argument,"float") || !std::strcmp(argument,"double")) {
+                !std::strcmp(argument,"int") || !std::strcmp(argument,"ulong") || !std::strcmp(argument,"unsigned long") ||
+                !std::strcmp(argument,"long") || !std::strcmp(argument,"float") || !std::strcmp(argument,"double")) {
               print(images,"Invert data endianness of image%s, with assumed pixel type '%s'.",
                     gmic_selection,argument);
               ++position;
@@ -7882,12 +7886,15 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                           else gmic_save_tiff(unsigned int,"uint")
                             else gmic_save_tiff(unsigned int,"unsigned int")
                               else gmic_save_tiff(int,"int")
-                                else gmic_save_tiff(float,"float")
-                                  else gmic_save_tiff(double,"double")
-                                    else error(images,
-                                               "Command '-output': File '%s', invalid specified "
-                                               "pixel type '%s'.",
-                                               _filename.data(),stype);
+                                else gmic_save_tiff(unsigned int,"ulong")
+                                  else gmic_save_tiff(unsigned int,"unsigned long")
+                                    else gmic_save_tiff(int,"long")
+                                      else gmic_save_tiff(float,"float")
+                                        else gmic_save_tiff(double,"double")
+                                          else error(images,
+                                                     "Command '-output': File '%s', invalid specified "
+                                                     "pixel type '%s'.",
+                                                     _filename.data(),stype);
 
             } else if (!cimg::strcasecmp(ext,"gif")) {
               float _fps = 0, _nb_loops = 0;
@@ -8063,12 +8070,15 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                           else gmic_save_raw(unsigned int,"uint")
                             else gmic_save_raw(unsigned int,"unsigned int")
                               else gmic_save_raw(int,"int")
-                                else gmic_save_raw(float,"float")
-                                  else gmic_save_raw(double,"double")
-                                    else error(images,
-                                               "Command '-output': File '%s', invalid specified "
-                                               "pixel type '%s'.",
-                                               _filename.data(),stype);
+                                else gmic_save_raw(unsigned int,"ulong")
+                                  else gmic_save_raw(unsigned int,"unsigned long")
+                                    else gmic_save_raw(int,"long")
+                                      else gmic_save_raw(float,"float")
+                                        else gmic_save_raw(double,"double")
+                                          else error(images,
+                                                     "Command '-output': File '%s', invalid specified "
+                                                     "pixel type '%s'.",
+                                                     _filename.data(),stype);
             } else if (!cimg::strcasecmp(ext,"cimg") || !cimg::strcasecmp(ext,"cimgz")) {
               const char *const stype = std::sscanf(options,"%255[A-zA-Z]%c",argx,&end)==1?argx:
                 cimg::type<T>::string();
@@ -8095,12 +8105,15 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                          else gmic_save_cimg(unsigned int,"uint")
                            else gmic_save_cimg(unsigned int,"unsigned int")
                              else gmic_save_cimg(int,"int")
-                                else gmic_save_cimg(float,"float")
-                                  else gmic_save_cimg(double,"double")
-                                    else error(images,
-                                               "Command '-output': File '%s', invalid specified "
-                                               "pixel type '%s'.",
-                                               _filename.data(),stype);
+                               else gmic_save_cimg(unsigned int,"ulong")
+                                 else gmic_save_cimg(unsigned int,"unsigned long")
+                                   else gmic_save_cimg(int,"long")
+                                     else gmic_save_cimg(float,"float")
+                                       else gmic_save_cimg(double,"double")
+                                         else error(images,
+                                                    "Command '-output': File '%s', invalid specified "
+                                                    "pixel type '%s'.",
+                                                    _filename.data(),stype);
             } else
               if (!cimg::strcasecmp(ext,"avi") || !cimg::strcasecmp(ext,"mov") ||
                   !cimg::strcasecmp(ext,"asf") || !cimg::strcasecmp(ext,"divx") ||
@@ -12273,11 +12286,14 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                         else gmic_load_raw(unsigned int,"uint")
                           else gmic_load_raw(unsigned int,"unsigned int")
                             else gmic_load_raw(int,"int")
-                              else gmic_load_raw(float,"float")
-                                else gmic_load_raw(double,"double")
-                                  else error(images,"Command '-input': raw file '%s', "
-                                             "invalid specified pixel type '%s'.\n",
-                                             _filename0,stype);
+                              else gmic_load_raw(unsigned int,"ulong")
+                                else gmic_load_raw(unsigned int,"unsigned long")
+                                  else gmic_load_raw(int,"long")
+                                    else gmic_load_raw(float,"float")
+                                      else gmic_load_raw(double,"double")
+                                        else error(images,"Command '-input': raw file '%s', "
+                                                   "invalid specified pixel type '%s'.\n",
+                                                   _filename0,stype);
             input_images_names.insert(__filename0);
           } else
             error(images,"Command '-input': raw file '%s', invalid file options '%s'.",
