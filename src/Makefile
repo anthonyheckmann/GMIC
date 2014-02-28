@@ -328,31 +328,34 @@ endif
 
 # Entries for other configurations.
 gmicol:
-	$(MAKE) "CFLAGS+=$(GMICOL_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS+=$(GMICOL_UNIX_LDFLAGS)" gmic_minimal
+	$(MAKE) "CFLAGS+=$(GMICOL_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS+=$(GMICOL_UNIX_LDFLAGS)" gmic_cli_standard
 
 static:
-	$(MAKE) "CFLAGS+=$(STATIC_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS+=$(STATIC_UNIX_LDFLAGS)" gmic_minimal
+	$(MAKE) "CFLAGS+=$(STATIC_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS+=$(STATIC_UNIX_LDFLAGS)" gmic_cli_standard
 
 minimal:
-	$(MAKE) "CFLAGS+=$(MINIMAL_UNIX_CFLAGS)" "LDFLAGS+=$(MINIMAL_UNIX_LDFLAGS)" gmic_minimal
+	$(MAKE) "CFLAGS+=$(MINIMAL_UNIX_CFLAGS)" "LDFLAGS+=$(MINIMAL_UNIX_LDFLAGS)" gmic_cli_standard
 
 linux:
-	$(MAKE) "CFLAGS=$(STD_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_UNIX_LDFLAGS)" "STRIP_EXE=1" gmic_gmic
+	$(MAKE) "CFLAGS=$(STD_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_UNIX_LDFLAGS)" "STRIP_EXE=1" gmic_cli_standard
+
+linux_full:
+	$(MAKE) "CFLAGS=$(STD_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_UNIX_LDFLAGS)" "STRIP_EXE=1" gmic_cli_alltypes
 
 custom:
-	$(MAKE) "CFLAGS=$(CUST_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(CUST_UNIX_LDFLAGS)" "STRIP_EXE=1" gmic_gmic
+	$(MAKE) "CFLAGS=$(CUST_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(CUST_UNIX_LDFLAGS)" "STRIP_EXE=1" gmic_cli_alltypes
 
 solaris:
-	$(MAKE) "CFLAGS=$(STD_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_UNIX_LDFLAGS) -R$(USR)/X11R6/lib -lrt -lnsl -lsocket" "STRIP_EXE=1" gmic_gmic
+	$(MAKE) "CFLAGS=$(STD_UNIX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_UNIX_LDFLAGS) -R$(USR)/X11R6/lib -lrt -lnsl -lsocket" "STRIP_EXE=1" gmic_cli_standard
 
 macosx:
-	$(MAKE) "CFLAGS=$(STD_MACOSX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_MACOSX_LDFLAGS) $(OPT_LDFLAGS)" gmic_gmic
+	$(MAKE) "CFLAGS=$(STD_MACOSX_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_MACOSX_LDFLAGS) $(OPT_LDFLAGS)" gmic_cli_standard
 
 windows:
-	$(MAKE) "CFLAGS=$(STD_WINDOWS_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_WINDOWS_LDFLAGS)" "STRIP_EXE=1" gmic_gmic
+	$(MAKE) "CFLAGS=$(STD_WINDOWS_CFLAGS) $(OPT_CFLAGS)" "LDFLAGS=$(STD_WINDOWS_LDFLAGS)" "STRIP_EXE=1" gmic_cli_standard
 
 wminimal:
-	$(MAKE) "CFLAGS=$(MINIMAL_WINDOWS_CFLAGS)" "LDFLAGS=$(MINIMAL_WINDOWS_LDFLAGS)" gmic_minimal
+	$(MAKE) "CFLAGS=$(MINIMAL_WINDOWS_CFLAGS)" "LDFLAGS=$(MINIMAL_WINDOWS_LDFLAGS)" gmic_cli_standard
 
 # Internal rules to build compilation modules.
 gmic_lib.o: gmic.cpp gmic_def.h
@@ -372,9 +375,6 @@ gmic_gimp : gmic_gimp.o gmic_gimp.cpp
 	$(CC) -o gmic_gimp gmic_gimp.cpp gmic_gimp.o `gimptool-2.0$(EXE) --cflags` $(CFLAGS) `gimptool-2.0$(EXE) --libs` $(LDFLAGS)
 	strip gmic_gimp$(EXE)
 
-gmic_minimal: gmic.cpp
-	$(CC) -o gmic gmic.cpp $(CFLAGS) -Dgmic_float_only -Dgmic_main $(LDFLAGS)
-
 gmic_bool.o: gmic.cpp
 	$(CC) -o gmic_bool.o -c gmic.cpp $(CFLAGS) -Dgmic_split_compilation -Dgmic_bool
 gmic_uchar.o: gmic.cpp
@@ -393,9 +393,12 @@ gmic_float.o: gmic.cpp
 	$(CC) -o gmic_float.o -c gmic.cpp $(CFLAGS) -Dgmic_split_compilation -Dgmic_float -Dgmic_main
 gmic_double.o: gmic.cpp
 	$(CC) -o gmic_double.o -c gmic.cpp $(CFLAGS) -Dgmic_split_compilation -Dgmic_double
-gmic_gmic: gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o gmic_def.h
+gmic_cli_alltypes: gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o gmic_def.h
 	$(CC) -o gmic gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o $(LDFLAGS)
 	strip gmic$(EXE)
+
+gmic_cli_standard: gmic.cpp
+	$(CC) -o gmic gmic.cpp $(CFLAGS) -Dgmic_float_only -Dgmic_main $(LDFLAGS)
 
 def:
 	@echo "#ifndef gmic_gimp" > gmic_def.h
