@@ -292,24 +292,18 @@ ifeq ($(OS),Unix)
 	@echo "**"
 	@echo "** Generic unix configuration."
 	@echo "**"
-	$(MAKE) linux
-	$(MAKE) gimp
-	$(MAKE) lib
-#	$(MAKE) zart
+	$(MAKE) linux gimp lib  # zart
 else
 ifeq ($(OS),Darwin)
 	@echo "**"
 	@echo "** MacOSX configuration."
 	@echo "**"
-	$(MAKE) macosx
-	$(MAKE) gimp
-#	$(MAKE) zart
+	$(MAKE) macosx gimp  # zart
 else
 	@echo "**"
 	@echo "** Windows configuration."
 	@echo "**"
-	$(MAKE) windows
-	$(MAKE) gimp
+	$(MAKE) windows gimp
 endif
 endif
 
