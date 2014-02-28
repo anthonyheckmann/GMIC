@@ -1954,6 +1954,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "value,_remove_if_not_found={0|1}. >") )
 		return 0
 		;;
+		"-endian" | "--endian")
+		COMPREPLY=( $(compgen -W "_datatype >") )
+		return 0
+		;;
 		"-equalize" | "--equalize")
 		COMPREPLY=( $(compgen -W "_nb_levels>0[%],_value_min[%],_value_max[%] >") )
 		return 0
