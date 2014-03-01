@@ -6,10 +6,10 @@
 \contentsline {section}{\numberline {1.5}Command items and selections}{9}{section.1.5}
 \contentsline {section}{\numberline {1.6}Inputs/outputs properties}{10}{section.1.6}
 \contentsline {section}{\numberline {1.7}Substitution rules}{11}{section.1.7}
-\contentsline {section}{\numberline {1.8}Mathematical expressions}{13}{section.1.8}
+\contentsline {section}{\numberline {1.8}Mathematical expressions}{14}{section.1.8}
 \contentsline {section}{\numberline {1.9}Image and data viewers}{15}{section.1.9}
 \contentsline {section}{\numberline {1.10}Adding custom commands}{16}{section.1.10}
-\contentsline {section}{\numberline {1.11}List of commands}{16}{section.1.11}
+\contentsline {section}{\numberline {1.11}List of commands}{17}{section.1.11}
 \contentsline {chapter}{\numberline {2}List of commands}{19}{chapter.2}
 \contentsline {section}{\numberline {2.1}Global options}{19}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}\emph {-debug} (*)}{19}{subsection.2.1.1}
@@ -549,14 +549,14 @@
 \contentsline {subsection}{\numberline {2.14.4}\emph {-array\_random} }{312}{subsection.2.14.4}
 \contentsline {subsection}{\numberline {2.14.5}\emph {-frame\_blur} }{312}{subsection.2.14.5}
 \contentsline {subsection}{\numberline {2.14.6}\emph {-frame\_cube} }{313}{subsection.2.14.6}
-\contentsline {subsection}{\numberline {2.14.7}\emph {-frame\_fuzzy} }{314}{subsection.2.14.7}
+\contentsline {subsection}{\numberline {2.14.7}\emph {-frame\_fuzzy} }{313}{subsection.2.14.7}
 \contentsline {subsection}{\numberline {2.14.8}\emph {-frame\_painting} }{314}{subsection.2.14.8}
 \contentsline {subsection}{\numberline {2.14.9}\emph {-frame\_pattern} }{315}{subsection.2.14.9}
-\contentsline {subsection}{\numberline {2.14.10}\emph {-frame\_round} }{316}{subsection.2.14.10}
+\contentsline {subsection}{\numberline {2.14.10}\emph {-frame\_round} }{315}{subsection.2.14.10}
 \contentsline {subsection}{\numberline {2.14.11}\emph {-frame\_x} }{316}{subsection.2.14.11}
 \contentsline {subsection}{\numberline {2.14.12}\emph {-frame\_xy} }{317}{subsection.2.14.12}
-\contentsline {subsection}{\numberline {2.14.13}\emph {-frame\_xyz} }{318}{subsection.2.14.13}
-\contentsline {subsection}{\numberline {2.14.14}\emph {-frame\_y} }{318}{subsection.2.14.14}
+\contentsline {subsection}{\numberline {2.14.13}\emph {-frame\_xyz} }{317}{subsection.2.14.13}
+\contentsline {subsection}{\numberline {2.14.14}\emph {-frame\_y} }{317}{subsection.2.14.14}
 \contentsline {subsection}{\numberline {2.14.15}\emph {-imagegrid} }{318}{subsection.2.14.15}
 \contentsline {subsection}{\numberline {2.14.16}\emph {-linearize\_tiles} }{319}{subsection.2.14.16}
 \contentsline {subsection}{\numberline {2.14.17}\emph {-map\_sprites} }{319}{subsection.2.14.17}
@@ -564,7 +564,7 @@
 \contentsline {subsection}{\numberline {2.14.19}\emph {-quadratize\_tiles} }{321}{subsection.2.14.19}
 \contentsline {subsection}{\numberline {2.14.20}\emph {-rotate\_tiles} }{321}{subsection.2.14.20}
 \contentsline {subsection}{\numberline {2.14.21}\emph {-shift\_tiles} }{322}{subsection.2.14.21}
-\contentsline {subsection}{\numberline {2.14.22}\emph {-taquin} }{323}{subsection.2.14.22}
+\contentsline {subsection}{\numberline {2.14.22}\emph {-taquin} }{322}{subsection.2.14.22}
 \contentsline {subsection}{\numberline {2.14.23}\emph {-tunnel} }{323}{subsection.2.14.23}
 \contentsline {section}{\numberline {2.15}Artistic}{324}{section.2.15}
 \contentsline {subsection}{\numberline {2.15.1}\emph {-boxfitting} }{324}{subsection.2.15.1}

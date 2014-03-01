@@ -271,6 +271,9 @@ G'MIC has been designed with portability in mind and runs on different platforms
        'filename.jpg,30' (here, to get a 30% quality output). 
     . .mnc files: The output header can set from another file, using the output expression 
        'filename.mnc,header_template.mnc'. 
+    . .cpp, .hpp, .c and .h files: The output datatype can be selected with output expression 
+       'filename[,datatype]'. 
+      'datatype' can be { bool | uchar | char | ushort | short | uint | int | ulong | long | float | double }. 
     . .gmic files: These filenames are assumed to be G'MIC custom commands files. Loading 
        such a file will add the commands it defines to the interpreter. Debug infos can be 
        enabled/disabled by the input expression 'filename.gmic,add_debug_infos={ 0 | 1 }'. 

@@ -282,7 +282,7 @@ gmic_gallery : -skip ${1=84}
 
   # Save html page and exit properly.
   -rm[0-{$nb_imgs-1}] -a x
-  -type uchar -o gallery.raw -type float -x "mv gallery.raw gallery.shtml" -rm
+  -o gallery.raw,uchar -x "mv gallery.raw gallery.shtml" -rm
   -v + -e[^-1] "All done !"
 
 _gmic_gallery :
