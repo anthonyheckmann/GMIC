@@ -4036,7 +4036,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
       if (!scope)
         error("Internal error: Scope is empty.");
       if (scope.size()>64)
-        error("Internal error: Scope overflow (infinite recursion ?).");
+        error("Scope overflow (infinite recursion ?).");
 
       // Substitute expressions in current item.
       const char
