@@ -322,19 +322,25 @@ zip -j -r -9 \$STA \$DIR && \
 cp \$PLU \$PAK \$STA \$HOME/work/src/ && \
 echo GEMINI_DONE " &
 
-# cp -f ${HOME}/work/src/deb_${TARFILE}.gz /tmp/
+# cp ${HOME}/work/src/deb_${TARFILE}.gz /tmp/ &&
 # cd /tmp/ &&
-# PAK=gmic_${VERSION}${SUFFIX}_quantal_i386.deb &&
-# rm -rf $PAK $DIR &&
+# PAK=gmic_${VERSION}${SUFFIX}_amd64.deb &&
+# PLU=gmic_gimp_${VERSION}${SUFFIX}_linux64.zip &&
+# STA=gmic_static_${VERSION}${SUFFIX}_linux64.zip &&
+# DIR=gmic-${VERSION} &&
+# rm -rf $PAK $PLU $DIR &&
 # touch deb_${TARFILE}.gz &&
 # tar zxvf deb_${TARFILE}.gz &&
-# find gmic-${VERSION} -exec touch {} \; &&
-# cd ${DIR} &&
-# dpkg-buildpackage -rfakeroot;
-# cd .. &&
-# cp gmic_${VERSION}_i386.deb ${HOME}/work/src/$PAK &&
-# rm -f gmic_${VERSION}_i386.deb &&
-echo ELARA_DONE
+# find gmic-${VERSION} -exec touch {} ; &&
+# cd $DIR &&
+# dpkg-buildpackage -d -j -rfakeroot;
+# mv ../gmic_${VERSION}_amd64.deb ../$PAK;
+# zip -j -r -9 ../$PLU src/gmic_gimp README &&
+# cd src && make clean && make STATIC_PATH=/usr/lib/x86_64-linux-gnu STATIC_EXTRA=-ljbig static && mv gmic ../ &&
+# cd .. && rm -rf man src zart debian && cd .. &&
+# zip -j -r -9 $STA $DIR &&
+# cp $PLU $PAK $STA $HOME/work/src/ &&
+# echo ELARA_DONE
 
 # Wait for packages to be generated and copy them to Sourceforge FRS.
 #--------------------------------------------------------------------
@@ -344,29 +350,7 @@ cd $DIR
 scp README $FORGE
 cd ${HOME}/work/src/
 
-# FILE=gmic_${VERSION}${SUFFIX}_quantal_i386.deb
-# while [ ! -f ${FILE} ]; do sleep 10; done
-# sleep 10
-# scp ${FILE} $FORGE
-
-FILE=gmic_${VERSION}${SUFFIX}_i386.deb
-while [ ! -f ${FILE} ]; do sleep 10; done
-sleep 10
-scp ${FILE} $FORGE
-
-FILE=gmic_gimp_${VERSION}${SUFFIX}_linux32.zip
-while [ ! -f ${FILE} ]; do sleep 10; done
-sleep 10
-scp ${FILE} $FORGE
-if [ "$1" == "final" ]; then
-    scp ${FILE} ${FORGE}gmic_gimp_linux32.zip
-fi
-
-FILE=gmic_static_${VERSION}${SUFFIX}_linux32.zip
-while [ ! -f ${FILE} ]; do sleep 10; done
-sleep 10
-scp ${FILE} $FORGE
-
+# Linux 64 bits.
 FILE=gmic_${VERSION}${SUFFIX}_amd64.deb
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
@@ -385,6 +369,26 @@ while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
 scp ${FILE} $FORGE
 
+# Linux 32 bits.
+FILE=gmic_${VERSION}${SUFFIX}_i386.deb
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+
+FILE=gmic_gimp_${VERSION}${SUFFIX}_linux32.zip
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+if [ "$1" == "final" ]; then
+    scp ${FILE} ${FORGE}gmic_gimp_linux32.zip
+fi
+
+FILE=gmic_static_${VERSION}${SUFFIX}_linux32.zip
+while [ ! -f ${FILE} ]; do sleep 10; done
+sleep 10
+scp ${FILE} $FORGE
+
+# Windows 32 bits.
 FILE=gmic_gimp_${VERSION}${SUFFIX}_win32.zip
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
