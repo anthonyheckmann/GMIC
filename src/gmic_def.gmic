@@ -15422,10 +15422,10 @@ gimp_gmicky_preview :
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
 #@gimp : - <b>2013/12/07</b> : version <i>1.5.8.0</i>.\n
-#@gimp : - <span foreground="purple"><b>2014/02/07</b> : version <i>1.5.8.3</i> (Current stable).</span>\n
+#@gimp : - <span foreground="purple"><b>2014/03/04</b> : version <i>1.5.8.4</i> (Current stable).</span>\n
 #@gimp : "}
-#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157639728004585/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/02/07</i>.</small>")
+#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157640785083263/")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/04</i>.</small>")
 
 #@gimp _<b>Arrays &amp; tiles</b>
 #--------------------------------
