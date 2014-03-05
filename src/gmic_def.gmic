@@ -967,6 +967,9 @@ version :
   -v - -__help_header_ascii[] -v +
   -e[] ""
 
+v : # Allow 'gmic --v' to get the version number.
+  -version
+
 #-------------------------------
 #
 #@gmic :: Inputs/outputs
