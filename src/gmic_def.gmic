@@ -23088,13 +23088,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-
-foo :
-  --luminance
-  -f[-1] 'iyf=j(0,1)-i;iyb=i-j(0,-1);iy=if(abs(iyf)>abs(iyb),iyf,iyb);ixf=j(1)-i;ixb=i-j(-1);ix=if(abs(ixf)>abs(ixb),ixf,ixb);atan2(iy,ix)'
-  -r[-1] 500%,500%
-  -r[0] 500%,500%,1,100%,0
-  -a c
-  -f 'ang=i(x,y,0,3);'
-

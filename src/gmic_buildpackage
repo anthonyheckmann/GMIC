@@ -108,7 +108,7 @@ echo " - Release number : $VERSION$SUFFIX"
 echo " - Create 'gmic_def.h' file"
 cd gmic/src/
 scp gmic_def.gmic ronounours,gmic@web.sourceforge.net:htdocs/gmic_def.$RELEASE1$RELEASE2$RELEASE3$RELEASE4
-make def
+make gmic_def
 ./gmic_commit >& /dev/null
 
 # Perform filters update on the sourceforge server.
@@ -321,26 +321,6 @@ cd .. && rm -rf man src zart debian && cd .. && \
 zip -j -r -9 \$STA \$DIR && \
 cp \$PLU \$PAK \$STA \$HOME/work/src/ && \
 echo GEMINI_DONE " &
-
-# cp ${HOME}/work/src/deb_${TARFILE}.gz /tmp/ &&
-# cd /tmp/ &&
-# PAK=gmic_${VERSION}${SUFFIX}_amd64.deb &&
-# PLU=gmic_gimp_${VERSION}${SUFFIX}_linux64.zip &&
-# STA=gmic_static_${VERSION}${SUFFIX}_linux64.zip &&
-# DIR=gmic-${VERSION} &&
-# rm -rf $PAK $PLU $DIR &&
-# touch deb_${TARFILE}.gz &&
-# tar zxvf deb_${TARFILE}.gz &&
-# find gmic-${VERSION} -exec touch {} ; &&
-# cd $DIR &&
-# dpkg-buildpackage -d -j -rfakeroot;
-# mv ../gmic_${VERSION}_amd64.deb ../$PAK;
-# zip -j -r -9 ../$PLU src/gmic_gimp README &&
-# cd src && make clean && make STATIC_PATH=/usr/lib/x86_64-linux-gnu STATIC_EXTRA=-ljbig static && mv gmic ../ &&
-# cd .. && rm -rf man src zart debian && cd .. &&
-# zip -j -r -9 $STA $DIR &&
-# cp $PLU $PAK $STA $HOME/work/src/ &&
-# echo ELARA_DONE
 
 # Wait for packages to be generated and copy them to Sourceforge FRS.
 #--------------------------------------------------------------------

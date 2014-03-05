@@ -351,7 +351,7 @@ wminimal:
 	$(MAKE) "CFLAGS=$(MINIMAL_WINDOWS_CFLAGS)" "LDFLAGS=$(MINIMAL_WINDOWS_LDFLAGS)" gmic_cli_standard
 
 # Internal rules to build compilation modules.
-gmic_lib.o: gmic.cpp gmic_def.h
+gmic_lib.o: gmic.cpp gmic_def
 	$(CC) -o gmic_lib.o -c gmic.cpp -fPIC $(CFLAGS) -Dgmic_float_only
 gmic_lib: gmic_lib.o
 	ar rcs libgmic.a gmic_lib.o
@@ -362,7 +362,7 @@ else
 	$(CC) -shared -o libgmic.so gmic_lib.o $(LDFLAGS)
 endif
 
-gmic_gimp.o: gmic.cpp gmic_def.h
+gmic_gimp.o: gmic.cpp gmic_def
 	$(CC) -o gmic_gimp.o -c gmic.cpp $(CFLAGS) -Dgmic_gimp -Dgmic_float_only
 gmic_gimp : gmic_gimp.o gmic_gimp.cpp
 	$(CC) -o gmic_gimp gmic_gimp.cpp gmic_gimp.o `gimptool-2.0$(EXE) --cflags` $(CFLAGS) `gimptool-2.0$(EXE) --libs` $(LDFLAGS)
@@ -386,18 +386,18 @@ gmic_float.o: gmic.cpp
 	$(CC) -o gmic_float.o -c gmic.cpp $(CFLAGS) -Dgmic_split_compilation -Dgmic_float -Dgmic_main
 gmic_double.o: gmic.cpp
 	$(CC) -o gmic_double.o -c gmic.cpp $(CFLAGS) -Dgmic_split_compilation -Dgmic_double
-gmic_cli_alltypes: gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o gmic_def.h
+gmic_cli_alltypes: gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o gmic_def
 	$(CC) -o gmic gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o $(LDFLAGS)
 	strip gmic$(EXE)
 
 gmic_cli_standard: gmic.cpp
 	$(CC) -o gmic gmic.cpp $(CFLAGS) -Dgmic_float_only -Dgmic_main $(LDFLAGS)
 
-def:
+gmic_def: gmic_def.gmic
 	@echo "#ifndef gmic_gimp" > gmic_def.h
-	\gmic gmic_def.gmic raw:gmic_def.gmic,char -compress_gmic -o -.h,char | sed 's/unnamed/gmic_def/' | sed 's/ \};/, 0 \};\n\nunsigned int size_data_gmic_def = sizeof(data_gmic_def);\n/g' >> gmic_def.h
+	@\gmic gmic_def.gmic raw:gmic_def.gmic,char -compress_gmic -o -.h,char | sed 's/unnamed/gmic_def/' | sed 's/ \};/, 0 \};\n\nunsigned int size_data_gmic_def = sizeof(data_gmic_def);\n/g' >> gmic_def.h
 	@echo "#else" >> gmic_def.h
-	\gmic gmic_def.gmic -update_gmic_gimp @.,0 raw:$(HOME)/.update@..gmic,char -compress_gmic_gimp -o -.h,char | sed 's/unnamed/gmic_def/' | sed 's/ \};/, 0 \};\n\nunsigned int size_data_gmic_def = sizeof(data_gmic_def);\n/g' >> gmic_def.h
+	@\gmic gmic_def.gmic -update_gmic_gimp @.,0 raw:$(HOME)/.update@..gmic,char -compress_gmic_gimp -o -.h,char | sed 's/unnamed/gmic_def/' | sed 's/ \};/, 0 \};\n\nunsigned int size_data_gmic_def = sizeof(data_gmic_def);\n/g' >> gmic_def.h
 	\gmic -v - ../html/img/logoGMIC.ppm -permute cxyz -o -.h,uchar | sed 's/unnamed/gmic_logo/' >> gmic_def.h
 	@echo "unsigned int size_data_logo = sizeof(data_gmic_logo);" >> gmic_def.h
 	@echo "#endif" >> gmic_def.h
