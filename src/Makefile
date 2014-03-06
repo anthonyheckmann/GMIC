@@ -351,7 +351,7 @@ wminimal:
 	$(MAKE) "CFLAGS=$(MINIMAL_WINDOWS_CFLAGS)" "LDFLAGS=$(MINIMAL_WINDOWS_LDFLAGS)" gmic_cli_standard
 
 # Internal rules to build compilation modules.
-gmic_lib.o: gmic.cpp gmic_def
+gmic_lib.o: gmic.cpp
 	$(CC) -o gmic_lib.o -c gmic.cpp -fPIC $(CFLAGS) -Dgmic_float_only
 gmic_lib: gmic_lib.o
 	ar rcs libgmic.a gmic_lib.o
@@ -362,7 +362,7 @@ else
 	$(CC) -shared -o libgmic.so gmic_lib.o $(LDFLAGS)
 endif
 
-gmic_gimp.o: gmic.cpp gmic_def
+gmic_gimp.o: gmic.cpp
 	$(CC) -o gmic_gimp.o -c gmic.cpp $(CFLAGS) -Dgmic_gimp -Dgmic_float_only
 gmic_gimp : gmic_gimp.o gmic_gimp.cpp
 	$(CC) -o gmic_gimp gmic_gimp.cpp gmic_gimp.o `gimptool-2.0$(EXE) --cflags` $(CFLAGS) `gimptool-2.0$(EXE) --libs` $(LDFLAGS)
@@ -386,7 +386,7 @@ gmic_float.o: gmic.cpp
 	$(CC) -o gmic_float.o -c gmic.cpp $(CFLAGS) -Dgmic_split_compilation -Dgmic_float -Dgmic_main
 gmic_double.o: gmic.cpp
 	$(CC) -o gmic_double.o -c gmic.cpp $(CFLAGS) -Dgmic_split_compilation -Dgmic_double
-gmic_cli_alltypes: gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o gmic_def
+gmic_cli_alltypes: gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o
 	$(CC) -o gmic gmic_bool.o gmic_uchar.o gmic_char.o gmic_ushort.o gmic_short.o gmic_uint.o gmic_int.o gmic_float.o gmic_double.o $(LDFLAGS)
 	strip gmic$(EXE)
 
