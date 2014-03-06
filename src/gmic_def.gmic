@@ -622,7 +622,7 @@ _help_usage :
 \n       'filename.jpg,30' (here, to get a 30% quality output).
 \n    . .mnc files: The output header can set from another file, using the output expression
 \n       'filename.mnc,header_template.mnc'.
-\n    . .cpp, .hpp, .c and .h files: The output datatype can be selected with output expression
+\n    . .pan, .cpp, .hpp, .c and .h files: The output datatype can be selected with output expression
 \n       'filename[,datatype]'.
 \n      'datatype' can be { bool | uchar | char | ushort | short | uint | int | ulong | long | float | double }.
 \n    . .gmic files: These filenames are assumed to be G'MIC custom commands files. Loading
