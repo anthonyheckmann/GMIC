@@ -7861,7 +7861,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                       nfilename.data());
               }
             } else if (!cimg::strcasecmp(ext,"cpp") || !cimg::strcasecmp(ext,"c") ||
-                       !cimg::strcasecmp(ext,"hpp") || !cimg::strcasecmp(ext,"h")) {
+                       !cimg::strcasecmp(ext,"hpp") || !cimg::strcasecmp(ext,"h") ||
+                       !cimg::strcasecmp(ext,"pan")) {
               const char *const
                 stype = (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&(end=0))==1 ||
                          (std::sscanf(options,"%255[A-zA-Z]%c",&(*argx=0),&end)==2 && end==','))?
@@ -7894,37 +7895,37 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 error(images,"Command '-output': File '%s', instance list (%u,%p) is empty.",
                       _filename.data(),output_images.size(),output_images.data());
 
-#define gmic_save_cpp(value_type,svalue_type) \
+#define gmic_save_multitype(value_type,svalue_type) \
               if (!std::strcmp(stype,svalue_type)) { \
                 if (output_images.size()==1) \
                   CImg<value_type>(output_images[0], \
                                    cimg::type<T>::string()==cimg::type<value_type>::string()). \
-                    save_cpp(filename); \
+                    save(filename); \
                 else { \
                   CImg<char> nfilename(4096); \
                   cimglist_for(output_images,l) { \
                     cimg::number_filename(filename,l,6,nfilename); \
                     CImg<value_type>(output_images[l], \
                                      cimg::type<T>::string()==cimg::type<value_type>::string()). \
-                                     save_cpp(nfilename); \
+                                     save(nfilename); \
                   } \
                 } \
               }
-              gmic_save_cpp(bool,"bool")
-              else gmic_save_cpp(unsigned char,"uchar")
-                else gmic_save_cpp(unsigned char,"unsigned char")
-                  else gmic_save_cpp(char,"char")
-                    else gmic_save_cpp(unsigned short,"ushort")
-                      else gmic_save_cpp(unsigned short,"unsigned short")
-                        else gmic_save_cpp(short,"short")
-                          else gmic_save_cpp(unsigned int,"uint")
-                            else gmic_save_cpp(unsigned int,"unsigned int")
-                              else gmic_save_cpp(int,"int")
-                                else gmic_save_cpp(unsigned int,"ulong")
-                                  else gmic_save_cpp(unsigned int,"unsigned long")
-                                    else gmic_save_cpp(int,"long")
-                                      else gmic_save_cpp(float,"float")
-                                        else gmic_save_cpp(double,"double")
+              gmic_save_multitype(bool,"bool")
+              else gmic_save_multitype(unsigned char,"uchar")
+                else gmic_save_multitype(unsigned char,"unsigned char")
+                  else gmic_save_multitype(char,"char")
+                    else gmic_save_multitype(unsigned short,"ushort")
+                      else gmic_save_multitype(unsigned short,"unsigned short")
+                        else gmic_save_multitype(short,"short")
+                          else gmic_save_multitype(unsigned int,"uint")
+                            else gmic_save_multitype(unsigned int,"unsigned int")
+                              else gmic_save_multitype(int,"int")
+                                else gmic_save_multitype(unsigned int,"ulong")
+                                  else gmic_save_multitype(unsigned int,"unsigned long")
+                                    else gmic_save_multitype(int,"long")
+                                      else gmic_save_multitype(float,"float")
+                                        else gmic_save_multitype(double,"double")
                                           else error(images,
                                                      "Command '-output': File '%s', invalid "
                                                      "specified pixel type '%s'.",
