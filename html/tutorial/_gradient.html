@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" href="partstyle.css">
+<body>
+
+<h1>-gradient</h1>
+<p><img src="./img/gradientgraph.jpg" title="A Bell Curve and its gradient" class="img_left" style="margin: 3px; border: 1px solid #808080; float: left;" height="300" width="400">The gradient of an image displays the rate of change of the operand's intensity along the horizontal (left to right), vertical (top to bottom) or depth (front to back) axes. The graph on the left charts the intensity of a one dimensional bell curve image (red), the green curve charts the bell curve's rate of change (or <em>slope</em>). The gradient is closely related to the first derivative, which it approximates, and is computed by taking successive differences of neighboring pixels along a given directional axis.&nbsp;</p>
+<p>The format of the command is:</p>
+<p><code class="western">-gradient: axis,scheme</code></p>
+<p><em>axis:</em> one of 'x', 'y', or 'z' and chooses a directional axis. With 'x', the command computes the gradient by taking successive differences of pixels, from left to right, along the horizontal direction. 'y' chooses successive differences along the vertical direction from top to bottom, and 'z' chooses successive differences along the depth direction from front (top) slices to rear (bottom) slices.</p>
+<p><em>scheme:</em> can be:</p>
+<ol>
+<li>-1=backward</li>
+<li>0=centered</li>
+<li>1=forward</li>
+<li>2=sobel</li>
+<li>3=rotation-invariant (default)</li>
+<li>4=deriche</li>
+<li>5=vanvliet</li>
+</ol>
+<p>and chooses among several different methods to estimate the gradient.</p>
+<p>Both the axis and scheme parameters are optional. Without parameters, the command computes all significant 2d/3d components using a scheme of 3 (rotation invariant).</p>
+<h2 class="western">Examples:</h2>
+<table class="table table-striped" border="0">
+<tbody>
+<tr>
+<td><img src="./img/cubic.jpg" title="Bell Curve" style="margin: 3px; border: 1px solid #808080; vertical-align: middle;"></td>
+<td><img src="./img/cubic_gradient_x.jpg" title="Bell Curve gradient along horizontal direction" style="margin: 3px; border: 1px solid #808080; vertical-align: middle;" height="200" width="200"></td>
+<td><img src="./img/cubic_gradient_y.jpg" title="Bell Curve gradient along vertical direction" style="margin: 3px; border: 1px solid #808080; vertical-align: middle;" height="200" width="200"></td>
+</tr>
+<tr>
+<td>
+<p>A bell curve from above (<code>cubic.png</code>). The red curve in the graph at the beginning of this article is a horizontal section of this grayscale image, taken through the midpoint line.</p>
+<p>Running: <code>$ gmic cubic.png -gradient</code> produces two gradient images, depicted on the right.</p>
+</td>
+<td>
+<p>Horizontal gradient of the bell curve on the left (<code>cubic.png</code>). The green curve in the graph at the beginning of this article is a horizontal section of this image, taken along the midpoint line.</p>
+<p>Gray maps to zero in this image and represents unchanging regions in <code>cubic.png</code>. Light gray and white represent positive values and regions of increasing intensity in <code>cubic.png</code>. Similarly dark gray and black represent negative values and regions of decreasing intensity.</p>
+</td>
+<td>Vertical gradient of the bell curve on the far left&nbsp; (<code>cubic.png</code>). But for orientation, the particulars of this image are the same as the horizontal gradient on the immediate left.</td>
+</tr>
+<tr>
+<td><img style="margin: 3px; border: 1px solid #808080; vertical-align: middle;" class="img_block" src="./img/flwr_a.jpg" width="200"></td>
+<td><img src="./img/flwr_c.jpg" class="img_block" style="margin: 3px; border: 1px solid #808080; vertical-align: middle;" height="300" width="200"></td>
+<td><img src="./img/flwr_b.jpg" class="img_block" style="margin: 3px; border: 1px solid #808080; vertical-align: middle;" height="300" width="200"></td>
+</tr>
+<tr>
+<td>
+<p>A <b style="font-size: xx-small;"><em>Isophysis tasmanica</em></b> Tasmania, Australia. (<code>isophysistasmanica.png</code>)</p>
+<p><code>$ gmic isophysistasmanica.png --luminance...</code></p>
+</td>
+<td>
+<p><code>... -gradient[-1] xy,1 -a[-2,-1] c ...</code></p>
+<p>We generate gradients in both the x and y directions and append these two images into the horizontal and vertical channels of a vector field.</p>
+</td>
+<td>
+<p><code>... --norm[-1] -negative[-1] --unsharp[-1] 20% -cut[-1] 0,255...</code></p>
+<p>We take the norm of this vector field, obtaining an image where dark lines trace the rapidly changing gradients of the original image.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+</body></html>

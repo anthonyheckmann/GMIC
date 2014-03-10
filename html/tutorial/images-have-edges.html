@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" href="partstyle.css">
+<body>
+
+<h2>Images Have Edges: Now What?</h2>
+<p>Many G`MIC commands decide how to write an output pixel by accessing a neighborhood of input pixels, usually centered around the pixel in question. In principle, the neighborhood may be arbitrarily large, in practice it is a ball or sphere just a few pixels across.</p>
+<p>All this is well and good until we consider pixels close to edges. At some point, a part of a neigborhood won't exist because the pixels are off an edge. How does one access a pixel that is not there?</p>
+<p>In the absence of data, one often reaches for policy. G`MIC commands which need to worry about boundaries generally sport a boundary parameter which specifies up to three possible policies:</p>
+<table align="center" border="0" cellpadding="1" cellspacing="0" class="table-striped">
+<tbody>
+<tr>
+<td>0</td>
+<td>dirichlet</td>
+<td>Off-border pixels are black</td>
+</tr>
+<tr>
+<td>1</td>
+<td>neumann</td>
+<td>Pixels on the border extend to infinity.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>cyclic</td>
+<td>The right hand border wraps to the left, the top to the bottom, so that pixels on the opposite edge neighbor each other. The image is a torus.</td>
+</tr>
+</tbody>
+</table>
+<p>These policies work well in some circumstances and poorly in others, there is no one 'right' approach. Many commands which operate on neighborhoods around input pixels do not fully implement the three policies; often the cyclic case is omitted.</p>
+
+</body></html>
