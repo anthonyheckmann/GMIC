@@ -10,7 +10,7 @@
 
 <!--#include file="toc.html" -->
 
-<iframe width="100%" height="4000" src="_mix_rgb.html" seamless></iframe>
+<iframe width="100%" height="4500" frameborder="0" src="_mix_rgb.html" seamless></iframe>
 
 </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
 <!--#include file="copyright.html" -->

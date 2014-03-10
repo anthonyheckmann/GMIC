@@ -10,7 +10,7 @@
 
 <!--#include file="toc.html" -->
 
-<iframe width="100%" height="3500" src="images-as-datasets.html" seamless></iframe>
+<iframe width="100%" height="3500" frameborder="0" src="images-as-datasets.html" seamless></iframe>
 
 </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
 <!--#include file="copyright.html" -->
