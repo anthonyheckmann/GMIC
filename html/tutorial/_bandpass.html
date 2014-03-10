@@ -19,7 +19,7 @@
 <p>Images have representation in both spatial and spectral domains. The <a target="_parent" class="external" href="http://en.wikipedia.org/wiki/Discrete_Fourier_transform">Fourier Transform</a> ('Fourier analysis') translates images from their spatial to spectral representations, the domain where the -bandpass command operates. The -bandpass command performs spectral filtering, preserving certain spectral coefficients and zeroing others out, The inverse Fourier Transform ('Fourier synthesis') returns the spectrally modified image to the spatial domain, where the effects of the spectral filtering are realized.</p>
 <p>The spatial representation is closely allied with how we see objects in space. A pixel constitutes a definite space point, offset with respect to an origin by length, height and depth coordinates, and marked with a particular hue. One could regard a large rectangular array of such pixels, in aggregate, 'painting' the image one point at a time.</p>
 <p>From such a collection of regularly spaced samples, Fourier analysis finds analogous spectral coefficients. These correspond to spatial domain sine curve wave forms of various frequencies, scalings, orientations, and phases that, in aggregate, also 'paints' the image, though not by one point at a time, but through constructive reinforcement and destructive interference of aptly chosen waveforms. The inverse transform, Fourier synthesis, finds such an apt set of waveforms in the spatial domain when given a set of coefficients in the spectral domain.</p>
-<p>A large class of filtering schemes may be effected by manipulating spectral coefficients. -bandpass is one such, serving as a front-end to <a target="_parent" class="internal" href="_fft.shtml">-fft</a> and <a target="_parent" class="internal" href="http://_ifft.shtml">-ifft</a>, respectively G`MIC's Fourier analysis and synthesis commands. In operation, the -bandpass command composes a boolean mask; those coefficients falling into the pass part of the mask are preserved, and are set to zero otherwise. These masks appear as rings around the spectral origin, the lower and upper boundary frequencies of the passband command corresponding to the inner and outer radii of the rings. Spectral coefficients falling within such rings are preserved, those falling outside are set to zero. Since these radii are measured off from the origin of the spectral domain, their lengths correspond to lower and upper cutoff frequencies.</p>
+<p>A large class of filtering schemes may be effected by manipulating spectral coefficients. -bandpass is one such, serving as a front-end to <a target="_parent" class="internal" href="http://gmic.sourceforge.net/reference.shtml#fft">-fft</a> and <a target="_parent" class="internal" href="http://gmic.sourceforge.net/reference.shtml#ifft">-ifft</a>, respectively G`MIC's Fourier analysis and synthesis commands. In operation, the -bandpass command composes a boolean mask; those coefficients falling into the pass part of the mask are preserved, and are set to zero otherwise. These masks appear as rings around the spectral origin, the lower and upper boundary frequencies of the passband command corresponding to the inner and outer radii of the rings. Spectral coefficients falling within such rings are preserved, those falling outside are set to zero. Since these radii are measured off from the origin of the spectral domain, their lengths correspond to lower and upper cutoff frequencies.</p>
 <p>The spatial waveforms arising out of such elided sets of coefficients only partially paint the image, the collection of wave forms corresponding to those spectral coefficients preserved by the mask. The effects of this depend primarily on the chosen lower and upper cutoff frequencies and the magnitude of their differences.</p>
 <h2>Examples</h2>
 <p>The following gallery shows how a canonical image changes though various -bandpass spectral filters. The red horizontal line marks a particular pixel row. The graphs below depict the row in both the spatial (top) and spectral (bottom) domains.</p>
@@ -111,28 +111,28 @@
 <tr>
 <td><img src="./img/lmex_000003.jpg" title="Zero out land regions" class="img_block" style="margin: 3px; border: 1px solid #808080;" height="200" width="200"></td>
 <td>
-<p><code>...[0] <a target="_parent" class="internal" href="_normalize.shtml">--n</a>[-1] 0,1 <a target="_parent" href="_mul.shtml">-mul</a>[-2,-1]...</code></p>
+<p><code>...[0] <a target="_parent" class="internal" href="http://gmic.sourceforge.net/reference.shtml#normalize">--n</a>[-1] 0,1 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#mul">-mul</a>[-2,-1]...</code></p>
 <p>To distinguish "land" from "sea", we harness the original bilevel image as a mask, normalizing it to the range of zero to one. When we multiply the penultimate and last pipeline images (landmasses and mask, respectively), the effects of the bandpass command are masked out in zero regions, by fiat, corresponding to "land."</p>
 </td>
 </tr>
 <tr>
 <td><img src="./img/lmex_000004.jpg" title="harnessing gradient_norm as a frequency doubler" class="img_block" style="margin: 3px; border: 1px solid #808080;" height="200" width="200"></td>
 <td>
-<p><code>...<a target="_parent" class="internal" href="_gradient_norm.shtml">--gradient_norm</a>[-1]...</code></p>
+<p><code>...<a target="_parent" class="internal" href="http://gmic.sourceforge.net/reference.shtml#gradient_norm">--gradient_norm</a>[-1]...</code></p>
 <p>The misuse of the -gradient_norm command is justified through artistic license, in that it acts like a frequency doubler of the prototype water patterns.</p>
 </td>
 </tr>
 <tr>
 <td><img src="./img/lmex_000005.jpg" title="unsharp_octave to increase dynamic range" height="200" width="200"></td>
 <td>
-<p><code>...<a target="_parent" class="internal" href="_unsharp_octave.shtml">--unsharp_octave</a>[-1] 7,30,20...</code></p>
+<p><code>...<a target="_parent" class="internal" href="http://gmic.sourceforge.net/reference.shtml#unsharp_octave">--unsharp_octave</a>[-1] 7,30,20...</code></p>
 <p>As with -gradient_norm, -unsharp_octave increases the dynamic range of the pattern as well as sharpening it.&nbsp;</p>
 </td>
 </tr>
 <tr>
 <td>&nbsp;<img src="./img/lmex_000006.jpg" title="finished shoreline" class="img_block" style="margin: 3px; border: 1px solid #808080;" height="200" width="200"></td>
 <td>
-<p><code>...--lt[-1] 15 <code><a target="_parent" href="_normalize.shtml">-normalize</a>[-1] 0,255 <a target="_parent" class="internal" href="_output.shtml/">-o</a>[-1] lmc.png</code></code></p>
+<p><code>...--lt[-1] 15 <code><a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">-normalize</a>[-1] 0,255 <a target="_parent" class="internal" href="http://gmic.sourceforge.net/reference.shtml#output">-o</a>[-1] lmc.png</code></code></p>
 <p>A logic command, -lt 15 (less than intensity level 15). generates bivalue "True/False" images; pixels obtain either a zero or a one value. Since it is true that most pixels in the image have intensities less than fifteen, the image becomes largely white ("True"), except for the more intense wave traces around the land and the shoreline itself. The logic command, then, achived an image reversal and extracted the final pattern: two operations for the price of one.&nbsp;</p>
 <p>&nbsp;</p>
 </td>
