@@ -8296,7 +8296,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 std::remove(filename_tmp);
               } catch (...) {
                 error(images,
-                      "Command '-output': Invalid write of file '%s from temporary file '%s'.",
+                      "Command '-output': Invalid write of file '%s' from temporary file '%s'.",
                       _filename.data(),filename_tmp.data());
               }
             }

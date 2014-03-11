@@ -2184,7 +2184,7 @@ _document_gmic :
 #@gmic echo_file : filename,message
 #@gmic : Output specified message, appending it to specified output file.
 #@gmic : (similar to '-echo' for specified output file stream).
-echo_file : -skip ${2='\n'}
+echo_file : -skip "${2='\n'}"
   -v - ({"'${2--1}\n'"}) -o[-1] raw:$1,uchar -rm[-1] -v +
 
 #@gmic echo_stdout : message
