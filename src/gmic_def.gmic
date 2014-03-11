@@ -1035,7 +1035,7 @@ apply_files : -skip "${3=gmic_}","${4=}",${5=0}
 
 # Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.comg), into the G'MIC web look.
 convert_tutorial_html :
-  -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood's blog (http://www.particularart.comg), for the G"{`39`}"MIC web page."
+  -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood"{`39`}"s blog (http://www.particularart.comg), for the G"{`39`}"MIC web page."
   -v -
   -rm -m "add_page : -__convert_tutorial_html $""*"
 
