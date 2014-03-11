@@ -1033,6 +1033,246 @@ apply_files : -skip "${3=gmic_}","${4=}",${5=0}
 #@gmic : Default value: 'add_debug_info=1'.
 #@gmic : $ image.jpg -command "foo : -mirror y -deform $""1" --foo[0] 5 --foo[0] 15
 
+# Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.comg), into the G'MIC web look.
+convert_tutorial_html :
+  -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood's blog (http://www.particularart.comg), for the G"{`39`}"MIC web page."
+  -v -
+  -rm -m "add_page : -__convert_tutorial_html $""*"
+
+  # Init list of pages to retrieve.
+  -add_page /,4500,index,_index
+  -add_page basics,4500
+  -add_page beginners-cookbook,4500
+  -add_page beginners-cookbook/cauldron,4500
+  -add_page beginners-cookbook/road-systems,4500
+  -add_page beginners-cookbook/stained-glass,4500
+  -add_page command-decorations,4500
+  -add_page command-guide,4500
+  -add_page command-guide/-bandpass,4500
+  -add_page command-guide/-blur,4500
+  -add_page command-guide/-convolve,4500
+  -add_page command-guide/-display,4500
+  -add_page command-guide/-gaussian,4500
+  -add_page command-guide/-gradient,4500
+  -add_page command-guide/-mix_rgb,4500
+  -add_page command-guide/trigometric-and-inverse-trigometric-commands,4500
+  -add_page images,4500
+  -add_page images/conjuring-images,4500
+  -add_page images/images-as-datasets,4500
+  -add_page images/images-have-edges,4500
+
+  # Prepare folder structure.
+  -v + -e[] "  > Prepare folder structure." -v -
+  -x "ln -fs ../copyright.html ."
+  -x "ln -fs ../favicon.ico ."
+  -x "ln -fs ../favicon.png ."
+  -x "ln -fs ../footer.html ."
+  -x "ln -fs ../header.html ."
+  -x "ln -fs ../images ."
+  -x "mkdir -p img"
+  -x "cd img && ln -fs ../../img/logo4.jpg ."
+  -x "cd img && ln -fs ../../img/logos.jpg ."
+  -x "cd img && ln -fs ../../img/rss.png ."
+#  -x "cp -f ../convert_raw.html ../convert_raw.shtml ."
+  0 -repeat $_N
+    -o[-1] ${_output_html$>} -o[-1] ${_output_shtml$>}
+  -done -rm[-1]
+
+  # Start page conversion.
+  -repeat $_N
+    -v + -_convert_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>} -v -
+  -done
+
+  # Create table of contents.
+  -v + -e[] "  > Create table of contents." -v -
+  ({'"<p><i>This tutorial has been written by <a href=\"http://particularart.com/about/\">Garry Osgood</a></i></p>"\n\
+     "<h1>Table of Contents</h1>"\n\
+     "<ul>"\n\
+     "<li><a target=\"_parent\" href=\"index.shtml\">Introduction</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"basics.shtml\">Basics</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"images.shtml\">Images</a></li>"\n\
+     "<ul>"\n\
+     "<li><a target=\"_parent\" href=\"images-as-datasets.shtml\">Images as Data Sets</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"conjuring-images.shtml\">Conjuring Images out of the Aether and Other Generators</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"images-have-edges.shtml\">Images Have Edges. Now What?</a></li>"\n\
+     "</ul>"\n\
+     "<li><a target=\"_parent\" href=\"command-decorations.shtml\">Command Decorations</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"beginners-cookbook.shtml\">Beginners Cookbook</a></li>"\n\
+     "<ul>"\n\
+     "<li><a target=\"_parent\" href=\"cauldron.shtml\">Cauldron, Anyone ?</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"road-systems.shtml\">Road Systems, Maybe, or Cells</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"stained-glass.shtml\">Stained Glass</a></li>"\n\
+     "</ul>"\n\
+     "<li><a target=\"_parent\" href=\"command-guide.shtml\">Command Guide</a></li>"\n\
+     "<ul>"\n\
+     "<li><a target=\"_parent\" href=\"trigometric-and-inverse-trigometric-commands.shtml\">Trigometric And Inverse Trigometric Commands</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_bandpass.shtml\">-bandpass</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_blur.shtml\">-blur</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_convolve.shtml\">-convolve</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_display.shtml\">-display</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_gaussian.shtml\">-gaussian</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_gradient.shtml\">-gradient</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_mix_rgb.shtml\">-mix_rgb</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_warp.shtml\">-warp</a></li>"\n\
+     "</ul>"\n\
+     "</ul>"\n'})
+  -o raw:toc.html,uchar
+
+  -v + -e[] "  > All done !."
+
+# Add page to the list of pages to explore.
+__convert_tutorial_html : -skip ${3=""},${4=""}
+  -if {!narg($_N)} _N=0 -endif
+  _input$_N=$1 _height$_N=$2
+
+  # Determine output filenames.
+  output_base=@{"-basename $1"}
+  -if {narg($output_base)}
+    ({'$output_base'}) -if {i=={'-'}} -=[-1] {'_'} output_base=@{-1,t} -endif -rm[-1] # Replace first '-' by underscore if necessary.
+  -endif
+  -if {narg("$3")} _output_shtml$_N="$3".shtml _output_html$_N="$3".html _img_prefix$_N="$3"
+  -else _output_shtml$_N=$output_base.shtml _output_html$_N=$output_base.html _img_prefix$_N=$output_base
+  -endif
+  -if {narg("$4")} _output_html$N="$4".html -endif
+  _N={$_N+1}
+
+# Retrieve one html page and convert it.
+_convert_tutorial_html :
+  -e[^-1] "Convert tutorial page '$1' to G"{`39`}"MIC web look."
+  -v -
+
+  # Get web page.
+  url="http://particularart.com/tools-and-toys/gmic/$1"
+  -v + -e[] "  > Retrieve web page '"$url"'." -v -
+  -x "wget "$url" -O __tmp.html"
+  -i raw:__tmp.html,uchar
+
+  # Discard or replace undesired text.
+  -discard 13
+  -replace_seq @{-quote\ {'" class=\"internal\" "'}},{'" "'}
+  -replace_seq @{-quote\ {'" class=\"external\" "'}},{'" "'}
+  -replace_seq @{-quote\ {'" dir=\"ltr\" "'}},{'" "'}
+  -replace_seq @{-quote\ {'"G`MIC"'}},@{-quote\ {'"G"{`39`}"MIC"'}}
+
+  # Discard original header.
+  -s +,{'<h1'}
+  -if {@#>1} -rm[0]
+  -else
+    -s +,{'<h2'}
+    -if {@#>1}
+      -rm[0]
+    -endif
+  -endif
+  -a y
+
+  # Discard original footer.
+  -s +,{'"   </div>\n</div>\n<footer>"'} -k[0]
+
+  # Add header and footer.
+  -i[0] ({'"<!DOCTYPE html>"\n\
+          "<html lang=\"en-us\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">"\n\
+          "<link rel=\"stylesheet\" href=\"../tutorial.css\">"\n\
+          "<body>"\n\n'})
+  ({'\n</body></html>'})
+  -y -a y
+
+  # Replace image links.
+  -replace_seq @{-quote\ {'" src=\"/static/media/uploads/"'}},@{-quote\ {'" src=\"http://particularart.com/static/media/uploads/"'}}
+
+  # Search and replace links to 'internal' pages.
+  -s +,{'"<a href=\""'}
+  -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<a href=\""}} -l[$>]
+    -s +,{'\"'}
+    -if {@#>0}
+      link=@{0,t}
+      -v + -e[] "  > Link found '"$link"'." -v -
+      ({'$link'}) -z[-1] 0,20 baselink=@{-1,t} -rm[-1]
+      -if {$baselink'=='"/tools-and-toys/gmic/"}
+
+        # Retrieve anchor if any.
+        -l[] anchor="" ({'$link'}) -s +,{"'\#'"} -if {@#>1} anchor=#@{-1,t} link=@{0,t} -endif -rm -endl
+        ({'$link'})
+        -if {i(w-1)=={'/'}} -z[-1] 0,{w-2} -endif
+        relink=@{-basename\ @{-1,t}}.shtml -rm[-1]
+        ({'$relink'}) -if {i=={'-'}} -=[-1] {'_'} relink=@{-1,t} -endif -rm[-1] # Replace first '-' by underscore if necessary.
+
+        -if $relink # If the relinked page exists.
+          relink=$relink$anchor
+          -v + -e[] "    -> Relink '"$link"' to '"$relink"'." -v -
+          -rm[0] -i[0] ({'$relink'}) -y[0]
+        -else # Else try to relink to reference page if link to a command.
+          ({'$relink'}) -if {i=={'_'}}
+            -l[-1] -z 1,100% -s -,{'.'} command=@{-basename\ @{0,t}} -k[0] -endl
+            relink="http://gmic.sourceforge.net/reference.shtml#"$command
+            -v + -e[] "    -> Relink '"$link"' to '"$relink"'." -v -
+            -rm[0] -i[0] ({'$relink'}) -y[0]
+          -else # If fail, link to original page with a hard link.
+            relink=http://particularart.com$link$anchor
+            -v + -e[] "    -> Relink '"$link"' to '"$relink"'." -v -
+            -rm[0] -i[0] ({'$relink'}) -y[0]
+          -endif
+          -rm[-1]
+        -endif
+      -elif {$baselink'=='"/static/media/uploads"}
+         relink=http://particularart.com$link
+         -v + -e[] "    -> Relink '"$link"' to '"$relink"'." -v -
+         -rm[0] -i[0] ({'$relink'}) -y[0]
+      -endif
+      -a y
+    -endif
+  -endl -endif -done
+  -a y
+
+  # Manage embedded images.
+  -s +,{'"<img"'}
+  -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<img"}} -l[$>]
+    -s +,{'"src=\""'}
+    -l[2]
+      -s +,{'\"'} link=@{0,t}
+      -v + -e[] "  > Image found '"$link"'." -v -
+      -l[]
+        -input $link -k[0] -to_rgba -i[0] 100%,100%,1,3 -fc[0] 247,247,249 -blend alpha
+        relink=img/$5_@{-basename\ $link}
+        0 -nm[-1] $relink relink=@{-1,f}@{-1,b}.jpg -rm[-1]
+        -o $relink,60
+        -v + -e[] "    -> Transfer image '"$link"' and convert to '"$relink"'." -v -
+        -rm
+      -onfail
+        relink=$link
+        -v + -e[] "    -> Fail to retrieve image '"$link"'." -v -
+        -rm
+      -endl
+      -rm[0] -i[0] ({'$relink'}) -y[0]
+    -endl
+    -a y
+  -endl -endif -done
+  -a y
+
+  # Set all links targets to "_parent"
+  -replace_seq @{-quote\ {'"<a "'}},@{-quote\ {'"<a target=\"_parent\" "'}}
+
+  # Save .html page.
+  -o raw:$4,uchar
+  -rm
+
+  # Generate parent .shtml page.
+  ({'"<!DOCTYPE html>"\n\
+     "<html lang=\"en-us\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">"\n\
+     "<!--#include file=\"header.html\" -->"\n\
+     "<link href=\"../style.css\" rel=\"stylesheet\" type=\"text/css\">"\n\
+     "<div id=\"bloc_option\"><div id=\"top_vert\"><div id=\"text_top\">Tutorial</div></div>"\n\
+     "<div id=\"center\"><div id=\"text_centre_intro\">"\n\
+     "<!--#include file=\"toc.html\" -->"\n\
+     "<iframe width=\"100%\" height=\"$2\" frameborder=\"0\" src=\""$4"\" seamless></iframe>"\n\
+     "</div></div><div id=\"footer\"><img src=\"images/footer.jpg\" /></div></div>"\n\
+     "<!--#include file=\"copyright.html\" -->"\n\
+     "<!--#include file=\"footer.html\" -->"\n'})
+  -o raw:$3,uchar
+  -rm
+
+  -x "rm -f __tmp.html"
+  -v +
+
 #@gmic cupid : _size>0
 #@gmic : Input cupid binary mask with specified size.
 #@gmic : $ -cupid ,
