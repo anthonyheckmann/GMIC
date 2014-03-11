@@ -1039,7 +1039,8 @@ convert_tutorial_html :
   -v - -rm -m "add_page : -__convert_tutorial_html $""*"
 
   # Init list of pages to retrieve.
-  -add_page /,1700,index,_index
+
+  # -add_page /,1700,index,_index
   # -add_page basics,4000
   # -add_page beginners-cookbook,1000
   # -add_page beginners-cookbook/cauldron,3500
@@ -1049,6 +1050,7 @@ convert_tutorial_html :
   # -add_page command-guide,5500
   # -add_page command-guide/-bandpass,5000
   # -add_page command-guide/-blur,2000
+  -add_page command-guide/-blur_z,2000
   # -add_page command-guide/-convolve,3500
   # -add_page command-guide/-display,2000
   # -add_page command-guide/-gaussian,2000
@@ -1109,6 +1111,7 @@ convert_tutorial_html :
      "<li><a target=\"_parent\" href=\"trigometric-and-inverse-trigometric-commands.shtml\">Trigometric And Inverse Trigometric Commands</a></li>"\n\
      "<li><a target=\"_parent\" href=\"_bandpass.shtml\"><i>-bandpass</i></a></li>"\n\
      "<li><a target=\"_parent\" href=\"_blur.shtml\"><i>-blur</i></a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_blur_z.shtml\"><i>-blur_z</i></a></li>"\n\
      "<li><a target=\"_parent\" href=\"_convolve.shtml\"><i>-convolve</i></a></li>"\n\
      "<li><a target=\"_parent\" href=\"_display.shtml\"><i>-display</i></a></li>"\n\
      "<li><a target=\"_parent\" href=\"_gaussian.shtml\"><i>-gaussian</i></a></li>"\n\
