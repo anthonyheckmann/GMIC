@@ -8294,10 +8294,18 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               try {
                 CImg<unsigned char>::get_load_raw(filename_tmp).save_raw(_filename);
                 std::remove(filename_tmp);
-              } catch (...) {
-                error(images,
-                      "Command '-output': Invalid write of file '%s' from temporary file '%s'.",
-                      _filename.data(),filename_tmp.data());
+              } catch (...) { // Failed, maybe 'filename_tmp' consists of several numbered images.
+                bool save_failure = false;
+                for (unsigned int i = 0; i!=~0U; ++i) {
+                  cimg::number_filename(filename_tmp,i,6,formula);
+                  cimg::number_filename(_filename,i,6,message);
+                  try { CImg<unsigned char>::get_load_raw(formula).save_raw(_message); }
+                  catch (...) { i = ~0U-1; if (!i) save_failure = true; }
+                }
+                if (save_failure)
+                  error(images,
+                        "Command '-output': Invalid write of file '%s' from temporary file '%s'.",
+                        _filename.data(),filename_tmp.data());
               }
             }
             is_released = true; ++position; continue;
