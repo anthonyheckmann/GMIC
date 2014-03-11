@@ -1050,12 +1050,13 @@ convert_tutorial_html :
   # -add_page command-guide,5500
   # -add_page command-guide/-bandpass,5000
   # -add_page command-guide/-blur,2000
-  -add_page command-guide/-blur_z,2000
+  # -add_page command-guide/-blur_z,2000
   # -add_page command-guide/-convolve,3500
   # -add_page command-guide/-display,2000
   # -add_page command-guide/-gaussian,2000
   # -add_page command-guide/-gradient,2000
   # -add_page command-guide/-mix_rgb,4000
+  -add_page command-guide/-warp,4000
   # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
   # -add_page images,1500
   # -add_page images/conjuring-images,1000
@@ -1157,6 +1158,9 @@ _convert_tutorial_html :
   -replace_seq @{-quote\ {'" class=\"external\" "'}},{'" "'}
   -replace_seq @{-quote\ {'" dir=\"ltr\" "'}},{'" "'}
   -replace_seq @{-quote\ {'"G`MIC"'}},@{-quote\ {'"G"{`39`}"MIC"'}}
+  -replace_seq @{-quote\ {'"CNTL"'}},@{-quote\ {'"CTRL"'}}
+  -replace_seq @{-quote\ {'"Selecton"'}},@{-quote\ {'"Selection"'}}
+  -replace_seq @{-quote\ {'"border: 1px"'}},@{-quote\ {'"border: 0px"'}}
 
   # Discard original header.
   -s +,{'<h1'}
@@ -1240,7 +1244,14 @@ _convert_tutorial_html :
         -if $relink
           -v + -e[] "    -> No need to convert, image '"$relink"' already exists." -v -
         -else
-          -input $link -k[0] -to_rgba -i[0] 100%,100%,1,3 -fc[0] 247,247,249 -blend alpha
+          -input $link -k[0]
+          is_opaque=0
+          -split_opacity -if {@#==1" || "ia>250} is_opaque=1 -endif -a c
+          -if $is_opaque
+            -to_rgb -frame 1,1,0 -frame 10,10,245
+          -else
+            -to_rgba -i[0] 100%,100%,1,3 -fc[0] 245,245,245 -blend alpha
+          -endif
           -o $relink,60
           -v + -e[] "    -> Transfer image '"$link"' and convert to '"$relink"'." -v -
           -rm

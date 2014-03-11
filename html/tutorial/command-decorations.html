@@ -8,7 +8,7 @@
 <p>The image list can, and often will, contain many items. As we '-input' or otherwise <a target="_parent" href="conjuring-images.shtml" title="Conjuring Images and Other Generators">conjure images</a>, the interpreter places them in sequence, assigning indices to them starting from zero as it goes along.</p>
 <p>Non-negative indices designate images with respect to the beginning of the stack. That is, 0, 1, 3 designate the first, second and fourth image.</p>
 <p>Negative indices designate images with respect to the end of the stack, i. e., -1, -2, -3 designate the last, penultimate and third from the last image. In a stack of four images, both -1 and 3 designate the same image, the last one in the stack. -4 and 0 designate the first image.</p>
-<h2>Image Selecton</h2>
+<h2>Image Selection</h2>
 <p>G'MIC allows us to decorate commands on their right hand sides with <em>selections</em> that restrict the scope of a command to a subset of items in the image list. Square brackets immediately to the right of the command, with no separating white space, may contain collections of image selecting indices. Thus:</p>
 <p><code>-noise[0] 0.5,2 -blur[2] 10 -diffusiontensors[-1] 0,1,0.7,2.3</code></p>
 <p>applies noise only to the first image in the pipeline, blurs just the third image, and generates diffusion tensors just from the last image.</p>
