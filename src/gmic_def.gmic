@@ -1040,28 +1040,28 @@ build_tutorial_html :
 
   # Init list of pages to retrieve.
 
-  -add_page /,1700,index,_index
-  -add_page basics,4000
-  -add_page beginners-cookbook,1000
-  -add_page beginners-cookbook/cauldron,3500
-  -add_page beginners-cookbook/road-systems,2500
-  -add_page beginners-cookbook/stained-glass,4000
-  -add_page command-decorations,3500
+  # -add_page /,1700,index,_index
+  # -add_page basics,4000
+  # -add_page beginners-cookbook,1000
+  # -add_page beginners-cookbook/cauldron,3500
+  # -add_page beginners-cookbook/road-systems,2500
+  # -add_page beginners-cookbook/stained-glass,4000
+  # -add_page command-decorations,3500
   -add_page command-guide,5500
-  -add_page command-guide/-bandpass,5000
-  -add_page command-guide/-blur,2000
-  -add_page command-guide/-blur_z,2000
-  -add_page command-guide/-convolve,3500
-  -add_page command-guide/-display,2000
-  -add_page command-guide/-gaussian,2000
-  -add_page command-guide/-gradient,2000
-  -add_page command-guide/-mix_rgb,4000
-  -add_page command-guide/-warp,4000
-  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
-  -add_page images,1500
-  -add_page images/conjuring-images,1000
-  -add_page images/images-as-datasets,3500
-  -add_page images/images-have-edges,1000
+  # -add_page command-guide/-bandpass,5000
+  # -add_page command-guide/-blur,2000
+  # -add_page command-guide/-blur_z,2000
+  # -add_page command-guide/-convolve,3500
+  # -add_page command-guide/-display,2000
+  # -add_page command-guide/-gaussian,2000
+  # -add_page command-guide/-gradient,2000
+  # -add_page command-guide/-mix_rgb,4000
+  # -add_page command-guide/-warp,4000
+  # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
+  # -add_page images,1500
+  # -add_page images/conjuring-images,1000
+  # -add_page images/images-as-datasets,3500
+  # -add_page images/images-have-edges,1000
 
   # Prepare folder structure.
   -v + -e[] "  > Prepare folder structure." -v -
