@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<link rel="stylesheet" href="partstyle.css">
+<link rel="stylesheet" href="../tutorial.css">
 <body>
 
 <h1>-gaussian</h1>
@@ -15,34 +14,34 @@
 <ol>
 <li>_sigma1 = 3</li>
 <li>_sigma2 = _sigma1</li>
-<li>_angle = 0°</li>
+<li>_angle = 0&deg;</li>
 </ol>
-<p><img src="./img/gauss_annotate.jpg" title="Annotated Gaussian Distribution" class="img_left" style="float: left; margin: 5px; border: 1px solid #808080;" height="300" width="300"></p>
+<p><img src="img/_gaussian_gauss_annotate.jpg" title="Annotated Gaussian Distribution" class="img_left" style="float: left; margin: 5px; border: 1px solid #808080;" height="300" width="300" /></p>
 <h2>Example:</h2>
 <p><code>gmic 300,300,1,1 -gaussian 60,10,57</code></p>
 <p>paints a Gaussian distribution. The arguments specify the size and orientation of an ellipse that encompasses pixels within one sigma of the expected mean average point, coinciding with the center pixel of the image. The first argument specifies the magnitude of sigma along the distribution's local x axis, the second argument specifies a like magnitude for the sigma along the local y axis. The third argument specifies a clockwise rotation of the local axis from the image axis.&nbsp;</p>
 <p>In the illustration on the left, the standard deviation ellipse is in pink.</p>
 <h2>Application</h2>
-<p>We often use images produced by this command as <em>spectral filters</em>, that is, multiply Gaussian distributions against the real and imaginary components of the spectral representation of an image produced by <a target="_parent" class="internal" href="_fft.shtml">-fft</a>. This operation is closely related to <a target="_parent" class="internal" href="_bandpass.shtml">-bandpass</a>, in that we are supressing all but a portion of the spectral coefficients, making various kinds of passbands.</p>
-<p>Though with this command, spectral filtering is more involved than with -bandpass, a good deal more control may be had over the spectral filter. Eccentric elipses, such as the one depicted here, give rise to images with strong directional character when the -<a target="_parent" href="_ifft.shtml">ifft</a> command takes filtered spectral components back into the spatial domain. This approach furnishes an especially rich source of textures when the initial image stems from <a target="_parent" href="_noise.shtml">-noise</a> or <a target="_parent" class="internal" href="_plasma.shtml">-plasma</a>.&nbsp;</p>
+<p>We often use images produced by this command as <em>spectral filters</em>, that is, multiply Gaussian distributions against the real and imaginary components of the spectral representation of an image produced by <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#fft">-fft</a>. This operation is closely related to <a target="_parent" href="_bandpass.shtml">-bandpass</a>, in that we are supressing all but a portion of the spectral coefficients, making various kinds of passbands.</p>
+<p>Though with this command, spectral filtering is more involved than with -bandpass, a good deal more control may be had over the spectral filter. Eccentric elipses, such as the one depicted here, give rise to images with strong directional character when the -<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#ifft">ifft</a> command takes filtered spectral components back into the spatial domain. This approach furnishes an especially rich source of textures when the initial image stems from <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#noise">-noise</a> or <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#plasma">-plasma</a>.&nbsp;</p>
 <table class="table striped" border="0">
 <tbody>
 <tr>
-<td width="128"><img src="./img/gauss_0.jpg" title="Punctured Gaussian distribution" height="128" width="128"></td>
+<td><img src="img/_gaussian_gauss_0.jpg" title="Punctured Gaussian distribution" height="128" width="128" /></td>
 <td>
-<p><code>$gmic 400,400,1,3 -gaussian[-1] 20,5,7 100%,100% -gaussian[-1] 4,3,0 <a target="_parent" class="internal" href="_negative.shtml">-negative</a>[-1] <a target="_parent" class="internal" href="_mul.shtml">-mul</a>[-1,-2]<br><a target="_parent" class="internal" href="_normalize.shtml">-normalize</a>[-1] 0,1 <a target="_parent" href="_shift.shtml">-shift</a>[-1] -200,-200,0,0,2...</code></p>
+<p><code>$gmic 400,400,1,3 -gaussian[-1] 20,5,7 100%,100% -gaussian[-1] 4,3,0 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#negative">-negative</a>[-1] <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#mul">-mul</a>[-1,-2]<br /><a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">-normalize</a>[-1] 0,1 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#shift">-shift</a>[-1] -200,-200,0,0,2...</code></p>
 <p>We compose a spectral filter, placing a punctured ellipse on the origin of the spectral plane. We puncture the first ellipse with the second, smaller, distribution by negating the second and multiplying the two. We shift the resulting image to the corners, as that is where the origin of the spectral plane resides. Then we normalize the filter in the range of zero to one, this in anticipation of multiplying this filter with the spectral components of a yet-to-be composed operand image. This punctured ellipse is a bandpass filter. It will admit only a certain number of spectral coefficients in an elliptic ring around the origin of the spectral plane.</p>
 </td>
 </tr>
 <tr>
-<td><img src="./img/gauss_1.jpg" title="Sparse (0.2) salt-and-pepper noise" height="128" width="128"></td>
+<td><img src="img/_gaussian_gauss_1.jpg" title="Sparse (0.2) salt-and-pepper noise" height="128" width="128" /></td>
 <td>
-<p><code>...100%,100%,1,3 <a target="_parent" href="_noise.shtml">-noise</a>[-1] 0.1,2 <a target="_parent" class="internal" href="_fft.shtml">--fft</a>[-1] <a target="_parent" class="internal" href="_mul.shtml">--mul</a>[0,-2] <a target="_parent" class="internal" href="_mul.shml">--mul</a>[0,-2] <a target="_parent" class="internal" href="_ifft.shtml">-ifft</a>[-2,-1]...</code></p>
-<p>For our operand, we fill a new image with very sparse salt-and-pepper noise and transform the image into its spectral form. In this form, "spectral pixels" encoding a sine wave at a particular amplitude, frequency, phase and orientation, are complex quantities. G`MIC realizes this encoding by utilizing two images, one holding the real components of the complex numbers, the other holding the imaginary components. We multiply both spectral images with the punctured ellipse. It is mainly black - i.e., set to zero - and mainly sets coefficients to zero. In particular, the punctured ellipse sets the zero frequency coefficient at the origin to zero and most high frequency components to zero. The gray and white parts of the punctured ellipse retains an elliptical ring of coefficients around the origin. This is a variable passband filter that favors very low frequencies at one orientation and somwhat higher frequencies on another orientation separated from the first by ninety degrees. Taking the image back to the spatial domain gives rise to a largely low-pass filtered image; but the degree of filtration has an angular orientation, in effect, smearing the image. &nbsp;</p>
+<p><code>...100%,100%,1,3 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#noise">-noise</a>[-1] 0.1,2 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#fft">--fft</a>[-1] <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#mul">--mul</a>[0,-2] <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#mul">--mul</a>[0,-2] <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#ifft">-ifft</a>[-2,-1]...</code></p>
+<p>For our operand, we fill a new image with very sparse salt-and-pepper noise and transform the image into its spectral form. In this form, "spectral pixels" encoding a sine wave at a particular amplitude, frequency, phase and orientation, are complex quantities. G'MIC realizes this encoding by utilizing two images, one holding the real components of the complex numbers, the other holding the imaginary components. We multiply both spectral images with the punctured ellipse. It is mainly black - i.e., set to zero - and mainly sets coefficients to zero. In particular, the punctured ellipse sets the zero frequency coefficient at the origin to zero and most high frequency components to zero. The gray and white parts of the punctured ellipse retains an elliptical ring of coefficients around the origin. This is a variable passband filter that favors very low frequencies at one orientation and somwhat higher frequencies on another orientation separated from the first by ninety degrees. Taking the image back to the spatial domain gives rise to a largely low-pass filtered image; but the degree of filtration has an angular orientation, in effect, smearing the image. &nbsp;</p>
 </td>
 </tr>
 <tr>
-<td><img src="./img/gauss_2.jpg" title="Reconstituted Star Field from edited spectral coefficients Real Component" height="128" width="128"></td>
+<td><img src="img/_gaussian_gauss_2.jpg" title="Reconstituted Star Field from edited spectral coefficients Real Component" height="128" width="128" /></td>
 <td>
 <p><code>-normalize[-1] 0,255 -o[-1]</code></p>
 <p>The inverse fast fourier transform generally produces pixels with complex values; these realized through a pair of image one containing the real components, the other the imaginary components.</p>
@@ -50,10 +49,15 @@
 </td>
 </tr>
 <tr>
-<td><img src="./img/gauss_3.jpg" title="Reconstituted Star Field from edited spectral coefficients Imaginary Component" height="128" width="128"></td>
+<td><img src="img/_gaussian_gauss_3.jpg" title="Reconstituted Star Field from edited spectral coefficients Imaginary Component" height="128" width="128" /></td>
 <td>The imaginary part can be utilized in its own right - it is, in practical effect, a separate image.</td>
 </tr>
 </tbody>
 </table>
+<p></p>
+<p><em>Garry Osgood</em></p>
+
+
+
 
 </body></html>
