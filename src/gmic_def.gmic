@@ -1036,30 +1036,29 @@ apply_files : -skip "${3=gmic_}","${4=}",${5=0}
 # Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.comg), into the G'MIC web look.
 convert_tutorial_html :
   -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood"{`39`}"s blog (http://www.particularart.comg), for the G"{`39`}"MIC web page."
-  -v -
-  -rm -m "add_page : -__convert_tutorial_html $""*"
+  -v - -rm -m "add_page : -__convert_tutorial_html $""*"
 
   # Init list of pages to retrieve.
-  -add_page /,4500,index,_index
-  -add_page basics,4500
-  -add_page beginners-cookbook,4500
-  -add_page beginners-cookbook/cauldron,4500
-  -add_page beginners-cookbook/road-systems,4500
-  -add_page beginners-cookbook/stained-glass,4500
-  -add_page command-decorations,4500
-  -add_page command-guide,4500
-  -add_page command-guide/-bandpass,4500
-  -add_page command-guide/-blur,4500
-  -add_page command-guide/-convolve,4500
-  -add_page command-guide/-display,4500
-  -add_page command-guide/-gaussian,4500
-  -add_page command-guide/-gradient,4500
-  -add_page command-guide/-mix_rgb,4500
-  -add_page command-guide/trigometric-and-inverse-trigometric-commands,4500
-  -add_page images,4500
-  -add_page images/conjuring-images,4500
-  -add_page images/images-as-datasets,4500
-  -add_page images/images-have-edges,4500
+  -add_page /,1700,index,_index
+  # -add_page basics,4000
+  # -add_page beginners-cookbook,1000
+  # -add_page beginners-cookbook/cauldron,3500
+  # -add_page beginners-cookbook/road-systems,2500
+  # -add_page beginners-cookbook/stained-glass,4000
+  # -add_page command-decorations,3500
+  # -add_page command-guide,5500
+  # -add_page command-guide/-bandpass,5000
+  # -add_page command-guide/-blur,2000
+  # -add_page command-guide/-convolve,3500
+  # -add_page command-guide/-display,2000
+  # -add_page command-guide/-gaussian,2000
+  # -add_page command-guide/-gradient,2000
+  # -add_page command-guide/-mix_rgb,4000
+  # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
+  # -add_page images,1500
+  # -add_page images/conjuring-images,1000
+  # -add_page images/images-as-datasets,3500
+  # -add_page images/images-have-edges,1000
 
   # Prepare folder structure.
   -v + -e[] "  > Prepare folder structure." -v -
@@ -1073,7 +1072,8 @@ convert_tutorial_html :
   -x "cd img && ln -fs ../../img/logo4.jpg ."
   -x "cd img && ln -fs ../../img/logos.jpg ."
   -x "cd img && ln -fs ../../img/rss.png ."
-#  -x "cp -f ../convert_raw.html ../convert_raw.shtml ."
+  -x "cd img && ln -fs ../../convert_raw_img/* ."
+  -x "ln -fs ../convert_raw.html ../convert_raw.shtml ."
   0 -repeat $_N
     -o[-1] ${_output_html$>} -o[-1] ${_output_shtml$>}
   -done -rm[-1]
@@ -1100,20 +1100,21 @@ convert_tutorial_html :
      "<li><a target=\"_parent\" href=\"beginners-cookbook.shtml\">Beginners Cookbook</a></li>"\n\
      "<ul>"\n\
      "<li><a target=\"_parent\" href=\"cauldron.shtml\">Cauldron, Anyone ?</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"convert_raw.shtml\">Convert Raw Image</a></li>"\n\
      "<li><a target=\"_parent\" href=\"road-systems.shtml\">Road Systems, Maybe, or Cells</a></li>"\n\
      "<li><a target=\"_parent\" href=\"stained-glass.shtml\">Stained Glass</a></li>"\n\
      "</ul>"\n\
      "<li><a target=\"_parent\" href=\"command-guide.shtml\">Command Guide</a></li>"\n\
      "<ul>"\n\
      "<li><a target=\"_parent\" href=\"trigometric-and-inverse-trigometric-commands.shtml\">Trigometric And Inverse Trigometric Commands</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_bandpass.shtml\">-bandpass</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_blur.shtml\">-blur</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_convolve.shtml\">-convolve</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_display.shtml\">-display</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_gaussian.shtml\">-gaussian</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_gradient.shtml\">-gradient</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_mix_rgb.shtml\">-mix_rgb</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_warp.shtml\">-warp</a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_bandpass.shtml\"><i>-bandpass</i></a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_blur.shtml\"><i>-blur</i></a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_convolve.shtml\"><i>-convolve</i></a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_display.shtml\"><i>-display</i></a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_gaussian.shtml\"><i>-gaussian</i></a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_gradient.shtml\"><i>-gradient</i></a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_mix_rgb.shtml\"><i>-mix_rgb</i></a></li>"\n\
+     "<li><a target=\"_parent\" href=\"_warp.shtml\"><i>-warp</i></a></li>"\n\
      "</ul>"\n\
      "</ul>"\n'})
   -o raw:toc.html,uchar
@@ -1231,12 +1232,16 @@ _convert_tutorial_html :
       -s +,{'\"'} link=@{0,t}
       -v + -e[] "  > Image found '"$link"'." -v -
       -l[]
-        -input $link -k[0] -to_rgba -i[0] 100%,100%,1,3 -fc[0] 247,247,249 -blend alpha
         relink=img/$5_@{-basename\ $link}
         0 -nm[-1] $relink relink=@{-1,f}@{-1,b}.jpg -rm[-1]
-        -o $relink,60
-        -v + -e[] "    -> Transfer image '"$link"' and convert to '"$relink"'." -v -
-        -rm
+        -if $relink
+          -v + -e[] "    -> No need to convert, image '"$relink"' already exists." -v -
+        -else
+          -input $link -k[0] -to_rgba -i[0] 100%,100%,1,3 -fc[0] 247,247,249 -blend alpha
+          -o $relink,60
+          -v + -e[] "    -> Transfer image '"$link"' and convert to '"$relink"'." -v -
+          -rm
+        -endif
       -onfail
         relink=$link
         -v + -e[] "    -> Fail to retrieve image '"$link"'." -v -
