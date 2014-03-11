@@ -1134,7 +1134,7 @@ __convert_tutorial_html : -skip ${3=""},${4=""}
   -if {narg("$3")} _output_shtml$_N="$3".shtml _output_html$_N="$3".html _img_prefix$_N="$3"
   -else _output_shtml$_N=$output_base.shtml _output_html$_N=$output_base.html _img_prefix$_N=$output_base
   -endif
-  -if {narg("$4")} _output_html$N="$4".html -endif
+  -if {narg("$4")} _output_html$_N="$4".html -endif
   _N={$_N+1}
 
 # Retrieve one html page and convert it.
