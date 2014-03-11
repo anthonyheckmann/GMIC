@@ -1034,34 +1034,34 @@ apply_files : -skip "${3=gmic_}","${4=}",${5=0}
 #@gmic : $ image.jpg -command "foo : -mirror y -deform $""1" --foo[0] 5 --foo[0] 15
 
 # Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.comg), into the G'MIC web look.
-convert_tutorial_html :
+build_tutorial_html :
   -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood"{`39`}"s blog (http://www.particularart.comg), for the G"{`39`}"MIC web page."
-  -v - -rm -m "add_page : -__convert_tutorial_html $""*"
+  -v - -rm -m "add_page : -__build_tutorial_html $""*"
 
   # Init list of pages to retrieve.
 
-  # -add_page /,1700,index,_index
-  # -add_page basics,4000
-  # -add_page beginners-cookbook,1000
-  # -add_page beginners-cookbook/cauldron,3500
-  # -add_page beginners-cookbook/road-systems,2500
-  # -add_page beginners-cookbook/stained-glass,4000
-  # -add_page command-decorations,3500
-  # -add_page command-guide,5500
-  # -add_page command-guide/-bandpass,5000
-  # -add_page command-guide/-blur,2000
-  # -add_page command-guide/-blur_z,2000
-  # -add_page command-guide/-convolve,3500
-  # -add_page command-guide/-display,2000
-  # -add_page command-guide/-gaussian,2000
-  # -add_page command-guide/-gradient,2000
-  # -add_page command-guide/-mix_rgb,4000
+  -add_page /,1700,index,_index
+  -add_page basics,4000
+  -add_page beginners-cookbook,1000
+  -add_page beginners-cookbook/cauldron,3500
+  -add_page beginners-cookbook/road-systems,2500
+  -add_page beginners-cookbook/stained-glass,4000
+  -add_page command-decorations,3500
+  -add_page command-guide,5500
+  -add_page command-guide/-bandpass,5000
+  -add_page command-guide/-blur,2000
+  -add_page command-guide/-blur_z,2000
+  -add_page command-guide/-convolve,3500
+  -add_page command-guide/-display,2000
+  -add_page command-guide/-gaussian,2000
+  -add_page command-guide/-gradient,2000
+  -add_page command-guide/-mix_rgb,4000
   -add_page command-guide/-warp,4000
-  # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
-  # -add_page images,1500
-  # -add_page images/conjuring-images,1000
-  # -add_page images/images-as-datasets,3500
-  # -add_page images/images-have-edges,1000
+  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
+  -add_page images,1500
+  -add_page images/conjuring-images,1000
+  -add_page images/images-as-datasets,3500
+  -add_page images/images-have-edges,1000
 
   # Prepare folder structure.
   -v + -e[] "  > Prepare folder structure." -v -
@@ -1077,56 +1077,20 @@ convert_tutorial_html :
   -x "cd img && ln -fs ../../img/rss.png ."
   -x "cd img && ln -fs ../../convert_raw_img/* ."
   -x "ln -fs ../convert_raw.html ../convert_raw.shtml ."
+  -x "ln -fs ../tutorial_toc.html ."
   0 -repeat $_N
     -o[-1] ${_output_html$>} -o[-1] ${_output_shtml$>}
   -done -rm[-1]
 
   # Start page conversion.
   -repeat $_N
-    -v + -_convert_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>} -v -
+    -v + -_build_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>} -v -
   -done
-
-  # Create table of contents.
-  -v + -e[] "  > Create table of contents." -v -
-  ({'"<p><i>This tutorial has been written by <a href=\"http://particularart.com/about/\">Garry Osgood</a></i></p>"\n\
-     "<h1>Table of Contents</h1>"\n\
-     "<ul>"\n\
-     "<li><a target=\"_parent\" href=\"index.shtml\">Introduction</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"basics.shtml\">Basics</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"images.shtml\">Images</a></li>"\n\
-     "<ul>"\n\
-     "<li><a target=\"_parent\" href=\"images-as-datasets.shtml\">Images as Data Sets</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"conjuring-images.shtml\">Conjuring Images out of the Aether and Other Generators</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"images-have-edges.shtml\">Images Have Edges. Now What?</a></li>"\n\
-     "</ul>"\n\
-     "<li><a target=\"_parent\" href=\"command-decorations.shtml\">Command Decorations</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"beginners-cookbook.shtml\">Beginners Cookbook</a></li>"\n\
-     "<ul>"\n\
-     "<li><a target=\"_parent\" href=\"cauldron.shtml\">Cauldron, Anyone ?</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"convert_raw.shtml\">Convert Raw Image</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"road-systems.shtml\">Road Systems, Maybe, or Cells</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"stained-glass.shtml\">Stained Glass</a></li>"\n\
-     "</ul>"\n\
-     "<li><a target=\"_parent\" href=\"command-guide.shtml\">Command Guide</a></li>"\n\
-     "<ul>"\n\
-     "<li><a target=\"_parent\" href=\"trigometric-and-inverse-trigometric-commands.shtml\">Trigometric And Inverse Trigometric Commands</a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_bandpass.shtml\"><i>-bandpass</i></a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_blur.shtml\"><i>-blur</i></a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_blur_z.shtml\"><i>-blur_z</i></a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_convolve.shtml\"><i>-convolve</i></a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_display.shtml\"><i>-display</i></a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_gaussian.shtml\"><i>-gaussian</i></a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_gradient.shtml\"><i>-gradient</i></a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_mix_rgb.shtml\"><i>-mix_rgb</i></a></li>"\n\
-     "<li><a target=\"_parent\" href=\"_warp.shtml\"><i>-warp</i></a></li>"\n\
-     "</ul>"\n\
-     "</ul>"\n'})
-  -o raw:toc.html,uchar
-
-  -v + -e[] "  > All done !."
+  -v +
+  -e[] "  > All done !."
 
 # Add page to the list of pages to explore.
-__convert_tutorial_html : -skip ${3=""},${4=""}
+__build_tutorial_html : -skip ${3=""},${4=""}
   -if {!narg($_N)} _N=0 -endif
   _input$_N=$1 _height$_N=$2
 
@@ -1142,8 +1106,8 @@ __convert_tutorial_html : -skip ${3=""},${4=""}
   _N={$_N+1}
 
 # Retrieve one html page and convert it.
-_convert_tutorial_html :
-  -e[^-1] "Convert tutorial page '$1' to G"{`39`}"MIC web look."
+_build_tutorial_html :
+  -e[^-1] "Convert tutorial page from '$1' to G"{`39`}"MIC web look."
   -v -
 
   # Get web page.
@@ -1185,7 +1149,7 @@ _convert_tutorial_html :
   -y -a y
 
   # Replace image links.
-  -replace_seq @{-quote\ {'" src=\"/static/media/uploads/"'}},@{-quote\ {'" src=\"http://particularart.com/static/media/uploads/"'}}
+  -replace_seq @{-quote\ {'"\"/static/media/uploads/"'}},@{-quote\ {'"\"http://particularart.com/static/media/uploads/"'}}
 
   # Search and replace links to 'internal' pages.
   -s +,{'"<a href=\""'}
@@ -1281,7 +1245,7 @@ _convert_tutorial_html :
      "<link href=\"../style.css\" rel=\"stylesheet\" type=\"text/css\">"\n\
      "<div id=\"bloc_option\"><div id=\"top_vert\"><div id=\"text_top\">Tutorial</div></div>"\n\
      "<div id=\"center\"><div id=\"text_centre_intro\">"\n\
-     "<!--#include file=\"toc.html\" -->"\n\
+     "<!--#include file=\"tutorial_toc.html\" -->"\n\
      "<iframe width=\"100%\" height=\"$2\" frameborder=\"0\" src=\""$4"\" seamless></iframe>"\n\
      "</div></div><div id=\"footer\"><img src=\"images/footer.jpg\" /></div></div>"\n\
      "<!--#include file=\"copyright.html\" -->"\n\

@@ -34,7 +34,7 @@
 <tr>
 <td><img src="img/stained-glass_sg_000003.jpg" title="Bandpass: X Gradient" height="250" width="250" /></td>
 <td><code>...-<a target="_parent" href="_gradient.shtml">gradient</a>[-1]...</code><br />
-<p><em>G'MIC's -<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#warp">warp</a> command harnesses a vector field to determine how far, and in what direction it is to move a pixel. Two channel images embody vector fields, one encodes the magnitude of deflection in the vertical direction, the other the horizontal direction.</em></p>
+<p><em>G'MIC's -<a target="_parent" href="_warp.shtml">warp</a> command harnesses a vector field to determine how far, and in what direction it is to move a pixel. Two channel images embody vector fields, one encodes the magnitude of deflection in the vertical direction, the other the horizontal direction.</em></p>
 <p><em>At the end of the last stage, we only had a single channel scalar field. Here, we pass that scalar field through -<a target="_parent" href="_gradient.shtml">gradient,</a> giving us partial first derivatives in the horizontal and vertical directions, these in separate, monochrome images. We declare these by fiat to be the components of a vector field.</em></p>
 <p><em>This heuristic aside, we prefer image-based vector field over one randomly generated because the warping patterns it establishes are more or less based on features in the image itself, and, hence, the distortion patterns would be akin to the image.</em></p>
 </td>
@@ -48,8 +48,8 @@
 </tr>
 <tr>
 <td><img src="img/stained-glass_sg_000005.jpg" title="Warped Glass" height="250" width="250" /></td>
-<td><code>...-<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#mul">mul</a>[-1] 0.4 --<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#warp">warp</a>[0] [-1],1,2,2...</code><br />
-<p><em>With the vector field complete and occupying the last slot in the pipeline, we apply it to the very first image in the pipeline. The -<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#warp">warp</a> command itself has no attenuation control. We synthesize one by downscaling the vector field. We arrived at a multiplier of 0.4 after some experimentation.</em></p>
+<td><code>...-<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#mul">mul</a>[-1] 0.4 --<a target="_parent" href="_warp.shtml">warp</a>[0] [-1],1,2,2...</code><br />
+<p><em>With the vector field complete and occupying the last slot in the pipeline, we apply it to the very first image in the pipeline. The -<a target="_parent" href="_warp.shtml">warp</a> command itself has no attenuation control. We synthesize one by downscaling the vector field. We arrived at a multiplier of 0.4 after some experimentation.</em></p>
 <p><em>Warp is notorious for uncovering ragged edges, as it can locally magnify regions by some large percentage. Note, in particular, the lowest arm of the letter 'E'. For sake of the tutorial, it is worth leaving this nasty abroad in order to point the species out, but for critical work, any project involving warping should be done at oversized scales, easily two or three times the presentation size. The warp command itself supports cubic interpolation, which diminishes, but does not eliminate, the effect of magnified ragged edges.</em></p>
 </td>
 </tr>
