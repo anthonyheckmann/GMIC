@@ -226,26 +226,26 @@ _help_header_latex :
 \nRead the full license terms at \\texttt{http://www.gnu.org/licenses/fdl-1.3.txt}.\\\\~\\\\
 \nAn online version of this documentation is available at:\\\\\\texttt{http://gmic.sourceforge.net/reference.shtml}.
 \n\\section*{Motivations}
-\nG'MIC is an open and full-featured framework for image processing, providing several different user interfaces to
+\nG"{`39`}"MIC is an open and full-featured framework for image processing, providing several different user interfaces to
 \nconvert/manipulate/filter/visualize generic image datasets, from 1d scalar signales to 3d+t sequences of multi-spectral volumetric images.
 \nTechnically speaking, what it does is:
 \n\\begin{itemize}
-\n\\item Define a lightweight but powerful script language (the G'MIC language) dedicated to the design of image processing pipelines.
+\n\\item Define a lightweight but powerful script language (the G"{`39`}"MIC language) dedicated to the design of image processing pipelines.
 \n\\item Provide several user interfaces embedding the corresponding interpreter:
 \n\\begin{itemize}
-\n\\item A command-line executable 'gmic', to use the G'MIC framework from a shell.
-\nIn this setting, G'MIC may be seen as a direct (and friendly) competitor of the ImageMagick or GraphicsMagick software suites.
-\n\\item A plug-in 'gmic\\_gimp', to bring G'MIC capabilities to the GIMP image retouching software.
-\n\\item A web-service 'G'MIC Online', to allow users applying image processing algorithms directly in a web brower.
+\n\\item A command-line executable 'gmic', to use the G"{`39`}"MIC framework from a shell.
+\nIn this setting, G"{`39`}"MIC may be seen as a direct (and friendly) competitor of the ImageMagick or GraphicsMagick software suites.
+\n\\item A plug-in 'gmic\\_gimp', to bring G"{`39`}"MIC capabilities to the GIMP image retouching software.
+\n\\item A web-service 'G"{`39`}"MIC Online', to allow users applying image processing algorithms directly in a web brower.
 \n\\item A Qt-based interface 'ZArt', for real-time manipulation of webcam images.
 \n\\item A C++ library 'libgmic', to be linked with third-party applications.
 \n\\end{itemize}
 \n\\end{itemize}
-\nG'MIC is focused on the design of possibly complex pipelines for converting, manipulating, filtering and visualizing generic 1d/2d/3d multi-spectral image datasets. This includes of course color images, but also more complex data as image sequences or 3d(+t) volumetric float-valued datasets.\\\\
+\nG"{`39`}"MIC is focused on the design of possibly complex pipelines for converting, manipulating, filtering and visualizing generic 1d/2d/3d multi-spectral image datasets. This includes of course color images, but also more complex data as image sequences or 3d(+t) volumetric float-valued datasets.\\\\
 \n
-\nG'MIC is an open framework: the default language can be extended with custom G'MIC-written commands, defining thus new available image filters or effects. By the way, G'MIC already contains a substantial set of pre-defined image processing algorithms and pipelines (more than 1000).\\\\
+\nG"{`39`}"MIC is an open framework: the default language can be extended with custom G"{`39`}"MIC-written commands, defining thus new available image filters or effects. By the way, G"{`39`}"MIC already contains a substantial set of pre-defined image processing algorithms and pipelines (more than 1000).\\\\
 \n
-\nG'MIC has been designed with portability in mind and runs on different platforms (Windows, Unix, MacOSX). It is distributed under the CeCILL license (GPL-compatible). Since 2008, it is developed in the Image Team of the GREYC laboratory, in Caen/France, by permanent researchers working in the field of image processing on a daily basis.
+\nG"{`39`}"MIC has been designed with portability in mind and runs on different platforms (Windows, Unix, MacOSX). It is distributed under the CeCILL license (GPL-compatible). Since 2008, it is developed in the Image Team of the GREYC laboratory, in Caen/France, by permanent researchers working in the field of image processing on a daily basis.
 \n\\section*{Version}
 \n
 \n gmic: GREYC's Magic for Image Computing.
@@ -294,7 +294,7 @@ _help_header_html :
 \n<ul>
 \n<li>This document is distributed under the <a href=\"http://www.gnu.org/licenses/fdl-1.3.txt\">GNU Free Documentation License</a>, version 1.3.</li>
 \n<li>A <a href=\"gmic_reference.pdf\">.pdf version</a> of this document is available.</li>
-\n<li>We also suggest you read <a href=\"tutorial/index.shtml\">these tutorial pages</a> which provide a more user-friendly explanation of most of the G'MIC basics.</li>
+\n<li>We also suggest you read <a href=\"tutorial/index.shtml\">these tutorial pages</a> which provide a more user-friendly explanation of most of the G"{`39`}"MIC basics.</li>
 \n</ul>
 \n<h2><a id=\"toc\"><font color=\"brown\"><u>Table of contents</u></font></a></h2>
 \n<ul>
@@ -366,7 +366,7 @@ _help_paragraph_html :
 _help_footer_html :
   -v +
   -e[] "
-\n<br/><b><font color=\"brown\">** G'MIC comes with ABSOLUTELY NO WARRANTY; for details visit <a href=\"http://gmic.sourceforge.net\">http://gmic.sourceforge.net **</a></font></b>
+\n<br/><b><font color=\"brown\">** G"{`39`}"MIC comes with ABSOLUTELY NO WARRANTY; for details visit <a href=\"http://gmic.sourceforge.net\">http://gmic.sourceforge.net **</a></font></b>
 \n</tt>
 \n</div>
 \n</div>
@@ -410,7 +410,7 @@ _help_paragraph_ascii :
 
 _help_footer_ascii :
   -v +
-  -e[] " ** G'MIC comes with ABSOLUTELY NO WARRANTY; for details visit http://gmic.sourceforge.net **"
+  -e[] " ** G"{`39`}"MIC comes with ABSOLUTELY NO WARRANTY; for details visit http://gmic.sourceforge.net **"
   -v -
 
 # Command to write general usage (used by all types of output).
@@ -418,16 +418,16 @@ _help_usage :
 
   -_help_paragraph " gmic [command1 [arg1_1,arg1_2,..]] .. [commandN [argN_1,argN_2,..]]
 \n
-\n 'gmic' is an open-source interpreter of the G'MIC language, a script-based programming
+\n 'gmic' is an open-source interpreter of the G"{`39`}"MIC language, a script-based programming
 \n  language dedicated to design image processing pipelines. It can be used to convert,
 \n  manipulate, filter and visualize datasets made of one or several 1d/2d or 3d multi-
 \n  spectral images.
 \n
-\n This documentation proposes a complete description of the G'MIC language basics and rules."
+\n This documentation proposes a complete description of the G"{`39`}"MIC language basics and rules."
 
   -_help_section "Overall context"
 
-  -_help_paragraph "  - At any time, G'MIC manages one list of numbered (and optionally named) pixel-based
+  -_help_paragraph "  - At any time, G"{`39`}"MIC manages one list of numbered (and optionally named) pixel-based
 \n     images, entirely stored in computer memory.
 \n  - The first image of the list has indice '0' and is denoted by '[0]'. The second image of
 \n     the list is denoted by '[1]', the third by '[2]' and so on.
@@ -437,16 +437,16 @@ _help_usage :
 \n  - A named image may be denoted by '[name]' if 'name' uses characters set [a-zA-Z0-9_] and
 \n     does not start with a number. Image names can be set or reassigned at any moment during
 \n     the processing pipeline (see commands '-name' and '-input').
-\n  - G'MIC defines a set of various commands and substitution mechanisms to allow the design
+\n  - G"{`39`}"MIC defines a set of various commands and substitution mechanisms to allow the design
 \n     of complex pipelines managing this list of images, in a very flexible way:
 \n     You can insert or remove images in the list, rearrange image indices, process images
 \n     (individually or as a group), merge image data together and output image files.
-\n  - Such a pipeline can be written itself as a custom G'MIC command storable in a custom
+\n  - Such a pipeline can be written itself as a custom G"{`39`}"MIC command storable in a custom
 \n     commands file, which can be re-used afterwards in another bigger pipeline if necessary."
 
   -_help_section "Image definition and terminology"
 
-  -_help_paragraph "  - In G'MIC, an image is modeled as a 1d, 2d, 3d or 4d array of scalar values, uniformly
+  -_help_paragraph "  - In G"{`39`}"MIC, an image is modeled as a 1d, 2d, 3d or 4d array of scalar values, uniformly
 \n     discretized on a rectangular/parallelepipedic domain.
 \n  - The four dimensions of these arrays are respectively denoted by:
 \n    . 'width', the number of image columns (size along the 'x'-axis).
@@ -458,8 +458,8 @@ _help_usage :
 \n  - There are no size limitations on each image dimensions. Particularly, the number of image
 \n     slices or channels can be of arbitrary size within the limits of available memory.
 \n  - The width, height and depth of an image are considered as 'spatial' dimensions, while the
-\n     spectrum has a 'multi-spectral' meaning. Thus, a 4d image in G'MIC should be most often
-\n     regarded as a 3d dataset of multi-spectral voxels. Most of the G'MIC commands will stick
+\n     spectrum has a 'multi-spectral' meaning. Thus, a 4d image in G"{`39`}"MIC should be most often
+\n     regarded as a 3d dataset of multi-spectral voxels. Most of the G"{`39`}"MIC commands will stick
 \n     with this idea (e.g. command '-blur' will blur images only along the 'xyz' axes).
 \n  - All pixel values of all images of the list have the same datatype. It can be one among:
 \n    . 'bool': Stands for 'boolean'. Value range is { 0=false | 1=true }.
@@ -473,22 +473,22 @@ _help_usage :
 \n    . 'int': Value range is [-2^31,2^31-1] (32 bits).
 \n    . 'float': Value range is [-3.4E38,+3.4E38] (32bits).
 \n        This type of coding is able to store pixels as 32 bits float-valued numbers. This is
-\n        the default datatype used by G'MIC image processing operations.
+\n        the default datatype used by G"{`39`}"MIC image processing operations.
 \n    . 'double': Value range is [-1.7E308,1.7E308] (64bits).
 \n        This type of coding is able to store pixels as 64 bits float-valued numbers.
 \n  - Considering pixel datatypes different than 'float' is generally useless, except to force
-\n     the input/output of image data to a prescribed binary format. Hence, most G'MIC image
+\n     the input/output of image data to a prescribed binary format. Hence, most G"{`39`}"MIC image
 \n     image processing commands are available only for the default 'float' pixel datatype
 \n     (see command '-type' if you need to switch to another pixel datatype)."
 
   -_help_section "Items of a processing pipeline"
 
-  -_help_paragraph "  - In G'MIC, an image processing pipeline is described as a sequence of items separated by
+  -_help_paragraph "  - In G"{`39`}"MIC, an image processing pipeline is described as a sequence of items separated by
 \n     the space character ' '. Such items are interpreted and executed from the left to the
 \n     right. For instance, the expression:
 \n       'input.jpg -blur 3,0 -sharpen 10 -resize 200%,200% -output output.jpg'
-\n     defines a valid pipeline composed of nine G'MIC items.
-\n  - A G'MIC item is a string which represents either a command, a set of command arguments,
+\n     defines a valid pipeline composed of nine G"{`39`}"MIC items.
+\n  - A G"{`39`}"MIC item is a string which represents either a command, a set of command arguments,
 \n     a filename, or a special input string.
 \n  - Escape characters '\\' and double quotes '\"' can be used (as usual) to define items
 \n     containing spaces, or any other character sequences. For instance, the strings
@@ -496,11 +496,11 @@ _help_usage :
 
   -_help_section "Input data items"
 
-  -_help_paragraph "  - If a specified G'MIC item appears to be an existing filename, the corresponding image
+  -_help_paragraph "  - If a specified G"{`39`}"MIC item appears to be an existing filename, the corresponding image
 \n     data are loaded and inserted at the end of the image list.
 \n  - Special filenames '-' and '-.ext' stand for the standard input/output streams, optionally
 \n     forced to be in a specific 'ext' file format (e.g. '-.jpg' or '-.png').
-\n  - The following special input strings may be used as G'MIC items to create and insert new
+\n  - The following special input strings may be used as G"{`39`}"MIC items to create and insert new
 \n     images with prescribed values, at the end of the image list:
 \n    . '[selection]' or '[selection]xN': Insert 1 or N copies of selected existing images.
 \n       'selection' may contain one or several images (see next section for details).
@@ -526,14 +526,14 @@ _help_usage :
 
   -_help_section "Command items and selections"
 
-  -_help_paragraph "  - A G'MIC item starting by '-' designates a command, most of the time. Generally, commands
+  -_help_paragraph "  - A G"{`39`}"MIC item starting by '-' designates a command, most of the time. Generally, commands
 \n     perform image processing operations on one or several available images of the list.
 \n  - Common commands have two equivalent names (regular and short). For instance, command
 \n     names '-resize' and '-r' refer to the same image resizing action.
-\n  - A G'MIC command may have mandatory or optional arguments. Command arguments must be
+\n  - A G"{`39`}"MIC command may have mandatory or optional arguments. Command arguments must be
 \n     specified in the next item on the command line. Commas ',' are used to separate multiple
 \n     arguments, if any required.
-\n  - The execution of a G'MIC command may be restricted only to a subset of the image list, by
+\n  - The execution of a G"{`39`}"MIC command may be restricted only to a subset of the image list, by
 \n     appending '[subset]' to the command name. Examples of valid syntaxes for 'subset' are:
 \n    . '-com[0,1,3]': Apply command only on images [0],[1] and [3].
 \n    . '-com[3-5]': Apply command only on images [3] to [5] (i.e, [3],[4] and [5]).
@@ -551,40 +551,40 @@ _help_usage :
 \n     '[1-3]'. If you want to repeat a single command multiple times on an image, use a
 \n     '-repeat..-done' loop. Inverting the order of images in a selection can be achieved by
 \n     inverting first the order of the images in the list, with command '-reverse[selection]'.
-\n  - G'MIC commands invoked without '[subset]' are applied on all images of the list.
-\n  - A G'MIC command starting with '--' instead of '-' does not act 'in-place' but inserts its
+\n  - G"{`39`}"MIC commands invoked without '[subset]' are applied on all images of the list.
+\n  - A G"{`39`}"MIC command starting with '--' instead of '-' does not act 'in-place' but inserts its
 \n     result as one or several new images at the end of the image list.
-\n  - There are two different types of commands that can be run by the G'MIC interpreter:
+\n  - There are two different types of commands that can be run by the G"{`39`}"MIC interpreter:
 \n    . Native commands, are hard-coded functionalities in the interpreter core.
 \n       They are thus compiled as machine code and run quickly, most of the time.
 \n       Omitting an argument when invoking a native command is not permitted, except if all
 \n       following arguments are also omitted. For instance, call to '-plasma 10,,5' is invalid
 \n       but '-plasma 10' is correct.
-\n    . Custom commands, are defined as G'MIC pipelines of native or custom commands.
-\n       They are interpreted by the G'MIC interpreter, and run slower than native commands.
+\n    . Custom commands, are defined as G"{`39`}"MIC pipelines of native or custom commands.
+\n       They are interpreted by the G"{`39`}"MIC interpreter, and run slower than native commands.
 \n       But omitting arguments when invoking a custom command is permitted. For instance,
 \n       expressions '-flower ,,,100,,2' or '-flower ,' are correct.
-\n  - A user may easily add its own custom commands to the G'MIC interpreter (see section
-\n     'Adding custom commands'). Native commands cannot be added unless you modify the G'MIC
+\n  - A user may easily add its own custom commands to the G"{`39`}"MIC interpreter (see section
+\n     'Adding custom commands'). Native commands cannot be added unless you modify the G"{`39`}"MIC
 \n     interpreter source code."
 
   -_help_section "Inputs/outputs properties"
 
-  -_help_paragraph "  - G'MIC is able to read/write most of the classical image file formats, including:
+  -_help_paragraph "  - G"{`39`}"MIC is able to read/write most of the classical image file formats, including:
 \n    . 2d grayscale/color files: .png, .jpeg, .gif, .pnm, .tif, .bmp, ..
 \n    . 3d volumetric files: .dcm, .hdr, .nii, .pan, .inr, .pnk, ..
 \n    . Image sequences: .mpeg, .avi, .mov, .ogg, .flv, ..
 \n    . Generic ascii or binary data files: .cimg, .cimgz, .dlm, .asc, .pfm, .raw, .txt, .h.
 \n    . 3d object files: .off.
-\n  - When dealing with color images, G'MIC generally reads, writes and displays data using the
+\n  - When dealing with color images, G"{`39`}"MIC generally reads, writes and displays data using the
 \n     usual RGB color space.
-\n  - G'MIC is able to manage 3d objects that may be read from files or generated by G'MIC
+\n  - G"{`39`}"MIC is able to manage 3d objects that may be read from files or generated by G"{`39`}"MIC
 \n     commands. They are stored as one-column scalar images containing the object data, in the
 \n     following order: { magic_number; sizes; vertices; primitives; colors; opacities }.
 \n     These 3d representations can be processed as regular float-valued images.
 \n     (see command '-split3d' for accessing each of these 3d object data separately).
 \n  - Be aware that usual file formats may be sometimes not adapted to store all the available
-\n     image data, since G'MIC uses float-valued coding of image pixels. For instance, saving
+\n     image data, since G"{`39`}"MIC uses float-valued coding of image pixels. For instance, saving
 \n     an image that was initially loaded as a 16bits/channel image, as a .jpg file will result
 \n     in loss of information. Use the .cimg file extension (or .cimgz, its compressed
 \n     version) to ensure that all data precision will be preserved when saving images.
@@ -625,21 +625,21 @@ _help_usage :
 \n    . .pan, .cpp, .hpp, .c and .h files: The output datatype can be selected with output expression
 \n       'filename[,datatype]'.
 \n      'datatype' can be { bool | uchar | char | ushort | short | uint | int | ulong | long | float | double }.
-\n    . .gmic files: These filenames are assumed to be G'MIC custom commands files. Loading
+\n    . .gmic files: These filenames are assumed to be G"{`39`}"MIC custom commands files. Loading
 \n       such a file will add the commands it defines to the interpreter. Debug infos can be
 \n       enabled/disabled by the input expression 'filename.gmic,add_debug_infos={ 0 | 1 }'.
-\n    . Inserting 'ext:' on the beginning of a filename (e.g. 'jpg:filename') forces G'MIC to
+\n    . Inserting 'ext:' on the beginning of a filename (e.g. 'jpg:filename') forces G"{`39`}"MIC to
 \n       read/write the file as it would have been done if it had the specified extension.
 \n  - Some input/output formats and options may not be supported by your current version of
 \n     'gmic', depending on the configuration flags set for the build of the 'gmic' binaries."
 
   -_help_section "Substitution rules"
 
-  -_help_paragraph "  - G'MIC items containing '@', '$' or '{}' may be substituted before being interpreted. Use
+  -_help_paragraph "  - G"{`39`}"MIC items containing '@', '$' or '{}' may be substituted before being interpreted. Use
 \n     the substituting expressions below to access data from the interpreter environment:
 \n    . '@#' is substituted by the current number of images in the list.
 \n    . '@*' is substituted by the number of available cpus.
-\n    . '@.' is substituted by the current version number of the G'MIC interpreter
+\n    . '@.' is substituted by the current version number of the G"{`39`}"MIC interpreter
 \n    . '@^' is substituted by the current verbosity level.
 \n    . '@%' is substituted by the pid of the current process.
 \n    . '@|' is substituted by the current value (expressed in seconds) of a millisecond
@@ -741,11 +741,11 @@ _help_usage :
 \n    to enable substitution if needed, as in \"3+8 kg = \"{3+8}\" kg\". Using double quotes
 \n    is then a convenient way to disable the substitutions mechanism in items, when necessary.
 \n  - One can also disable the substitution mechanism on items outside double quotes, by
-\n     escaping the '@','{','}' or '$' characters, as in '\\{3+4\\}\\ doesn't\\ evaluate'."
+\n     escaping the '@','{','}' or '$' characters, as in '\\{3+4\\}\\ doesn"{`39`}"t\\ evaluate'."
 
   -_help_section "Mathematical expressions"
 
-  -_help_paragraph "  - G'MIC has an embedded mathematical parser. It is used to evaluate expressions inside
+  -_help_paragraph "  - G"{`39`}"MIC has an embedded mathematical parser. It is used to evaluate expressions inside
 \n     braces '{}', or formulas in commands that may take one as an argument (e.g. '-fill').
 \n  - When used in commands, a formula is evaluated for each pixel of the selected images.
 \n  - The mathematical parser understands the following set of functions, operators and variables:
@@ -796,7 +796,7 @@ _help_usage :
 \n    _ The following specific functions are also defined:
 \n         . 'if(expr_cond,expr_then,expr_else)': return value of 'expr_then' or 'expr_else',
 \n            depending on the value of 'expr_cond' (0=false, other=true). For instance,
-\n            G'MIC command '-fill if(x%10==0,255,i)' will draw blank vertical lines on every
+\n            G"{`39`}"MIC command '-fill if(x%10==0,255,i)' will draw blank vertical lines on every
 \n            10th column of an image.
 \n         . '?(max)' or '?(min,max)': return a random value between [0,max] or [min,max],
 \n            following a uniform distribution. 'u(max)' and 'u(0,max)' mean the same.
@@ -816,11 +816,11 @@ _help_usage :
 \n         . If specified formula starts with '>' or '<', the operators 'i(..)' and 'j(..)' will return
 \n            values of the image currently being modified, in forward ('>') or backward ('<') order.
 \n  - The last image of the list is always associated to the evaluations of '{expressions}',
-\n     e.g. G'MIC sequence '256,128 -f {w}' will create a 256x128 image filled with value 256."
+\n     e.g. G"{`39`}"MIC sequence '256,128 -f {w}' will create a 256x128 image filled with value 256."
 
   -_help_section "Image and data viewers"
 
-  -_help_paragraph "  - G'MIC has some very handy embedded visualization modules, for 1d signals
+  -_help_paragraph "  - G"{`39`}"MIC has some very handy embedded visualization modules, for 1d signals
 \n     (command '-plot'), 1d/2d/3d images (command '-display') and 3d objects
 \n     (command '-display3d'). It enables an interactive view of the selected image data.
 \n  - The following keyboard shortcuts are available in the interactive viewers:
@@ -852,11 +852,11 @@ _help_usage :
 
   -_help_section "Adding custom commands"
 
-  -_help_paragraph "  - Custom commands can be defined by a user, through the use of G'MIC custom commands files.
+  -_help_paragraph "  - Custom commands can be defined by a user, through the use of G"{`39`}"MIC custom commands files.
 \n  - A command file is a simple ascii text file, where each line starts either by
 \n     'command_name: command_definition' or 'command_definition (continuation)'.
 \n  - Custom command names must use characters [a-zA-Z0-9_] and cannot start with a number.
-\n  - Any ' \# comment' expression found in a custom commands file is discarded by the G'MIC
+\n  - Any ' \# comment' expression found in a custom commands file is discarded by the G"{`39`}"MIC
 \n     interpreter, wherever it is located in a line.
 \n  - In custom commands, the following $-expressions are substituted:
 \n    . '$""*' is substituted by a copy of the specified string of arguments.
@@ -891,7 +891,7 @@ _help_usage :
 
   -_help_section "List of commands"
 
-  -_help_paragraph " All available G'MIC commands are listed below, classified by themes.
+  -_help_paragraph " All available G"{`39`}"MIC commands are listed below, classified by themes.
 \n When several choices of command arguments are possible, they appear separated by '|'.
 \n An argument specified inside '[]' or starting by '_' is optional except when standing for an
 \n existing image [image], where 'image' can be either an indice number or an image name.
@@ -940,8 +940,8 @@ _help_examples :
 \n  - Plot the isosurface of a 3d volume:
 \n     gmic -m3d 5 -md3d 5 -db3d 0 -isosurface3d \"'x^2+y^2+abs(z)^abs(4*cos(x*y*z*3))'\",3
 \n
-\n  - Render a G'MIC 3d logo:
-\n     gmic 1 -text G\\'MIC,0,0,57,1,1,1,1 -expand_xy 10,0 -blur 2 -n 0,100 --plasma 0.4 -+ \\
+\n  - Render a G"{`39`}"MIC 3d logo:
+\n     gmic 1 -text G\\"{`39`}"MIC,0,0,57,1,1,1,1 -expand_xy 10,0 -blur 2 -n 0,100 --plasma 0.4 -+ \\
 \n      -blur 1 -elevation3d -0.1 -md3d 4
 \n
 \n  - Generate a 3d ring of torii:
@@ -957,7 +957,7 @@ _help_examples :
 \n  - Display filtered webcam stream:
 \n     gmic -apply_camera \\\"--mirror x --mirror y -+ -/ 4\\\"
 \n
-\n  - Launch a set of G'MIC interactive demos:
+\n  - Launch a set of G"{`39`}"MIC interactive demos:
 \n     gmic -demo
 \n"
 
@@ -2238,14 +2238,14 @@ _function1d :
 #@gmic : Load a new image of the G'MIC mascot 'Gmicky'.
 #@gmic : $ -gmicky
 gmicky :
-  -e[^-1] "Load image of the G'MIC mascot 'Gmicky'."
+  -e[^-1] "Load image of the G"{`39`}"MIC mascot 'Gmicky'."
   -v - -i http://gmic.sourceforge.net/img/gmicky_large.cimgz -nm[-1] [gmicky] -v +
 
 #@gmic gmicky_wilber
 #@gmic : Load a new image of the G'MIC mascot 'Gmicky' together with GIMP mascot 'Wilber'.
 #@gmic : $ -gmicky_wilber
 gmicky_wilber :
-  -e[^-1] "Load image of the G'MIC mascot 'Gmicky' together with GIMP mascot 'Wilber'."
+  -e[^-1] "Load image of the G"{`39`}"MIC mascot 'Gmicky' together with GIMP mascot 'Wilber'."
   -v - -i http://gmic.sourceforge.net/img/gmicky_wilber_large.cimgz -nm[-1] [gmicky_wilber] -v +
 
 #@gmic heart : _width>0,_height>0
@@ -2408,7 +2408,7 @@ rainbow_lut :
 #@gmic : Load a new image of the G'MIC Rodilius mascot 'Roddy'.
 #@gmic : $ -roddy
 roddy :
-  -e[^-1] "Load image of the G'MIC Rodilius mascot 'Roddy'."
+  -e[^-1] "Load image of the G"{`39`}"MIC Rodilius mascot 'Roddy'."
   -v - -i http://gmic.sourceforge.net/img/roddy_large.cimgz -nm[-1] [roddy] -v +
 
 #@gmic remove_duplicates
@@ -2506,7 +2506,7 @@ update :
   -_$0
 
 _update :
-  -e[0--3] "Update commands from the latest definition file on the G'MIC server."
+  -e[0--3] "Update commands from the latest definition file on the G"{`39`}"MIC server."
   -v - -m http://gmic.sourceforge.net/update@..gmic -v +
 
 #@gmic v : eq. to '-verbose'. : (*)
@@ -3160,7 +3160,7 @@ orientation :
 #@gmic : Default value: 'nb_levels=256'.
 #@gmic : $ image.jpg -luminance --otsu ,
 otsu : -check "isint(${1=256}) && $1>0"
-  -e[^-1] "Hard-threshold image$? using Otsu's method, with $1 histogram levels."
+  -e[^-1] "Hard-threshold image$? using Otsu"{`39`}"s method, with $1 histogram levels."
   -v - -repeat @# -l[$>]
     im={im} iM={iM} -n 0,{$1-1}
     --histogram $1 total=@{-1,+}
@@ -7613,7 +7613,7 @@ gaussians3d : -check "${1=32}>0" -skip ${2=0.3}
 #@gmic : Input a 3d G'MIC logo.
 #@gmic : $ -gmic3d --primitives3d 1
 gmic3d :
-  -e[^-1] "Input 3d G'MIC logo."
+  -e[^-1] "Input 3d G"{`39`}"MIC logo."
   -v -
   -text3d G,60,20,2 -col3d[-1] 16,64,255
   -text3d \',60,20,2 -+3d[-1] 30 -col3d[-1] 64,128,255
@@ -7800,7 +7800,7 @@ imagepyramid3d :
 #@gmic : Default values: 'xy_tiles=3', 'xy_shift=5' and 'z_shift=5'.
 #@gmic : $ image.jpg -imagerubik3d ,
 imagerubik3d : -check "${1=3}>=1 && ${2=5}>=0 && $2<=100 && ${3=5}>=0 && $3<=100"
-  -e[^-1] "Generate 3d mapped rubik's cubes from image$? with $1 xy-tiles, xy-shift $2 and z-shift $3."
+  -e[^-1] "Generate 3d mapped rubik"{`39`}"s cubes from image$? with $1 xy-tiles, xy-shift $2 and z-shift $3."
   -v - -repeat @# -l[$>] nm=@{0,n}
     # Generate primary 3d side.
     ({'CImg3d'}) -+[-1] 0.5
@@ -10358,7 +10358,7 @@ vignette : -check "${1=100}>=0 && ${2=70}>=0 && $2<=100 && ${3=90}>=0 && $3<=100
 #@gmic : Add or remove a visible watermark on selected images (value range must be [0,255]).
 #@gmic : Default values: 'text=(c) G'MIC', 'opacity=0.3', 'size=57', 'angle=25', 'mode=1' and 'smoothness=0'.
 #@gmic : $ image.jpg --watermark_visible ,0.7
-watermark_visible : -skip "${1=\251\ G\'MIC}" -check "${2=0.3}>0 && $2<1 && ${3=57}>0 && ${6=0.5}>=0" -skip ${4=25},${5=1}
+watermark_visible : -skip "${1=\251\ G"{`39`}"MIC}" -check "${2=0.3}>0 && $2<1 && ${3=57}>0 && ${6=0.5}>=0" -skip ${4=25},${5=1}
   -e[^-1] @{-arg\ 1+!$5,Add,Remove}" visible watermark '$1' on image$?, with opacity $2, size $3, angle $4 deg."
   -v - -repeat @# -l[$>]
     0 -t[-1] "$1",0,0,$3,1,255 -rotate[-1] $4,0,0 -b[-1] $6 -n[-1] 0,255
@@ -10802,7 +10802,7 @@ transition3d : -check "isint(${1=10}) && $1>=2 && isint(${2=3}) && $2>0 && isint
 #@gmic : Show a menu to select and view all G'MIC interactive demos.
 demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   -e[] "\n
------- G'MIC demos menu -----------------\n
+------ G"{`39`}"MIC demos menu -----------------\n
 ----\n
 ---- Mouse button to select a demo.\n
 ---- Keys 'CTRL+D' to double window size.\n
@@ -10848,7 +10848,7 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   y0=59
   -j[-2] [-1],20,$y0,0,0 -rm[-1]
   -rectangle[-1] 0,16,100%,44,1,120,120,32
-  0 -text[-1] "G'MIC "@{-strver}" demos",2,2,24,1,1,1,1 -b[-1] 0.5 -n[-1] 0,1
+  0 -text[-1] "G"{`39`}"MIC "@{-strver}" demos",2,2,24,1,1,1,1 -b[-1] 0.5 -n[-1] 0,1
   (32;255^255;255^0;0) -r[-1] [-2],[-2],1,3,3 -*[-2,-1] -round[-1] 1,-1 --neq[-1] 0 -channels[-1] 1
   -j[-3] [-2],20,18,0,0,1,[-1] -rm[-2,-1] --channels[-1] 1 -dilate[-1] 5
   (80;255;80^0;255;0^0;0;0) (10;255;10^0;100;0^0;0;0)
@@ -10865,7 +10865,7 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   cfx={0} cfy={0} cfz={0} nfx={g} nfy={g} nfz={g} alpha=0 time0={@|-4} selected=-1 -f3d 400
 
   # Start main loop.
-  -w[0] -1,-1,0,0,50%,50%,"[G'MIC] Demos menu"
+  -w[0] -1,-1,0,0,50%,50%,"[G"{`39`}"MIC] Demos menu"
   -do
 
     # Set 3d coordinates for object.
@@ -10916,7 +10916,7 @@ x_blobs :
 
   # Create background image [0].
   -rm (0;0^0;128^0;255) -r[-1] 350,350,1,3,3 -flower[-1] 30,8,0,0,0.5,0.5,1 -water[-1] 20
-  -w {w},{h},0,0,"[G'MIC] Blobs editor"
+  -w {w},{h},0,0,"[G"{`39`}"MIC] Blobs editor"
 
   # Start event loop.
   moving=-1
@@ -10941,7 +10941,7 @@ x_blobs :
       -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
       -rm[-1]
     -else
-      --text_outline[0] "G'MIC Blobs Editor",65,40,24,3,1,200,128,255
+      --text_outline[0] "G"{`39`}"MIC Blobs Editor",65,40,24,3,1,200,128,255
       -t[-1] "* Left mouse button : Create and move blobs.\n\n\
               * Right mouse button : Remove blob.\n\n\
               * Middle mouse button : Remove all blobs.\n\n\
@@ -10993,7 +10993,7 @@ x_bouncing :
     -ball[] {round(?(32,80))},@{-RGB}
     t$>={?(200)} x$>=@{0,?(10,w-10)} h$>={?(150,300)} vx$>={if(?<0.5,1,-1)*?(1,8)}
   -done
-  -mv[0] @# -w[-1] -1,-1,0,"[G'MIC] Bouncing balls"
+  -mv[0] @# -w[-1] -1,-1,0,"[G"{`39`}"MIC] Bouncing balls"
   (0;0.7;1) -r[-1] @{-2,w},70,1,1,3
 
   -do
@@ -11027,7 +11027,7 @@ x_bouncing :
 
 #@gmic x_fire
 #@gmic : Launch the fire effect demo.
-x_fire : -skip "${1=G'MIC}"
+x_fire : -skip "${1=G"{`39`}"MIC}"
   -e[] "\n
 ------ Fire effect ----------------------\n
 ----\n
@@ -11039,7 +11039,7 @@ x_fire : -skip "${1=G'MIC}"
   -v -
 
   # Init image data.
-  -i[0] 100,32 -w[0] 450,200,0,"[G'MIC] Fire effect"
+  -i[0] 100,32 -w[0] 450,200,0,"[G"{`39`}"MIC] Fire effect"
   -i[1] (0,255,255,255,255^0,0,255,255,255^0,0,0,128,255) -r[1] 256,1,1,3,3
   -i[2] (0,0,0;0,0,0;1,1,1;0,1,0) -*[2] 0.21
   -text3d "$1",34,3,1 -mv[-1] 3 -c3d[3] -n3d[3] -*3d[3] 320 -col3d[3] 255,205,130 -db3d 0 -f3d 300
@@ -11080,7 +11080,7 @@ x_fireworks :
   time=0
   (0;64^0;32^128;0) -r 256,128,1,3,3            # [-2] = Background (color gradient).
   [-1]                                          # [-1] = Rendered image.
-  -w[-1] {1.5*w},{1.5*h},0,"[G'MIC] Fireworks"  # Display window.
+  -w[-1] {1.5*w},{1.5*h},0,"[G"{`39`}"MIC] Fireworks"  # Display window.
   -do                                           # Start animation loop.
     time={$time-1}
     -if {@#==2\ ||\ $time<0} # Insert new rocket.
@@ -11136,13 +11136,13 @@ x_fisheye :
   -v -
   -if {@#>0} -a x -n 0,255 -r2dy 220 -else
   120,90,1,3 -rand[-1] 0,255 -plasma[-1] 0.3,3 -n 0,255
-  -t "  G'MIC\nFISH-EYE\n EFFECT",15,13,24,1,255 -scale2x -b 5 -sharpen 1000
+  -t "  G"{`39`}"MIC\nFISH-EYE\n EFFECT",15,13,24,1,255 -scale2x -b 5 -sharpen 1000
   -f i+150-4*abs(y-h/2) -c[-1] 0,255 -frame_fuzzy[-1] 15,10,15,1.5,0 -to_rgb[-1]
   -endif
   -torus3d 20,6 -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} --r3d[-1] 1,0,0,90
   -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} -+3d[-1] 15 -+3d[-2,-1] -db3d 0 -c3d[-1]
   R=30
-  -w[-2] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G'MIC] Fish-eye effect"
+  -w[-2] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G"{`39`}"MIC] Fish-eye effect"
   -do
     -wait 40
     -if {@{!,b}==1} R={min(80,$R+8)} -endif
@@ -11191,11 +11191,11 @@ x_fourier :
     -n[-1] 0,255 -shift[-1] 50%,50%,0,0,2 -to_colormode[-1] @{-2,s}
     -nm[-1] logmag
 
-    -w[0,-1] -1,-1,0,"[G'MIC] Fourier filtering"
+    -w[0,-1] -1,-1,0,"[G"{`39`}"MIC] Fourier filtering"
 
     -if {!narg($first_time)} --l[-1] -r2dy 128 -frame 1,1,0
-    -alert "[G'MIC Fourier filtering]",\
-           "The G'MIC Fourier filtering demo illustrates the effect\n"\
+    -alert "[G"{`39`}"MIC Fourier filtering]",\
+           "The G"{`39`}"MIC Fourier filtering demo illustrates the effect\n"\
            "of bandpass frequency filtering on an image. Use your mouse\n"\
            "buttons to select low and high bounds for the frequencies\n"\
            "displayed on the Fourier representation of the image\n"\
@@ -11320,7 +11320,7 @@ x_histogram :
     -j[-2] [-1],5,317 -rm[-1]
 
     # Display rendering.
-    -w[-1] {w},{h},0,"[G'MIC] Histogram demo" -rm[-1]
+    -w[-1] {w},{h},0,"[G"{`39`}"MIC] Histogram demo" -rm[-1]
     -wait
 
     # Manage user interactions.
@@ -11372,10 +11372,10 @@ x_hough :
 
     rhomax={sqrt(w^2+h^2)/2}
     --b[-1] 1.5 -hough[-1] 512,400 -b[-1] 0.5 -+[-1] 1 -log[-1] -n[-1] 0,255
-    -w[-2] -1,-1,0,"[G'MIC] Image" -w1[-1] -1,-1,0,"[G'MIC] Hough transform"
+    -w[-2] -1,-1,0,"[G"{`39`}"MIC] Image" -w1[-1] -1,-1,0,"[G"{`39`}"MIC] Hough transform"
     -if {!narg($first_time)} --l[0] -r2dy 128 -frame 1,1,0
-    -alert "[G'MIC Hough Transform]",\
-           "The G'MIC Hough transform demo illustrates the application\n"\
+    -alert "[G"{`39`}"MIC Hough Transform]",\
+           "The G"{`39`}"MIC Hough transform demo illustrates the application\n"\
            "of the Hough transform to detect lines in an image. Use your\n"\
            "mouse buttons to explore the transform image and see how\n"\
            "lines in images are represented by points in the transform.",\
@@ -11475,7 +11475,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
      --abs[board] --[-1] 1 -*[-1] {360/$3} --ge[board] 0 -*[-1] 0.9 -r[-2,-1] [balls] [balls] -a[-3--1] c -hsv2rgb[-1]
       --compose_channels[-1] + -gt[-1] 0 -dilate[-1] 3
       -j[visu] [back] -j[visu] [-2],0,0,0,0,1,[-1] -rm[-2,-1]
-      -if {!$shapescorey} -w[visu] @{back,w},@{back,h},0,"[G'MIC] Jawbreaker (score : "$score")" -endif
+      -if {!$shapescorey} -w[visu] @{back,w},@{back,h},0,"[G"{`39`}"MIC] Jawbreaker (score : "$score")" -endif
       render_board=0
     -endif
 
@@ -11483,7 +11483,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
     -if $shapescorey
       --t[visu] "+"$shapescore,@{!,x},{@{!,y}-64+$shapescorey},32,{($shapescorey-1)/31},255
       shapescorey={max(0,$shapescorey-1)}
-      -w[-1] @{back,w},@{back,h},0,"[G'MIC] Jawbreaker (score : "$score")" -rm[-1] -wait 25
+      -w[-1] @{back,w},@{back,h},0,"[G"{`39`}"MIC] Jawbreaker (score : "$score")" -rm[-1] -wait 25
     -else -wait -endif
 
     # Check for the end of the game.
@@ -11546,7 +11546,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
 
   # Game over.
   -if {@!" && "!@{!,ESC}}
-    -w[] @{visu,w},@{visu,h},0,"[G'MIC] Jawbreaker (final score : "$score")"
+    -w[] @{visu,w},@{visu,h},0,"[G"{`39`}"MIC] Jawbreaker (final score : "$score")"
     -i[gameover] 230,85 -t[-1] "Game Over!",3,0,57,1,1 -t[-1] "Score : "$score,24,54,32,1,1
     --dilate[-1] 5 -nm[-1] "mgameover" -*[-2] 255 -r[-2] 100%,100%,1,3
     -repeat 25
@@ -11601,7 +11601,7 @@ x_life :
   score=0                                                       # Current score.
   bestscore=0                                                   # Best score.
   stock=500                                                     # Remaining cells.
-  -w[0] 400,400,0,"[G'MIC] The game of life"                    # Initialize display window.
+  -w[0] 400,400,0,"[G"{`39`}"MIC] The game of life"                    # Initialize display window.
   -cursor[0] 0
 
   # Start user-event loop.
@@ -11676,14 +11676,14 @@ x_light :
   -v -
 
   # Create warping and color images.
-  0 -t[-1] "    G'MIC\nLight effect",0,0,57,1,255 -expand_xy[-1] 15,0 -b[-1] 3
+  0 -t[-1] "    G"{`39`}"MIC\nLight effect",0,0,57,1,255 -expand_xy[-1] 15,0 -b[-1] 3
   [-1] -n[-2] 0,1 -r[-2] 100%,100%,1,3
   -sh[-2] 0,0 -*[-1] 120 -rm[-1]
   -sh[-2] 1,1 -*[-1] 70 -rm[-1]
   -sh[-2] 0,50%,0,2 -*[-1] 120 -rm[-1]
   25%,25%,1,1 -rand[-1] -20,20 -smooth[-1] 10,0,1,1,4 -r[-1] [-2],3 -b[-1] 3 -n[-1] -60,60
   -+[-2,-1] -g[-1] xy -a[-2,-1] c -n[-1] -150,150
-  -w[] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G'MIC] Light effect"  # Init display window.
+  -w[] {1.5*@{-2,w}},{1.5*@{-2,h}},0,"[G"{`39`}"MIC] Light effect"  # Init display window.
   -cursor[0] 0
 
   # Create a large light image.
@@ -11738,8 +11738,8 @@ x_mandelbrot : -skip ${1=0},${2=0.317},${3=0.03}
   -do
     siz={min(@{!,w},@{!,h})}                                                                      # Desired window dimension.
     $siz,$siz -mandelbrot[-1] @0,256,$1,{if($1,$2,0)},{if($1,$3,0)} -map[-1] [1]                  # Render fractal.
-    -if $1 -w[-1] $siz,$siz,0,"[G'MIC] Julia set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}"), c0=($2,$3)" # Display on window.
-    -else -w[-1] $siz,$siz,0,"[G'MIC] Mandelbrot set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}")" -endif
+    -if $1 -w[-1] $siz,$siz,0,"[G"{`39`}"MIC] Julia set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}"), c0=($2,$3)" # Display on window.
+    -else -w[-1] $siz,$siz,0,"[G"{`39`}"MIC] Mandelbrot set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}")" -endif
     w={w} h={h} -select[-1] 2                                                                     # Get the user selection.
 
     -if {@{-1,0}>0}                                                                               # If valid selection found.
@@ -11788,7 +11788,7 @@ x_metaballs3d :
   72,72,72 M=8 mode=5
   s0=Dots s1=Wireframe s2=Flat s3=Flat-shaded s4=Gouraud-shaded s5=Phong-shaded
   -repeat $M fx$>={g*1.5} fy$>={g*1.5} fz$>={g*1.5} -done
-  -w[0] -1,-1,0,"[G'MIC] 3d metaballs"
+  -w[0] -1,-1,0,"[G"{`39`}"MIC] 3d metaballs"
   -do
     -repeat $M
       x$>={w/2+0.5*(w-@{2,w}-4)*cos(${fx$>}*@|)}
@@ -11884,7 +11884,7 @@ x_minesweeper : -check "${1=20}>=8 && $1<=30 && ${2=$1}>=8 && $2<=30"
         -negative[-1] -j[canvas] [-1],0,3 -rm[-1]
         -wait 50
         x={int((@{!,x}-24)/24)} y={int((@{!,y}-24)/24)} b=@{!,b}
-        -w[canvas] {w},{h},0,"[G'MIC] Minesweeper"
+        -w[canvas] {w},{h},0,"[G"{`39`}"MIC] Minesweeper"
       -while {@!" && "!@{!,ESC}" && "!@{!,Q}" && "!$b}
     -endif
 
@@ -11923,10 +11923,10 @@ x_minimal_path :
   -if {!@#} -testimage2d 400 -endif
   -n 0,200 -round 1
   -repeat @# -l[$>]
-    -w[0] -1,-1,0,"[G'MIC] Select starting point P0"
+    -w[0] -1,-1,0,"[G"{`39`}"MIC] Select starting point P0"
     -if {!narg($first_time)} --l[0] -r2dy 128 -frame 1,1,0
-    -alert "[G'MIC Minimal path]",\
-           "The G'MIC minimal path demo illustrates how minimal paths\n"\
+    -alert "[G"{`39`}"MIC Minimal path]",\
+           "The G"{`39`}"MIC minimal path demo illustrates how minimal paths\n"\
            "can be computed in images to detect and track edge points.\n"\
            "Use your mouse to select desired starting and ending points,\n"\
            "and see what is the minimal path computed between these points.",\
@@ -11940,7 +11940,7 @@ x_minimal_path :
     -if {min($P0)>=0}
       p=1
       -do
-        -w[0] -1,-1,0,"[G'MIC] Select ending point P"$p
+        -w[0] -1,-1,0,"[G"{`39`}"MIC] Select ending point P"$p
         --select[0] 0
         -if {@{!,S}}
           -rm[-1]
@@ -11970,7 +11970,7 @@ x_pacman :
   -e[] "\n
 ------ Pacman -----------------------------------------------\n
 ----\n
----- This is a G'MIC implementation of the pacman game.\n
+---- This is a G"{`39`}"MIC implementation of the pacman game.\n
 ----\n
 ---- Move the pacman to eat all pacdots on the different levels.\n
 ---- Eating a pacgum makes pacman invincible for 10 seconds,\n
@@ -12047,7 +12047,7 @@ x_pacman :
     -t[-1] "Lives :",10,0,23,1,255 -t[-1] "Score :",{w-140},0,23,1,255
     -if $lives --r[pacman_2] 12,12,1,4,2 -r[-1] {100*$lives}%,100%,1,4,0,2 -j[-2] [-1],90,7 -rm[-1] -endif
     -nm[-1] visu
-    -w[visu] -1,-1,0,"[G'MIC] Pacman" -cursor[0] 0
+    -w[visu] -1,-1,0,"[G"{`39`}"MIC] Pacman" -cursor[0] 0
     0 -t[-1] "Level "$level,0,0,57,1,1 -autocrop[-1] 0 -expand_xy[-1] 4,0 (0,255^0,255^0,0) --map[-2] [-1] -rm[-2] -dilate[-2] 8
     -nm[-1] level_N -nm[-2] levelm_N
 
@@ -12432,12 +12432,12 @@ x_plasma :
   -done
 
   {w+2},100%,1,1,'x' 100%,100%,1,1,'Y=(y-60+5*cos(x/30)+10*sin(x/15));if(Y<0||Y>=32,-1,Y)' -a[-2,-1] c
-  0 -t[-1] "** Welcome to G'MIC, a powerful image processing framework **",0,0,32,1,255
+  0 -t[-1] "** Welcome to G"{`39`}"MIC, a powerful image processing framework **",0,0,32,1,255
   -b[-1] 0.6 -n[-1] 0,255
   M={w}
 
   # Start animation loop.
-  -w[] {1.5*@{0,w}},{1.5*@{0,h}},0,"[G'MIC] Plasma effect"
+  -w[] {1.5*@{0,w}},{1.5*@{0,h}},0,"[G"{`39`}"MIC] Plasma effect"
   t=0 tt={-1.5*@{0,w}}
   -do
     tic=@|
@@ -12548,7 +12548,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
       -rm[-2,-1] -nm[-1] visu_centroids -j[visu] [visu_centroids],5,310
     -endif
     -l[visu]
-    -w -1,-1,0,"[G'MIC] RGB quantization"
+    -w -1,-1,0,"[G"{`39`}"MIC] RGB quantization"
     -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
     -endl
 
@@ -12658,7 +12658,7 @@ x_reflection3d :
 
   # Start animation loop.
   xb=0 xl=0 anim=0
-  -w[] 256,256,0,"[G'MIC] 3d reflection"
+  -w[] 256,256,0,"[G"{`39`}"MIC] 3d reflection"
   -do
 
     tic=@|
@@ -12711,7 +12711,7 @@ x_rubber3d :
   256,256,64,3
   {w},{h},1,3,'if(c==0,x,if(c==1,y,y*@{1,d}/h))'
   {w},{h},1,3
-  -w[] {w},{h},0,"[G'MIC] 3d rubber object"
+  -w[] {w},{h},0,"[G"{`39`}"MIC] 3d rubber object"
   frame=0
   -do
     {w},{h},1,3 -fc[-1] 16,32,32 -object3d[-1] [0],50%,50%,0,1,3,0,0 -j[1] [-1],0,0,$frame -rm[-1]
@@ -12734,7 +12734,7 @@ x_shadebobs :
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
 -------------------------------------------------"
-  -v - -rm t=100 -w 512,512,0,"[G'MIC] Shade bobs"
+  -v - -rm t=100 -w 512,512,0,"[G"{`39`}"MIC] Shade bobs"
 
   # Start animation loop.
   -do
@@ -12786,7 +12786,7 @@ x_spline :
 
   # Init display and variables.
   -v -
-  -if @# -a x -n 0,255 -to_rgb -else (0;0^0;128^0;0) -r[-1] 512,512,1,3,3 -name[-1] "[G'MIC] Spline Editor" -endif
+  -if @# -a x -n 0,255 -to_rgb -else (0;0^0;128^0;0) -r[-1] 512,512,1,3,3 -name[-1] "[G"{`39`}"MIC] Spline Editor" -endif
   -w[0] @{0,w},@{0,h},0,0,-1,-1,@{-1,n} -r[0] @{!,w},@{!,h},1,3,1
   -i[1] 1        # Point coordinates
   roundness=0.5  # Curve roundness
@@ -12888,7 +12888,7 @@ x_tetris :
   -e[] "\n
 ------ Tetris --------------------------------------------\n
 ----\n
----- This is a G'MIC implementation of the Tetris game.\n
+---- This is a G"{`39`}"MIC implementation of the Tetris game.\n
 ----\n
 ---- Arrow keys to move/rotate the triominos.\n
 ---- Key 'SPACE' to make the current triomino falling.\n
@@ -12967,7 +12967,7 @@ x_tetris :
 
     --shift[background] 0,{-13*@|*1.04^$score},0,0,2
     -j[-1] [curr_render],0,0,0,0,1,[curr_render_mask],255
-    -w[-1] {2*w},{2*h},0,"[G'MIC] Tetris" -rm[-1] -cursor[0] 0
+    -w[-1] {2*w},{2*h},0,"[G"{`39`}"MIC] Tetris" -rm[-1] -cursor[0] 0
 
     # Manage user interactions.
     -if @{!,SPACE} fall_mode=1 -endif
@@ -13027,7 +13027,7 @@ x_tictactoe :
 
     # Select position by the user.
     -do                                                                       # Enter event loop.
-      -w[] {w},{h},0,"[G'MIC] "$message -wait                                 # Wait for events and force window size if necessary.
+      -w[] {w},{h},0,"[G"{`39`}"MIC] "$message -wait                                 # Wait for events and force window size if necessary.
       -if {!@!} -w[] 0 -rm -v + -return -endif                                # Quit properly if window has been closed.
       -if {@{!,b}&1" && "@{!,x}>20" && "@{!,y}>20" && "@{!,x}<400" && "@{!,y}<400} # If mouse button has been pressed on the board area.
         tmp3={int((@{!,x}-15)/130)}                                                # Get x-coord of the selected position (0,1 or 2).
@@ -13125,7 +13125,7 @@ x_waves :
     --mirror y --mirror x -+ -n 0,255
   -endl -else -k[0] -r[0] 100,100,1,3,2 -endif
   -i[0] (20;80;0^20;80;0^20;80;0) -r[0] 400,300,1,3,3 -water[0] 100,2
-  -w[0] @{0,w},@{0,h},0,"[G'MIC] Image waves"
+  -w[0] @{0,w},@{0,h},0,"[G"{`39`}"MIC] Image waves"
   w={w} -elevation3d[-1] 0 -rv3d[-1]
   -sh[-1] 8,{7+3*i[6]},0,0 -r[-1] 3,{h/3},1,1,-1
   (0,1,0;1,0,1;0,1,0) -/[-1] 2
@@ -13170,7 +13170,7 @@ x_whirl : -check ${1=0.2}>=0
 ----\n
 --------------------------------------------------"
   -v -
-  5,5,1,3 256,256,1,3 [-1] -w[-1] 384,384,0,"[G'MIC] Fractal whirls"
+  5,5,1,3 256,256,1,3 [-1] -w[-1] 384,384,0,"[G"{`39`}"MIC] Fractal whirls"
   tangle=0 tzoom=0 xc={(w-@{-3,w})/2} yc={(h-@{-3,h})/2}
   -do
     -rand[-3] 0,255 -j[-2] [-3],$xc,$yc,0,0
@@ -13389,7 +13389,7 @@ pink_wshed : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=0},${3=0}
 #@gmic : Display an alert box and wait for user's choice.
 #@gmic : If a single image is in the selection, it is used as an icon for the alert box.
 #@gmic : Default values: 'title=[G'MIC Alert]' and 'message=This is an alert box.'.
-alert : -skip "${1=[G'MIC Alert]},${2=This is an alert box.},${3=OK}"
+alert : -skip "${1=[G"{`39`}"MIC Alert]},${2=This is an alert box.},${3=OK}"
   -if {@#==1}
     -e[0--3] "Display alert box, with image$?, title '$1', message '$2' and buttons '${3--1}'."
   -else
@@ -14944,7 +14944,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
     -v + -e[] "> Output list of filters in stdout.\n" -v -
     -exec "date +%Y,%m,%d >"@{-path_tmp}/date.dlm
     @{-path_tmp}/date.dlm
-    -echo_stdout "*** List of filters in the G'MIC plug-in for GIMP ("$nb_filters" filters, on "{i}/{i(1)}/{i(2)}") ***\n"
+    -echo_stdout "*** List of filters in the G"{`39`}"MIC plug-in for GIMP ("$nb_filters" filters, on "{i}/{i(1)}/{i(2)}") ***\n"
     -rm[-1]
     -echo_stdout "* List of filters, sorted by path:\n"
     -repeat @# -l[$>]
@@ -15084,7 +15084,7 @@ _gimp_no_preview :
 #@gimp_en : Postcards senders automatically enter the <i>Friends Hall of Fame</i> :) !
 #@gimp_en : "}
 gimp_logo_version3 : -skip "${1=Plug-in for GIMP}"
-  -rm s="G'MIC"
+  -rm s="G"{`39`}"MIC"
   -repeat {narg({'$s'})}
     0 -text[-1] {`{arg(1+$>,{'$s'})}`},0,0,57,1,1 -frame[-1] 3,0,0
     -r[-1] 500%,500%,1,1,3 -b[-1] 3% -ge[-1] 50%
@@ -15109,7 +15109,7 @@ gimp_logo_version3 : -skip "${1=Plug-in for GIMP}"
 
 gimp_logo_version2 : -skip "${1=Plug-in for GIMP}"
   -if @# -k[0] -endif
-  -to_rgb 0 -t[-1] "G'MIC",0,0,57,1,1 -label[-1]
+  -to_rgb 0 -t[-1] "G"{`39`}"MIC",0,0,57,1,1 -label[-1]
   6,1,1,3 -rand[-1] 150,255 -point[-1] 0 -map[-2] [-1] -rm[-1]
   -expand_xy[-1] 10,0 -b[-1] 2 -r[-1] 200%,200%,1,3,6 -sqr[-1] -c[-1] 0,60% -n[-1] 0,255
   -warp_perspective[-1] 0.5,0,1,50,50,0 -shift[-1] 0,-10
@@ -15120,7 +15120,7 @@ gimp_logo_version2 : -skip "${1=Plug-in for GIMP}"
 
 gimp_logo_version1 : -skip "${1=Plug-in for GIMP}"
   -if @# ratio={w/h} -else ratio=1 -endif
-  -rm 118,44,1,1 -t "G'MIC",3,-6,57,1,255 -r 100%,100%,10,1 -r 100%,100%,20,1,0,0,0.5,0.5,0.5 -b 1.5
+  -rm 118,44,1,1 -t "G"{`39`}"MIC",3,-6,57,1,255 -r 100%,100%,10,1 -r 100%,100%,20,1,0,0,0.5,0.5,0.5 -b 1.5
   -isosurface3d 50%
   -col3d {?(150,255)},{?(150,255)},{?(150,255)}
   -sphere3d 8 -col3d[-1] {?(150,255)},{?(150,255)},{?(150,255)} -+3d[-1] 72,-6 -+3d -c3d[-1] -rv3d
@@ -15354,7 +15354,7 @@ gimp_friends :
   -rand[-2] 0,255 -sh[-2] 1,2 -/[-1] 2 -rm[-1]
   -blur_radial[-2] 10 -sharpen[-2] 600
   -r[-1] [-2],[-2],1,4,0,0,0.5,0.5 -blend alpha
-  135,67,1,1,0 -t[-1] "Greetings to\n  all G'MIC\n  friends!",2,-2,24,1,1
+  135,67,1,1,0 -t[-1] "Greetings to\n  all G"{`39`}"MIC\n  friends!",2,-2,24,1,1
   --dilate[-1] 3 -*[-2] 255 -to_rgb[-2] -j[-3] [-2],{(@{-3,w}-@{-2,w})/2},{(@{-3,h}-@{-2,h})/2.2},0,0,1,[-1]
   -rm[-2,-1]
 
