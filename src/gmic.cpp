@@ -2164,7 +2164,7 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
       *(ptrd++) = c;
     } else if (is_dquoted) { // If non-escaped character inside string.
       if (c=='\"') is_dquoted = false;
-      else if (c==1) while (c!=' ') c = *(++ptrs); // Discard debug infos inside string.
+      else if (c==1) while (c && c!=' ') c = *(++ptrs); // Discard debug infos inside string.
       else *(ptrd++) = c=='$'?_dollar:c=='{'?_lbrace:c=='}'?_rbrace:
              c==','?_comma:c=='@'?_arobace:c;
     } else { // Non-escaped character outside string.
@@ -2176,8 +2176,26 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
       } else *(ptrd++) = c;
     }
   }
-  if (is_dquoted) error("Invalid command line: Double quotes are not closed, in expression '%s'.",
-                        commands_line);
+  if (is_dquoted) {
+    CImg<char> str; CImg<char>::string(commands_line).move_to(str); // Discard debug infos.
+    char *ptrd = str,c = 0;
+    bool _is_debug_infos = false;
+    cimg_for(str,ptrs,char) {
+      c = *ptrs;
+      if (c!=1) *(ptrd++) = c;
+      else { // Try to retrieve first debug line when discarding debyg infos.
+        unsigned int _debug_filename = ~0U, _debug_line = ~0U;
+        if (!_is_debug_infos && std::sscanf(ptrs+1,"%x,%x",&_debug_line,&(_debug_filename=0))) {
+          debug_filename = _debug_filename;
+          debug_line = _debug_line;
+          _is_debug_infos = is_debug_infos = true;
+        }
+        while (c && c!=' ') c = *(++ptrs);
+      }
+    } *ptrd = 0;
+    error("Invalid command line: Double quotes are not closed, in expression '%s'.",
+          str.data());
+  }
   if (ptrd!=item.data() && c!=' ') {
     *ptrd = 0; CImg<char>(item.data(),ptrd - item.data() + 1).move_to(items);
   }

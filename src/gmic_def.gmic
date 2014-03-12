@@ -23332,3 +23332,10 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+foo :
+ ({'"Salut la compagnie !'})
+  0 -text @{0,t},0,0,24,1,255
+
+fii :
+  -foo
