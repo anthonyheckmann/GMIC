@@ -1129,10 +1129,10 @@ _build_tutorial_html :
   -replace_str "class=\"internal\" "
   -replace_str "class=\"external\" "
   -replace_str "dir=\"ltr\" "
+  -replace_str "border: 1px","border: 0px"
   -replace_str "G"{`96`}"MIC","G"{`39`}"MIC"
   -replace_str "CNTL","CTRL"
   -replace_str "Selecton","Selection"
-  -replace_str "border: 1px","border: 0px"
 
   # Discard original header.
   -s +,{'<h1'}
@@ -1160,7 +1160,6 @@ _build_tutorial_html :
   -replace_str "\"/static/media/uploads/","\"http://particularart.com/static/media/uploads/"
 
   # Search and replace links to 'internal' pages.
-
   -s +,{'"<a "'}
   -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<a "}} -l[$>] -s +,{'href=\"'} -l[-1]
     -s +,{'\"'}
@@ -23332,10 +23331,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-foo :
- ({'"Salut la compagnie !'})
-  0 -text @{0,t},0,0,24,1,255
-
-fii :
-  -foo
