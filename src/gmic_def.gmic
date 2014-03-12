@@ -1033,34 +1033,34 @@ apply_files : -skip "${3=gmic_}","${4=}",${5=0}
 #@gmic : Default value: 'add_debug_info=1'.
 #@gmic : $ image.jpg -command "foo : -mirror y -deform $""1" --foo[0] 5 --foo[0] 15
 
-# Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.comg), into the G'MIC web look.
+# Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.com), into the G'MIC web look.
 build_tutorial_html :
-  -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood"{`39`}"s blog (http://www.particularart.comg), for the G"{`39`}"MIC web page."
+  -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood"{`39`}"s blog (http://www.particularart.com), for the G"{`39`}"MIC web page."
   -v - -rm -m "add_page : -__build_tutorial_html $""*"
 
   # Init list of pages to retrieve.
-  # -add_page /,1700,index,_index
-  # -add_page basics,4000
-  # -add_page beginners-cookbook,1000
-  # -add_page beginners-cookbook/cauldron,3500
-  # -add_page beginners-cookbook/road-systems,2500
-  # -add_page beginners-cookbook/stained-glass,4000
-  # -add_page command-decorations,3500
-  # -add_page command-guide,5500
-  # -add_page command-guide/-bandpass,5000
-  # -add_page command-guide/-blur,2000
+  -add_page /,1700,index,_index
+  -add_page basics,4000
+  -add_page beginners-cookbook,1000
+  -add_page beginners-cookbook/cauldron,3500
+  -add_page beginners-cookbook/road-systems,2500
+  -add_page beginners-cookbook/stained-glass,4000
+  -add_page command-decorations,3500
+  -add_page command-guide,5500
+  -add_page command-guide/-bandpass,5000
+  -add_page command-guide/-blur,2000
   -add_page command-guide/-blur_z,2500
-  # -add_page command-guide/-convolve,3500
-  # -add_page command-guide/-display,2000
-  # -add_page command-guide/-gaussian,2000
-  # -add_page command-guide/-gradient,2000
-  # -add_page command-guide/-mix_rgb,4000
-  # -add_page command-guide/-warp,4000
-  # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
-  # -add_page images,1500
-  # -add_page images/conjuring-images,1000
-  # -add_page images/images-as-datasets,3500
-  # -add_page images/images-have-edges,1000
+  -add_page command-guide/-convolve,3500
+  -add_page command-guide/-display,2000
+  -add_page command-guide/-gaussian,2000
+  -add_page command-guide/-gradient,2000
+  -add_page command-guide/-mix_rgb,4000
+  -add_page command-guide/-warp,4000
+  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
+  -add_page images,1500
+  -add_page images/conjuring-images,1000
+  -add_page images/images-as-datasets,3500
+  -add_page images/images-have-edges,1000
 
   # Prepare folder structure.
   -v + -e[] "  > Prepare folder structure." -v -
@@ -1160,8 +1160,9 @@ _build_tutorial_html :
   -replace_str "\"/static/media/uploads/","\"http://particularart.com/static/media/uploads/"
 
   # Search and replace links to 'internal' pages.
-  -s +,{'"<a href=\""'}
-  -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<a href=\""}} -l[$>]
+
+  -s +,{'"<a "'}
+  -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<a "}} -l[$>] -s +,{'href=\"'} -l[-1]
     -s +,{'\"'}
     -if {@#>0}
       link=@{0,t}
@@ -1200,7 +1201,7 @@ _build_tutorial_html :
       -endif
       -a y
     -endif
-  -endl -endif -done
+  -endl -a y -endl -endif -done
   -a y
 
   # Manage embedded images.
