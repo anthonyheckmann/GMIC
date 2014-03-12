@@ -13,7 +13,7 @@
 <li><em>amplitude:</em> sets the spread of the Gaussian distribution kernel, informally the amount of blurring.&nbsp; One must supply this value; there is no default.</li>
 <li><em>_boundary:</em> chooses how to handle image edges; see "<a target="_parent" title="Images have edges; now what?" href="/tools-and-toys/gmic/images/images-have-edges/">Pictures have Edges. Now What?</a>" A zero flag (0, Dirichlet) assumes that off-image pixels are black. A unit flag (1, Neumann) assumes that off-image pixels have the exact same value as the nearest edge pixel. This eliminates the vignette, but sometimes edge values become uncommonly bright. This value may be omitted and when it is, the command uses the Neumann policy as a default.</li>
 </ul>
-<h2>Application</h2>
+<h2>Application: A Hoard of Happy Faces</h2>
 <p><video id="zbuffer" width="360" height="240" style="float:left;margin:7px;" poster="http://particularart.com/static/media/uploads/zbuf_still.png" preload="metadata" controls="controls"><source src="http://particularart.com/static/media/uploads/command_reference/blur_z/zblur.mp4" type="video/mp4" /><source src="http://particularart.com/static/media/uploads/command_reference/blur_z/zblur.webm" type="video/webm" /><source src="http://particularart.com/static/media/uploads/command_reference/blur_z/zblur.ogv" type="video/ogg" /><source src="http://particularart.com/static/media/uploads/command_reference/blur_z/zblur.avi" type="video/avi" /><object id="zbuffer" width="360" height="240" data="/static/grappelli/tinymce/jscripts/tiny_mce/plugins/media/moxieplayer.swf" type="application/x-shockwave-flash"><param name="src" value="/static/grappelli/tinymce/jscripts/tiny_mce/plugins/media/moxieplayer.swf" /><param name="flashvars" value="url=/static/media/uploads/command_reference/blur_z/zblur.mp4&amp;poster=/static/media/uploads/zbuf_still.png" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="true" /></object> </video></p>
 <p>There are those here who cannot look at a single pixel without thinking "impulse!", a kind of signal which causes convolution kernels to take snapshots of themselves. We noted this phenomenon in the <a target="_parent" href="_convolve.shtml">-convolve</a> article; see its 'Application' section.</p>
 <p>For us, it means that winking star fields such as the one in the introduction can serve as a scaffold for all manner of winking things, which might become horrific. However, these stars are nothing if not impulses and convolution can change these into whatever kernel we may harness. So we start with a happy face.</p>
@@ -42,13 +42,16 @@ The -to_rgb command entails a bit of channel matching. Our volume consists of si
 <td>
 <h4>3</h4>
 <p>The -convolve command takes the kernel, an image of a happy face in position zero on the stack, and convolves it with each slice of the of the volume, the image in position one. That is, from left to right, top to bottom, for each slice, the -convolve command moves the kernel image, and, at each stop, tabulates a pixel-wise multiplication of the kernel and the neighborhood of the slice which it covers, then adds up the tabulation to arrive at the value of the corresponding pixel in the output slice. Truth be told, thix command could run for some minutes. Relax, take a potty break, play with the cat.</p>
-<p>In its travels over slices, the kernel will take in off-edge pixels; we choose to regard these as zero-valued, indicated by a second parameter flag of zero. We also opt out of a per-slice normalization as we will be instigating a volume-wiude normalization some what later in the pipeline, so the third flag is zero as well.&nbsp; </p>
+<p>In its travels over slices, the kernel will take in off-edge pixels; we choose to regard these as zero-valued, indicated by a second parameter flag of zero. We also opt out of a per-slice normalization as we will be instigating a volume-wiude normalization some what later in the pipeline, so the third flag is zero as well.&nbsp;</p>
+<p>Some minutes later, after the potty break, after the cat is sick of our company, the -convolve command finishes on the last slice. We remove the kernel image at position zero as we are about to turn the image stack into a series of animation frames and do not wish to incorporate the kernel itself into the series. </p>
 </td>
 </tr>
 <tr>
 <td><code>...<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">-normalize</a>[-1] 0,255<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#split">-split</a>[-1] z <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#output">-output</a> ...</code></td>
 <td>
 <h4>4</h4>
+<p>These three commands constitute animation set-up housekeeping. Convolutions will generally leave images with out-of-bound values for eight bit unsigned formats; we scale the image volume to an eight-bit, unsigned range. See<a target="_parent" href="images-as-datasets.shtml"> "Images as Datasets"</a> for the more detailed explanation.</p>
+<p>Splitting a three hundred slice volumetric image along the depth axis gives rise to three humdred single-slice images, preparation for the output command, which, for the video media formats, require frames arrayed as single slice images. </p>
 </td>
 </tr>
 </tbody>
