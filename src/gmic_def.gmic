@@ -3468,13 +3468,13 @@ replace_nan :
 #@gmic replace_seq : "search_seq","replace_seq"
 #@gmic : Search and replace a sequence of values in selected images.
 #@gmic : $ (1;2;3;4;5) --replace_seq "2,3,4","7,8"
-replace_seq :
+replace_seq : -skip ${2=""}
   -e[^-1] "Replace value sequence '$1' by value sequence '$2' in image$?."
-  -v - ($1) ($2) -repeat {@#-2} -l[$>,-2,-1]
-    -s[0] +,$1 -s y,-@{-2,w}
-    -repeat {@#-2} -if {@{$>,t}'=='@{-2,t}} -rows[$>] 0,{w-1} -f[$>] [-1] -endif -done
-    -a[0--3] y
-  -endl -done -rm[-2,-1] -v +
+  -v - ns={narg($1)} nd={narg($2)} ratio={$nd*100/$ns}
+  -repeat @# -l[$>]
+    -s +,$1 --rows[0] 0,{$ns-1} ($1) --[-2,-1] -abs[-1] ind={iM!=0} -rm[-1]
+    -if {$ind<@#} -if $nd -r[$ind--1:2] 1,$ratio%,1,1,0 -f[$ind--1:2] $2 -else -rm[$ind--1:2] -endif -a y -endif
+  -endl -done -v +
 
 #@gmic round : rounding_value>=0,_rounding_type : (no args) : (+)
 #@gmic : Round values of selected images.
@@ -23324,4 +23324,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
