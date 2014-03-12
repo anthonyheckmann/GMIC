@@ -123,14 +123,14 @@
 <td width=""><center><div><a href="img/gallery_000035.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gallery_thumb_000035.jpg"/></a><div class="highslide-caption">gmic chloe.jpg -stencilbw 30</div></div></center></td>
 <td width=""><center><div><a href="img/gallery_000036.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gallery_thumb_000036.jpg"/></a><div class="highslide-caption">gmic fawn.jpg -glow 4</div></div></center></td>
 <td width=""><center><div><a href="img/gallery_000037.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gallery_thumb_000037.jpg"/></a><div class="highslide-caption">gmic house.jpg -ditheredbw</div></div></center></td>
-<td width=""><center><div><a href="img/gallery_000038.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gallery_thumb_000038.jpg"/></a><div class="highslide-caption">gmic statue.jpg -dotsbw , -n 0,255</div></div></center></td>
+<td width=""><center><div><a href="img/gallery_000038.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gallery_thumb_000038.jpg"/></a><div class="highslide-caption">gmic statue.jpg -blur_angular 10</div></div></center></td>
 <td width=""><center><div><a href="img/gallery_000039.jpg" class="highslide" onclick="return hs.expand(this)"><img src="img/gallery_thumb_000039.jpg"/></a><div class="highslide-caption">gmic beach.jpg -blur_radial 10</div></div></center></td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td width="88"><center><font size="1">gmic chloe.jpg -stencilbw 30</font></center></td>
 <td width="95"><center><font size="1">gmic fawn.jpg -glow 4</font></center></td>
 <td width="112"><center><font size="1">gmic house.jpg -ditheredbw</font></center></td>
-<td width="63"><center><font size="1">gmic statue.jpg -dotsbw , -n 0,255</font></center></td>
+<td width="63"><center><font size="1">gmic statue.jpg -blur_angular 10</font></center></td>
 <td width="112"><center><font size="1">gmic beach.jpg -blur_radial 10</font></center></td>
 </tr>
 <tr bgcolor="#DDDDDD">

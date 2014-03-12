@@ -1039,29 +1039,28 @@ build_tutorial_html :
   -v - -rm -m "add_page : -__build_tutorial_html $""*"
 
   # Init list of pages to retrieve.
-
-  # -add_page /,1700,index,_index
-  # -add_page basics,4000
-  # -add_page beginners-cookbook,1000
-  # -add_page beginners-cookbook/cauldron,3500
-  # -add_page beginners-cookbook/road-systems,2500
-  # -add_page beginners-cookbook/stained-glass,4000
-  # -add_page command-decorations,3500
+  -add_page /,1700,index,_index
+  -add_page basics,4000
+  -add_page beginners-cookbook,1000
+  -add_page beginners-cookbook/cauldron,3500
+  -add_page beginners-cookbook/road-systems,2500
+  -add_page beginners-cookbook/stained-glass,4000
+  -add_page command-decorations,3500
   -add_page command-guide,5500
-  # -add_page command-guide/-bandpass,5000
-  # -add_page command-guide/-blur,2000
-  # -add_page command-guide/-blur_z,2000
-  # -add_page command-guide/-convolve,3500
-  # -add_page command-guide/-display,2000
-  # -add_page command-guide/-gaussian,2000
-  # -add_page command-guide/-gradient,2000
-  # -add_page command-guide/-mix_rgb,4000
-  # -add_page command-guide/-warp,4000
-  # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
-  # -add_page images,1500
-  # -add_page images/conjuring-images,1000
-  # -add_page images/images-as-datasets,3500
-  # -add_page images/images-have-edges,1000
+  -add_page command-guide/-bandpass,5000
+  -add_page command-guide/-blur,2000
+  -add_page command-guide/-blur_z,2000
+  -add_page command-guide/-convolve,3500
+  -add_page command-guide/-display,2000
+  -add_page command-guide/-gaussian,2000
+  -add_page command-guide/-gradient,2000
+  -add_page command-guide/-mix_rgb,4000
+  -add_page command-guide/-warp,4000
+  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
+  -add_page images,1500
+  -add_page images/conjuring-images,1000
+  -add_page images/images-as-datasets,3500
+  -add_page images/images-have-edges,1000
 
   # Prepare folder structure.
   -v + -e[] "  > Prepare folder structure." -v -
@@ -1078,13 +1077,19 @@ build_tutorial_html :
   -x "cd img && ln -fs ../../convert_raw_img/* ."
   -x "ln -fs ../convert_raw.html ../convert_raw.shtml ."
   -x "ln -fs ../tutorial_toc.html ."
+
+  # Create images for toc tree.
+  11,11,1,3,255 -frame 1,1,0 -line 3,50%,{w-4},50%,1,0 --line 50%,3,50%,{h-4},1,0
+  -a x -o img/toc_buttons.png
+  100%,100%,1,4 -fc[-1] 245,245,245,0 -o[-1] img/toc_void.png
+  -rm
+
+  # Start page conversion.
   0 -repeat $_N
     -o[-1] ${_output_html$>} -o[-1] ${_output_shtml$>}
   -done -rm[-1]
-
-  # Start page conversion.
   -repeat $_N
-    -v + -_build_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>} -v -
+    -v + -_build_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>},${_parent$>} -v -
   -done
   -v +
   -e[] "  > All done !."
@@ -1093,6 +1098,9 @@ build_tutorial_html :
 __build_tutorial_html : -skip ${3=""},${4=""}
   -if {!narg($_N)} _N=0 -endif
   _input$_N=$1 _height$_N=$2
+
+  # Determine parent id for toc.
+  ({'"$1"'}) -s -,{'/'} -if @# _parent$_N=@{0,t} -rm -else _parent$_N=index -endif
 
   # Determine output filenames.
   output_base=@{"-basename $1"}
@@ -1245,6 +1253,7 @@ _build_tutorial_html :
      "<link href=\"../style.css\" rel=\"stylesheet\" type=\"text/css\">"\n\
      "<div id=\"bloc_option\"><div id=\"top_vert\"><div id=\"text_top\">Tutorial</div></div>"\n\
      "<div id=\"center\"><div id=\"text_centre_intro\">"\n\
+     "<script language=\"javascript\">var gFilename = '$6';</script>"\n\
      "<!--#include file=\"tutorial_toc.html\" -->"\n\
      "<iframe width=\"100%\" height=\"$2\" frameborder=\"0\" src=\""$4"\" seamless></iframe>"\n\
      "</div></div><div id=\"footer\"><img src=\"images/footer.jpg\" /></div></div>"\n\
@@ -23315,3 +23324,7 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+foo :
+
+
