@@ -198,6 +198,7 @@ _gmic_def()
 	      -replace_inf --replace_inf\
 	      -replace_nan --replace_nan\
 	      -replace_seq --replace_seq\
+	      -replace_str --replace_str\
 	      -round --round\
 	      -roundify --roundify\
 	      -= --=\
@@ -1032,6 +1033,7 @@ _gmic_def()
 	      replace_inf\
 	      replace_nan\
 	      replace_seq\
+	      replace_str\
 	      round\
 	      roundify\
 	      =\
@@ -2012,6 +2014,10 @@ _gmic_def()
 		;;
 		"-replace_seq" | "--replace_seq")
 		COMPREPLY=( $(compgen -W ""search_seq","replace_seq" >") )
+		return 0
+		;;
+		"-replace_str" | "--replace_str")
+		COMPREPLY=( $(compgen -W ""search_str","replace_str" >") )
 		return 0
 		;;
 		"-round" | "--round")
