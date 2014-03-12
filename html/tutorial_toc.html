@@ -1,43 +1,45 @@
 <script language="javascript">
-function foldOrUnfold(button,i) {
-    var e = document.getElementById('Subsections'+i);
+function foldOrUnfold(section) {
+    var e = document.getElementById('Subsection_'+section);
+    var button = document.getElementById('SectionButton_'+section);
     if ( e.style.display == '' ) {
 	e.style.display = 'none';
-	button.innerHTML = '+';
+	button.style.backgroundPosition = '-13px 0px';
     } else {
 	e.style.display = '';
-	button.innerHTML = '&#65293;';
+	button.style.backgroundPosition = '0px 0px';
     }
+}
+function unfoldSingleSection( ) {
+    if ( gFilename == '' ) return;
 }
 </script>
 <style>
-a.UnfoldButton { cursor: pointer; font-size: 70%; border: 1px solid black; padding: 1px; height: 20px; text-align: center; }
-a.voidButton { cursor: auto; font-size: 70%; border: 1px transparent; padding: 1px; height: 20px; text-align: center;  color: transparent; }
+img.foldingButton { cursor: pointer; width: 13px; height: 13px; background: url(img/toc_buttons.png) -13px 0; }
+img.voidButton { cursor: auto; height: 13px; width: 13px; }
 ul.noMarker { list-style-type: none; }
 </style>
-<script>window["_GOOG_TRANS_EXT_VER"] = "1";</script><style type="text/css"></style></head>
-<body>
 <p><i>This tutorial has been written by <a href="http://particularart.com/about/">Garry Osgood</a></i></p>
 <h1>Table of Contents</h1>
-<ul class="noMarker"  style="font-size:16px">
-<li><a class="voidButton">+</a> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/index.shtml">Introduction</a></li>
-<li><a class="voidButton">+</a> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/basics.shtml">Basics</a></li>
-<li><a class="UnfoldButton" onclick="foldOrUnfold(this,1);">+</a> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/images.shtml">Images</a></li>
-<ul id="Subsections1" style="display: none; font-size:15px">
+<ul class="noMarker"  style="font-size:14px">
+<li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/index.shtml">Introduction</a></li>
+<li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/basics.shtml">Basics</a></li>
+<li><img id="SectionButton_images" class="foldingButton" onclick="foldOrUnfold('images');" src="img/toc_void.png" /> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/images.shtml">Images</a></li>
+<ul id="Subsection_images" style="display: none; font-size:13px">
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/images-as-datasets.shtml">Images as Data Sets</a></li>
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/conjuring-images.shtml">Conjuring Images out of the Aether and Other Generators</a></li>
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/images-have-edges.shtml">Images Have Edges. Now What?</a></li>
 </ul>
-<li><a class="voidButton">+</a> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/command-decorations.shtml">Command Decorations</a></li>
-<li><a class="UnfoldButton" onclick="foldOrUnfold(this,2);">+</a> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/beginners-cookbook.shtml">Beginners Cookbook</a></li>
-<ul id="Subsections2" style="display: none; font-size:15px">
+<li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/command-decorations.shtml">Command Decorations</a></li>
+<li><img id="SectionButton_beginners-cookbook" class="foldingButton" onclick="foldOrUnfold('beginners-cookbook');" src="img/toc_void.png" /> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/beginners-cookbook.shtml">Beginners Cookbook</a></li>
+<ul id="Subsection_beginners-cookbook" style="display: none; font-size:13px">
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/cauldron.shtml">Cauldron, Anyone ?</a></li>
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/convert_raw.shtml">Convert Raw Image</a></li>
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/road-systems.shtml">Road Systems, Maybe, or Cells</a></li>
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/stained-glass.shtml">Stained Glass</a></li>
 </ul>
-<li><a class="UnfoldButton" onclick="foldOrUnfold(this,3);">+</a> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/command-guide.shtml">Command Guide</a></li>
-<ul id="Subsections3" style="display: none; font-size:15px">
+<li><img id="SectionButton_command-guide" class="foldingButton" onclick="foldOrUnfold('command-guide');" src="img/toc_void.png" /> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/command-guide.shtml">Command Guide</a></li>
+<ul id="Subsection_command-guide" style="display: none; font-size:13px">
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/trigometric-and-inverse-trigometric-commands.shtml">Trigometric And Inverse Trigometric Commands</a></li>
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_bandpass.shtml"><i>-bandpass</i></a></li>
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur.shtml"><i>-blur</i></a></li>
@@ -50,3 +52,6 @@ ul.noMarker { list-style-type: none; }
 <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_warp.shtml"><i>-warp</i></a></li>
 </ul>
 </ul>
+<script language="javascript">
+    foldOrUnfold( gFilename );
+</script>

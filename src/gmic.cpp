@@ -2536,8 +2536,19 @@ CImg<char> gmic::selection2string(const CImg<unsigned int>& selection,
                           selection[0],selection[1],selection[2]); break;
     case 4: cimg_snprintf(res.data(),res.width(),"s [%u,%u,%u,%u]",
                           selection[0],selection[1],selection[2],selection[3]); break;
-    default: cimg_snprintf(res.data(),res.width(),"s [%u,..,%u]",
-                           selection[0],selection.back());
+    case 5: cimg_snprintf(res.data(),res.width(),"s [%u,%u,%u,%u,%u]",
+                          selection[0],selection[1],selection[2],selection[3],selection[4]); break;
+    case 6: cimg_snprintf(res.data(),res.width(),"s [%u,%u,%u,%u,%u,%u]",
+                          selection[0],selection[1],selection[2],
+                          selection[3],selection[4],selection[5]); break;
+    case 7: cimg_snprintf(res.data(),res.width(),"s [%u,%u,%u,%u,%u,%u,%u]",
+                          selection[0],selection[1],selection[2],selection[3],
+                          selection[4],selection[5],selection[6]); break;
+    default: cimg_snprintf(res.data(),res.width(),"s [%u,%u,%u,..,%u,%u,%u]",
+                           selection[0],selection[1],selection[2],
+                           selection[selection.height()-3],
+                           selection[selection.height()-2],
+                           selection[selection.height()-1]);
     }
     return res;
   }

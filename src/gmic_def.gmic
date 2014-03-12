@@ -1033,35 +1033,34 @@ apply_files : -skip "${3=gmic_}","${4=}",${5=0}
 #@gmic : Default value: 'add_debug_info=1'.
 #@gmic : $ image.jpg -command "foo : -mirror y -deform $""1" --foo[0] 5 --foo[0] 15
 
-# Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.comg), into the G'MIC web look.
+# Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.com), into the G'MIC web look.
 build_tutorial_html :
-  -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood"{`39`}"s blog (http://www.particularart.comg), for the G"{`39`}"MIC web page."
+  -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood"{`39`}"s blog (http://www.particularart.com), for the G"{`39`}"MIC web page."
   -v - -rm -m "add_page : -__build_tutorial_html $""*"
 
   # Init list of pages to retrieve.
-
-  # -add_page /,1700,index,_index
-  # -add_page basics,4000
-  # -add_page beginners-cookbook,1000
-  # -add_page beginners-cookbook/cauldron,3500
-  # -add_page beginners-cookbook/road-systems,2500
-  # -add_page beginners-cookbook/stained-glass,4000
-  # -add_page command-decorations,3500
+  -add_page /,1700,index,_index
+  -add_page basics,4000
+  -add_page beginners-cookbook,1000
+  -add_page beginners-cookbook/cauldron,3500
+  -add_page beginners-cookbook/road-systems,2500
+  -add_page beginners-cookbook/stained-glass,4000
+  -add_page command-decorations,3500
   -add_page command-guide,5500
-  # -add_page command-guide/-bandpass,5000
-  # -add_page command-guide/-blur,2000
-  # -add_page command-guide/-blur_z,2000
-  # -add_page command-guide/-convolve,3500
-  # -add_page command-guide/-display,2000
-  # -add_page command-guide/-gaussian,2000
-  # -add_page command-guide/-gradient,2000
-  # -add_page command-guide/-mix_rgb,4000
-  # -add_page command-guide/-warp,4000
-  # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
-  # -add_page images,1500
-  # -add_page images/conjuring-images,1000
-  # -add_page images/images-as-datasets,3500
-  # -add_page images/images-have-edges,1000
+  -add_page command-guide/-bandpass,5000
+  -add_page command-guide/-blur,2000
+  -add_page command-guide/-blur_z,2500
+  -add_page command-guide/-convolve,3500
+  -add_page command-guide/-display,2000
+  -add_page command-guide/-gaussian,2000
+  -add_page command-guide/-gradient,2000
+  -add_page command-guide/-mix_rgb,4000
+  -add_page command-guide/-warp,4000
+  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
+  -add_page images,1500
+  -add_page images/conjuring-images,1000
+  -add_page images/images-as-datasets,3500
+  -add_page images/images-have-edges,1000
 
   # Prepare folder structure.
   -v + -e[] "  > Prepare folder structure." -v -
@@ -1078,13 +1077,19 @@ build_tutorial_html :
   -x "cd img && ln -fs ../../convert_raw_img/* ."
   -x "ln -fs ../convert_raw.html ../convert_raw.shtml ."
   -x "ln -fs ../tutorial_toc.html ."
+
+  # Create images for toc tree.
+  11,11,1,3,255 -frame 1,1,0 -line 3,50%,{w-4},50%,1,0 --line 50%,3,50%,{h-4},1,0
+  -a x -o img/toc_buttons.png
+  100%,100%,1,4 -fc[-1] 245,245,245,0 -o[-1] img/toc_void.png
+  -rm
+
+  # Start page conversion.
   0 -repeat $_N
     -o[-1] ${_output_html$>} -o[-1] ${_output_shtml$>}
   -done -rm[-1]
-
-  # Start page conversion.
   -repeat $_N
-    -v + -_build_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>} -v -
+    -v + -_build_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>},${_parent$>} -v -
   -done
   -v +
   -e[] "  > All done !."
@@ -1093,6 +1098,9 @@ build_tutorial_html :
 __build_tutorial_html : -skip ${3=""},${4=""}
   -if {!narg($_N)} _N=0 -endif
   _input$_N=$1 _height$_N=$2
+
+  # Determine parent id for toc.
+  ({'"$1"'}) -s -,{'/'} -if @# _parent$_N=@{0,t} -rm -else _parent$_N=index -endif
 
   # Determine output filenames.
   output_base=@{"-basename $1"}
@@ -1118,13 +1126,13 @@ _build_tutorial_html :
 
   # Discard or replace undesired text.
   -discard 13
-  -replace_seq @{-quote\ {'" class=\"internal\" "'}},{'" "'}
-  -replace_seq @{-quote\ {'" class=\"external\" "'}},{'" "'}
-  -replace_seq @{-quote\ {'" dir=\"ltr\" "'}},{'" "'}
-  -replace_seq @{-quote\ {'"G`MIC"'}},@{-quote\ {'"G"{`39`}"MIC"'}}
-  -replace_seq @{-quote\ {'"CNTL"'}},@{-quote\ {'"CTRL"'}}
-  -replace_seq @{-quote\ {'"Selecton"'}},@{-quote\ {'"Selection"'}}
-  -replace_seq @{-quote\ {'"border: 1px"'}},@{-quote\ {'"border: 0px"'}}
+  -replace_str "class=\"internal\" "
+  -replace_str "class=\"external\" "
+  -replace_str "dir=\"ltr\" "
+  -replace_str "G"{`96`}"MIC","G"{`39`}"MIC"
+  -replace_str "CNTL","CTRL"
+  -replace_str "Selecton","Selection"
+  -replace_str "border: 1px","border: 0px"
 
   # Discard original header.
   -s +,{'<h1'}
@@ -1149,11 +1157,12 @@ _build_tutorial_html :
   -y -a y
 
   # Replace image links.
-  -replace_seq @{-quote\ {'"\"/static/media/uploads/"'}},@{-quote\ {'"\"http://particularart.com/static/media/uploads/"'}}
+  -replace_str "\"/static/media/uploads/","\"http://particularart.com/static/media/uploads/"
 
   # Search and replace links to 'internal' pages.
-  -s +,{'"<a href=\""'}
-  -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<a href=\""}} -l[$>]
+
+  -s +,{'"<a "'}
+  -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<a "}} -l[$>] -s +,{'href=\"'} -l[-1]
     -s +,{'\"'}
     -if {@#>0}
       link=@{0,t}
@@ -1192,7 +1201,7 @@ _build_tutorial_html :
       -endif
       -a y
     -endif
-  -endl -endif -done
+  -endl -a y -endl -endif -done
   -a y
 
   # Manage embedded images.
@@ -1232,7 +1241,7 @@ _build_tutorial_html :
   -a y
 
   # Set all links targets to "_parent"
-  -replace_seq @{-quote\ {'"<a "'}},@{-quote\ {'"<a target=\"_parent\" "'}}
+  -replace_str "<a ","<a target=\"_parent\" "
 
   # Save .html page.
   -o raw:$4,uchar
@@ -1245,6 +1254,7 @@ _build_tutorial_html :
      "<link href=\"../style.css\" rel=\"stylesheet\" type=\"text/css\">"\n\
      "<div id=\"bloc_option\"><div id=\"top_vert\"><div id=\"text_top\">Tutorial</div></div>"\n\
      "<div id=\"center\"><div id=\"text_centre_intro\">"\n\
+     "<script language=\"javascript\">var gFilename = '$6';</script>"\n\
      "<!--#include file=\"tutorial_toc.html\" -->"\n\
      "<iframe width=\"100%\" height=\"$2\" frameborder=\"0\" src=\""$4"\" seamless></iframe>"\n\
      "</div></div><div id=\"footer\"><img src=\"images/footer.jpg\" /></div></div>"\n\
@@ -2050,10 +2060,9 @@ _document_gmic_footer_xml : -skip $1
   -uncommand doff
 
 _document_gmic_replace_xml :
-  -replace_seq {'&'},@{-quote\ {'&amp;'}} # Replace '&'
-  -replace_seq {'<'},@{-quote\ {'&lt;'}}  # Replace '<'
-  -replace_seq {'>'},@{-quote\ {'&gt;'}}  # Replace '>'
-
+  -replace_str "&","&amp;" # Replace '&'
+  -replace_str "<","&lt;"  # Replace '<'
+  -replace_str ">","&gt;"  # Replace '>'
 
 # Define document_gmic commands for LateX output.
 _document_gmic_header_latex :
@@ -2138,7 +2147,7 @@ _document_gmic_description_latex :
   -if {@{-1,0-12}'=='{'"Default value"'}}  # Reached line as '#@gmic : Default value(s) : ... '.
     -s +,{':'} -l[^0] -a y -endl -autocrop {':'} -autocrop {'" "'}
     -if {@#>1}
-      -replace_seq[1] @{-quote\ {'" and "'}},@{-quote\ {'"} and \\\\texttt{"'}}
+      -replace_str[1] " and ","} and \\\\texttt{"
       -v + -e[] @{-eoff}$s"~\\\\\\textbf{"@{0,t}"}: {\\small \\texttt{"@{-1,t}"}}" -v -
     -else -v + -e[] @{-eoff}$s"~\\\\"@{0,t} -v -
     -endif
@@ -2184,18 +2193,18 @@ _document_gmic_footer_latex :
   -uncommand eoff
 
 _document_gmic_replace_latex :
-  -replace_seq {'\\'},@{-quote\ {'"\\\\textbackslash "'}} # Replace '\'
-  -replace_seq {'_'},@{-quote\ {'\\\\_'}} # Replace '_'
-  -replace_seq {'%'},@{-quote\ {'\\\\%'}} # Replace '%'
-  -replace_seq {'#'},@{-quote\ {'\\\\%'}} # Replace '#'
-  -replace_seq {'^'},@{-quote\ {'"\\\\textasciicircum "'}} # Replace '^'
-  -replace_seq {'$'},@{-quote\ {'\\\\$'}} # Replace '$'
-  -replace_seq {'\{'},@{-quote\ {'\\\\\{'}} # Replace '{'
-  -replace_seq {'\}'},@{-quote\ {'\\\\\}'}} # Replace '}'
-  -replace_seq {'&'},@{-quote\ {'\\\\&'}} # Replace '&'
-  -replace_seq {'|'},@{-quote\ {'~$|$~'}} # Replace '|'
-  -replace_seq {'<'},@{-quote\ {'$\<$'}} # Replace '<'
-  -replace_seq {'>'},@{-quote\ {'$\>$'}} # Replace '>'
+  -replace_str "\\","\\\\textbackslash "  # Replace '\'
+  -replace_str "_","\\\\_"                # Replace '_'
+  -replace_str "%","\\\\%"                # Replace '%'
+  -replace_str "#","\\\\%"                # Replace '#'
+  -replace_str "^","\\\\textasciicircum " # Replace '^'
+  -replace_str "$","\\\\$"                # Replace '$'
+  -replace_str "\{","\\\\\{"              # Replace '{'
+  -replace_str "\}","\\\\\}"              # Replace '}'
+  -replace_str "&","\\\\&"                # Replace '&'
+  -replace_str "|","~$|$~"                # Replace '|'
+  -replace_str "<","$\<$"                 # Replace '<'
+  -replace_str ">","$\>$"                 # Replace '>'
 
 # Define document_gmic commands for images-only output.
 _document_gmic_header_images : -skip $1
@@ -3459,13 +3468,21 @@ replace_nan :
 #@gmic replace_seq : "search_seq","replace_seq"
 #@gmic : Search and replace a sequence of values in selected images.
 #@gmic : $ (1;2;3;4;5) --replace_seq "2,3,4","7,8"
-replace_seq :
+replace_seq : -skip "${2=}"
   -e[^-1] "Replace value sequence '$1' by value sequence '$2' in image$?."
-  -v - ($1) ($2) -repeat {@#-2} -l[$>,-2,-1]
-    -s[0] +,$1 -s y,-@{-2,w}
-    -repeat {@#-2} -if {@{$>,t}'=='@{-2,t}} -rows[$>] 0,{w-1} -f[$>] [-1] -endif -done
-    -a[0--3] y
-  -endl -done -rm[-2,-1] -v +
+  -v - ns={narg($1)} nd={narg($2)} ratio={$nd*100/$ns}
+  -repeat @# -l[$>]
+    -s +,$1 --rows[0] 0,{$ns-1} ($1) --[-2,-1] -abs[-1] ind={iM!=0} -rm[-1]
+    -if {$ind<@#} -if $nd -r[$ind--1:2] 1,$ratio%,1,1,0 -f[$ind--1:2] $2 -else -rm[$ind--1:2] -endif -a y -endif
+  -endl -done -v +
+
+#@gmic replace_str : "search_str","replace_str"
+#@gmic : Search and replace a string in selected images (viewed as strings, i.e. sequences of ascii codes).
+#@gmic : $ ({'"Hello there, how are you ?"'}) --replace_str "Hello there","Hi David"
+replace_str : -skip "${2=}"
+  -e[^-1] "Replace string '$1' by string '$2' in image$? (viewed as string$?)."
+  -v - arg1={'"$1"'} -if {narg("$2")} arg2={'"$2"'} -else arg2="" -endif
+  -replace_seq @{-quote\ $arg1},@{-quote\ $arg2} -v +
 
 #@gmic round : rounding_value>=0,_rounding_type : (no args) : (+)
 #@gmic : Round values of selected images.
@@ -13469,7 +13486,7 @@ pink : -v -
   -repeat @# -l[@{>,-1}] -_xpinks $1,$p -endl -done -v +
 
 #@gmic pink_grayskel : _connectivity={ 4 | 8 | 6 | 26 }, _lambda=0
-#@gmic : (http://pinkhq.com/grayskel_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/grayskel_8c.html)
 #@gmic : Grayscale homotopic skeleton (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'lambda=0'.
 #@gmic : $ image.jpg --pink_grayskel , --pink_grayskel[0] ,10 --pink_grayskel[0] ,100 -append_tiles 2
@@ -13478,7 +13495,7 @@ pink_grayskel : -skip ${1=4},${2=0}
   -repeat @# -l[@{>,-1}] -_xpinks "grayskel","null $1 $2" -endl -done
 
 #@gmic pink_heightmaxima : _connectivity={ 4 | 8 | 6 | 26 },_height=1
-#@gmic : (http://pinkhq.com/heightmaxima_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/heightmaxima_8c.html)
 #@gmic : Heightmaxima filtering (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'height=1'.
 #@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]
@@ -13491,7 +13508,7 @@ pink_heightmaxima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
   -endl -done -v +
 
 #@gmic pink_heightminima : _connectivity={ 4 | 8 | 6 | 26 },_height=1
-#@gmic : (http://pinkhq.com/heightminima_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/heightminima_8c.html)
 #@gmic : Heightminima filtering (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'height=1'.
 #@gmic : $ image.jpg --blur 2 --pink_heightminima ,15 --pink_heightmaxima[0,1] ,15 --[-3,-1] --[-3,-1] -keep[-1,-2]
@@ -13504,8 +13521,8 @@ pink_heightminima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26" -skip ${2=1}
   -endl -done -v +
 
 #@gmic pink_htkern : _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
-#@gmic : (http://pinkhq.com/htkern_8c.html)
-#@gmic : (http://pinkhq.com/htkernu_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/htkern_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/htkernu_8c.html)
 #@gmic : Grayscale ultimate homotopic thinning/thickening without condition (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'type=""'.
 #@gmic : $ image.jpg --pink_htkern ,u --pink_htkern[0] , ---[-1,-2] -remove[0]
@@ -13513,8 +13530,8 @@ pink_htkern : -skip ${1=4},${2=""}
   -repeat @# -l[@{>,-1}] -_xpinks htkern$2,"null $1" -endl -done
 
 #@gmic pink_lvkern : _connectivity={ 4 | 8 | 6 | 26 }, _type={""|u}
-#@gmic : (http://pinkhq.com/lvkern_8c.html)
-#@gmic : (http://pinkhq.com/lvkernu_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/lvkern_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/lvkernu_8c.html)
 #@gmic : Grayscale ultimate leveling thinning/thickening without condition (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'type=""'.
 #@gmic : $ image.jpg -pink_lvkern ,u
@@ -13523,7 +13540,7 @@ pink_lvkern : -skip ${1=4},${2=""}
   -repeat @# -l[@{>,-1}] -_xpinks lvkern${2},"null $1" -endl -done
 
 #@gmic pink_reg_minima : _connectivity={ 4 | 8 | 6 | 26 }
-#@gmic : (http://pinkhq.com/minima_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/minima_8c.html)
 #@gmic : Regional minima (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4'.
 #@gmic : $ image.jpg --blur 2 -pink_reg_minima ,
@@ -13536,7 +13553,7 @@ pink_reg_minima : -check "${1=4}==4 || $1==8 || $1==6 || $1==26"
   -endl -done -v +
 
 #@gmic pink_skelcurv : _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
-#@gmic : (http://pinkhq.com/skelcurv_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/skelcurv_8c.html)
 #@gmic : Curvilinear binary skeleton guided by a priority function or image (requires the PINK library to be installed).
 #@gmic : Default values: 'prio=0', 'connectivity=4' and 'inhibit=""'.
 #@gmic : $ image.jpg -threshold 50% {w},{h} -fill[-1] 'if(x>w/2,255,0)' tp=@{-path_tmp} -output[-1] ${tp}/inhibit.pgm -remove[-1] --pink_skelcurv[0] , --pink_skelcurv[0] ,,${tp}/inhibit.pgm -exec "rm "${tp}"/inhibit.pgm"
@@ -13546,7 +13563,7 @@ pink_skelcurv : -skip ${1=0},${2=4},${3=""}
   -repeat @# -l[@{>,-1}] -_xpinks "skelcurv","$1 $2 $3" -endl -done
 
 #@gmic pink_skelend : _connectivity={ 4 | 8 | 6 | 26 },_n=0
-#@gmic : (http://pinkhq.com/skelend_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/skelend_8c.html)
 #@gmic : Homotopic skeleton of a 2d or 3d binary image with dynamic detection of end points (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4' and 'n=0'.
 #@gmic : $ image.jpg -threshold 50% --pink_skelend , --pink_skelend[-2] ,-1
@@ -13554,7 +13571,7 @@ pink_skelend : -skip ${1=4},${2=0}
   -repeat @# -l[@{>,-1}] -_xpinks "skelend","$1 $2" -endl -done
 
 #@gmic pink_skeleton : _prio={0|1|2|3|4|8|6|26},_connectivity={ 4 | 8 | 6 | 26 },_inhibit={""}
-#@gmic : (http://pinkhq.com/skeleton_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/skeleton_8c.html)
 #@gmic : Ultimate binary skeleton guided by a priority image (requires the PINK library to be installed).
 #@gmic : Default values: 'prio=0', 'connectivity=4' and 'inhibit=""'.
 #@gmic : $ image.jpg -threshold 50% --pink_skeleton[-1] ,
@@ -13562,7 +13579,7 @@ pink_skelend : -skip ${1=4},${2=0}
   -repeat @# -l[@{>,-1}] -_xpinks "skeleton","$1 $2 $3" -endl -done
 
 #@gmic pink_skelpar : _algorithm={0..29},_nsteps=_1,_inhibit=""
-#@gmic : (http://pinkhq.com/skelpar_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/skelpar_8c.html)
 #@gmic : Parallel binary skeleton (requires the PINK library to be installed).
 #@gmic : Default values: 'algorithm=4', 'nsteps=-1' and 'inhibit=""'.
 #@gmic : $ image.jpg -threshold 50% --pink_skelpar[-1] 0 --pink_skelpar[-1] 2
@@ -13570,7 +13587,7 @@ pink_skelpar : -skip ${1=4},${2=-1},${3=""}
   -repeat @# -l[@{>,-1}] -_xframe -_xpinks "skelpar","$1 $2 $3" -endl -done
 
 #@gmic pink_wshed : _connectivity={ 4 | 8 | 6 | 26 },_inverse={ 0 | 1 },_height=0
-#@gmic : (http://pinkhq.com/wshedtopo_8c.html)
+#@gmic : (http://pinkhq.com/doxygen/wshedtopo_8c.html)
 #@gmic : Watershed (requires the PINK library to be installed).
 #@gmic : Default values: 'connectivity=4', 'inverse=0' and 'height=0'.
 #@gmic : $ image.jpg --pink_wshed ,1,5 -pink_wshed[0] ,,5
@@ -14960,18 +14977,18 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
      "-autocrop 32 "\
      "-f 'if(i>=65&&i<=90,i+32,i)' "\
      "-replace {'_'},32 -autocrop 32 "\
-     "-replace_seq \""{'rgb'}"\",\""{'RGB'}"\" "\
-     "-replace_seq \""{'lab'}"\",\""{'Lab'}"\" "\
-     "-replace_seq \""{'hsv'}"\",\""{'HSV'}"\" "\
-     "-replace_seq \""{'hsl'}"\",\""{'HSL'}"\" "\
-     "-replace_seq \""{'ycbcr'}"\",\""{'YCbCr'}"\" "\
-     "-replace_seq \""{'cmyk'}"\",\""{'CMYK'}"\" "\
-     "-replace_seq \""{'b&amp;w'}"\",\""{'B&amp;W'}"\" "\
-     "-replace_seq \""{'gimp'}"\",\""{'GIMP'}"\" "\
-     "-replace_seq \""{'roddy'}"\",\""{'Roddy'}"\" "\
-     "-replace_seq \""{'crt'}"\",\""{'CRT'}"\" "\
-     "-replace_seq \""{'colorabstractionpaint'}"\",\""{'"Color abstraction paint"'}"\" "\
-     "-replace_seq \""{'g'},39,{'mic'}"\",\""{'G'},39,{'MIC'}"\" "\
+     "-replace_str rgb,RGB "\
+     "-replace_str lab,LAB "\
+     "-replace_str hsv,HSV "\
+     "-replace_str hsl,HSL "\
+     "-replace_str ycbcr,YCbCr "\
+     "-replace_str cmyk,CMYK "\
+     "-replace_str b&amp;w,B&amp;W "\
+     "-replace_str gimp,GIMP "\
+     "-replace_str roddy,Roddy "\
+     "-replace_str crt,CRT "\
+     "-replace_str colorabstractionpaint,\"Color abstraction paint\" "\
+     "-replace_str g"{`39`}"mic,G"{`39`}"MIC "\
      "-f 'if(y==0&&i>=97&&i<=122,i-32,i)' "
 
   # Copy latest command definitions on sourceforge server if necessary.
@@ -15030,10 +15047,10 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
 
           # Format string by removing special character sequences.
           -s +,{':'}
-          -replace_seq[0] @{-quote\ {'<b>'}},32
-          -replace_seq[0] @{-quote\ {'</b>'}},32
-          -replace_seq[0] @{-quote\ {'<i>'}},32
-          -replace_seq[0] @{-quote\ {'</i>'}},32
+          -replace_str[0] "<b>"
+          -replace_str[0] "</b>"
+          -replace_str[0] "<i>"
+          -replace_str[0] "</i>"
           -replace[0] {'/'},{'-'}
           -replace[0] {','},{';'}
           -autocrop[0] 32
@@ -15173,9 +15190,9 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
     -repeat @# -l[$>]
       ({'@{0,n}'}) -if {i!={'!'}}
         -r[-1] {w-1},1,1,1,0,0,1
-        -replace_seq[-1] @{-quote\ {'&amp;'}},{'&'}
-        -replace_seq[-1] @{-quote\ {'"&#233;"'}},{'e'}
-        -replace_seq[-1] {'/'},@{-quote\ {'~/~'}}
+        -replace_str[-1] "&amp;","&"
+        -replace_str[-1] "&#233;","e"
+        -replace_str[-1] "/","~/~"
         -replace[-1] {'~'},32
         -echo_stdout[] "  "@{-1,t}
       -endif -rm[-1]
@@ -15189,8 +15206,8 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
     -_update_gmic_gimp_sort 0,{@#-1}
     -repeat @# -l[$>]
       ({'@{0,n}'}) -if {i!={'!'}}
-        -replace_seq[-1] @{-quote\ {'&amp;'}},{'&'}
-        -replace_seq[-1] @{-quote\ {'"&#233;"'}},{'e'}
+        -replace_str[-1] "&amp;","&"
+        -replace_str[-1] "&#233;","e"
         -replace[-1] {'~'},32
         -echo_stdout[] "  "@{-1,t}
       -endif -rm[-1]
