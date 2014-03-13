@@ -1091,11 +1091,10 @@ build_tutorial_html :
   -repeat $_N
     -v + -_build_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>},${_parent$>} -v -
   -done
-  -v +
 
   # Clean temp files.
   -x "rm -f __tmp.html"
-  -e[] "  * All done !.\n\n"
+  -v + -e[] "  * All done !.\n\n"
 
 # Add page to the list of pages to explore.
 __build_tutorial_html : -skip ${3=""},${4=""}
