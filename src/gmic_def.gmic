@@ -3173,7 +3173,7 @@ apply_gamma : -check $1>=0
 
 #@gmic balance_gamma : _ref_color1,...
 #@gmic : Apply color balance transformation on selected image, with respect to specified reference color.
-#@gmic : Default values: 'ref_color1=128'.
+#@gmic : Default value: 'ref_color1=128'.
 #@gmic : $ image.jpg --balance_gamma 128,64,64
 balance_gamma : -skip ${1=128}
   -e[^-1] "Apply color balance transformation on image$?, with gamma curve and reference color ("${^0}")."
@@ -3192,14 +3192,21 @@ complex2polar :
     -r[1] [0],3 --atan2[1] [0] -nm[-1] @{1,n},1 -sqr[-3,-2] -+[-3,-2] -sqrt[-2]
   -endl -done -v +
 
-#@gmic compress_rle
+#@gmic compress_rle : _maximum_sequence_length>=0
 #@gmic : Compress selected images as 2xN data matrices, using RLE algorithm.
-#@gmic : $ image.jpg -resize2dy 100 -quantize 4 -round --compress_rle --uncompress_rle[-1]
-compress_rle :
+#@gmic : Set 'maximum_sequence_length=0' to disable maximum length constraint.
+#@gmic : Default value: 'maximum_sequence_length=0'.
+#@gmic : $ image.jpg -resize2dy 100 -quantize 4 -round --compress_rle , --uncompress_rle[-1]
+compress_rle : -check "isint(${1=0}) && $1>=0"
   -e[^-1] "Compress image$?, using RLE algorithm."
   -v - -repeat @# -l[$>] nm=@{0,n} im={im} header={w};{h};{d};{s};$im
     -- $im -y x ({@{0,-1}+1}) -a x -r 100%,3
-    -f[-1] '>if(y==0,i,if(y==1,if(i(x,0)==i(x+1,0),-1,x),if(i(x-1,1)==-1,i(x-1,2)+1,1)))'
+    -f '>if(y==0,i,if(y==1,if(i(x,0)==i(x+1,0),-1,x),if(i(x-1,1)==-1,i(x-1,2)+1,1)))'
+    -if $1 # Constrain maximum sequence length.
+      -transpose -mirror x
+      -f[-1] '>if(x==2,i,if(x==0,if(j(0,-1)==$1,1,if(i!=1,j(0,-1)+1,1)),if(i==-1&&j(-1)==$1,y,i)))'
+      -mirror x -transpose
+    -endif
     -z 0,{w-2} -s y,3 -discard[1] -1 -warp[0,2] [1],0,0 -rm[1]
     -*[-1] -1 -rv -a x -y -discard -1 -f '>if(i(0,y-1)<0&&i==0&&i(0,y+1)<0,-1,i)' -discard -1
     -i[0] ($header) -a y -nm $nm,1
