@@ -1063,7 +1063,7 @@ build_tutorial_html :
   -add_page images/images-have-edges,1000
 
   # Prepare folder structure.
-  -v + -e[] "  > Prepare folder structure." -v -
+  -v + -e[] "\n  * Prepare folder structure." -v -
   -x "ln -fs ../copyright.html ."
   -x "ln -fs ../favicon.ico ."
   -x "ln -fs ../favicon.png ."
@@ -1092,7 +1092,10 @@ build_tutorial_html :
     -v + -_build_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>},${_parent$>} -v -
   -done
   -v +
-  -e[] "  > All done !."
+
+  # Clean temp files.
+  -x "rm -f __tmp.html"
+  -e[] "  * All done !.\n\n"
 
 # Add page to the list of pages to explore.
 __build_tutorial_html : -skip ${3=""},${4=""}
@@ -1115,13 +1118,13 @@ __build_tutorial_html : -skip ${3=""},${4=""}
 
 # Retrieve one html page and convert it.
 _build_tutorial_html :
-  -e[^-1] "Convert tutorial page from '$1' to G"{`39`}"MIC web look."
   -v -
+  url="http://particularart.com/tools-and-toys/gmic/$1"
+  -v + -e[] "\n  * Convert tutorial page '"$url"'." -v -
 
   # Get web page.
-  url="http://particularart.com/tools-and-toys/gmic/$1"
-  -v + -e[] "  > Retrieve web page '"$url"'." -v -
-  -x "wget "$url" -O __tmp.html"
+  -v + -e[] "    > Retrieve page '"$url"'." -v -
+  -x "wget -q "$url" -O __tmp.html"
   -i raw:__tmp.html,uchar
 
   # Discard or replace undesired text.
@@ -1165,7 +1168,6 @@ _build_tutorial_html :
     -s +,{'\"'}
     -if {@#>0}
       link=@{0,t}
-      -v + -e[] "  > Link found '"$link"'." -v -
       ({'$link'}) -z[-1] 0,20 baselink=@{-1,t} -rm[-1]
       -if {$baselink'=='"/tools-and-toys/gmic/"}
 
@@ -1178,25 +1180,43 @@ _build_tutorial_html :
 
         -if $relink # If the relinked page exists.
           relink=$relink$anchor
-          -v + -e[] "    -> Relink '"$link"' to '"$relink"'." -v -
+          -v + -e[] "    > Local link '"$link$anchor"' relinked to '"$relink"'." -v -
           -rm[0] -i[0] ({'$relink'}) -y[0]
         -else # Else try to relink to reference page if link to a command.
           ({'$relink'}) -if {i=={'_'}}
             -l[-1] -z 1,100% -s -,{'.'} command=@{-basename\ @{0,t}} -k[0] -endl
             relink="http://gmic.sourceforge.net/reference.shtml#"$command
-            -v + -e[] "    -> Relink '"$link"' to '"$relink"'." -v -
+            -v + -e[] "    > Local link '"$link$anchor"' relinked to '"$relink"'." -v -
             -rm[0] -i[0] ({'$relink'}) -y[0]
           -else # If fail, link to original page with a hard link.
             relink=http://particularart.com$link$anchor
-            -v + -e[] "    -> Relink '"$link"' to '"$relink"'." -v -
+            -v + -e[] "    > Local link '"$link$anchor"' relinked to '"$relink"'." -v -
             -rm[0] -i[0] ({'$relink'}) -y[0]
           -endif
           -rm[-1]
         -endif
       -elif {$baselink'=='"/static/media/uploads"}
          relink=http://particularart.com$link
-         -v + -e[] "    -> Relink '"$link"' to '"$relink"'." -v -
+         -v + -e[] "    > Local link '"$link"' relinked to '"$relink"'." -v -
          -rm[0] -i[0] ({'$relink'}) -y[0]
+       -else # External link.
+         0 -nm[-1] $link ext=@{-1,x} -if {narg($ext)} ext=@{-struncase\ $ext} -endif -rm[-1]
+         -if {{$ext'=='png}||{$ext'=='jpg}||{$ext'=='jpeg}}  # Check for an image link.
+           relink=img/$5_@{-basename\ $link} 0 -nm[-1] $relink relink=@{-1,f}@{-1,b}.jpg -rm[-1]
+           -if $relink -v + -e[] "    > External image link '"$link"' relinked to '"$relink"'." -v -
+           -else
+             -l[] -i $link -k[0] is_opaque=0
+             -split_opacity -if {@#==1" || "ia>250} is_opaque=1 -endif -a c
+             -if {$is_opaque} -to_rgb -else -to_rgba -i[0] 100%,100%,1,3 -fc[0] 245,245,245 -blend alpha -endif
+             -o $relink,60 -rm
+             -v + -e[] "    > Image link '"$link"' converted and relinked to '"$relink"'." -v -
+             -onfail relink=$link -v + -e[] "    > Failed to retrieve image link '"$link"'." -v - -rm
+             -endl
+           -endif
+           -rm[0] -i[0] ({'$relink'}) -y[0]
+         -else
+           -v + -e[] "    > External link '"$link"' found." -v -
+         -endif
       -endif
       -a y
     -endif
@@ -1209,30 +1229,19 @@ _build_tutorial_html :
     -s +,{'"src=\""'}
     -l[2]
       -s +,{'\"'} link=@{0,t}
-      -v + -e[] "  > Image found '"$link"'." -v -
-      -l[]
-        relink=img/$5_@{-basename\ $link}
-        0 -nm[-1] $relink relink=@{-1,f}@{-1,b}.jpg -rm[-1]
-        -if $relink
-          -v + -e[] "    -> No need to convert, image '"$relink"' already exists." -v -
-        -else
-          -input $link -k[0]
-          is_opaque=0
-          -split_opacity -if {@#==1" || "ia>250} is_opaque=1 -endif -a c
-          -if $is_opaque
-            -to_rgb -frame 1,1,0 -frame 10,10,245
-          -else
-            -to_rgba -i[0] 100%,100%,1,3 -fc[0] 245,245,245 -blend alpha
-          -endif
-          -o $relink,60
-          -v + -e[] "    -> Transfer image '"$link"' and convert to '"$relink"'." -v -
-          -rm
+      relink=img/$5_@{-basename\ $link} 0 -nm[-1] $relink relink=@{-1,f}@{-1,b}.jpg -rm[-1]
+      -if $relink -v + -e[] "    > Image '"$link"' relinked to '"$relink"'." -v -
+      -else
+        -l[] -i $link -k[0] is_opaque=0
+        -split_opacity -if {@#==1" || "ia>250} is_opaque=1 -endif -a c
+        -if $is_opaque -to_rgb -frame 1,1,0 -frame 10,10,245
+        -else -to_rgba -i[0] 100%,100%,1,3 -fc[0] 245,245,245 -blend alpha
         -endif
-      -onfail
-        relink=$link
-        -v + -e[] "    -> Fail to retrieve image '"$link"'." -v -
-        -rm
-      -endl
+        -o $relink,60 -rm
+        -v + -e[] "    > Image '"$link"' converted and relinked to '"$relink"'." -v -
+        -onfail relink=$link -v + -e[] "      > Failed to retrieve image '"$link"'." -v - -rm
+        -endl
+      -endif
       -rm[0] -i[0] ({'$relink'}) -y[0]
     -endl
     -a y
@@ -1260,10 +1269,7 @@ _build_tutorial_html :
      "<!--#include file=\"copyright.html\" -->"\n\
      "<!--#include file=\"footer.html\" -->"\n'})
   -o raw:$3,uchar
-  -rm
-
-  -x "rm -f __tmp.html"
-  -v +
+  -rm -v +
 
 #@gmic cupid : _size>0
 #@gmic : Input cupid binary mask with specified size.
@@ -3468,20 +3474,19 @@ replace_nan :
 #@gmic : Search and replace a sequence of values in selected images.
 #@gmic : $ (1;2;3;4;5) --replace_seq "2,3,4","7,8"
 replace_seq : -skip "${2=}"
-  -e[^-1] "Replace value sequence '$1' by value sequence '$2' in image$?."
-  -v - ns={narg($1)} nd={narg($2)} ratio={$nd*100/$ns}
+  -e[^-1] "Replace value sequence '$1' by value sequence '${2--1}' in image$?."
+  -v - ns={narg($1)} nd={narg(${2--1})} ratio={$nd*100/$ns}
   -repeat @# -l[$>]
     -s +,$1 --rows[0] 0,{$ns-1} ($1) --[-2,-1] -abs[-1] ind={iM!=0} -rm[-1]
-    -if {$ind<@#} -if $nd -r[$ind--1:2] 1,$ratio%,1,1,0 -f[$ind--1:2] $2 -else -rm[$ind--1:2] -endif -a y -endif
+    -if {$ind<@#} -if $nd -r[$ind--1:2] 1,$ratio%,1,1,0 -f[$ind--1:2] ${2--1} -else -rm[$ind--1:2] -endif -a y -endif
   -endl -done -v +
 
 #@gmic replace_str : "search_str","replace_str"
 #@gmic : Search and replace a string in selected images (viewed as strings, i.e. sequences of ascii codes).
 #@gmic : $ ({'"Hello there, how are you ?"'}) --replace_str "Hello there","Hi David"
 replace_str : -skip "${2=}"
-  -e[^-1] "Replace string '$1' by string '$2' in image$? (viewed as string$?)."
-  -v - arg1={'"$1"'} -if {narg("$2")} arg2={'"$2"'} -else arg2="" -endif
-  -replace_seq @{-quote\ $arg1},@{-quote\ $arg2} -v +
+  -e[^-1] "Replace string '$1' by string '${2--1}' in image$? (viewed as string$?)."
+  -v - -replace_seq @{-quote\ {'"$1"'}},{'"${2--1}"'} -v +
 
 #@gmic round : rounding_value>=0,_rounding_type : (no args) : (+)
 #@gmic : Round values of selected images.

@@ -5,7 +5,7 @@
 
 <h1>-mix_rgb</h1>
 <p>This command mixes the channels of each pixel in an output image from its counterpart in an input image. Nine <em>transfer weights</em>, W<sub>&lt;in_chn&gt;&rarr;&lt;out_chn&gt;</sub>, govern the reconstitution, one for each pairing of an input channel to an output channel. The final value of each output channel arises from a weighted sum of the three input channels, illustrated in the following schematic:</p>
-<center><a target="_parent" href="http://particularart.com/static/media/uploads/mixrgb.png"><img class="img_block" src="img/_mix_rgb_mixrgb.jpg" style="margin: 3px; border: 0px solid #a0a0a0;" title="Mix RGB composition pipeline" height="300" width="400" /></a></center>
+<center><a target="_parent" href="img/_mix_rgb_mixrgb.jpg"><img class="img_block" src="img/_mix_rgb_mixrgb.jpg" style="margin: 3px; border: 0px solid #a0a0a0;" title="Mix RGB composition pipeline" height="300" width="400" /></a></center>
 <p>The format of the G'MIC command is:</p>
 <p><code>-mix_rgb Wrr,Wgr,Wbr,Wrg,Wgg,Wbg,Wrb,Wgb,Wbb</code></p>
 <p>where each parameter represents one weight and is a floating point numeral ranging from negative to positive infinity, The subscripts denote a particular input-output channel pair which the weight connects:</p>
