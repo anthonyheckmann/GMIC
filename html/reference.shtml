@@ -1418,16 +1418,21 @@ _ref_color1,...
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Apply color balance transformation on selected image, with respect to specified reference color.
-<br/><br/><b>Default values</b>: 'ref_color1=128'.
+<br/><br/><b>Default value</b>: 'ref_color1=128'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def121.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --balance_gamma 128,64,64</div></div></td><td><tt>image.jpg --balance_gamma 128,64,64</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="complex2polar"><font color="green">&nbsp;&nbsp;<b>-complex2polar</b>:</font></a>
 
 <p style="margin-left:100px"><tt>Compute complex to polar transforms of selected images.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def122.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --fft -complex2polar[-2,-1] -log[-2] -shift[-2] 50%,50%,0,0,2 -remove[-1]</div></div></td><td><tt>image.jpg --fft -complex2polar[-2,-1] -log[-2] -shift[-2] 50%,50%,0,0,2 -remove[-1]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="compress_rle"><font color="green">&nbsp;&nbsp;<b>-compress_rle</b>:</font></a>
+<p style="margin-left:150px"><tt><i><font color="purple">
+_maximum_sequence_length>=0
 
+</font></i></tt></p>
 <p style="margin-left:100px"><tt>Compress selected images as 2xN data matrices, using RLE algorithm.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def123.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -resize2dy 100 -quantize 4 -round --compress_rle --uncompress_rle[-1]</div></div></td><td><tt>image.jpg -resize2dy 100 -quantize 4 -round --compress_rle --uncompress_rle[-1]</tt></td></tr>
+<br/>Set 'maximum_sequence_length=0' to disable maximum length constraint.
+<br/><br/><b>Default value</b>: 'maximum_sequence_length=0'.
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def123.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -resize2dy 100 -quantize 4 -round --compress_rle , --uncompress_rle[-1]</div></div></td><td><tt>image.jpg -resize2dy 100 -quantize 4 -round --compress_rle , --uncompress_rle[-1]</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="cumul"><font color="green">&nbsp;&nbsp;<b>-cumul</b>:</font></a>
 
 <p style="margin-left:100px"><tt>Compute the cumulative function of specified image data.

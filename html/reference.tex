@@ -1618,7 +1618,7 @@ Apply gamma correction to selected images.
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_ref\_color1,...}}\\~\\
 Apply color balance transformation on selected image, with respect to specified reference color.
-~\\~\\\textbf{Default values}: {\small \texttt{'ref\_color1=128'.}}
+~\\~\\\textbf{Default value}: {\small \texttt{'ref\_color1=128'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def121.jpg}\\
 {\footnotesize \textbf{Example 121~:} \texttt{image.jpg --balance\_gamma 128,64,64}}
 \end{center}
@@ -1630,9 +1630,13 @@ Compute complex to polar transforms of selected images.
 \end{center}
 
 \subsection{\emph{-compress\_rle\index{-compress\_rle}} }\vspace*{-0.5em}
+~\\\textbf{Arguments: } 
+{\small \texttt{\_maximum\_sequence\_length$>$=0}}\\~\\
 Compress selected images as 2xN data matrices, using RLE algorithm.
+~\\Set 'maximum\_sequence\_length=0' to disable maximum length constraint.
+~\\~\\\textbf{Default value}: {\small \texttt{'maximum\_sequence\_length=0'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def123.jpg}\\
-{\footnotesize \textbf{Example 123~:} \texttt{image.jpg -resize2dy 100 -quantize 4 -round --compress\_rle --uncompress\_rle[-1]}}
+{\footnotesize \textbf{Example 123~:} \texttt{image.jpg -resize2dy 100 -quantize 4 -round --compress\_rle , --uncompress\_rle[-1]}}
 \end{center}
 
 \subsection{\emph{-cumul\index{-cumul}} }\vspace*{-0.5em}

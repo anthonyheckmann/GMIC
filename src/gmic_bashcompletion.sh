@@ -1948,6 +1948,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "_ref_color1,... >") )
 		return 0
 		;;
+		"-compress_rle" | "--compress_rle")
+		COMPREPLY=( $(compgen -W "_maximum_sequence_length>=0 >") )
+		return 0
+		;;
 		"-cut" | "--cut")
 		COMPREPLY=( $(compgen -W "{value0[%]|[image0]},{value1[%]|[image1]} [image] (noargs)") )
 		return 0

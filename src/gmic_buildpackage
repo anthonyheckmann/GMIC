@@ -175,7 +175,10 @@ ln -s img/tiger.jpg image.jpg
 \gmic -v - ../src/gmic_def.gmic raw:../src/gmic_def.gmic,uchar _gmic_version=$VERSION _gmic_is_beta=$IS_BETA -__help html >& reference.shtml
 rm -f image.jpg
 \gmic ../src/gmic_def.gmic gallery.gmic -gmic_gallery
-cd ..
+cd tutorial
+-rm -rf *.shtml *.html img
+\gmic ../../src/gmic_def.gmic -build_tutorial_html
+cd ../../
 
 # Create .pdf handbook.
 #----------------------
