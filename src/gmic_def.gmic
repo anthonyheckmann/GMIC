@@ -1137,7 +1137,6 @@ _build_tutorial_html :
   -replace_str "border: 1px","border: 0px"
   -replace_str "G"{`96`}"MIC","G"{`39`}"MIC"
   -replace_str "CNTL","CTRL"
-  -replace_str "Selecton","Selection"
 
   # Discard original header.
   -s +,{'<h1'}
@@ -23345,3 +23344,18 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+foo :
+  -v -
+  256,1,1,1,'if(x<32,32,x)'
+  -s x,-64
+
+  -v + -e[] "\n" -v -
+
+  -repeat @#
+    -v + -e[] @{$>,t} -v -
+  -done
+
+  -v + -e[] "\n" -v -
+
+ -q
