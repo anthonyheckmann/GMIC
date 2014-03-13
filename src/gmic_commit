@@ -1,4 +1,5 @@
 #!/bin/bash
+cd $HOME/work/src/gmic/src
 rm -f CImg.h
 cp ../../CImg/CImg.h .
 cd ../
