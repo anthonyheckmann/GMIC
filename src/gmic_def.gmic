@@ -941,7 +941,7 @@ _help_examples :
 \n     gmic -m3d 5 -md3d 5 -db3d 0 -isosurface3d \"'x^2+y^2+abs(z)^abs(4*cos(x*y*z*3))'\",3
 \n
 \n  - Render a G"{`39`}"MIC 3d logo:
-\n     gmic 1 -text G\\"{`39`}"MIC,0,0,57,1,1,1,1 -expand_xy 10,0 -blur 2 -n 0,100 --plasma 0.4 -+ \\
+\n     gmic 1 -text G\\"{`39`}"MIC,0,0,53,1,1,1,1 -expand_xy 10,0 -blur 2 -n 0,100 --plasma 0.4 -+ \\
 \n      -blur 1 -elevation3d -0.1 -md3d 4
 \n
 \n  - Generate a 3d ring of torii:
@@ -7300,12 +7300,12 @@ spline : -skip ${9=256},${10=1},${11=0}
 #@gmic text : text,_x[%],_y[%],_font_height>=0,_opacity,_color1,.. : (+)
 #@gmic : Draw specified colored text string on selected images.
 #@gmic : (eq. to '-t').
-#@gmic : Exact pre-defined sizes are '13','24','32' and '57'. Any other size is interpolated.
+#@gmic : Exact pre-defined sizes are '13','23','33' and '53'. Any other size is interpolated from an exact size.
 #@gmic : Specifying an empty target image resizes it to new dimensions such that the image contains
 #@gmic : the entire text string.
 #@gmic : Default values: 'opacity=1' and 'color1=0'.
 #@gmic : $ image.jpg -resize2dy 600 y=0 -repeat 30 -text {2*$>}" : This is a nice text, isn't it ?",10,$y,{2*$>},0.9,255 y={$y+2*$>} -done
-#@gmic : $ 0 -text "G'MIC",0,0,24,1,255
+#@gmic : $ 0 -text "G'MIC",0,0,23,1,255
 
 #@gmic text_outline : text,_x[%],_y[%],_font_height>0,_outline>=0,_opacity,_color1,..
 #@gmic : Draw specified colored and outlined text string on selected images.
@@ -7535,9 +7535,9 @@ arrow3d : -check "${7=5%}>=0 && ${8=25%}>=0 && ${9=15%}>=0"
 
 #@gmic axes3d : _size_x,_size_y,_size_z,_font_size>0,_label_x,_label_y,_label_z
 #@gmic : Input 3d axes with specified sizes along the x,y and z orientations.
-#@gmic : Default values: 'size_x=size_y=size_z=1', 'font_size=24', 'label_x=X', 'label_y=Y' and 'label_z=Z'.
+#@gmic : Default values: 'size_x=size_y=size_z=1', 'font_size=23', 'label_x=X', 'label_y=Y' and 'label_z=Z'.
 #@gmic : $ -axes3d ,
-axes3d : -check ${4=24}>0 -skip ${1=1},${2=$1},${3=$2},"${5=X},${6=Y},${7=Z}"
+axes3d : -check ${4=23}>0 -skip ${1=1},${2=$1},${3=$2},"${5=X},${6=Y},${7=Z}"
   -e[^-1] "Input 3d axes with sizes ($1,$2,$3)."
   -v - -l[]
   m={max(abs($1),abs($2),abs($3))/40} m2={2*$m} m3={1.2*$m2}
@@ -8135,7 +8135,7 @@ imagesphere3d : -check "${1=32}>=3 && ${2=16}>=3"
 #@gmic label_points3d : _label_size>0,_opacity
 #@gmic : Add a numbered label to all vertices of selected 3d objects.
 #@gmic : Default values: 'label_size=13' and 'opacity=0.8'.
-#@gmic : $ -torus3d 100,40,6,6 -label_points3d 24,1 -mode3d 1
+#@gmic : $ -torus3d 100,40,6,6 -label_points3d 23,1 -mode3d 1
 label_points3d : -check ${1=13}>0 -skip ${2=0.8}
   -e[^-1] "Label vertices of 3d object$?."
   -v - -repeat @#
@@ -8738,8 +8738,8 @@ superformula3d : -check "${1=1024}>1 && ${2=8}>=1" -skip ${3=1},${4=5},${5=8}
 text_pointcloud3d : -skip ${1="text1"},${2="text2"},${3=1}
   -e[^-1] "Input 3d pointcloud text object from strings '$1' and '$2', with smoothness $3."
   -v -
-  0 -t[-1] "$1",0,0,57,1,1
-  0 -t[-1] "$2",0,0,57,1,1 -mirror[-1] y
+  0 -t[-1] "$1",0,0,53,1,1
+  0 -t[-1] "$2",0,0,53,1,1 -mirror[-1] y
   -expand_xy[-2,-1] 2,0 -dilate[-2,-1] 2
   -permute[-1] zyxc -r[-2,-1] @{-max_whd} -and[-2,-1]
 
@@ -8758,9 +8758,9 @@ text_pointcloud3d : -skip ${1="text1"},${2="text2"},${3=1}
 
 #@gmic text3d : text,_font_height>0,_depth>0,_smoothness
 #@gmic : Input a 3d text object from specified text.
-#@gmic : Default values: 'font_height=57', 'depth=10' and 'smoothness=1.5'.
+#@gmic : Default values: 'font_height=53', 'depth=10' and 'smoothness=1.5'.
 #@gmic : $ -text3d "G'MIC as a\n3D logo!"
-text3d : -skip ${2=57},${3=10},${4=1.5}
+text3d : -skip ${2=53},${3=10},${4=1.5}
   -e[^-1] "Input 3d text object '$1' with size $2, depth $3 and smoothness $4."
   -v - 0 -t[-1] "$1",0,0,$2,1,1 -autocrop[-1] 0 -r[-1] 100%,100%,$3 -expand_xyz[-1] 10,0
   -b[-1] $4 -isosurface3d[-1] 40% -rv3d[-1] -nm[-1] "[3d text '$1']" -v +
@@ -9060,7 +9060,7 @@ _rprogress : $*
 #@gmic status : value : (*)
 #@gmic : Set current status value. Used to define a returning value in a function.
 #@gmic : (eq. to '-u').
-#@gmic : $ image.jpg -command "foo : u0=Dark u1=Bright -status ${u{ia>=128}}" -text_outline @{-foo},2,2,24,2,1,255
+#@gmic : $ image.jpg -command "foo : u0=Dark u1=Bright -status ${u{ia>=128}}" -text_outline @{-foo},2,2,23,2,1,255
 
 #@gmic while : boolean : filename : (*)
 #@gmic : End a 'do..while' block and go back to associated '-do'
@@ -10609,9 +10609,9 @@ vignette : -check "${1=100}>=0 && ${2=70}>=0 && $2<=100 && ${3=90}>=0 && $3<=100
 
 #@gmic watermark_visible : _text,0<_opacity<1,_size>0,_angle,_mode={ 0=remove | 1=add },_smoothness>=0
 #@gmic : Add or remove a visible watermark on selected images (value range must be [0,255]).
-#@gmic : Default values: 'text=(c) G'MIC', 'opacity=0.3', 'size=57', 'angle=25', 'mode=1' and 'smoothness=0'.
+#@gmic : Default values: 'text=(c) G'MIC', 'opacity=0.3', 'size=53', 'angle=25', 'mode=1' and 'smoothness=0'.
 #@gmic : $ image.jpg --watermark_visible ,0.7
-watermark_visible : -skip "${1=\251\ G"{`39`}"MIC}" -check "${2=0.3}>0 && $2<1 && ${3=57}>0 && ${6=0.5}>=0" -skip ${4=25},${5=1}
+watermark_visible : -skip "${1=\251\ G"{`39`}"MIC}" -check "${2=0.3}>0 && $2<1 && ${3=53}>0 && ${6=0.5}>=0" -skip ${4=25},${5=1}
   -e[^-1] @{-arg\ 1+!$5,Add,Remove}" visible watermark '$1' on image$?, with opacity $2, size $3, angle $4 deg."
   -v - -repeat @# -l[$>]
     0 -t[-1] "$1",0,0,$3,1,255 -rotate[-1] $4,0,0 -b[-1] $6 -n[-1] 0,255
@@ -10639,12 +10639,12 @@ watermark_visible : -skip "${1=\251\ G"{`39`}"MIC}" -check "${2=0.3}>0 && $2<1 &
 #@gmic : Default values: 'blending_mode=alpha', 'opacity=1' and 'revert_layers=0'.
 #@gmic : $ image.jpg --drop_shadow , -resize2dy[-1] 200 -rotate[-1] 20 --blend alpha -drgba[-2]
 #@gmic : $ image.jpg -testimage2d {w},{h} -blend overlay
-#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex add,alpha,and,average,blue,burn,darken
-#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex difference,divide,dodge,exclusion,freeze,grainextract,grainmerge
-#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex green,hardlight,hardmix,hue,interpolation,lighten,lightness
-#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex linearburn,linearlight,luminance,multiply,negation,or,overlay
-#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex pinlight,red,reflect,saturation,screen,shapeaverage,softburn
-#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,24,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor
+#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,23,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex add,alpha,and,average,blue,burn,darken
+#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,23,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex difference,divide,dodge,exclusion,freeze,grainextract,grainmerge
+#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,23,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex green,hardlight,hardmix,hue,interpolation,lighten,lightness
+#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,23,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex linearburn,linearlight,luminance,multiply,negation,or,overlay
+#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,23,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex pinlight,red,reflect,saturation,screen,shapeaverage,softburn
+#@gmic : $ -m "ex : $""=arg -repeat $""# --blend[0,1] ${arg{$>+1}} -text_outline[-1] Mode:\" \"${arg{$>+1}},2,2,23,2,1,255 -done" image.jpg -testimage2d {w},{h} -ex softdodge,softlight,stamp,subtract,value,vividlight,xor
 blend : -skip ${1=alpha},${2=1},${3=0},${4=1}
   -v - s0="" s1="(reverted layers) " -v +
   -e[^-1] "Blend image$? two-by-two, using '$1' mode "${s{$3!=0}}"and opacity $2."
@@ -11067,33 +11067,33 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   parallel_mode={3-if($1!=2,$1,@*>2)}
   300,420,1,3 --plasma[-1] 1,1,5 -n[-1] 0,230 -sh[-1] 0,1 -/[-1] 2.2 -rm[-1] -water[-1] 100 -*[-1] 0.15
   100%,100%,1,3
-  0 -text[-1] "1- Blobs editor\n"\
-              "2- Bouncing balls\n"\
-              "3- Fire effect\n"\
-              "4- Fireworks\n"\
-              "5- Fish-eye effect\n"\
-              "6- Fourier filtering\n"\
-              "7- Histogram demo\n"\
-              "8- Hough transform\n"\
-              "9- Jawbreaker\n"\
-              "10- The game of life\n"\
-              "11- Light effect\n"\
-              "12- Mandelbrot explorer\n"\
-              "13- 3d metaballs\n"\
-              "14- Minesweeper\n"\
-              "15- Minimal path\n"\
-              "16- Pacman\n"\
-              "17- Paint\n"\
-              "18- Plasma effect\n"\
-              "19- RGB quantization\n"\
-              "20- 3d reflection\n"\
-              "21- 3d rubber object\n"\
-              "22- Shade bobs\n"\
-              "23- Spline editor\n"\
-              "24- Tetris\n"\
-              "25- Tic-tac-toe\n"\
-              "26- Image waves\n"\
-              "27- Fractal whirls",0,0,13,1,255,255,255
+  0 -t[-1] "1- Blobs editor\n"\
+           "2- Bouncing balls\n"\
+           "3- Fire effect\n"\
+           "4- Fireworks\n"\
+           "5- Fish-eye effect\n"\
+           "6- Fourier filtering\n"\
+           "7- Histogram demo\n"\
+           "8- Hough transform\n"\
+           "9- Jawbreaker\n"\
+           "10- The game of life\n"\
+           "11- Light effect\n"\
+           "12- Mandelbrot explorer\n"\
+           "13- 3d metaballs\n"\
+           "14- Minesweeper\n"\
+           "15- Minimal path\n"\
+           "16- Pacman\n"\
+           "17- Paint\n"\
+           "18- Plasma effect\n"\
+           "19- RGB quantization\n"\
+           "20- 3d reflection\n"\
+           "21- 3d rubber object\n"\
+           "22- Shade bobs\n"\
+           "23- Spline editor\n"\
+           "24- Tetris\n"\
+           "25- Tic-tac-toe\n"\
+           "26- Image waves\n"\
+           "27- Fractal whirls",0,0,13,1,255,255,255
   commands=-x_blobs,-x_bouncing,-x_fire,-x_fireworks,-x_fisheye,-x_fourier,-x_histogram,-x_hough,\
            -x_jawbreaker,-x_life,-x_light,-x_mandelbrot,-x_metaballs3d,-x_minesweeper,-x_minimal_path,\
            -x_pacman,-x_paint,-x_plasma,-x_quantize_rgb,-x_reflection3d,-x_rubber3d,-x_shadebobs,\
@@ -11101,7 +11101,7 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
   y0=59
   -j[-2] [-1],20,$y0,0,0 -rm[-1]
   -rectangle[-1] 0,16,100%,44,1,120,120,32
-  0 -text[-1] "G"{`39`}"MIC "@{-strver}" demos",2,2,24,1,1,1,1 -b[-1] 0.5 -n[-1] 0,1
+  0 -t[-1] "G"{`39`}"MIC "@{-strver}" demos",2,2,23,1,1,1,1 -b[-1] 0.5 -n[-1] 0,1
   (32;255^255;255^0;0) -r[-1] [-2],[-2],1,3,3 -*[-2,-1] -round[-1] 1,-1 --neq[-1] 0 -channels[-1] 1
   -j[-3] [-2],20,18,0,0,1,[-1] -rm[-2,-1] --channels[-1] 1 -dilate[-1] 5
   (80;255;80^0;255;0^0;0;0) (10;255;10^0;100;0^0;0;0)
@@ -11194,7 +11194,7 @@ x_blobs :
       -if {@{!,CTRLLEFT}&&@{!,D}} -w[] {2*w},{2*h} -elif {@{!,CTRLLEFT}&&@{!,C}} -w[] {w},{h} -endif
       -rm[-1]
     -else
-      --text_outline[0] "G"{`39`}"MIC Blobs Editor",65,40,24,3,1,200,128,255
+      --text_outline[0] "G"{`39`}"MIC Blobs Editor",65,40,23,3,1,200,128,255
       -t[-1] "* Left mouse button : Create and move blobs.\n\n\
               * Right mouse button : Remove blob.\n\n\
               * Middle mouse button : Remove all blobs.\n\n\
@@ -11295,7 +11295,7 @@ x_fire : -skip "${1=G"{`39`}"MIC}"
   -i[0] 100,32 -w[0] 450,200,0,"[G"{`39`}"MIC] Fire effect"
   -i[1] (0,255,255,255,255^0,0,255,255,255^0,0,0,128,255) -r[1] 256,1,1,3,3
   -i[2] (0,0,0;0,0,0;1,1,1;0,1,0) -*[2] 0.21
-  -text3d "$1",34,3,1 -mv[-1] 3 -c3d[3] -n3d[3] -*3d[3] 320 -col3d[3] 255,205,130 -db3d 0 -f3d 300
+  -text3d "$1",33,3,1 -mv[-1] 3 -c3d[3] -n3d[3] -*3d[3] 320 -col3d[3] 255,205,130 -db3d 0 -f3d 300
   100,100 -rand[-1] 0,255 -ellipse[-1] 50%,50%,5,5,0,1,300 -b[-1] 10
   -sharpen[-1] 1000 -shrink_xy[-1] 1 -n[-1] 0,255 -to_rgb[-1] -light3d [-1] -rm[-1]
 
@@ -11389,7 +11389,7 @@ x_fisheye :
   -v -
   -if {@#>0} -a x -n 0,255 -r2dy 220 -else
   120,90,1,3 -rand[-1] 0,255 -plasma[-1] 0.3,3 -n 0,255
-  -t "  G"{`39`}"MIC\nFISH-EYE\n EFFECT",15,13,24,1,255 -scale2x -b 5 -sharpen 1000
+  -t "  G"{`39`}"MIC\nFISH-EYE\n EFFECT",15,13,23,1,255 -scale2x -b 5 -sharpen 1000
   -f i+150-4*abs(y-h/2) -c[-1] 0,255 -frame_fuzzy[-1] 15,10,15,1.5,0 -to_rgb[-1]
   -endif
   -torus3d 20,6 -col3d[-1] {?(30,255)},{?(30,255)},{?(30,255)} --r3d[-1] 1,0,0,90
@@ -11599,7 +11599,7 @@ x_histogram :
 _x_histogram :
   val={max(0,min(100,$1))}
   280,2,1,3,255 -line[-1] 0,0,$val%,0,1,0,255,0 -line[-1] 0,1,$val%,1,1,240,255,62 -r[-1] 100%,16,1,3,3
-  0 -t[-1] {round($val)}%,0,0,20,1,1 --*[-1] -255 -+[-1] 255 -r[-1] 100%,100%,1,3
+  0 -t[-1] {round($val)}%,0,0,14,1,1 --*[-1] -255 -+[-1] 255 -r[-1] 100%,100%,1,3
   -j[-3] [-1],{(280-w)/2},{(16-h)/2},0,0,1,[-2] -rm[-2,-1]
   -r[-1] {w+2},{h+2},1,3,0,0,0.5,0.5
 
@@ -11800,7 +11800,7 @@ x_jawbreaker : -check "${1=12}>0 && $1<20 && ${2=13}>0 && $2<20 && ${3=5}>0 && $
   # Game over.
   -if {@!" && "!@{!,ESC}}
     -w[] @{visu,w},@{visu,h},0,"[G"{`39`}"MIC] Jawbreaker (final score : "$score")"
-    -i[gameover] 230,85 -t[-1] "Game Over!",3,0,57,1,1 -t[-1] "Score : "$score,24,54,32,1,1
+    -i[gameover] 248,85 -t[-1] "Game Over!",3,0,53,1,1 -t[-1] "Score : "$score,23,53,32,1,1
     --dilate[-1] 5 -nm[-1] "mgameover" -*[-2] 255 -r[-2] 100%,100%,1,3
     -repeat 25
       --r[gameover,mgameover] {400-12*($>+1)}%,{400-12*($>+1)}%
@@ -11929,7 +11929,7 @@ x_light :
   -v -
 
   # Create warping and color images.
-  0 -t[-1] "    G"{`39`}"MIC\nLight effect",0,0,57,1,255 -expand_xy[-1] 15,0 -b[-1] 3
+  0 -t[-1] "    G"{`39`}"MIC\nLight effect",0,0,53,1,255 -expand_xy[-1] 15,0 -b[-1] 3
   [-1] -n[-2] 0,1 -r[-2] 100%,100%,1,3
   -sh[-2] 0,0 -*[-1] 120 -rm[-1]
   -sh[-2] 1,1 -*[-1] 70 -rm[-1]
@@ -11993,7 +11993,7 @@ x_mandelbrot : -skip ${1=0},${2=0.317},${3=0.03}
     $siz,$siz -mandelbrot[-1] @0,256,$1,{if($1,$2,0)},{if($1,$3,0)} -map[-1] [1]                  # Render fractal.
     -if $1 -w[-1] $siz,$siz,0,"[G"{`39`}"MIC] Julia set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}"), c0=($2,$3)" # Display on window.
     -else -w[-1] $siz,$siz,0,"[G"{`39`}"MIC] Mandelbrot set c=("@{0,0}","@{0,1}")-("@{0,2}","@{0,3}")" -endif
-    w={w} h={h} -select[-1] 2                                                                     # Get the user selection.
+    w={w} h={h} -round[-1] -select[-1] 2                                                          # Get the user selection.
 
     -if {@{-1,0}>0}                                                                               # If valid selection found.
       M={max(@{-1,3}-@{-1,0},@{-1,4}-@{-1,1})}                                                    # Compute max dimension of selected rectangle.
@@ -12054,7 +12054,7 @@ x_metaballs3d :
     N={i[7]} (255,255,150;200,96,164;50,150,230) -r[-1] 3,$N,1,1,3 -y[-1] -j[-2] [-1],0,{@{-2,h}-4*$N} # Do some color tweaks.
     -if {!$mode} -circles3d[-2] 4 -endif
     -if {!@{1,w}}
-      0 -text[-1] ${s$mode},5,5,24,0.5,255,255,255 -b[-1] 0.7 -n[-1] 0,255
+      0 -t[-1] ${s$mode},5,5,23,0.5,255,255,255 -b[-1] 0.7 -n[-1] 0,255
       --dilate[-1] 3 --j[0] [-2],5,3,0,0,1,[-1],255 -mv[-1] 1 -rm[2,-2,-1]
     -endif
     --object3d[1] [-2],50%,50%,0,1,{if(!$mode,3,$mode)},0,0,300,0,0,-500,0.1,1.5
@@ -12267,7 +12267,7 @@ x_pacman :
   -repeat 11 0 -t[-1] $<" s",0,0,23,1,${time{min(4,round(($<+1)/2))}} -nm[-1] time$< -done
   0 -t[-1] "Get Ready!",0,0,32,1,255 -autocrop[-1] 0 -expand_xy[-1] 4,0 --dilate[-1] 8 -r[-2] 100%,100%,1,3
   -nm[-2] get_ready -nm[-1] get_readym
-  0 -t[-1] "Game\nOver!",0,0,57,1,255 -autocrop[-1] 0 -expand_xy[-1] 4,0 --dilate[-1] 8 -r[-2] 100%,100%,1,3
+  0 -t[-1] "Game\nOver!",0,0,53,1,255 -autocrop[-1] 0 -expand_xy[-1] 4,0 --dilate[-1] 8 -r[-2] 100%,100%,1,3
   -nm[-2] game_over -nm[-1] game_overm
 
   # Start game.
@@ -12301,7 +12301,7 @@ x_pacman :
     -if $lives --r[pacman_2] 12,12,1,4,2 -r[-1] {100*$lives}%,100%,1,4,0,2 -j[-2] [-1],90,7 -rm[-1] -endif
     -nm[-1] visu
     -w[visu] -1,-1,0,"[G"{`39`}"MIC] Pacman" -cursor[0] 0
-    0 -t[-1] "Level "$level,0,0,57,1,1 -autocrop[-1] 0 -expand_xy[-1] 4,0 (0,255^0,255^0,0) --map[-2] [-1] -rm[-2] -dilate[-2] 8
+    0 -t[-1] "Level "$level,0,0,53,1,1 -autocrop[-1] 0 -expand_xy[-1] 4,0 (0,255^0,255^0,0) --map[-2] [-1] -rm[-2] -dilate[-2] 8
     -nm[-1] level_N -nm[-2] levelm_N
 
     -repeat 4 xg$>={16*$mw2} yg$>={16*$mh2+4*$>} dg$>=3 mg$>=0 -done
@@ -12332,7 +12332,7 @@ x_pacman :
         -endif
       -else
         --rotate[pacman_$t,pacmanm_$t] {90*(abs($dp)-1)} -j[-3] [-2],$xp,{24+$yp},0,0,1,[-1],255 -rm[-2,-1]
-        -if {$left>=0" && "($left>=5" || "$t<=2)} -j[-1] [time{round($left)}],{(w-@{time0,w})/2},1 -endif
+        -if {$left>=0" && "($left>=5" || "$t<=2)} -j[-1] [time{round($left)}],{(w-@{time0,w})/2-10},1 -endif
       -endif
       -t[-1] $score,{w-65},1,22,1,255
       -if {$is_get_ready}
@@ -12685,7 +12685,7 @@ x_plasma :
   -done
 
   {w+2},100%,1,1,'x' 100%,100%,1,1,'Y=(y-60+5*cos(x/30)+10*sin(x/15));if(Y<0||Y>=32,-1,Y)' -a[-2,-1] c
-  0 -t[-1] "** Welcome to G"{`39`}"MIC, a powerful image processing framework **",0,0,32,1,255
+  0 -t[-1] "** Welcome to G"{`39`}"MIC, a powerful image processing framework **",0,0,33,1,255
   -b[-1] 0.6 -n[-1] 0,255
   M={w}
 
@@ -12797,7 +12797,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
 
     -if {!narg($visu_centroids)} # Update colormap.
       --luminance[centroids] -a[-1] [centroids],y -sort[-1] +,x -rows[-1] 1 -r[-1] {@{visu,w}-10},50,1,3
-      0 -text[-1] "Colors: "@{centroids,w},2,0,13,1,255,255,255 --dilate[-1] 3 -j[-3] [-2],2,2,0,0,1,[-1],255
+      0 -t[-1] "Colors: "@{centroids,w},2,0,13,1,255,255,255 --dilate[-1] 3 -j[-3] [-2],2,2,0,0,1,[-1],255
       -rm[-2,-1] -nm[-1] visu_centroids -j[visu] [visu_centroids],5,310
     -endif
     -l[visu]
@@ -12881,7 +12881,7 @@ x_quantize_rgb : -check "isint(${1=16}) && $1>1"
   --3d[-1] 128,128,128 -nm[-1] obj3d _N={i[7]}
 
 _x_quantize_rgb_text :
-  0 -text[-1] "$1",0,0,13,1,255 -r[-1] {w+2},15,1,1,0,0,0.5,0.5 --dilate[-1] 3 -to_rgb[-2]
+  0 -t[-1] "$1",0,0,13,1,255 -r[-1] {w+2},15,1,1,0,0,0.5,0.5 --dilate[-1] 3 -to_rgb[-2]
   -nm[-2] $2 -nm[-1] m$2
 
 #@gmic x_reflection3d
@@ -13667,7 +13667,7 @@ alert : -skip "${1=[G"{`39`}"MIC Alert]},${2=This is an alert box.},${3=OK}"
 
     # Create buttons graphics.
     $=arg
-    -repeat {$#-2} label=${arg{$>+3}} 0 -text[-1] $label,0,0,14,1,-200 -done
+    -repeat {$#-2} label=${arg{$>+3}} 0 -t[-1] $label,0,0,14,1,-200 -done
     -r[^0] {min(128,max(64,@{-max_w[^0]}+12))},{min(48,max(24,@{-max_h[^0]}+12))},1,1,0,0,0.5,0.5
     -+[^0] 200 -to_rgb[^0]
     -mv[0] @#
@@ -13702,7 +13702,7 @@ alert : -skip "${1=[G"{`39`}"MIC Alert]},${2=This is an alert box.},${3=OK}"
     --l
       -channels 0,3 -sh 1,100% --[50%--1] 200 -rm[50%--1] -frame 8,8,0
       -if {@#<6} -a[^-1] x -else -append_tiles[^-1] , -endif
-      0 -text[-1] "$2",0,0,14,1,0,-200,-200,-200 -r[-1] {w+16},{h+8},1,4,0
+      0 -t[-1] "$2",0,0,14,1,0,-200,-200,-200 -r[-1] {w+16},{h+8},1,4,0
       -a[-2,-1] x,0.5 -rv -a y,0.5
       -sh 1,100% -+[-1] 200 -rm[-1]
       -rectangle 0,0,100%,100%,1,0xFFFFFFFF,0
@@ -14762,9 +14762,9 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
         -a[$ip--1] y
         -j[-1] [-2],1,0 -rm[-2]
 
-        256,256,1,3,255 -piechart[-1] 57,0,0,0,@-2,"abs.",{@{scores,w}-@{nb_games,(0,$p)}},255,255,255 -frame[-1] 10,10,255
+        256,256,1,3,255 -piechart[-1] 53,0,0,0,@-2,"abs.",{@{scores,w}-@{nb_games,(0,$p)}},255,255,255 -frame[-1] 10,10,255
         1,$row_height,1,3,0
-        256,256,1,3,255 -piechart[-1] 57,0,0,0,@-4 -frame[-1] 10,10,255
+        256,256,1,3,255 -piechart[-1] 53,0,0,0,@-4 -frame[-1] 10,10,255
         -rm[-4] -r2dy[-3,-1] $row_height
         -a[-5--1] x
       -endif
@@ -14832,7 +14832,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
     -if {$t_coffee_balance>0} t_coffee_balance=+$t_coffee_balance -endif
     t_coffee_rank=@{coffee_balance,(1,$p)}
     c={v=@{coffee_balance,(1,$p)};if(v>=1&&v<=3,v,if(v==$max_coffee_balance_rank-1,4,if(v==$max_coffee_balance_rank,5,0)))}
-    -_gpt_field $t_coffee_balance\$\ ($t_coffee_rank),80,$row_height,16,$n,$c
+    -_gpt_field $t_coffee_balance{`31`}\ ($t_coffee_rank),80,$row_height,16,$n,$c
 
     # Append all fields into a single row.
     -if {!$n} -f[$i,{$i+2}--1] "i*(0.7+0.3*(((x+y)%8)!=0))" -endif  # Add hatches for absent player.
@@ -14846,7 +14846,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
   -elif {$2>0} t_title="** GREYC Poker Tour ** Last "@{scores,w}" sessions  (avg. \#player = "$avg_nb_players")"
   -else t_title="** GREYC Poker Tour ** Session \#"@{scores,w}"/"{-$2}" (avg. \#player = "$avg_nb_players")"
   -endif
-  0 -t[-1] $t_title,0,0,57,1,255 -r[-1] 100%,100%,1,4 -drop_shadow[-1] 5,5,2
+  0 -t[-1] $t_title,0,0,53,1,255 -r[-1] 100%,100%,1,4 -drop_shadow[-1] 5,5,2
   -r2dy[-1] 24 -r[-1] {@{$board,w}-2},{1.5*$row_height-2},1,4,0,0,0.5,{if($2,0.9,0.6)}
   -i[-2] 1,3,1,3,32,0,64,32,64,128,64,200,256 -r[-2] [-1],[-1],1,3,3 -blend[-2,-1] alpha
   -if {$2>0} -shift[-1] 0,0,0,1,2 -elif {$2<0} -mirror[-1] c -endif
@@ -14865,7 +14865,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
       @{-path_tmp}/${player{@{session_winners,(1,$>)}}_file} --[-1] 255 -rr2d[-1] 56,56,2,2 -+[-1] 255 -frame[-1] 1,1,0
     -done
     t_session_winners=@{-_gpt_remove_underscore\ $t_session_winners}
-    0 -t[-1] "Session winner"@{-if\ {$nb_session_winners==1}\ -u\ \"\"\ -else\ -u\ s\ -endif}" : "$t_session_winners,0,0,57,1,255
+    0 -t[-1] "Session winner"@{-if\ {$nb_session_winners==1}\ -u\ \"\"\ -else\ -u\ s\ -endif}" : "$t_session_winners,0,0,53,1,255
     -r[-1] 100%,100%,1,4 -drop_shadow[-1] 5,5,2
     -r2dy[-1] 24 -r[-1] {@{$board,w}-2},{1.5*$row_height-2},1,4,0,0,0.1,0.5
     -i[-2] 1,2,1,3,0,128,128,255,64,128 -r[-2] [-1],[-1],1,3,3 -blend[-2,-1] alpha
@@ -14888,7 +14888,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
       @{-path_tmp}/${player{@{session_losers,(1,$>)}}_file} --[-1] 255 -rr2d[-1] 56,56,2,2 -+[-1] 255 -frame[-1] 1,1,0
     -done
     t_session_losers=@{-_gpt_remove_underscore\ $t_session_losers}
-    0 -t[-1] "Session loser"@{-if\ {$nb_session_losers==1}\ -u\ \"\"\ -else\ -u\ s\ -endif}" : "$t_session_losers,0,0,57,1,255
+    0 -t[-1] "Session loser"@{-if\ {$nb_session_losers==1}\ -u\ \"\"\ -else\ -u\ s\ -endif}" : "$t_session_losers,0,0,53,1,255
     -r[-1] 100%,100%,1,4 -drop_shadow[-1] 5,5,2
     -r2dy[-1] 24 -r[-1] {@{$board,w}-2},{1.5*$row_height-2},1,4,0,0,0.1,0.5
     -i[-2] 1,2,1,3,128,255,0,128,64,128 -r[-2] [-1],[-1],1,3,3 -blend[-2,-1] alpha
@@ -14913,7 +14913,7 @@ _gpt_remove_underscore :
 # $1 : Text - $2 : Width - $3 : Height - $4 : Font size - $5 : Text - $6 : Color code.
 _gpt_field :
   -if {!$5} {$2-2},{$3-2},1,3,255 -frame[-1] 1,1,0 -return -endif
-  0 -t[-1] "$1",0,0,57,1,1 -*[-1] -1 -+[-1] 1
+  0 -t[-1] "$1",0,0,53,1,1 -*[-1] -1 -+[-1] 1
   -r2dy[-1] $4 --[-1] 1 -r[-1] {$2-2},{$3-2},1,1,0,0,0.5,0.5 -+[-1] 1
   -frame[-1] 1,1,0
   [-1]x2
@@ -15289,7 +15289,7 @@ gimp_no_preview :
 
 _gimp_no_preview :
   -if {@#>0} -k[0] -else 256,256,1,1,128 -endif
-  118,50 -t[-1] "$1",2,1,24,1,255 -r[-1] [-2],[-2],1,1,0,0,0.5,0.5 -to_colormode[-1] @{-2,s}
+  118,50 -t[-1] "$1",2,1,23,1,255 -r[-1] [-2],[-2],1,1,0,0,0.5,0.5 -to_colormode[-1] @{-2,s}
   (1.5,0,1.5;0,0,0;1.5,0,1.5) -r[-1] [-3],3 -*[-3,-1] -c[-2] 0,255 -or
   -skip "$*"
 
@@ -15339,7 +15339,7 @@ _gimp_no_preview :
 gimp_logo_version3 : -skip "${1=Plug-in for GIMP}"
   -rm s="G"{`39`}"MIC"
   -repeat {narg({'$s'})}
-    0 -text[-1] {`{arg(1+$>,{'$s'})}`},0,0,57,1,1 -frame[-1] 3,0,0
+    0 -t[-1] {`{arg(1+$>,{'$s'})}`},0,0,53,1,1 -frame[-1] 3,0,0
     -r[-1] 500%,500%,1,1,3 -b[-1] 3% -ge[-1] 50%
     -distance[-1] 1 -le[-1] 10
     [-1]x3 -whirls[-4--2] ,
@@ -15352,7 +15352,7 @@ gimp_logo_version3 : -skip "${1=Plug-in for GIMP}"
   -ball 64,{255*$r3},{255*$g3},{255*$b3} -j[-2] [-1],420,15 -rm[-1]
   -sh[-1] 100%,100% -dilate[-1] 7 -rm[-1] -autocrop[-1]
   -drop_shadow[-1] 10,10,1%,0.5
-  0 -text[-1] "$1",0,0,57,1,255 -frame[-1] 4,4,0 [-1]x3 -dilate[-1] 7 -a[-4--1] c
+  0 -t[-1] "$1",0,0,53,1,255 -frame[-1] 4,4,0 [-1]x3 -dilate[-1] 7 -a[-4--1] c
   -a[-2,-1] y,0.5
   -r2dy[-1] 50%
   -i[-2] 120%,120%,1,3,255 -plasma[-2] 1,1 -s[-2] c
@@ -15362,7 +15362,7 @@ gimp_logo_version3 : -skip "${1=Plug-in for GIMP}"
 
 gimp_logo_version2 : -skip "${1=Plug-in for GIMP}"
   -if @# -k[0] -endif
-  -to_rgb 0 -t[-1] "G"{`39`}"MIC",0,0,57,1,1 -label[-1]
+  -to_rgb 0 -t[-1] "G"{`39`}"MIC",0,0,53,1,1 -label[-1]
   6,1,1,3 -rand[-1] 150,255 -point[-1] 0 -map[-2] [-1] -rm[-1]
   -expand_xy[-1] 10,0 -b[-1] 2 -r[-1] 200%,200%,1,3,6 -sqr[-1] -c[-1] 0,60% -n[-1] 0,255
   -warp_perspective[-1] 0.5,0,1,50,50,0 -shift[-1] 0,-10
@@ -15373,7 +15373,7 @@ gimp_logo_version2 : -skip "${1=Plug-in for GIMP}"
 
 gimp_logo_version1 : -skip "${1=Plug-in for GIMP}"
   -if @# ratio={w/h} -else ratio=1 -endif
-  -rm 118,44,1,1 -t "G"{`39`}"MIC",3,-6,57,1,255 -r 100%,100%,10,1 -r 100%,100%,20,1,0,0,0.5,0.5,0.5 -b 1.5
+  -rm 118,44,1,1 -t "G"{`39`}"MIC",3,-6,53,1,255 -r 100%,100%,10,1 -r 100%,100%,20,1,0,0,0.5,0.5,0.5 -b 1.5
   -isosurface3d 50%
   -col3d {?(150,255)},{?(150,255)},{?(150,255)}
   -sphere3d 8 -col3d[-1] {?(150,255)},{?(150,255)},{?(150,255)} -+3d[-1] 72,-6 -+3d -c3d[-1] -rv3d
@@ -15527,14 +15527,14 @@ gimp_logo_ca :
 gimp_display_filter_sources :
   -if @# -k[0] -remove_opacity -f 0 -else 256,256 -endif
   -l[] -gimp_filter_sources -y x -a y -onfail (0) -endl
-  -text[0] "Enabled external sources:\n--------------------------------",5,5,13,1,255
+  -t[0] "Enabled external sources:\n--------------------------------",5,5,13,1,255
   -if @{-is_windows} path=@{-path_user}/ -else path=@{-path_user}/. -endif
   i=1 -repeat {h}
     --rows[-1] $>
     -if {@{-1,0-3}'=='{'http'}}
-      -text[0] [$i]" "@{-1,t},5,{32+15*$i},13,1,255 i={$i+1}
+      -t[0] [$i]" "@{-1,t},5,{32+15*$i},13,1,255 i={$i+1}
     -else
-      -if $path@{-1,t} -text[0] [$i]" "@{-1,t}" (local file)",5,{32+15*$i},13,1,255 i={$i+1} -endif
+      -if $path@{-1,t} -t[0] [$i]" "@{-1,t}" (local file)",5,{32+15*$i},13,1,255 i={$i+1} -endif
     -endif
     -rm[-1]
   -done
@@ -15607,7 +15607,7 @@ gimp_friends :
   -rand[-2] 0,255 -sh[-2] 1,2 -/[-1] 2 -rm[-1]
   -blur_radial[-2] 10 -sharpen[-2] 600
   -r[-1] [-2],[-2],1,4,0,0,0.5,0.5 -blend alpha
-  135,67,1,1,0 -t[-1] "Greetings to\n  all G"{`39`}"MIC\n  friends!",2,-2,24,1,1
+  135,67,1,1,0 -t[-1] "Greetings to\n  all G"{`39`}"MIC\n  friends!",2,-2,23,1,1
   --dilate[-1] 3 -*[-2] 255 -to_rgb[-2] -j[-3] [-2],{(@{-3,w}-@{-2,w})/2},{(@{-3,h}-@{-2,h})/2.2},0,0,1,[-1]
   -rm[-2,-1]
 
@@ -18759,7 +18759,7 @@ gimp_shade_stripes_preview :
 #@gimp Visible watermark : gimp_watermark_visible, gimp_watermark_visible(0)
 #@gimp : Text = text{"(c) G'MIC"}
 #@gimp : Opacity = float(0.4,0.1,0.9)
-#@gimp : Size = int(57,13,128)
+#@gimp : Size = int(53,13,128)
 #@gimp : Angle = float(25,0,360)
 #@gimp : Smoothness = float(0.5,0,5)
 #@gimp : Lightness = choice(1,"Darker","Brighter")
@@ -21875,7 +21875,7 @@ gimp_mandelbrot_preview :
 
 #@gimp Quick copyright : gimp_quick_copyright, gimp_quick_copyright(0)
 #@gimp : Text = text{"(c) G'MIC"}
-#@gimp : Size = int(24,13,128)
+#@gimp : Size = int(23,13,128)
 #@gimp : Color = color(255,255,255,128)
 #@gimp : Outline = int(1,0,4)
 #@gimp : Position = choice(3,"Up-left","Up-right","Bottom-left","Bottom-right")
@@ -22546,7 +22546,7 @@ gimp_fourier_preview :
 
 #@gimp Fourier watermark : gimp_watermark_fourier, _none_
 #@gimp : Text = text{"(c) G'MIC"}
-#@gimp : Size = int(57,13,128)
+#@gimp : Size = int(53,13,128)
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Note: </b> To make the watermark visible afterwards, use the 'Fourier Analysis' filter. </small>")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
@@ -23345,3 +23345,22 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+foo :
+
+ # Remove red boundaries
+ -rows 65,100%
+ -negative
+
+ -s y,-54
+ -k[0-255]
+
+ -a z -autocrop -s z -i[0] 100%,100%
+ -rows 0,{h-2}
+
+ -e "SIZE : "{w},{h}
+
+# -append_tiles 32 -d
+
+  -a x
+  -neq 0
