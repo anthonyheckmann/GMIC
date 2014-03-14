@@ -1137,7 +1137,6 @@ _build_tutorial_html :
   -replace_str "border: 1px","border: 0px"
   -replace_str "G"{`96`}"MIC","G"{`39`}"MIC"
   -replace_str "CNTL","CTRL"
-  -replace_str "Selecton","Selection"
 
   # Discard original header.
   -s +,{'<h1'}
@@ -23345,22 +23344,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-foo :
-
- # Remove red boundaries
- -rows 65,100%
- -negative
-
- -s y,-54
- -k[0-255]
-
- -a z -autocrop -s z -i[0] 100%,100%
- -rows 0,{h-2}
-
- -e "SIZE : "{w},{h}
-
-# -append_tiles 32 -d
-
-  -a x
-  -neq 0
