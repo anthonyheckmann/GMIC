@@ -23344,38 +23344,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-foo :
-  -v -
-  -channels 0 -n 0,1 -eq 0
-  -autocrop -shift 0,$2
-  -s y,-$1
-  -k[0-254]
-
-  -a z -autocrop -s z
-  -i[0] [31]
-
-  -v + -e "FONT SIZE = "{w}x{h} -v -
-
-  --append_tiles 32 -d[-1] -rm[-1]
-  -a x
-
-  M=400 Mm=0 MM=1000 continue=1
-  -do
-
-    -v + -e "Compress with M="$M -v -
-    --compress_binary $M
-
-    iM={iM}
-
-    -if {$iM==126} continue=false
-    -elif {$iM>126} MM=$M M={round(($Mm+$MM)/2)} -rm[-1]
-    -else Mm=$M M={round(($Mm+$MM)/2)} -rm[-1]
-    -endif
-
-  -while $continue
-  -rm[0]
-
-  -o raw:font$1.asc,char
-  -v +
-  -e "All done, font $1 saved with M="$M"."
