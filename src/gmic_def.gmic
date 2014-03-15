@@ -7310,7 +7310,7 @@ spline : -skip ${9=256},${10=1},${11=0}
 #@gmic text_outline : text,_x[%],_y[%],_font_height>0,_outline>=0,_opacity,_color1,..
 #@gmic : Draw specified colored and outlined text string on selected images.
 #@gmic : Default values: 'x=y=2', 'font_height=13', 'outline=2', 'opacity=1' and 'color1=255'.
-#@gmic : $ image.jpg -text_outline "Hi there!",10,10,53,3
+#@gmic : $ image.jpg -text_outline "Hi there!",10,10,63,3
 text_outline : -skip ${2=2},${3=2},${4=13},${5=2},${6=1},${7=255}
   -e[^-1] "Draw outlined text '$1' at position ($2,$3) on image$?, with font height $4, outline $5, opacity $6 and color ${7--1}."
   -v - -if $5
