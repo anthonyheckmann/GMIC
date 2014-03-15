@@ -5874,9 +5874,258 @@ _scorefile,_number_of_sessions>=0
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Generate score board for the GPT championship (GREYC Poker Tour).
-[gmic]-0./__help/document_gmic/*repeat/*local/*if/*if/*if/*if/_document_gmic_example_html/*if/*local/foo/ Generate score board for GPT-like championship (GREYC Poker Tour), from file 'https://tschumperle.users.greyc.fr/gpt.raw'.sh: 1: curl: not found
-
-gzip: /tmp/an80iYKr.raw.gz: unexpected end of file
-
-[gmic] [0;31;59m[1m*** Error in ./__help/document_gmic/../*if/*local/foo/gpt/ (file '../src/gmic_def.gmic', call from line 1815) *** cimg::load_network_external(): Failed to load file 'https://tschumperle.users.greyc.fr/gpt.raw' with external commands 'wget' or 'curl'.[0;0;0m
-
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def623.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">-gpt ,</div></div></td><td><tt>-gpt ,</tt></td></tr>
+</table></tt></p><br/><h3><a id="subsection24"><font color="purple">** <u>Commands shortcuts</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h3>
+<p style="margin-left:20px">
+<font color="green"><b>&nbsp;&nbsp;-h  (*)</b>:</font>
+<font color="blue"><i>eq. to '-help'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-m  (*)</b>:</font>
+<font color="blue"><i>eq. to '-command'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-display'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-d0 </b>:</font>
+<font color="blue"><i>eq. to '-display0'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-d3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-display3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-da </b>:</font>
+<font color="blue"><i>eq. to '-display_array'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-dfft </b>:</font>
+<font color="blue"><i>eq. to '-display_fft'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-dg </b>:</font>
+<font color="blue"><i>eq. to '-display_graph'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-dh </b>:</font>
+<font color="blue"><i>eq. to '-display_histogram'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-dp </b>:</font>
+<font color="blue"><i>eq. to '-display_polar'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-drgba </b>:</font>
+<font color="blue"><i>eq. to '-display_rgba'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-dt </b>:</font>
+<font color="blue"><i>eq. to '-display_tensors'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-dw </b>:</font>
+<font color="blue"><i>eq. to '-display_warp'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-e  (*)</b>:</font>
+<font color="blue"><i>eq. to '-echo'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-i  (*)</b>:</font>
+<font color="blue"><i>eq. to '-input'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-o  (*)</b>:</font>
+<font color="blue"><i>eq. to '-output'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-on </b>:</font>
+<font color="blue"><i>eq. to '-outputn'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-op </b>:</font>
+<font color="blue"><i>eq. to '-outputp'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-ow </b>:</font>
+<font color="blue"><i>eq. to '-outputw'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-p  (*)</b>:</font>
+<font color="blue"><i>eq. to '-print'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-sh  (*)</b>:</font>
+<font color="blue"><i>eq. to '-shared'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-up </b>:</font>
+<font color="blue"><i>eq. to '-update'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-v  (*)</b>:</font>
+<font color="blue"><i>eq. to '-verbose'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-w  (+)</b>:</font>
+<font color="blue"><i>eq. to '-window'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-k  (*)</b>:</font>
+<font color="blue"><i>eq. to '-keep'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-mv  (*)</b>:</font>
+<font color="blue"><i>eq. to '-move'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-nm  (*)</b>:</font>
+<font color="blue"><i>eq. to '-name'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-rm  (*)</b>:</font>
+<font color="blue"><i>eq. to '-remove'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-rv  (*)</b>:</font>
+<font color="blue"><i>eq. to '-reverse'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-+  (+)</b>:</font>
+<font color="blue"><i>eq. to '-add'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-<<  (+)</b>:</font>
+<font color="blue"><i>eq. to '-bsl'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;->>  (+)</b>:</font>
+<font color="blue"><i>eq. to '-bsr'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-/  (+)</b>:</font>
+<font color="blue"><i>eq. to '-div'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-==  (+)</b>:</font>
+<font color="blue"><i>eq. to '-eq'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;->=  (+)</b>:</font>
+<font color="blue"><i>eq. to '-ge'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;->  (+)</b>:</font>
+<font color="blue"><i>eq. to '-gt'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-<=  (+)</b>:</font>
+<font color="blue"><i>eq. to '-le'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-<  (+)</b>:</font>
+<font color="blue"><i>eq. to '-lt'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-//  (+)</b>:</font>
+<font color="blue"><i>eq. to '-mdiv'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-%  (+)</b>:</font>
+<font color="blue"><i>eq. to '-mod'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-**  (+)</b>:</font>
+<font color="blue"><i>eq. to '-mmul'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-*  (+)</b>:</font>
+<font color="blue"><i>eq. to '-mul'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-!=  (+)</b>:</font>
+<font color="blue"><i>eq. to '-neq'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-^  (+)</b>:</font>
+<font color="blue"><i>eq. to '-pow'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;--  (+)</b>:</font>
+<font color="blue"><i>eq. to '-sub'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-c  (+)</b>:</font>
+<font color="blue"><i>eq. to '-cut'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-f  (+)</b>:</font>
+<font color="blue"><i>eq. to '-fill'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-n  (+)</b>:</font>
+<font color="blue"><i>eq. to '-normalize'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-=  (+)</b>:</font>
+<font color="blue"><i>eq. to '-set'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-t2 </b>:</font>
+<font color="blue"><i>eq. to '-threshold2'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-fc </b>:</font>
+<font color="blue"><i>eq. to '-fill_color'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-a  (*)</b>:</font>
+<font color="blue"><i>eq. to '-append'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-z  (*)</b>:</font>
+<font color="blue"><i>eq. to '-crop'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-r  (*)</b>:</font>
+<font color="blue"><i>eq. to '-resize'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-rr2d </b>:</font>
+<font color="blue"><i>eq. to '-resize_ratio2d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-r2dx </b>:</font>
+<font color="blue"><i>eq. to '-resize2dx'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-r2dy </b>:</font>
+<font color="blue"><i>eq. to '-resize2dy'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-r3dx </b>:</font>
+<font color="blue"><i>eq. to '-resize3dx'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-r3dy </b>:</font>
+<font color="blue"><i>eq. to '-resize3dy'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-r3dz </b>:</font>
+<font color="blue"><i>eq. to '-resize3dz'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-s  (*)</b>:</font>
+<font color="blue"><i>eq. to '-split'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-y  (*)</b>:</font>
+<font color="blue"><i>eq. to '-unroll'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-b  (+)</b>:</font>
+<font color="blue"><i>eq. to '-blur'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-g  (+)</b>:</font>
+<font color="blue"><i>eq. to '-gradient'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-j  (+)</b>:</font>
+<font color="blue"><i>eq. to '-image'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-t  (+)</b>:</font>
+<font color="blue"><i>eq. to '-text'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-+3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-add3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-b3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-background3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-c3d </b>:</font>
+<font color="blue"><i>eq. to '-center3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-col3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-color3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-/3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-div3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-db3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-double3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-f3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-focale3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-l3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-light3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-m3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-mode3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-md3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-moded3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-*3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-mul3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-n3d </b>:</font>
+<font color="blue"><i>eq. to '-normalize3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-o3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-opacity3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-p3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-primitives3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-rv3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-reverse3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-r3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-rotate3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-sl3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-specl3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-ss3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-specs3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-s3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-split3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;--3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-sub3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-t3d  (+)</b>:</font>
+<font color="blue"><i>eq. to '-texturize3d'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-endl  (*)</b>:</font>
+<font color="blue"><i>eq. to '-endlocal'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-x  (*)</b>:</font>
+<font color="blue"><i>eq. to '-exec'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-l  (*)</b>:</font>
+<font color="blue"><i>eq. to '-local'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-q  (*)</b>:</font>
+<font color="blue"><i>eq. to '-quit'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-u  (*)</b>:</font>
+<font color="blue"><i>eq. to '-status'</i></font><br/>
+<font color="green"><b>&nbsp;&nbsp;-frame </b>:</font>
+<font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
+</p>
+<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 832 ]</b></font>
+<h2><a id="section13"><font color="brown"><u>Examples of use</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
+<pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
+ The few examples below illustrate possible uses of this tool: 
+ 
+  - View a list of images: 
+     gmic file1.bmp file2.jpeg 
+ 
+  - Convert an image file: 
+     gmic input.bmp -o output.jpg 
+ 
+  - Create a volumetric image from a movie sequence: 
+     gmic input.mpg -a z -o output.hdr 
+ 
+  - Compute image gradient norm: 
+     gmic input.bmp -gradient_norm 
+ 
+  - Denoise a color image: 
+     gmic image.jpg -denoise 30,10 -o denoised.jpg 
+ 
+  - Compose two images using overlay layer blending: 
+     gmic image1.jpg image2.jpg -blend overlay -o blended.jpg 
+ 
+  - Evaluate a mathematical expression: 
+     gmic -e "cos(pi/4)^2+sin(pi/4)^2={cos(pi/4)^2+sin(pi/4)^2}" 
+ 
+  - Plot a 2d function: 
+     gmic 1000,1,1,2 -f "X=3*(x-500)/500;X^2*sin(3*X^2)+if(c==0,u(0,-1),cos(X*10))" -plot 
+ 
+  - Plot a 3d elevated function in random colors: 
+     gmic 128,128,1,3,"?(0,255)" -plasma 10,3 -blur 4 -sharpen 10000 \ 
+      -elevation3d[-1] "'X=(x-64)/6;Y=(y-64)/6;100*exp(-(X^2+Y^2)/30)*abs(cos(X)*sin(Y))'" 
+ 
+  - Plot the isosurface of a 3d volume: 
+     gmic -m3d 5 -md3d 5 -db3d 0 -isosurface3d "'x^2+y^2+abs(z)^abs(4*cos(x*y*z*3))'",3 
+ 
+  - Render a G'MIC 3d logo: 
+     gmic 1 -text G\'MIC,0,0,53,1,1,1,1 -expand_xy 10,0 -blur 2 -n 0,100 --plasma 0.4 -+ \ 
+      -blur 1 -elevation3d -0.1 -md3d 4 
+ 
+  - Generate a 3d ring of torii: 
+     gmic -repeat 20 -torus3d 15,2 -col3d[-1] "{?(60,255)},{?(60,255)},{?(60,255)}" \ 
+      -*3d[-1] 0.5,1 -if "{$>%2}" -r3d[-1] 0,1,0,90 -endif -+3d[-1] 70 -+3d \ 
+      -r3d 0,0,1,18 -done -md3d 3 -m3d 5 -db3d 0 
+ 
+  - Create a vase from a 3d isosurface: 
+     gmic -md3d 4 -isosurface3d "'x^2+2*abs(y/2)*sin(2*y)^2+z^2-3',0" -sphere3d 1.5 \ 
+      --3d[-1] 0,5 -plane3d 15,15 -r3d[-1] 1,0,0,90 -c3d[-1] -+3d[-1] 0,3.2 \ 
+      -col3d[-1] 180,150,255 -col3d[-2] 128,255,0 -col3d[-3] 255,128,0 -+3d 
+ 
+  - Display filtered webcam stream: 
+     gmic -apply_camera \"--mirror x --mirror y -+ -/ 4\" 
+ 
+  - Launch a set of G'MIC interactive demos: 
+     gmic -demo 
+</pre>
+ 
+<br/><b><font color="brown">** G'MIC comes with ABSOLUTELY NO WARRANTY; for details visit <a href="http://gmic.sourceforge.net">http://gmic.sourceforge.net **</a></font></b> 
+</tt> 
+</div> 
+</div> 
+<div id="footer"><img src="images/footer.jpg" /></div> 
+</div> 
+<!--#include file="copyright.html" --> 
+<!--#include file="footer.html" --> 

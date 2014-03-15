@@ -42,7 +42,7 @@ The -to_rgb command entails a bit of channel matching. Our volume consists of si
 <td>
 <h4>3</h4>
 <p>The -convolve command takes the kernel, an image of a happy face on the stack at position zero and convolves it with each slice of the of the volume in position one. That is, from left to right, top to bottom, for each slice, the -convolve command moves the kernel image pixel-by-pixel, and, at each, tabulates a pixel-wise multiplication of the kernel and the neighborhood around the pixel. It then sums these pixel-wise products to establish the value of the corresponding output pixel. Truth be told, this command could run for some minutes. Relax, take a potty break, play with the cat.</p>
-<p>In its travels over slices, the kernel will encounter off-edge pixels; we choose to regard these as zero-valued, indicated by a second parameter flag of zero (Dirichlet policy). We also opt out of a per-slice normalization, third parameter flag zero, as we will be instigating a volume-wiude normalization later in the pipeline.</p>
+<p>In its travels over slices, the kernel will encounter off-edge pixels; we choose to regard these as zero-valued, indicated by a second parameter flag of zero (Dirichlet policy). We also opt out of a per-slice normalization, third parameter flag zero, as we will be instigating a volume-wide normalization later in the pipeline.</p>
 <p>Some minutes later, after the potty break and the cat now sick of our company, the -convolve command finishes on the last slice. We remove the kernel image at position zero as we are about to turn the image stack into a series of animation frames and do not wish to incorporate the kernel itself into the series.</p>
 </td>
 </tr>
