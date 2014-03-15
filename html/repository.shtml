@@ -54,5 +54,21 @@
         is under development and may be experimental, so always test the latest stable archive before complaining !
     </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
 
+  <div id="bloc_option"><div id="top_bleu"><div id="text_top">Source browser</div></div>
+    <div id="center"><div id="text_centre_intro">
+        The source code of <b><font color="#000066">G'MIC</font></b> can be read directly on your web browser, using the
+        <a href="https://sourceforge.net/p/gmic/source/ci/master/tree/"><i>Sourceforge git repository viewer</i></a>.<br/>
+        The G'MIC core features are mainly defined these three files :
+        <ul>
+          <li>Low-level image processing functionalities (e.g. code of G'MIC native commands) are defined in file
+            <a href="https://sourceforge.net/p/gmic/source/ci/master/tree/src/CImg.h"><tt>CImg.h</tt></a>
+              (which is actually the core file of the <a href="http://cimg.sourceforge.net">CImg project</a>, a C++ template image processing library we also develop).</li>
+          <li>Most of the G'MIC custom commands (written as G'MIC scripts) are defined in file
+            <a href="https://sourceforge.net/p/gmic/source/ci/master/tree/src/gmic_def.gmic"><tt>gmic_def.gmic</tt></a>.
+              This file can be seen as the <b>standard library</b> of the G'MIC script language.</li>
+          <li>Other G'MIC specific features (e.g. the code of the script language interpreter) are defined in file
+            <a href="https://sourceforge.net/p/gmic/source/ci/master/tree/src/gmic.cpp"><tt>gmic.cpp</tt></a>.</li>
+          </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
 <!--#include file="copyright.html" -->
 <!--#include file="footer.html" -->
