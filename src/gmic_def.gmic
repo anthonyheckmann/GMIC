@@ -6962,7 +6962,7 @@ _render_maze :
 #@gmic maze_mask : _cellsize>0
 #@gmic : Input maze according to size and shape of selected mask images.
 #@gmic : Mask may contain disconnected shapes.
-#@gmic : $ 0 -text "G'MIC",0,0,57,1,1 -dilate 3 -autocrop 0 -frame 1,1,0 -maze_mask 8 -dilate 3 -negative -* 255
+#@gmic : $ 0 -text "G'MIC",0,0,53,1,1 -dilate 3 -autocrop 0 -frame 1,1,0 -maze_mask 8 -dilate 3 -negative -* 255
 maze_mask : -check "isint(${1=24}) && $1>0"
   -e[^-1] "Input masked maze from image$? with cell size $1."
   -v - -norm -ge 50% -repeat @# -l[$>]
@@ -7309,18 +7309,22 @@ spline : -skip ${9=256},${10=1},${11=0}
 #@gmic text_outline : text,_x[%],_y[%],_font_height>0,_outline>=0,_opacity,_color1,..
 #@gmic : Draw specified colored and outlined text string on selected images.
 #@gmic : Default values: 'x=y=2', 'font_height=13', 'outline=2', 'opacity=1' and 'color1=255'.
-#@gmic : $ image.jpg -text_outline "Hi there!",10,10,52,3
-text_outline : -skip ${2=2},${3=2},${4=13},${5=2},${6=1},${7=255},${8=$-1},${9=$-1}
+#@gmic : $ image.jpg -text_outline "Hi there!",10,10,53,3
+text_outline : -skip ${2=2},${3=2},${4=13},${5=2},${6=1},${7=255}
   -e[^-1] "Draw outlined text '$1' at position ($2,$3) on image$?, with font height $4, outline $5, opacity $6 and color ${7--1}."
-  -v -
-  -if $5
-    0 -t[-1] "$1",0,0,$4,1,1 -expand_xy[-1] {1+$5},0 --dilate[-1] {2*$5+1}
-    (${7--1}) -y[-1] c -r[-1] 2,1,1,100%,0,0,1 -map[-3] [-1] -rm[-1]
-    -repeat {@#-2} -if @{$>,w} -j[$>] [-2],$2,$3,0,0,$6,[-1] -else -rm[$>] -i[$>] [-2] -endif -done -rm[-2,-1]
-  -else
-    -t "$1",${2-4},${6--1}
-  -endif
-  -v +
+  -v - -if $5
+    0 -t[-1] "$1",0,0,$4,1,${7--1},1 -expand_xy[-1] {1+$5},0
+    -s[-1] c,{-narg(${7--1})} -dilate[-1] {2*$5+1}
+    -repeat {@#-2} -l[$>,-2,-1]
+      -if @{0,w}
+        -if {@{0,s}==@{1,s}} -j[0] [1],$2,$3,0,0,$6,[2]
+        -else --r[1] 100%,100%,1,@{0,s},0,1 -j[0] [3],$2,$3,0,0,$6,[2] -rm[3]
+        -endif
+      -else -rm[0] -i[0] [0] -endif
+    -endl -done
+    -rm[-2,-1]
+  -else -t "$1",${2-4},${6--1}
+  -endif -v +
 
 #@gmic triangle_shade : x0,y0,x1,y0,x2,y2,R0,G0,B0,...,R1,G1,B1,...,R2,G2,B2,....
 #@gmic : Draw triangle with interpolated colors on selected images.
