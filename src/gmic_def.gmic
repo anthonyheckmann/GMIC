@@ -7299,7 +7299,7 @@ spline : -skip ${9=256},${10=1},${11=0}
 #@gmic text : text,_x[%],_y[%],_font_height>=0,_opacity,_color1,.. : (+)
 #@gmic : Draw specified colored text string on selected images.
 #@gmic : (eq. to '-t').
-#@gmic : Exact pre-defined sizes are '13','23','33' and '53'. Any other size is interpolated from an exact size.
+#@gmic : Exact pre-defined sizes are '13','23' and '53'. Any other size is interpolated from an exact size.
 #@gmic : Specifying an empty target image resizes it to new dimensions such that the image contains
 #@gmic : the entire text string.
 #@gmic : Default values: 'opacity=1' and 'color1=0'.
