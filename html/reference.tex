@@ -6783,9 +6783,164 @@ Return the estimated noise variance of the last selected image.
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_scorefile,\_number\_of\_sessions$>$=0}}\\~\\
 Generate score board for the GPT championship (GREYC Poker Tour).
-[gmic]-0./__help/document_gmic/*repeat/*local/*if/*if/*if/*if/_document_gmic_example_latex/*if/*local/foo/ Generate score board for GPT-like championship (GREYC Poker Tour), from file 'https://tschumperle.users.greyc.fr/gpt.raw'.sh: 1: curl: not found
+\begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def623.jpg}\\
+{\footnotesize \textbf{Example 623~:} \texttt{-gpt ,}}
+\end{center}
+\section{Commands shortcuts}
+$\bullet$~'\texttt{-h}' (*)~is equivalent to~~'\texttt{-help}'.\\
+$\bullet$~'\texttt{-m}' (*)~is equivalent to~~'\texttt{-command}'.\\
+$\bullet$~'\texttt{-d}' (+)~is equivalent to~~'\texttt{-display}'.\\
+$\bullet$~'\texttt{-d0}' ~is equivalent to~~'\texttt{-display0}'.\\
+$\bullet$~'\texttt{-d3d}' (+)~is equivalent to~~'\texttt{-display3d}'.\\
+$\bullet$~'\texttt{-da}' ~is equivalent to~~'\texttt{-display\_array}'.\\
+$\bullet$~'\texttt{-dfft}' ~is equivalent to~~'\texttt{-display\_fft}'.\\
+$\bullet$~'\texttt{-dg}' ~is equivalent to~~'\texttt{-display\_graph}'.\\
+$\bullet$~'\texttt{-dh}' ~is equivalent to~~'\texttt{-display\_histogram}'.\\
+$\bullet$~'\texttt{-dp}' ~is equivalent to~~'\texttt{-display\_polar}'.\\
+$\bullet$~'\texttt{-drgba}' ~is equivalent to~~'\texttt{-display\_rgba}'.\\
+$\bullet$~'\texttt{-dt}' ~is equivalent to~~'\texttt{-display\_tensors}'.\\
+$\bullet$~'\texttt{-dw}' ~is equivalent to~~'\texttt{-display\_warp}'.\\
+$\bullet$~'\texttt{-e}' (*)~is equivalent to~~'\texttt{-echo}'.\\
+$\bullet$~'\texttt{-i}' (*)~is equivalent to~~'\texttt{-input}'.\\
+$\bullet$~'\texttt{-o}' (*)~is equivalent to~~'\texttt{-output}'.\\
+$\bullet$~'\texttt{-on}' ~is equivalent to~~'\texttt{-outputn}'.\\
+$\bullet$~'\texttt{-op}' ~is equivalent to~~'\texttt{-outputp}'.\\
+$\bullet$~'\texttt{-ow}' ~is equivalent to~~'\texttt{-outputw}'.\\
+$\bullet$~'\texttt{-p}' (*)~is equivalent to~~'\texttt{-print}'.\\
+$\bullet$~'\texttt{-sh}' (*)~is equivalent to~~'\texttt{-shared}'.\\
+$\bullet$~'\texttt{-up}' ~is equivalent to~~'\texttt{-update}'.\\
+$\bullet$~'\texttt{-v}' (*)~is equivalent to~~'\texttt{-verbose}'.\\
+$\bullet$~'\texttt{-w}' (+)~is equivalent to~~'\texttt{-window}'.\\
+$\bullet$~'\texttt{-k}' (*)~is equivalent to~~'\texttt{-keep}'.\\
+$\bullet$~'\texttt{-mv}' (*)~is equivalent to~~'\texttt{-move}'.\\
+$\bullet$~'\texttt{-nm}' (*)~is equivalent to~~'\texttt{-name}'.\\
+$\bullet$~'\texttt{-rm}' (*)~is equivalent to~~'\texttt{-remove}'.\\
+$\bullet$~'\texttt{-rv}' (*)~is equivalent to~~'\texttt{-reverse}'.\\
+$\bullet$~'\texttt{-+}' (+)~is equivalent to~~'\texttt{-add}'.\\
+$\bullet$~'\texttt{-$<$$<$}' (+)~is equivalent to~~'\texttt{-bsl}'.\\
+$\bullet$~'\texttt{-$>$$>$}' (+)~is equivalent to~~'\texttt{-bsr}'.\\
+$\bullet$~'\texttt{-/}' (+)~is equivalent to~~'\texttt{-div}'.\\
+$\bullet$~'\texttt{-==}' (+)~is equivalent to~~'\texttt{-eq}'.\\
+$\bullet$~'\texttt{-$>$=}' (+)~is equivalent to~~'\texttt{-ge}'.\\
+$\bullet$~'\texttt{-$>$}' (+)~is equivalent to~~'\texttt{-gt}'.\\
+$\bullet$~'\texttt{-$<$=}' (+)~is equivalent to~~'\texttt{-le}'.\\
+$\bullet$~'\texttt{-$<$}' (+)~is equivalent to~~'\texttt{-lt}'.\\
+$\bullet$~'\texttt{-//}' (+)~is equivalent to~~'\texttt{-mdiv}'.\\
+$\bullet$~'\texttt{-\%}' (+)~is equivalent to~~'\texttt{-mod}'.\\
+$\bullet$~'\texttt{-**}' (+)~is equivalent to~~'\texttt{-mmul}'.\\
+$\bullet$~'\texttt{-*}' (+)~is equivalent to~~'\texttt{-mul}'.\\
+$\bullet$~'\texttt{-!=}' (+)~is equivalent to~~'\texttt{-neq}'.\\
+$\bullet$~'\texttt{-\textasciicircum }' (+)~is equivalent to~~'\texttt{-pow}'.\\
+$\bullet$~'\texttt{--}' (+)~is equivalent to~~'\texttt{-sub}'.\\
+$\bullet$~'\texttt{-c}' (+)~is equivalent to~~'\texttt{-cut}'.\\
+$\bullet$~'\texttt{-f}' (+)~is equivalent to~~'\texttt{-fill}'.\\
+$\bullet$~'\texttt{-n}' (+)~is equivalent to~~'\texttt{-normalize}'.\\
+$\bullet$~'\texttt{-=}' (+)~is equivalent to~~'\texttt{-set}'.\\
+$\bullet$~'\texttt{-t2}' ~is equivalent to~~'\texttt{-threshold2}'.\\
+$\bullet$~'\texttt{-fc}' ~is equivalent to~~'\texttt{-fill\_color}'.\\
+$\bullet$~'\texttt{-a}' (*)~is equivalent to~~'\texttt{-append}'.\\
+$\bullet$~'\texttt{-z}' (*)~is equivalent to~~'\texttt{-crop}'.\\
+$\bullet$~'\texttt{-r}' (*)~is equivalent to~~'\texttt{-resize}'.\\
+$\bullet$~'\texttt{-rr2d}' ~is equivalent to~~'\texttt{-resize\_ratio2d}'.\\
+$\bullet$~'\texttt{-r2dx}' ~is equivalent to~~'\texttt{-resize2dx}'.\\
+$\bullet$~'\texttt{-r2dy}' ~is equivalent to~~'\texttt{-resize2dy}'.\\
+$\bullet$~'\texttt{-r3dx}' ~is equivalent to~~'\texttt{-resize3dx}'.\\
+$\bullet$~'\texttt{-r3dy}' ~is equivalent to~~'\texttt{-resize3dy}'.\\
+$\bullet$~'\texttt{-r3dz}' ~is equivalent to~~'\texttt{-resize3dz}'.\\
+$\bullet$~'\texttt{-s}' (*)~is equivalent to~~'\texttt{-split}'.\\
+$\bullet$~'\texttt{-y}' (*)~is equivalent to~~'\texttt{-unroll}'.\\
+$\bullet$~'\texttt{-b}' (+)~is equivalent to~~'\texttt{-blur}'.\\
+$\bullet$~'\texttt{-g}' (+)~is equivalent to~~'\texttt{-gradient}'.\\
+$\bullet$~'\texttt{-j}' (+)~is equivalent to~~'\texttt{-image}'.\\
+$\bullet$~'\texttt{-t}' (+)~is equivalent to~~'\texttt{-text}'.\\
+$\bullet$~'\texttt{-+3d}' (+)~is equivalent to~~'\texttt{-add3d}'.\\
+$\bullet$~'\texttt{-b3d}' (+)~is equivalent to~~'\texttt{-background3d}'.\\
+$\bullet$~'\texttt{-c3d}' ~is equivalent to~~'\texttt{-center3d}'.\\
+$\bullet$~'\texttt{-col3d}' (+)~is equivalent to~~'\texttt{-color3d}'.\\
+$\bullet$~'\texttt{-/3d}' (+)~is equivalent to~~'\texttt{-div3d}'.\\
+$\bullet$~'\texttt{-db3d}' (+)~is equivalent to~~'\texttt{-double3d}'.\\
+$\bullet$~'\texttt{-f3d}' (+)~is equivalent to~~'\texttt{-focale3d}'.\\
+$\bullet$~'\texttt{-l3d}' (+)~is equivalent to~~'\texttt{-light3d}'.\\
+$\bullet$~'\texttt{-m3d}' (+)~is equivalent to~~'\texttt{-mode3d}'.\\
+$\bullet$~'\texttt{-md3d}' (+)~is equivalent to~~'\texttt{-moded3d}'.\\
+$\bullet$~'\texttt{-*3d}' (+)~is equivalent to~~'\texttt{-mul3d}'.\\
+$\bullet$~'\texttt{-n3d}' ~is equivalent to~~'\texttt{-normalize3d}'.\\
+$\bullet$~'\texttt{-o3d}' (+)~is equivalent to~~'\texttt{-opacity3d}'.\\
+$\bullet$~'\texttt{-p3d}' (+)~is equivalent to~~'\texttt{-primitives3d}'.\\
+$\bullet$~'\texttt{-rv3d}' (+)~is equivalent to~~'\texttt{-reverse3d}'.\\
+$\bullet$~'\texttt{-r3d}' (+)~is equivalent to~~'\texttt{-rotate3d}'.\\
+$\bullet$~'\texttt{-sl3d}' (+)~is equivalent to~~'\texttt{-specl3d}'.\\
+$\bullet$~'\texttt{-ss3d}' (+)~is equivalent to~~'\texttt{-specs3d}'.\\
+$\bullet$~'\texttt{-s3d}' (+)~is equivalent to~~'\texttt{-split3d}'.\\
+$\bullet$~'\texttt{--3d}' (+)~is equivalent to~~'\texttt{-sub3d}'.\\
+$\bullet$~'\texttt{-t3d}' (+)~is equivalent to~~'\texttt{-texturize3d}'.\\
+$\bullet$~'\texttt{-endl}' (*)~is equivalent to~~'\texttt{-endlocal}'.\\
+$\bullet$~'\texttt{-x}' (*)~is equivalent to~~'\texttt{-exec}'.\\
+$\bullet$~'\texttt{-l}' (*)~is equivalent to~~'\texttt{-local}'.\\
+$\bullet$~'\texttt{-q}' (*)~is equivalent to~~'\texttt{-quit}'.\\
+$\bullet$~'\texttt{-u}' (*)~is equivalent to~~'\texttt{-status}'.\\
+$\bullet$~'\texttt{-frame}' ~is equivalent to~~'\texttt{-frame\_xy}'.\\
+\section{Examples of use}
+\small
+\begin{lstlisting}
+ 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
+ The few examples below illustrate possible uses of this tool: 
+ 
+  - View a list of images: 
+     gmic file1.bmp file2.jpeg 
+ 
+  - Convert an image file: 
+     gmic input.bmp -o output.jpg 
+ 
+  - Create a volumetric image from a movie sequence: 
+     gmic input.mpg -a z -o output.hdr 
+ 
+  - Compute image gradient norm: 
+     gmic input.bmp -gradient_norm 
+ 
+  - Denoise a color image: 
+     gmic image.jpg -denoise 30,10 -o denoised.jpg 
+ 
+  - Compose two images using overlay layer blending: 
+     gmic image1.jpg image2.jpg -blend overlay -o blended.jpg 
+ 
+  - Evaluate a mathematical expression: 
+     gmic -e "cos(pi/4)^2+sin(pi/4)^2={cos(pi/4)^2+sin(pi/4)^2}" 
+ 
+  - Plot a 2d function: 
+     gmic 1000,1,1,2 -f "X=3*(x-500)/500;X^2*sin(3*X^2)+if(c==0,u(0,-1),cos(X*10))" -plot 
+ 
+  - Plot a 3d elevated function in random colors: 
+     gmic 128,128,1,3,"?(0,255)" -plasma 10,3 -blur 4 -sharpen 10000 \ 
+      -elevation3d[-1] "'X=(x-64)/6;Y=(y-64)/6;100*exp(-(X^2+Y^2)/30)*abs(cos(X)*sin(Y))'" 
+ 
+  - Plot the isosurface of a 3d volume: 
+     gmic -m3d 5 -md3d 5 -db3d 0 -isosurface3d "'x^2+y^2+abs(z)^abs(4*cos(x*y*z*3))'",3 
+ 
+  - Render a G'MIC 3d logo: 
+     gmic 1 -text G\'MIC,0,0,53,1,1,1,1 -expand_xy 10,0 -blur 2 -n 0,100 --plasma 0.4 -+ \ 
+      -blur 1 -elevation3d -0.1 -md3d 4 
+ 
+  - Generate a 3d ring of torii: 
+     gmic -repeat 20 -torus3d 15,2 -col3d[-1] "{?(60,255)},{?(60,255)},{?(60,255)}" \ 
+      -*3d[-1] 0.5,1 -if "{$>%2}" -r3d[-1] 0,1,0,90 -endif -+3d[-1] 70 -+3d \ 
+      -r3d 0,0,1,18 -done -md3d 3 -m3d 5 -db3d 0 
+ 
+  - Create a vase from a 3d isosurface: 
+     gmic -md3d 4 -isosurface3d "'x^2+2*abs(y/2)*sin(2*y)^2+z^2-3',0" -sphere3d 1.5 \ 
+      --3d[-1] 0,5 -plane3d 15,15 -r3d[-1] 1,0,0,90 -c3d[-1] -+3d[-1] 0,3.2 \ 
+      -col3d[-1] 180,150,255 -col3d[-2] 128,255,0 -col3d[-3] 255,128,0 -+3d 
+ 
+  - Display filtered webcam stream: 
+     gmic -apply_camera \"--mirror x --mirror y -+ -/ 4\" 
+ 
+  - Launch a set of G'MIC interactive demos: 
+     gmic -demo 
 
-gzip: /tmp/oBVg6YRL.raw.gz: unexpected end of file
+\end{lstlisting}
+\normalsize
+ 
+\printindex 
+~\\$\square$~End of document. 
 
-[gmic] [0;31;59m[1m*** Error in ./__help/document_gmic/../*if/*local/foo/gpt/ (file '../src/gmic_def.gmic', call from line 1815) *** cimg::load_network_external(): Failed to load file 'https://tschumperle.users.greyc.fr/gpt.raw' with external commands 'wget' or 'curl'.[0;0;0m
-
+\end{document}
