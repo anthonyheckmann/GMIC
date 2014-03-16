@@ -13462,7 +13462,7 @@ _xpink :
   -endif
   status=@{}
   -file_rm ${filename}.pnk
-  -if {$status!=0\ &&\ {$1'!='seuilauto} -error "exec Status is "${status}"." -return
+  -if {$status!=0\ &&\ {$1'!='seuilauto}} -error "exec Status is "${status}"." -return
   -elif ${filename}_o.pnk -i ${filename}_o.pnk -file_rm ${filename}_o.pnk -k[-1]
   -else -error "exec Error!!" -endif
 
