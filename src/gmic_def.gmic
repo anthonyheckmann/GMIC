@@ -1051,6 +1051,7 @@ build_tutorial_html :
   -add_page command-guide/-blur,2000
   -add_page command-guide/-blur_x,700
   -add_page command-guide/-blur_xy,700
+  -add_page command-guide/-blur_xyz,700
   -add_page command-guide/-blur_y,700
   -add_page command-guide/-blur_z,2500
   -add_page command-guide/-convolve,3500
