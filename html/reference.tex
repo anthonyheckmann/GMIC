@@ -3972,7 +3972,7 @@ Input maze with specified size.
 Input maze according to size and shape of selected mask images.
 ~\\Mask may contain disconnected shapes.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def374.jpg}\\
-{\footnotesize \textbf{Example 374~:} \texttt{0 -text "G'MIC",0,0,57,1,1 -dilate 3 -autocrop 0 -frame 1,1,0 -maze\_mask 8 -dilate 3 -negative -* 255}}
+{\footnotesize \textbf{Example 374~:} \texttt{0 -text "G'MIC",0,0,53,1,1 -dilate 3 -autocrop 0 -frame 1,1,0 -maze\_mask 8 -dilate 3 -negative -* 255}}
 \end{center}
 
 \subsection{\emph{-object3d\index{-object3d}} (+)}\vspace*{-0.5em}
@@ -4128,7 +4128,7 @@ Draw specified colored spline curve on selected images (cubic hermite spline).
 {\small \texttt{text,\_x[\%],\_y[\%],\_font\_height$>$=0,\_opacity,\_color1,..}}\\~\\
 Draw specified colored text string on selected images.
 ~\\(\emph{eq. to} {\small \texttt{'-t'}}).
-~\\Exact pre-defined sizes are '13','23','33' and '53'. Any other size is interpolated from an exact size.
+~\\Exact pre-defined sizes are '13','23' and '53'. Any other size is interpolated from an exact size.
 ~\\Specifying an empty target image resizes it to new dimensions such that the image contains
 the entire text string.
 ~\\~\\\textbf{Default values}: {\small \texttt{'opacity=1'} and \texttt{'color1=0'.}}
@@ -4144,7 +4144,7 @@ the entire text string.
 Draw specified colored and outlined text string on selected images.
 ~\\~\\\textbf{Default values}: {\small \texttt{'x=y=2', 'font\_height=13', 'outline=2', 'opacity=1'} and \texttt{'color1=255'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def393.jpg}\\
-{\footnotesize \textbf{Example 393~:} \texttt{image.jpg -text\_outline "Hi there!",10,10,52,3}}
+{\footnotesize \textbf{Example 393~:} \texttt{image.jpg -text\_outline "Hi there!",10,10,53,3}}
 \end{center}
 
 \subsection{\emph{-triangle\_shade\index{-triangle\_shade}} }\vspace*{-0.5em}
