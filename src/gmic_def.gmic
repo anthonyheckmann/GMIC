@@ -1034,9 +1034,9 @@ apply_files : -skip "${3=gmic_}","${4=}",${5=0}
 #@gmic : $ image.jpg -command "foo : -mirror y -deform $""1" --foo[0] 5 --foo[0] 15
 
 # Convert G'MIC tutorial from Garry Osgood's blog (http://www.particularart.com), into the G'MIC web look.
-build_tutorial_html :
+update_tutorial_html :
   -e[^-1] "Convert G"{`39`}"MIC tutorial from Garry Osgood"{`39`}"s blog (http://www.particularart.com), for the G"{`39`}"MIC web page."
-  -v - -rm -m "add_page : -__build_tutorial_html $""*"
+  -v - -rm -m "add_page : -__update_tutorial_html $""*"
 
   # Init list of pages to retrieve.
   -add_page /,1700,index,_index
@@ -1094,7 +1094,7 @@ build_tutorial_html :
     -o[-1] ${_output_html$>} -o[-1] ${_output_shtml$>}
   -done -rm[-1]
   -repeat $_N
-    -v + -_build_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>},${_parent$>} -v -
+    -v + -_update_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>},${_parent$>} -v -
   -done
 
   # Clean temp files.
@@ -1102,7 +1102,7 @@ build_tutorial_html :
   -v + -e[] "  * All done !.\n\n"
 
 # Add page to the list of pages to explore.
-__build_tutorial_html : -skip ${3=""},${4=""}
+__update_tutorial_html : -skip ${3=""},${4=""}
   -if {!narg($_N)} _N=0 -endif
   _input$_N=$1 _height$_N=$2
 
@@ -1121,7 +1121,7 @@ __build_tutorial_html : -skip ${3=""},${4=""}
   _N={$_N+1}
 
 # Retrieve one html page and convert it.
-_build_tutorial_html :
+_update_tutorial_html :
   -v -
   url="http://particularart.com/tools-and-toys/gmic/$1"
   -v + -e[] "\n  * Convert tutorial page '"$url"'." -v -
