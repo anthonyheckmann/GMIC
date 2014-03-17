@@ -19552,13 +19552,21 @@ _gimp_emulate_film_collage :
 
 #@gimp [Download all presets] : gimp_emulate_film_download, gimp_no_preview(1)
 #@gimp : note = note{"This filter will download the color profiles for all film emulation presets available in <i>G'MIC</i>,
-#@gimp : and will store them as persistent data files on your hard drive. After this operation, you won't need a permanent
-#@gimp : internet connection anymore, in order to use the film emulation filters."}
+#@gimp : and will install them as persistent data files on your hard drive. After this operation, you won't need a permanent
+#@gimp : internet connection anymore in order to use the G'MIC film emulation filters."}
 #@gimp : note = note()
 #@gimp : note = note{"<b><span color="red">Warning:</span></b> About <b>80 Mb</b> of data will be downloaded by this filter. This can take a long time !"}
 #@gimp : sep = separator()
 #@gimp : Force re-download = _bool(0)
-#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
+#@gimp : sep = separator()
+#@gimp : note = note{"<b><span color="red">Alternative (manual) method:</span></b>\nIf, for any reasons, your plug-in is unable to retrieve data from the Internet, you can download all
+#@gimp : color profiles manually (as a single .zip file) at this address :"}
+#@gimp : link = link{"http://gmic.sourceforge.net/data_film_presets/all_gmic_film_presets.zip"}
+#@gimp : note = note{"You must then decompress all files contained in this archive at the following location:\n
+#@gimp : - for <b>Unix</b>-like systems : <span color="blue"><tt>$HOME/.gmic_film_presets/</tt></span>\n
+#@gimp : - for <b>Windows</b> systems : <span color="blue"><tt>%APPDATA/</tt></span>
+#@gimp : "}
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/16</i>.</small>")
 gimp_emulate_film_download :
   -_gimp_emulate_film_download @{-_gimp_emulate_film_bw},\
                                @{-_gimp_emulate_film_instant_consumer},\
