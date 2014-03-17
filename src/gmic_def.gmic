@@ -23359,22 +23359,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-
-foo :
-  -repeat 255
-  -e[] "DEBUG "$>
-  -if {$>==0} 0 -text[-1] " ",0,0,55,1,255
-  -elif {$>==23} 0 -text[-1] {`23`},0,0,55,1,255
-  -elif {$>==24} 0 -text[-1] {`24`},0,0,55,1,255
-  -elif {$>==25} 0 -text[-1] {`25`},0,0,55,1,255
-  -elif {$>==26} 0 -text[-1] {`26`},0,0,55,1,255
-  -elif {$>==27} 0 -text[-1] {`27`},0,0,55,1,255
-  -elif {$>==28} 0 -text[-1] {`27`},0,0,55,1,255
-  -elif {$>==10} 0 -text[-1] " ",0,0,55,1,255
-  -elif {$>==44} 0 -text[-1] ",",0,0,55,1,255
-  -else ($>,32) 0 -text[-1] @{-2,t},0,0,55,1,255 -rm[-2]
-  -endif
-  -done
-
-  -append_tiles 16
