@@ -177,7 +177,7 @@ rm -f image.jpg
 \gmic ../src/gmic_def.gmic gallery.gmic -gmic_gallery
 cd tutorial
 -rm -rf *.shtml *.html img
-\gmic ../../src/gmic_def.gmic -build_tutorial_html
+\gmic ../../src/gmic_def.gmic -update_tutorial_html
 cd ../../
 
 # Create .pdf handbook.
