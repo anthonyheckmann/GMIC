@@ -2336,10 +2336,10 @@ void process_preview() {
     // Run G'MIC.
     process_thread(&spt);
     if (spt.error_message) {
-      const float white[] = { 255,255,255 };
-      spt.images.assign(1).back().fill(0).draw_text(0,0," Preview \n  error ",white,0,1,57).
+      const float white[] = { 155,155,155 };
+      spt.images.assign(1).back().fill(0).draw_text(0,0," Preview\n  error ",white,0,1,57).
         resize(-100,-100,1,4).get_shared_channel(3).dilate(5);
-      spt.images[0].resize(w,h,1,4,0,0,0.5,0.5);
+      spt.images[0].resize(w,h,1,4,0,0,0.5,0.5)+=100;
     }
 
     // Transfer the output layers back into GIMP preview.

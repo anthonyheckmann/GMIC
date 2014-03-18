@@ -15032,7 +15032,6 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   -load_gmic http://www.saunalahti.fi/naggobot/naggobot.gmic
   -load_gmic http://gmic.sourceforge.net/photocomix.gmic
   -load_gmic http://gmic.sourceforge.net/ronounours.gmic
-#  -load_gmic http://gmic.sourceforge.net/samj.gmic
   -load_gmic http://www.aljacom.com/~gmic/samj.gmic
   -load_gmic http://gmic.sourceforge.net/tomkeil.gmic
   -load_gmic http://docgmic.tuxfamily.org/zonderr.gmic
