@@ -4,8 +4,7 @@
 <body>
 
 <h1>Basics</h1>
-<p><img alt="An example image for examining GMIC operations" class="img_left" id="example_01" src="img/basics_example.jpg" style="float: left; margin: 15px;" title="Example Image" height="150" lang="en-us" width="150" /></p>
-<p>G'MIC is an interpreter for the image processing language of the same name. It lives in terminal emulator command shells and has no GUI. It is never present on Windows or Mac systems unless you have already put it there. The G'MIC <a target="_parent" href="http://sourceforge.net/projects/gmic/files/">download page</a> furnishes installation scripts and binaries for Windows and Mac and are labeled macgmic_<em>x.x.x.x</em>_<em>architecture</em>.dmg for Mac OS X, gmic_<em>x.x.x.x</em>_<em>architecture</em>.exe for Windows and zip files for Windows and some Linux distributions. Here, '<em>x.x.x.x</em>' represents a gmic version number and '<em>architecture</em>' represents a an OS and machine architecture, such as 'win32'; choose what best matches your machine.</p>
+<p><img alt="An example image for examining GMIC operations" class="img_left" id="example_01" src="img/basics_example.jpg" style="float: left; margin: 15px;" title="Example Image" height="150" lang="en-us" width="150" />G'MIC is an interpreter for the image processing language of the same name. It lives in terminal emulator command shells and has no GUI. It is never present on Windows or Mac systems unless you have already put it there. The G'MIC <a target="_parent" href="http://sourceforge.net/projects/gmic/files/">download page</a> furnishes installation scripts and binaries for Windows and Mac and are labeled macgmic_<em>x.x.x.x</em>_<em>architecture</em>.dmg for Mac OS X, gmic_<em>x.x.x.x</em>_<em>architecture</em>.exe for Windows and zip files for Windows and some Linux distributions. Here, '<em>x.x.x.x</em>' represents a gmic version number and '<em>architecture</em>' represents a an OS and machine architecture, such as 'win32'; choose what best matches your machine.</p>
 <p>If you use a GNU/Linux distribution, the standalone G'MIC interpreter and Gimp G'MIC plugin are very likely in your distributor's repositories. These have been tuned and integrated with the distribution and would likely be a better fit than the generic binaries at the download site. Use 'apt-get', 'emerge', 'yum' or whatever else manages your distribution's repository.&nbsp;</p>
 <p>There are also similarly named files with 'gimp' inserted. These are Gimp G'MIC plug-in binaries and presuppose that you already have <a target="_parent" href="http://www.gimp.org/downloads/">Gimp 2.8</a> installed. If you are absolutely new to G'MIC, we heartily recommend installing both Gimp and the Gimp G'MIC plug-in and putting in some time with those tools first. We don't have documentation on the Gimp G'MIC plugin here, but it is well supported by the plugin itself and in the various G'MIC forums (<a target="_parent" href="http://gimpchat.com/viewforum.php?f=28">GIMPChat/G'MIC</a>, <a target="_parent" href="https://plus.google.com/117441237982283011318/posts">G'MIC at Google+</a>, <a target="_parent" href="http://www.flickr.com/groups/gmic/discuss">G'MIC at Flickr</a>).</p>
 <p>At some point, you might wish to extend the Gimp G'MIC plugin or filter a large number of images in some kind of image processing pipeline. At that point, you will want to become familiar with the G'MIC image processing languge itself and the interpreter that runs it. Then, we hope, you will find these pages useful.</p>
@@ -80,7 +79,7 @@
 </li>
 </ol>
 <p>We will conclude this section with a small gallery of commands, which, like <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#glow">-glow</a>, are fairly simple to invoke. We also introduce the <a target="_parent" href="_display.shtml">-display</a> command, which, instead of writing files like <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#output">-output</a>, routes the content of the image list to a display window, where the items in the pipeline appear as a set of thumbnails. Your mouse can manipulate this pipeline display. Examine a particular image by clicking on it with the left mouse button; other images go away and the selected image becomes larger. Magnify portions of the selected image by a left-mouse-down, drag, left-mouse-up action; you will draw out a rectangle that, on mouse-up, expands to fill the entire window. Step out by single-clicking with the left mouse button without dragging out a rectangle. Exit the pipeline display command by pressing the 'ESC' key.</p>
-<p style="border-top: none; border-bottom: 1px solid #000000; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.03in; padding-left: 0in; padding-right: 0in;">You cannot save files with the '-display'command, but when exploring, that is usually not a big concern. If saving images is a big concern, however, place an '-output' command after the '-display' command. When you dismiss the display window by pressing ESC, the follow-on '-output' command will write the contents of the image processing pipeline to a set of files.</p>
+<p style="border-top: none; border-bottom: 1px solid #000000; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.03in; padding-left: 0in; padding-right: 0in;">You cannot save files with the '-display' command, but when exploring, that is usually not a big concern. If saving images is a big concern, however, place an '-output' command after the '-display' command. When you dismiss the display window by pressing ESC, the follow-on '-output' command will write the contents of the image processing pipeline to a set of files.</p>
 <p></p>
 <p>Some simple G'MIC commands</p>
 <table class="img_block" id="basic_image_gallery" style="border: solid #aaaaaa 1px;" summary="Basic Image Gallery" lang="en-US" align="center" border="0" cellpadding="2" cellspacing="2">
@@ -116,14 +115,6 @@
 <tr>
 <td style="border: solid #cccccc 1px;"><code>$ gmic -input example.png -bandpass 0.005,0.01 -normalize 0,255 -display<br />(normalize: -bandpass output is from -100 to 100)</code></td>
 <td style="border: solid #cccccc 1px;"><code>$ gmic -input example.png -edges 9% -normalize 0,255 -display<br />(normalize: -edges output is from 0 to 1)</code></td>
-</tr>
-</tbody>
-</table>
-<table>
-<tbody>
-<tr>
-<td border="0" cellpadding="2" cellspacing="2" dir="ltr">Previous: <a target="_parent" href="http://particularart.com/tools-and-toys/gmic/">G'MIC</a></td>
-<td border="0" cellpadding="2" cellspacing="2" dir="ltr">Next: <a target="_parent" href="/admin/pages/richtextpage/10/">Conveniences and Conventions</a></td>
 </tr>
 </tbody>
 </table>

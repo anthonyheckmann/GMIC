@@ -1050,6 +1050,7 @@ update_tutorial_html :
   -add_page command-guide/-bandpass,5000
   -add_page command-guide/-blur,2000
   -add_page command-guide/-blur_angular,700
+  -add_page command-guide/-blur_linear,700
   -add_page command-guide/-blur_radial,700
   -add_page command-guide/-blur_x,700
   -add_page command-guide/-blur_xy,700
