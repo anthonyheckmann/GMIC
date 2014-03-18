@@ -125,7 +125,7 @@ fi
 #-----------------
 echo " - Create man page."
 cd ../
-mkdir man
+mkdir -p man
 cd man
 rm -f man/gmic.1.gz
 echo -e "\
