@@ -1052,6 +1052,7 @@ update_tutorial_html :
   -add_page command-guide/-blur_angular,700
   -add_page command-guide/-blur_linear,700
   -add_page command-guide/-blur_radial,700
+  -add_page command-guide/-blur_selective,700
   -add_page command-guide/-blur_x,700
   -add_page command-guide/-blur_xy,700
   -add_page command-guide/-blur_xyz,700
