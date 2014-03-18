@@ -1214,7 +1214,7 @@ _update_tutorial_html :
              -l[] -i $link -k[0] is_opaque=0
              -split_opacity -if {@#==1" || "ia>250} is_opaque=1 -endif -a c
              -if {$is_opaque} -to_rgb -else -to_rgba -i[0] 100%,100%,1,3 -fc[0] 245,245,245 -blend alpha -endif
-             -o $relink,60 -rm
+             -o $relink,60 -rm -x "git add "$relink
              -v + -e[] "    > Image link '"$link"' converted and relinked to '"$relink"'." -v -
              -onfail relink=$link -v + -e[] "    > Failed to retrieve image link '"$link"'." -v - -rm
              -endl
@@ -1243,7 +1243,7 @@ _update_tutorial_html :
         -if $is_opaque -to_rgb -frame 1,1,0 -frame 10,10,245
         -else -to_rgba -i[0] 100%,100%,1,3 -fc[0] 245,245,245 -blend alpha
         -endif
-        -o $relink,60 -rm
+        -o $relink,60 -rm -x "git add "$relink
         -v + -e[] "    > Image '"$link"' converted and relinked to '"$relink"'." -v -
         -onfail relink=$link -v + -e[] "      > Failed to retrieve image '"$link"'." -v - -rm
         -endl
@@ -1259,6 +1259,7 @@ _update_tutorial_html :
 
   # Save .html page.
   -o raw:$4,uchar
+  -x "git add $4"
   -rm
 
   # Generate parent .shtml page.
@@ -1275,6 +1276,7 @@ _update_tutorial_html :
      "<!--#include file=\"copyright.html\" -->"\n\
      "<!--#include file=\"footer.html\" -->"\n'})
   -o raw:$3,uchar
+  -x "git add $3"
   -rm -v +
 
 #@gmic cupid : _size>0

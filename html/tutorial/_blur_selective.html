@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../tutorial.css">
+<body>
+
+<h1>-blur_selective</h1>
+<p><img src="img/_blur_selective_fm_b4naftr.jpg" title="Before and after: selective blur noise removal. " class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="200" width="200" /></p>
+<p>Selective blur operates on an image that has been segmented into a number of regions characterized by varying rates of change. The command aims to preserve edges, which exhibit very high rates of change, while selectively blurring noise from other regions that exhibit fairly low rates of change. </p>
+<p>The command has the following format:</p>
+<p>-blur_selective: sigma&gt;=0,_edges&gt;0,_nb_scales&gt;0 Blur selected images using selective gaussian scales. Default values: 'sigma=5', 'edges=0.5' and 'nb_scales=5'. Example(s): image.jpg -noise 20 -cut 0,255 --local[-1] -repeat 4 -blur_selective , \ -done -endlocal</p>
+<p>From <em>G'MIC Handbook Version 1.5.8.1</em> Updated: December 31, 2013 04:51 PM UTC</p>
+
+
+
+
+</body></html>
