@@ -15002,7 +15002,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
      "-f 'if(i>=65&&i<=90,i+32,i)' "\
      "-replace {'_'},32 -autocrop 32 "\
      "-replace_str rgb,RGB "\
-     "-replace_str lab,LAB "\
+     "-replace_str lab,Lab "\
      "-replace_str hsv,HSV "\
      "-replace_str hsl,HSL "\
      "-replace_str ycbcr,YCbCr "\
@@ -15665,6 +15665,7 @@ gimp_gmicky_preview :
 #@gimp : note = link{0,"Official G'MIC wiki.","https://sourceforge.net/p/gmic/wiki/Home/"}
 #@gimp : note = link{0,"Screenshots of some of the plug-in filters.","http://gmic.sourceforge.net/gimp.shtml"}
 #@gimp : note = link{0,"List of available plug-in filters.","http://gmic.sourceforge.net/gimp_filters.txt"}
+#@gimp : note = link{0,"Tutorial for learning the G'MIC language.","http://gmic.sourceforge.net/tutorial/index.shtml"}
 #@gimp : note = link{0,"Reference documentation of the G'MIC language (html).","http://gmic.sourceforge.net/reference.shtml"}
 #@gimp : note = link{0,"Reference documentation of the G'MIC language (pdf).","http://gmic.sourceforge.net/gmic_reference.pdf"}
 #@gimp : sep = separator()
