@@ -23362,9 +23362,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-foo :
-  str0="G\47MIC"
-  str1="G"{`39`}"MIC"
-  cond={$str0'=='$str1}
-  -echo "str0="$str0" str1="$str1" eq="$cond
