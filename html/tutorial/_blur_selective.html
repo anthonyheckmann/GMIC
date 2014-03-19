@@ -4,11 +4,17 @@
 <body>
 
 <h1>-blur_selective</h1>
-<p><img src="img/_blur_selective_fm_b4naftr.jpg" title="Before and after: selective blur noise removal. " class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="200" width="200" /></p>
-<p>Selective blur operates on an image that has been segmented into a number of regions characterized by varying rates of change. The command aims to preserve edges, which exhibit very high rates of change, while selectively blurring noise from other regions that exhibit fairly low rates of change. </p>
+<p><img src="img/_blur_selective_fm_b4naftr.jpg" title="Before and after: selective blur noise removal. " class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="200" width="200" />Selective blur aims to preserve edges while reducing noise. Both phenomena exhibit very high rates of change, but noise tends to random, mutually cancelling impulses while edges exhibit a degree of coherency. This command tends to agressively blur noise in locales where the average rate of change is relatively low, impulses notwithstanding as these tend to cancel out, while avoiding regions where pixels clump into distinct populations of color or luminosity that give rise to edge locales of rapid average color and luminosity change.</p>
 <p>The command has the following format:</p>
-<p>-blur_selective: sigma&gt;=0,_edges&gt;0,_nb_scales&gt;0 Blur selected images using selective gaussian scales. Default values: 'sigma=5', 'edges=0.5' and 'nb_scales=5'. Example(s): image.jpg -noise 20 -cut 0,255 --local[-1] -repeat 4 -blur_selective , \ -done -endlocal</p>
-<p>From <em>G'MIC Handbook Version 1.5.8.1</em> Updated: December 31, 2013 04:51 PM UTC</p>
+<p>-blur_selective: sigma&gt;=0,_edges&gt;0,_nb_scales&gt;0</p>
+<ul>
+<li><em>sigma:</em> sets the standard variation, or spread of a gaussian kernel for blurring in regions of locally constant color and luminosity. a non-negative number. One must supply a value, there are no defaults. The actual blurring in a particular locale will be less, or even zero, in the proximity of edges.</li>
+<li><em>_edges:</em> sets edge sensitivity. Higher numbers (greater than unity) tends toward preserving edges, but also noise. Lower numbers (0.01 - 0,4) permits more aggressive blurring, but can cause edges to disappear. The optimal value depends on particularities of images </li>
+<li><em>_nb_scales:</em> fum</li>
+</ul>
+<h2>Selective Gaussian Scaling</h2>
+<p>Blur selected images using selective gaussian scales. Default values: 'sigma=5', 'edges=0.5' and 'nb_scales=5'. Example(s): image.jpg -noise 20 -cut 0,255 --local[-1] -repeat 4 -blur_selective , \ -done -endlocal</p>
+<p><em>Garry Osgood</em></p>
 
 
 
