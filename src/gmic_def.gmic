@@ -23390,3 +23390,7 @@ tex_images :
     -l[] -i raw:${file$>},uchar -o raw:$folder/$filename,uchar -rm -endl
   -done
   -v + -e[] "  > All done !."
+
+
+foo :
+  -e {'{'}
