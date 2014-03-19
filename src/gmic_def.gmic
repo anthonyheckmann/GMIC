@@ -23362,3 +23362,31 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+tex_images :
+  -v -
+
+  # Parse file and extract image filenames.
+  -v + -e[] "  > Parse file '$1'." -v -
+  -i raw:$1,char
+  -s +,{'\\includegraphics'}
+  N=0
+  -repeat @# -if $>
+    -if {@{{$>-1},t}'=='"\includegraphics"} -l[$>]
+      -s -,125 -k[0] -s -,123 -k[-1] file$N=@{0,t} N={$N+1}
+    -endl -endif
+  -endif -done -rm
+  -v + -e[] "    -> "$N" images found !" -v -
+
+  # Copy images into separate folder.
+  folder=images_@{"-basename $1"}
+  -v + -e[] "  > Archive images in folder '"$folder"'." -v -
+  -x "mkdir -p "$folder
+  -repeat $N
+    0 -nm[-1] ${file$>}
+    filename=@{-1,b}.@{-1,x}
+    -rm[-1]
+    -v + -e[] "    . File '"$filename"'." -v -
+    -l[] -i raw:${file$>},uchar -o raw:$folder/$filename,uchar -rm -endl
+  -done
+  -v + -e[] "  > All done !."
