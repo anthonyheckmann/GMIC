@@ -15535,7 +15535,7 @@ gimp_logo_ca :
 gimp_display_filter_sources :
   -if @# -k[0] -remove_opacity -f 0 -else 256,256 -endif
   -l[] -gimp_filter_sources -y x -a y -onfail (0) -endl
-  -f[0] 120
+  -f[0] 64
   -text_outline[0] "Enabled external sources:\n----------------------------------",5,5,13,1,1,255
   -if @{-is_windows} path=@{-path_user}/ -else path=@{-path_user}/. -endif
   i=1 -repeat {h}
