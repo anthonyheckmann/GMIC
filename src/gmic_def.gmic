@@ -1322,25 +1322,6 @@ cupid : -check "${1=480}>=1"
   -nm "[Cupid binary mask]"
   -endl -v +
 
-
-foo :
-  cupid.cimgz
-  -compress_rle 1,47
-  -rows 6,100%
-  -- {im} -+ 32
-  -p
-  -s y,-200
-
-
-  -replace_str "\\","\\\\"
-  -replace_str "\"","\\\""
-  -replace_str "\#","\\\#"
-  -replace_str "\47","\\47"
-  -i[1--2] ({'\"\\\n\"'}) -i[0,@#] ({'"\""'})
-  -y -a y
-  -o raw:cupid.str,char
-
-
 #@gmic cursor : _mode = { 0=hide | 1=show } : (+)
 #@gmic : Show or hide mouse cursor for selected instant windows.
 #@gmic : Command subset (if any) stands for instant window indices instead of image indices.
