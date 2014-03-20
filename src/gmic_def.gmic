@@ -1286,7 +1286,7 @@ cupid : -check "${1=480}>=1"
   -e[^-1] "Input $1x$1 cupid binary mask." -v -
   -l[]
   (480,480,1,1,1)
-  ({'"                                                                                                  -WHX         /ZL[         1\\N]         2k         2l         4m         4m         4m         4m      "\
+  ({'"                                                                                                   -WHX         /ZL[         1\\N]         2k         2l         4m         4m         4m         4m      "\
      "   4m         4m         4m         3l         3k         2k         1i         0i         /g         .g         -e         +c         )a         (`         &^         $\\         !Y          NW       "\
      "   LU          IQ                                                                                                                                                                                       "\
      "                                :R>Z         9ZD^      8T  *^G`      :X@Q  ?`Ib      ;ZCS  AcMe      ;[FTAQ \"{      ;\\GTBS $}      ;\\JVBS $}      ;]LWBT %}      ;hBV (~P      ;gBXNT 0~P      ;hC^ 0~P "\
