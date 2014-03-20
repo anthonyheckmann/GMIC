@@ -15309,9 +15309,9 @@ _update_gmic_gimp_move :
 # Generate a splitted preview, with arguments "command",_split_type.
 # 'split_type' can be { 0=no split | 1=forw. horiz. | 2=forw. vert. | 3=back. horiz. | 4=back. vert. | 5=dupl. horiz. | 6=dupl. vert. }
 _before :
-  33,11 -t[-1] "Before",1,-1,13,1,1
+  0 -t[-1] "Before",1,-1,16,1,1
 _after :
-  26,11 -t[-1] "After",1,-1,13,1,1
+  0 -t[-1] "After",1,-1,16,1,1
 
 gimp_split_preview :
   -repeat @#
