@@ -3575,8 +3575,6 @@ uncompress_rle :
     # Retrieve original data dimension and min value.
     -y whds=@{0,0-3} im=@{0,4} is_binary_data=@{0,5} -rows 6,100%
 
-    -v + -e[] "** DEBUG "$is_binary_data -v -
-
     # Transform RLE data to list of pairs {nb_occurences,value}.
     -if $is_binary_data  # Decode for binary data.
       --ge 0 -abs[0] -a x
