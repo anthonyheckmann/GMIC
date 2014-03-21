@@ -1949,7 +1949,7 @@ _gmic_def()
 		return 0
 		;;
 		"-compress_rle" | "--compress_rle")
-		COMPREPLY=( $(compgen -W "_maximum_sequence_length>=0 >") )
+		COMPREPLY=( $(compgen -W "_is_binary_data={0|1},_maximum_sequence_length>=0 >") )
 		return 0
 		;;
 		"-cut" | "--cut")
