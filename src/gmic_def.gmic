@@ -15732,10 +15732,10 @@ gimp_gmicky_preview :
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
 #@gimp : - <b>2013/12/07</b> : version <i>1.5.8.0</i>.\n
-#@gimp : - <span foreground="purple"><b>2014/03/04</b> : version <i>1.5.8.4</i> (Current stable).</span>\n
+#@gimp : - <span foreground="purple"><b>2014/03/21</b> : version <i>1.5.8.5</i> (Current stable).</span>\n
 #@gimp : "}
-#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157640785083263/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/04</i>.</small>")
+#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157641941880853/")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/21</i>.</small>")
 
 #@gimp _<b>Arrays &amp; tiles</b>
 #--------------------------------
@@ -19493,7 +19493,7 @@ _gimp_emulate_film :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_bw :
-  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_bw}
 
 #@gimp Instant - collage [consumer] : gimp_emulate_film_collage_instant_consumer, gimp_no_preview
@@ -19505,7 +19505,7 @@ gimp_emulate_film_collage_bw :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_instant_consumer :
-  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_instant_consumer}
 
 #@gimp Instant - collage [pro] : gimp_emulate_film_collage_instant_pro, gimp_no_preview
@@ -19517,7 +19517,7 @@ gimp_emulate_film_collage_instant_consumer :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_instant_pro :
-  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_instant_pro}
 
 #@gimp Negative - collage [color] : gimp_emulate_film_collage_negative_color, gimp_no_preview
@@ -19529,7 +19529,7 @@ gimp_emulate_film_collage_instant_pro :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_negative_color :
-  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_color}
 
 #@gimp Negative - collage [new] : gimp_emulate_film_collage_negative_new, gimp_no_preview
@@ -19541,7 +19541,7 @@ gimp_emulate_film_collage_negative_color :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_negative_new :
-  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_new}
 
 #@gimp Negative - collage [old] : gimp_emulate_film_collage_negative_old, gimp_no_preview
@@ -19553,7 +19553,7 @@ gimp_emulate_film_collage_negative_new :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_negative_old :
-  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_old}
 
 #@gimp Other effects - collage : gimp_emulate_film_collage_others, gimp_no_preview
@@ -19565,7 +19565,7 @@ gimp_emulate_film_collage_negative_old :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_others :
-  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_others}
 
 #@gimp Slide - collage [color] : gimp_emulate_film_collage_colorslide, gimp_no_preview
@@ -19577,7 +19577,7 @@ gimp_emulate_film_collage_others :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_colorslide :
-  -k[0] -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 -_gimp_emulate_film_collage @{-_gimp_emulate_film_colorslide}
 
 _gimp_emulate_film_collage :
