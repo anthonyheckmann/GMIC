@@ -273,12 +273,8 @@ tar chvf ${TARFILE} `basename $DIR`
 gzip ${TARFILE}
 cp ${TARFILE}.gz ${HOME}/work/src/
 
-FORGE=ronounours,gmic@frs.sourceforge.net:/home/frs/project/g/gm/gmic/
-if [ "$1" != "final" ]; then
-FORGE=${FORGE}beta/
-fi
-
-scp ${HOME}/work/src/${TARFILE}.gz $FORGE
+FORGE=ronounours,gmic@frs.sourceforge.net:/home/frs/project/g/gm/gmic
+scp ${HOME}/work/src/${TARFILE}.gz $FORGE/
 
 # Create debian packages for debian/ubuntu 32 and 64 bits.
 #---------------------------------------------------------
@@ -330,69 +326,69 @@ echo GEMINI_DONE " &
 echo " - Waiting for all packages.".
 
 cd $DIR
-scp README $FORGE
+scp README $FORGE/
 cd ${HOME}/work/src/
 
 # Linux 64 bits.
 FILE=gmic_${VERSION}${SUFFIX}_amd64.deb
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
-scp ${FILE} $FORGE
+scp ${FILE} $FORGE/linux/
 
 FILE=gmic_gimp_${VERSION}${SUFFIX}_linux64.zip
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
-scp ${FILE} $FORGE
+scp ${FILE} $FORGE/linux/
 if [ "$1" == "final" ]; then
-    scp ${FILE} ${FORGE}gmic_gimp_linux64.zip
+    scp ${FILE} ${FORGE}/linux/gmic_gimp_linux64.zip
 fi
 
 FILE=gmic_static_${VERSION}${SUFFIX}_linux64.zip
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
-scp ${FILE} $FORGE
+scp ${FILE} $FORGE/linux/
 
 # Linux 32 bits.
 FILE=gmic_${VERSION}${SUFFIX}_i386.deb
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
-scp ${FILE} $FORGE
+scp ${FILE} $FORGE/linux/
 
 FILE=gmic_gimp_${VERSION}${SUFFIX}_linux32.zip
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
-scp ${FILE} $FORGE
+scp ${FILE} $FORGE/linux/
 if [ "$1" == "final" ]; then
-    scp ${FILE} ${FORGE}gmic_gimp_linux32.zip
+    scp ${FILE} ${FORGE}/linux/gmic_gimp_linux32.zip
 fi
 
 FILE=gmic_static_${VERSION}${SUFFIX}_linux32.zip
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
-scp ${FILE} $FORGE
+scp ${FILE} $FORGE/linux/
 
 # Windows 32 bits.
 FILE=gmic_gimp_${VERSION}${SUFFIX}_win32.zip
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
-scp ${FILE} $FORGE
+scp ${FILE} $FORGE/windows/
 if [ "$1" == "final" ]; then
-    scp ${FILE} ${FORGE}gmic_gimp_win32.zip
+    scp ${FILE} ${FORGE}/windows/gmic_gimp_win32.zip
 fi
 
 FILE=gmic_gimp_${VERSION}${SUFFIX}_win32.exe
 while [ ! -f ${FILE} ]; do sleep 10; done
 sleep 10
-scp ${FILE} $FORGE
+scp ${FILE} $FORGE/windows/
 if [ "$1" == "final" ]; then
-    scp ${FILE} ${FORGE}gmic_gimp_win32.exe
+    scp ${FILE} ${FORGE}/windows/gmic_gimp_win32.exe
 fi
 
 if [ "$1" == "final" ]; then
     FILE=gmic_${VERSION}${SUFFIX}_win32.zip
     while [ ! -f ${FILE} ]; do sleep 10; done
     sleep 10
-    scp ${FILE} $FORGE
+    scp ${FILE} $FORGE/windows/
 fi
 
 #

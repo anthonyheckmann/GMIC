@@ -15352,13 +15352,13 @@ _gimp_no_preview :
 # #@gimp : note = note{"A <b>new version</b> of the G'MIC plug-in for GIMP is available!
 # #@gimp : You are strongly encouraged to download and install this updated version, by clicking on one of the following urls :"}
 # #@gimp : note = note{"\n<span foreground="purple"><u>Windows version :</u></span>"}
-# #@gimp : url = link{"Download G'MIC plug-in for Windows (32 bits)","http://downloads.sourceforge.net/gmic/gmic_gimp_win32.exe"}
-# #@gimp : url = link{"Download G'MIC plug-in for Windows (64 bits)","http://downloads.sourceforge.net/gmic/gmic_gimp_win64.zip"}
+# #@gimp : url = link{"Download G'MIC plug-in for Windows (32 bits)","http://downloads.sourceforge.net/gmic/windows/gmic_gimp_win32.exe"}
+# #@gimp : url = link{"Download G'MIC plug-in for Windows (64 bits)","http://downloads.sourceforge.net/gmic/windows/gmic_gimp_win64.zip"}
 # #@gimp : note = note{"<b>Installation </b>: unzip the archive files and copy them into folder\n
 # #@gimp :              <i>C:\\Program Files\\GIMP\\lib\\gimp\\2.0\\plug-ins\</i>"}
 # #@gimp : note = note{"\n<span foreground="purple"><u>Linux version :</u></span>"}
-# #@gimp : url = link{"Download plug-in for Linux (32 bits)","http://downloads.sourceforge.net/gmic/gmic_gimp_linux32.zip"}
-# #@gimp : url = link{"Download plug-in for Linux (64 bits)","http://downloads.sourceforge.net/gmic/gmic_gimp_linux64.zip"}
+# #@gimp : url = link{"Download plug-in for Linux (32 bits)","http://downloads.sourceforge.net/gmic/linux/gmic_gimp_linux32.zip"}
+# #@gimp : url = link{"Download plug-in for Linux (64 bits)","http://downloads.sourceforge.net/gmic/linux/gmic_gimp_linux64.zip"}
 # #@gimp : note = note{"<b>Installation </b>: unzip the archive files and copy them in folder\n
 # #@gimp :              <i>/usr/lib/gimp/2.0/plug-ins/</i>"}
 # #@gimp : note = note{"\nNote that there will be no updated filters anymore for your current plug-in version.
