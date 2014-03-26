@@ -15916,7 +15916,7 @@ gimp_array_preview :
 #@gimp : Output folder = _folder()
 #@gimp : Output filename = _text("gmic_asciiart.txt")
 #@gimp : sep = separator()
-#@gimp : note = note("<small><b>Note:</b> This filter probably requires version <b>1.5.8.5</b> of the G'MIC plug-in to work properly.</small>")
+#@gimp : note = note("<small><b>Note:</b> This filter probably requires version <b>1.5.8.5</b> (or later) of the G'MIC plug-in to work properly.</small>")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/26</i>.</small>")
 gimp_asciiart :
   -repeat @# -l[$>] -to_rgb
