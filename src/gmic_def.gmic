@@ -1059,6 +1059,7 @@ update_tutorial_html :
   -add_page command-guide/-blur_y,700
   -add_page command-guide/-blur_z,2500
   -add_page command-guide/-convolve,3500
+  -add_page command-guide/-deriche,1500
   -add_page command-guide/-display,2000
   -add_page command-guide/-gaussian,2000
   -add_page command-guide/-gradient,2000
@@ -1142,6 +1143,7 @@ _update_tutorial_html :
   -replace_str "border: 1px","border: 0px"
   -replace_str "G\140MIC","G\47MIC"
   -replace_str "CNTL","CTRL"
+  -replace_str "Rashid","Rachid"
 
   # Discard original header.
   -s +,{'<h1'}
@@ -1167,6 +1169,8 @@ _update_tutorial_html :
 
   # Replace image links.
   -replace_str "\"/static/media/uploads/","\"http://particularart.com/static/media/uploads/"
+  -replace_str "\"/tools-and-toys/gmic/","\"http://particularart.com/tools-and-toys/gmic/"
+  -replace_str "\"http://particularart.com/","\"http://www.particularart.com/"
 
   # Search and replace links to 'internal' pages.
   -s +,{'"<a "'}
@@ -1174,13 +1178,13 @@ _update_tutorial_html :
     -s +,{'\"'}
     -if {@#>0}
       link=@{0,t}
-      ({'$link'}) -z[-1] 0,20 baselink=@{-1,t} -rm[-1]
-      -if {$baselink'=='"/tools-and-toys/gmic/"}
+      ({'$link'}) -z[-1] 0,48 baselink=@{-1,t} -rm[-1]
+
+      -if {$baselink'=='"http://www.particularart.com/tools-and-toys/gmic/"}  # Check for a 'local' link.
 
         # Retrieve anchor if any.
         -l[] anchor="" ({'$link'}) -s +,{"'\#'"} -if {@#>1} anchor=#@{-1,t} link=@{0,t} -endif -rm -endl
-        ({'$link'})
-        -if {i(w-1)=={'/'}} -z[-1] 0,{w-2} -endif
+        ({'$link'}) -autocrop[-1] {'/'}
         relink=@{-basename\ @{-1,t}}.shtml -rm[-1]
         ({'$relink'}) -if {i=={'-'}} -=[-1] {'_'} relink=@{-1,t} -endif -rm[-1] # Replace first '-' by underscore if necessary.
 
@@ -1201,7 +1205,7 @@ _update_tutorial_html :
           -endif
           -rm[-1]
         -endif
-      -elif {$baselink'=='"/static/media/uploads"}
+      -elif {$baselink'=='"http://www.particularart.com/static/media/uploads"}
          relink=http://particularart.com$link
          -v + -e[] "    > Local link '"$link"' relinked to '"$relink"'." -v -
          -rm[0] -i[0] ({'$relink'}) -y[0]
