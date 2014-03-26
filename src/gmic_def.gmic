@@ -15909,7 +15909,7 @@ gimp_array_preview :
 
 #@gimp Ascii art : gimp_asciiart, gimp_asciiart_preview(0)
 #@gimp : Charset = choice(5,"Custom","Binary digits","Digits","Lowercase letters","Uppercase letters","Ascii","Card suits")
-#@gimp : Custom dictionnary = text{" .o*O"}
+#@gimp : Custom dictionnary = text{" .oO0"}
 #@gimp : Analysis scale = int(16,8,103)
 #@gimp : Analysis smoothness = float(25,0,100)
 #@gimp : Synthesis scale = int(16,8,103)
@@ -15919,7 +15919,7 @@ gimp_array_preview :
 #@gimp : Output folder = _folder()
 #@gimp : Output filename = _text("gmic_asciiart.txt")
 #@gimp : sep = separator()
-#@gimp : note = note("<small><b>Note:</b> This filter probably requires version <b>1.5.8.5</b> (or later) of the G'MIC plug-in to work properly.</small>")
+#@gimp : note = note{"<small><b>Note:</b> This filter probably requires version <b>1.5.8.5</b> (or later) of the G'MIC plug-in to work properly.</small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/26</i>.</small>")
 gimp_asciiart :
   -repeat @# -l[$>] -to_rgb
