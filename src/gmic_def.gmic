@@ -15905,9 +15905,9 @@ gimp_array_preview :
 #@gimp Ascii art : gimp_asciiart, gimp_asciiart_preview(0)
 #@gimp : Charset = choice(5,"Custom","Binary digits","Digits","Lowercase letters","Uppercase letters","Ascii","Card suits")
 #@gimp : Custom dictionnary = text{" .o*O"}
-#@gimp : Analysis scale = int(16,1,103)
+#@gimp : Analysis scale = int(16,8,103)
 #@gimp : Analysis smoothness = float(25,0,100)
-#@gimp : Synthesis scale = int(16,1,103)
+#@gimp : Synthesis scale = int(16,8,103)
 #@gimp : Result type = choice(2,"White on black","Black on white","Colored on black","Colored on transparent")
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Note:</b> This filter probably requires version <b>1.5.8.5</b> of the G'MIC plug-in to work properly.</small>")
