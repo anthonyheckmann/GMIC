@@ -9377,11 +9377,11 @@ _frame :
     -if {$d} 100%,100%,$d,100% -fc[-1] ${4--1} -j[0] [1] -j[0] [1],0,0,@{0,d-$d} -rm[-1] -endif
   -endl -done -v +
 
-#@gmic img2ascii : _charset,_analysis_scale>0,_analysis_smoothness[%]>=0,_synthesis_scale>0,_output_type={ 0=stdout | 1=image of ascii codes | 2=image }
+#@gmic img2ascii : _charset,_analysis_scale>0,_analysis_smoothness[%]>=0,_synthesis_scale>0,_output_ascii_filename
 #@gmic : Render selected images as binary ascii art.
-#@gmic : Default values: 'charset=[ascii charset]', analysis_scale=16, analysis_smoothness=20% and synthesis_scale=16.
+#@gmic : Default values: 'charset=[ascii charset]', 'analysis_scale=16', 'analysis_smoothness=20%', 'synthesis_scale=16' and '_output_ascii_filename=[undefined]'.
 #@gmic : $ image.jpg --img2ascii , -r[0] [1],[1],1,3 --mul
-img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\133\\\135^_\140abcdefghijklmnopqrstuvwxyz\173|\174~}",${5=2} -check "${2=16}>0 && ${3=20%}>=0 && ${4=16}>0"
+img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\133\\\135^_\140abcdefghijklmnopqrstuvwxyz\173|\174~}","${5=}" -check "${2=16}>0 && ${3=20%}>=0 && ${4=16}>0"
   -e[^-1] "Render image$? as binary ascii art, with charset '$1', analysis scale $2, analysis smoothness $3 and synthesis scale $4."
   -v -
 
@@ -9409,14 +9409,16 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
       -rprogress {$>*100/(@#-2)}
       -r[0] [1] --[0] [1] -sqr[0] -r[0] 1,1,100%,1,2 -y[0]
       C=@{0,ym} -rm[0]
-      -if {$5==2} --slices[1] $C -mv[-1] 0
-      -else -i[0] ($C) -endif
+      --slices[1] $C -mv[-1] 0
+      -if {narg("$5")} --f[0] $C -a[0,-1] c -endif
     -endl -done
     -append_tiles[0--2] $nx,$ny
 
-    -if {$5<=1} -l[0]
-      ({'"$1"'}) -map[0] [-1] -k[0]
-      -if {$5==0} -s y -repeat @# -echo_stdout @{$>,t} -done -a y -endif
+    -if {narg("$5")} -s[0] c -l[1]  # Export as ascii file.
+       -r {round(w/$w)},{round(h/$h)},1,1,1
+       ({'"$1"'}) -map[0] [-1] -k[0]
+       -s y -i[1-@#] ({'\n'})
+       -a x -o raw:"$5",char -rm
     -endl -endif
 
   -endl -done
@@ -15910,10 +15912,11 @@ gimp_array_preview :
 #@gimp : Analysis smoothness = float(25,0,100)
 #@gimp : Synthesis scale = int(16,8,103)
 #@gimp : Result type = choice(2,"White on black","Black on white","Colored on black","Colored on transparent")
+#@gimp : Export ascii file as = _text("")
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Note:</b> This filter probably requires version <b>1.5.8.5</b> of the G'MIC plug-in to work properly.</small>")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/26</i>.</small>")
-gimp_asciiart :
+gimp_asciiart : -skip "${7=}"
   -repeat @# -l[$>] -to_rgb
     -if {$1==0} dict="$2"
     -elif {$1==1} dict="01"
@@ -15924,7 +15927,7 @@ gimp_asciiart :
     -elif {$1==6} dict=" \16\17\20\21"
     -endif
     -if {$6==1} -negative -endif
-    --img2ascii $dict,$3,$4%,$5
+    --img2ascii $dict,$3,$4%,$5,"$7"
     -if {$6==0} -k[-1] -n 0,255
     -elif {$6==1} -k[-1] -negative -n 0,255
     -elif {$6==2} -r[0] [1],[1],1,100% --neq[-1] 0 -blend[0,-1] shapeaverage0 -*
@@ -15935,7 +15938,7 @@ gimp_asciiart :
 gimp_asciiart_preview :
   -repeat @# -l[$>]
     w={w} h={h}
-    -gimp_asciiart $1,"$2",${3--1}
+    -gimp_asciiart $1,"$2",$3,$4,$5,$6
     -r $w,$h,1,100%,0,0,0.5,0.5
   -endl -done
 
