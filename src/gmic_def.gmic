@@ -9381,7 +9381,7 @@ _frame :
 #@gmic : Render selected images as binary ascii art.
 #@gmic : Default values: 'charset=[ascii charset]', analysis_scale=16, analysis_smoothness=20% and synthesis_scale=16.
 #@gmic : $ image.jpg --img2ascii , -r[0] [1],[1],1,3 --mul
-img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\133\\\135^_\140abcdefghijklmnopqrstuvwxyz\173|\174~}",${5=1} -check "${2=16}>0 && ${3=20%}>=0 && ${4=16}>0"
+img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\133\\\135^_\140abcdefghijklmnopqrstuvwxyz\173|\174~}",${5=2} -check "${2=16}>0 && ${3=20%}>=0 && ${4=16}>0"
   -e[^-1] "Render image$? as binary ascii art, with charset '$1', analysis scale $2, analysis smoothness $3 and synthesis scale $4."
   -v -
 
@@ -9403,7 +9403,7 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
     -luminance[0] -equalize[0] 256 -b[0] 1 -n[0] 0,255
     nx=@{0,round(w/$w,1,1)}
     ny=@{0,round(h/$h,1,1)}
-    -s[0] y,$ny -s[0--3] x,$nx -r[0--3] $w,$h,1,1,0,0
+    -s[0] y,-$h -s[0--3] x,-$w -r[0--3] $w,$h,1,1,0,0
     -repeat {@#-2} -l[$>,-2,-1]
       -rprogress {$>*100/(@#-2)}
       -r[0] [1] --[0] [1] -sqr[0] -r[0] 1,1,100%,1,2 -y[0]
