@@ -9379,6 +9379,7 @@ _frame :
 
 #@gmic img2ascii : _charset,_analysis_scale>0,_analysis_smoothness[%]>=0,_synthesis_scale>0,_output_ascii_filename
 #@gmic : Render selected images as binary ascii art.
+#@gmic : This command returns the corresponding the list of widths and heights (expressed as a number of characters) for each selected image.
 #@gmic : Default values: 'charset=[ascii charset]', 'analysis_scale=16', 'analysis_smoothness=20%', 'synthesis_scale=16' and '_output_ascii_filename=[undefined]'.
 #@gmic : $ image.jpg --img2ascii , -r[0] [1],[1],1,3 --mul
 img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\133\\\135^_\140abcdefghijklmnopqrstuvwxyz\173|\174~}","${5=}" -check "${2=16}>0 && ${3=20%}>=0 && ${4=16}>0"
@@ -9401,8 +9402,10 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
   # Transform selected image to ascii art.
   -repeat {@#-2} -l[$>,-2,-1]
     -luminance[0] -equalize[0] 256 -b[0] 1 -n[0] 0,255
-    nx=@{0,round(w/$w,1,1)}
-    ny=@{0,round(h/$h,1,1)}
+    nw=@{0,round(w/$w,1,1)}
+    nh=@{0,round(h/$h,1,1)}
+    -if $> list_wh=$list_wh,$nw,$nh -else list_wh=$nw,$nh -endif
+
     -s[0] y,-$h -s[0--3] x,-$w -r[0--3] $w,$h,1,1,0,0
     -repeat {@#-2} -l[$>,-2,-1]
       -rprogress {$>*100/(@#-2)}
@@ -9411,17 +9414,17 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
       --slices[1] $C -mv[-1] 0
       -if {narg("$5")} --f[0] $C -a[0,-1] c -endif
     -endl -done
-    -append_tiles[0--2] $nx,$ny
+    -append_tiles[0--2] $nw,$nh
 
     -if {narg("$5")} -s[0] c -l[1]  # Export as ascii file.
-       -r {round(w/$w)},{round(h/$h)},1,1,1
+       -r $nw,$nh,1,1,1
        ({'"$1"'}) -map[0] [-1] -k[0]
        -s y -i[1-@#] ({'\n'})
        -a x -o raw:"$5",char -rm
     -endl -endif
 
   -endl -done
-  -rm[-2,-1] -v +
+  -rm[-2,-1] -u $list_wh -v +
 
 #@gmic imagegrid : M>0,_N>0
 #@gmic : Create MxN image grid from selected images.
@@ -15932,10 +15935,11 @@ gimp_asciiart :
     -if $7 --img2ascii $dict,$3,$4%,$5,"$8"/"$9"
     -else --img2ascii $dict,$3,$4%,$5
     -endif
+    wh=@{}
     -if {$6==0} -k[-1] -n 0,255
     -elif {$6==1} -k[-1] -negative -n 0,255
-    -elif {$6==2} -r[0] [1],[1],1,100% --neq[-1] 0 -blend[0,-1] shapeaverage0 -*
-    -elif {$6==3} -r[0] [1],[1],1,100% --neq[-1] 0 -blend[0,-1] shapeaverage0 -*[0] [1] -*[1] 255 -a c
+    -elif {$6==2} -r[0] $wh,1,100%,3 -r[0] [1],[1],1,100% -*
+    -elif {$6==3} -r[0] $wh,1,100%,3 -r[0] [1],[1],1,100% -*[0] [1] -*[1] 255 -a c
     -endif
   -endl -done
 
