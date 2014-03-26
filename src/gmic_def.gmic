@@ -15911,11 +15911,14 @@ gimp_array_preview :
 #@gimp : Analysis smoothness = float(25,0,100)
 #@gimp : Synthesis scale = int(16,8,103)
 #@gimp : Result type = choice(2,"White on black","Black on white","Colored on black","Colored on transparent")
-#@gimp : Export ascii file as = _text("")
+#@gimp : sep = separator()
+#@gimp : Output ascii file = _bool(0)
+#@gimp : Output folder = _folder()
+#@gimp : Output filename = _text("gmic_asciiart.txt")
 #@gimp : sep = separator()
 #@gimp : note = note("<small><b>Note:</b> This filter probably requires version <b>1.5.8.5</b> of the G'MIC plug-in to work properly.</small>")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/26</i>.</small>")
-gimp_asciiart : -skip "${7=}"
+gimp_asciiart :
   -repeat @# -l[$>] -to_rgb
     -if {$1==0} dict="$2"
     -elif {$1==1} dict="01"
@@ -15926,7 +15929,9 @@ gimp_asciiart : -skip "${7=}"
     -elif {$1==6} dict=" \16\17\20\21"
     -endif
     -if {$6==1} -negative -endif
-    --img2ascii $dict,$3,$4%,$5,"$7"
+    -if $7 --img2ascii $dict,$3,$4%,$5,"$8"/"$9"
+    -else --img2ascii $dict,$3,$4%,$5
+    -endif
     -if {$6==0} -k[-1] -n 0,255
     -elif {$6==1} -k[-1] -negative -n 0,255
     -elif {$6==2} -r[0] [1],[1],1,100% --neq[-1] 0 -blend[0,-1] shapeaverage0 -*
@@ -15937,7 +15942,7 @@ gimp_asciiart : -skip "${7=}"
 gimp_asciiart_preview :
   -repeat @# -l[$>]
     w={w} h={h}
-    -gimp_asciiart $1,"$2",$3,$4,$5,$6
+    -gimp_asciiart $1,"$2",$3,$4,$5,$6,0,foo,foo
     -r $w,$h,1,100%,0,0,0.5,0.5
   -endl -done
 
