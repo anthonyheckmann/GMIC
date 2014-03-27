@@ -9383,7 +9383,7 @@ _frame :
 #@gmic : Default values: 'charset=[ascii charset]', 'analysis_scale=16', 'analysis_smoothness=20%', 'synthesis_scale=16' and '_output_ascii_filename=[undefined]'.
 #@gmic : $ image.jpg --img2ascii , -r[0] [1],[1],1,3 --mul
 img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\133\\\135^_\140abcdefghijklmnopqrstuvwxyz\173|\174~}","${5=}" -check "${2=16}>0 && ${3=20%}>=0 && ${4=16}>0"
-  -e[^-1] "Render image$? as binary ascii art, with charset '$1', analysis scale $2, analysis smoothness $3 and synthesis scale $4."
+  -e[^-1] "Render image$? as binary ascii art, with charset '$1', analysis scale $2, analysis smoothness $3, synthesis scale $4 and output ascii filename '$5'."
   -v -
   is_multi={@#>1}
 
