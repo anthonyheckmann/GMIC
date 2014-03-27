@@ -9385,6 +9385,7 @@ _frame :
 img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\133\\\135^_\140abcdefghijklmnopqrstuvwxyz\173|\174~}","${5=}" -check "${2=16}>0 && ${3=20%}>=0 && ${4=16}>0"
   -e[^-1] "Render image$? as binary ascii art, with charset '$1', analysis scale $2, analysis smoothness $3 and synthesis scale $4."
   -v -
+  is_multi={@#>1}
 
   # Generate dictionnaries for image analysis and synthesis.
   -l[]
@@ -9420,7 +9421,9 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
        -r $nw,$nh,1,1,1
        ({'"$1"'}) -map[0] [-1] -k[0]
        -s y -i[1-@#] ({'\n'})
-       -a x -o raw:"$5",char -rm
+       -a x
+       -if $is_multi filename=@{-filename\ "$5",$>} -else filename="$5" -endif
+       -o raw:$filename,char -rm
     -endl -endif
 
   -endl -done
