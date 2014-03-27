@@ -640,6 +640,7 @@ _gmic_def()
 	      -frame_xy --frame_xy\
 	      -frame_xyz --frame_xyz\
 	      -frame_y --frame_y\
+	      -img2ascii --img2ascii\
 	      -imagegrid --imagegrid\
 	      -linearize_tiles --linearize_tiles\
 	      -map_sprites --map_sprites\
@@ -659,6 +660,7 @@ _gmic_def()
 	      -drop_shadow --drop_shadow\
 	      -ellipsionism --ellipsionism\
 	      -fire_edges --fire_edges\
+	      -fractalize --fractalize\
 	      -glow --glow\
 	      -halftone --halftone\
 	      -hardsketchbw --hardsketchbw\
@@ -1475,6 +1477,7 @@ _gmic_def()
 	      frame_xy\
 	      frame_xyz\
 	      frame_y\
+	      img2ascii\
 	      imagegrid\
 	      linearize_tiles\
 	      map_sprites\
@@ -1494,6 +1497,7 @@ _gmic_def()
 	      drop_shadow\
 	      ellipsionism\
 	      fire_edges\
+	      fractalize\
 	      glow\
 	      halftone\
 	      hardsketchbw\
@@ -2677,7 +2681,7 @@ _gmic_def()
 		return 0
 		;;
 		"-pack_sprites" | "--pack_sprites")
-		COMPREPLY=( $(compgen -W "_nb_scales>=0,0<=_min_scale<=100,_allow_rotation={0=0deg.|1=180deg.|2=90deg.|3=any},_spacing,_precision>=0,,max_iterations>=0 >") )
+		COMPREPLY=( $(compgen -W "_nb_scales>=0,0<=_min_scale<=100,_allow_rotation={0=0deg.|1=180deg.|2=90deg.|3=any},_spacing,_precision>=0,max_iterations>=0 >") )
 		return 0
 		;;
 		"-piechart" | "--piechart")
@@ -3140,6 +3144,10 @@ _gmic_def()
 		COMPREPLY=( $(compgen -W "size_y[%]>=0,_col1,...,_colN >") )
 		return 0
 		;;
+		"-img2ascii" | "--img2ascii")
+		COMPREPLY=( $(compgen -W "_charset,_analysis_scale>0,_analysis_smoothness[%]>=0,_synthesis_scale>0,_output_ascii_filename >") )
+		return 0
+		;;
 		"-imagegrid" | "--imagegrid")
 		COMPREPLY=( $(compgen -W "M>0,_N>0 >") )
 		return 0
@@ -3214,6 +3222,10 @@ _gmic_def()
 		;;
 		"-fire_edges" | "--fire_edges")
 		COMPREPLY=( $(compgen -W "_edges>=0,0<=_attenuation<=1,_smoothness>=0,_threshold>=0,_nb_frames>0,_starting_frame>=0,frame_skip>=0 >") )
+		return 0
+		;;
+		"-fractalize" | "--fractalize")
+		COMPREPLY=( $(compgen -W "0<=detail_level<=1 >") )
 		return 0
 		;;
 		"-glow" | "--glow")
