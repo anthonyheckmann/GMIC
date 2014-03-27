@@ -9394,14 +9394,14 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
       0 -text[-1] $C,0,0,$4,1,1
     -done -rm[0]
     -= -1 -= -1,0,100% -autocrop -= 0 -= 0,0,100%
-    -l[0--2:2] -r {@{-max_w}+2},100%,1,1,0,0,0.5 -b $3 -n 0,255 -a z -endl
-    -l[1--1] -r {@{-max_w}+2},100%,1,1,0,0,0.5 -a z -endl
+    -l[0--2:2] -r {@{-max_w}+1},100%,1,1,0,0,0.5 -b $3 -n 0,255 -a z -endl
+    -l[1--1] -r {@{-max_w}+1},100%,1,1,0,0,0.5 -a z -endl
   -endl
   w=@{-2,w} h=@{-2,h}
 
   # Transform selected image to ascii art.
   -repeat {@#-2} -l[$>,-2,-1]
-    -luminance[0] -equalize[0] 256 -b[0] 1 -n[0] 0,255
+    -luminance[0] -n[0] 0,255
     nw=@{0,round(w/$w,1,1)}
     nh=@{0,round(h/$h,1,1)}
     -if $> list_wh=$list_wh,$nw,$nh -else list_wh=$nw,$nh -endif
@@ -15911,18 +15911,24 @@ gimp_array_preview :
 #@gimp : Charset = choice(5,"Custom","Binary digits","Digits","Lowercase letters","Uppercase letters","Ascii","Card suits")
 #@gimp : Custom dictionnary = text{" .oO0"}
 #@gimp : Analysis scale = int(16,8,103)
-#@gimp : Analysis smoothness = float(25,0,100)
+#@gimp : Analysis smoothness = float(15,0,100)
 #@gimp : Synthesis scale = int(16,8,103)
 #@gimp : Result type = choice(2,"White on black","Black on white","Colored on black","Colored on transparent")
+#@gimp : sep = separator()
+#@gimp : Gamma = float(0,-3,3)
+#@gimp : Smoothness = float(0.2,0,5)
+#@gimp : Colors = choice("Full colors","2 colors","3 colors","4 colors","8 colors","12 colors","16 colors",
+#@gimp :                 "Grayscale","2 grays","3 grays","4 grays","8 grays","12 grays","16 grays")
 #@gimp : sep = separator()
 #@gimp : Output ascii file = _bool(0)
 #@gimp : Output folder = _folder()
 #@gimp : Output filename = _text("gmic_asciiart.txt")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Note:</b> This filter probably requires version <b>1.5.8.5</b> (or later) of the G'MIC plug-in to work properly.</small>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/26</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/27</i>.</small>")
 gimp_asciiart :
   -repeat @# -l[$>] -to_rgb
+    -apply_gamma {10^$7} -b $8% -n 0,255
     -if {$1==0} dict="$2"
     -elif {$1==1} dict="01"
     -elif {$1==2} dict="0123456789"
@@ -15932,21 +15938,27 @@ gimp_asciiart :
     -elif {$1==6} dict=" \16\17\20\21"
     -endif
     -if {$6==1} -negative -endif
-    -if $7 --img2ascii $dict,$3,$4%,$5,"$8"/"$9"
+    -if $-3 --img2ascii $dict,$3,$4%,$5,"$-2"/"$-1"
     -else --img2ascii $dict,$3,$4%,$5
     -endif
     wh=@{}
     -if {$6==0} -k[-1] -n 0,255
     -elif {$6==1} -k[-1] -negative -n 0,255
-    -elif {$6==2} -r[0] $wh,1,100%,3 -r[0] [1],[1],1,100% -*
-    -elif {$6==3} -r[0] $wh,1,100%,3 -r[0] [1],[1],1,100% -*[0] [1] -*[1] 255 -a c
+    -elif {$6==2||$6==3}
+      -r[0] $wh,1,100%,1
+      -if {$9>=7} -luminance[0] -endif
+      -if {$9%7} -quantize[0] {arg($9%7,2,3,4,8,12,16)-1},1,0 -endif
+      -r[0] [1],[1],1,100% -*[0] [1]
+      -if {$6==2} -rm[1]
+      -else -*[1] 255 -a c
+      -endif
     -endif
   -endl -done
 
 gimp_asciiart_preview :
   -repeat @# -l[$>]
     w={w} h={h}
-    -gimp_asciiart $1,"$2",$3,$4,$5,$6,0,foo,foo
+    -gimp_asciiart $1,"$2",${3--4},0,foo,foo
     -r $w,$h,1,100%,0,0,0.5,0.5
   -endl -done
 
