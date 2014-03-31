@@ -19104,8 +19104,11 @@ gimp_deblur_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gimp : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2013/03/29</i>.</small>")
 gimp_unsharp_goldmeinel:
-  -deblur_goldmeinel $* -if $5 -c 0,255 -else -n 0,255 -endif
-#  -gimp_parallel_overlap "-deblur_goldmeinel $* -if $5 -c 0,255 -else -n 0,255 -endif",$6,$7
+  -gimp_parallel_overlap "-_gimp_unsharp_goldmeinel $*",$6,$7
+
+_gimp_unsharp_goldmeinel :
+  -deblur_goldmeinel $*
+  -if $5 -c 0,255 -else -n 0,255 -endif
 
 gimp_unsharp_goldmeinel_preview:
   -gimp_split_preview "-gimp_unsharp_goldmeinel $*",$-1
@@ -19153,8 +19156,11 @@ gimp_unsharp_octave_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gimp : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2013/03/29</i>.</small>")
 gimp_unsharp_richardsonlucy :
-  -deblur_richardsonlucy $* -if $4 -c 0,255 -else -n 0,255 -endif
-#  -gimp_parallel_overlap "-deblur_richardsonlucy $* -if $4 -c 0,255 -else -n 0,255 -endif",$5,$6
+  -gimp_parallel_overlap "-_gimp_unsharp_richardsonlucy $*",$5,$6
+
+_gimp_unsharp_richardsonlucy :
+  -deblur_richardsonlucy $*
+  -if $4 -c 0,255 -else -n 0,255 -endif
 
 gimp_unsharp_richardsonlucy_preview :
   -gimp_split_preview "-gimp_unsharp_richardsonlucy $*",$-1
@@ -23562,3 +23568,6 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+foo :
+ -apply_parallel_overlap "-blur 10 -if 1 -mirror x -endif",0,16

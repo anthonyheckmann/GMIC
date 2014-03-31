@@ -8578,8 +8578,6 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 gi.variables_names[i] = &gi._variables_names[i];
                 _threads_data[l].variables_sizes[i] = 0;
               }
-              //              gi.variables[255] = variables[255];  // Share global variables between all threads.
-              //              gi.variables_names[255] = variables_names[255];
               gi.scope.assign(scope);
               gi.commands_files.assign(commands_files,true);
               cimg_snprintf(title,_title.size(),"*thread%d",l);
