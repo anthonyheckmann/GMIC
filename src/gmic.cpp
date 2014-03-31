@@ -8579,6 +8579,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 _threads_data[l].variables_sizes[i] = 0;
               }
               gi.scope.assign(scope);
+              gi.scope.assign();
               gi.commands_files.assign(commands_files,true);
               cimg_snprintf(title,_title.size(),"*thread%d",l);
               CImg<char>::string(title).move_to(gi.scope);
