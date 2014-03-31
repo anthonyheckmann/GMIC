@@ -9400,6 +9400,8 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
   -endl
   w=@{-2,w} h=@{-2,h}
 
+  -o pouet{?}.cimgz
+
   # Transform selected image to ascii art.
   -repeat {@#-2} -l[$>,-2,-1]
     -luminance[0] -n[0] 0,255
@@ -16126,7 +16128,7 @@ gimp_puzzle :
       # Recompose puzzle.
       -if $14 -sort_list +,? -endif
 
-      -if $16  # One piece by layer.
+      -if $16 # One piece by layer.
         -repeat @# -l[$<]
           -r2dy {max(0.1,$10+$11*?(-1,1))}% -rotate {$12+$13*?(-1,1)}
           -if $15 -expand_xy 1,0 -endif
