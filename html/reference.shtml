@@ -4734,7 +4734,7 @@ _edges>=0,0<=_attenuation<=1,_smoothness>=0,_threshold>=0,_nb_frames>0,_starting
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Randomly fractalize selected images.
 <br/><br/><b>Default value</b>: 'detail_level=0.8'
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def531.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --fractalize</div></div></td><td><tt>image.jpg --fractalize</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def531.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --fractalize ,</div></div></td><td><tt>image.jpg --fractalize ,</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="glow"><font color="green">&nbsp;&nbsp;<b>-glow</b>:</font></a>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _amplitude>=0
