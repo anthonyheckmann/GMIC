@@ -8355,9 +8355,9 @@ parametric3d : -skip "${1=(2+cos(b))*sin(a)}","${2=(2+cos(b))*cos(a)}","${3=sin(
 #@gmic : Default values: 'patch_size=7', 'M=1000', 'N=3000', 'normalize_input=1', 'normalize_output=0', and 'lambda_xy=0'.
 #@gmic : $ image.jpg -pca_patch3d 7
 pca_patch3d : -check "isint(${1=7}) && $1>0 && isint(${2=1000}) && $2>0 && isint(${3=3000}) && $3>0" -skip ${4=1},${5=0},${6=0}
-  -e[^-1] "Get 3d patch-pca representation"@{-arg\ 1+(@#>1),s,""}" of image$?, from $2 $1x$1 input patchs,
-           with $3 output patchs, input normalization "@{-arg\ 1+!$4,enabled,disabled}", output normalization
-          "@{-arg\ 1+!$5,enabled,disabled}" and lambda_xy $6."
+  -e[^-1] "Get 3d patch-pca representation"@{-arg\ 1+(@#>1),s,""}" of image$?, from $2 $1x$1 input patchs, "\
+          "with $3 output patchs, input normalization "@{-arg\ 1+!$4,enabled,disabled}", output normalization "\
+          @{-arg\ 1+!$5,enabled,disabled}" and lambda_xy $6."
   -v -
   P1={int($1/2)}       # Backward half-patch size.
   P2={$1-$P1-1}        # Forward half-patch size.
@@ -8908,14 +8908,12 @@ weird3d : -skip ${1=32}
 #@gmic : $ image.jpg --mirror x --mirror y -apply_parallel "-blur 3"
 apply_parallel :
   -e[^-1] "Execute command '$*' on all image$? in parallel, using "@*" threads."
-  -v - -m "_apply_parallel : $*" N=@#
-  -l[]
-    -repeat @* ({'-_apply_parallel[$>]'}) -done -if {@#>1} -i[1--2] ({','}) -endif -a x arg0=@{-1,t} -rm
-    -if {$N%@*} -repeat {$N%@*} ({'-_apply_parallel[$>]'}) -done -if {@#>1} -i[1--2] ({','}) -endif -a x arg1=@{-1,t} -rm -endif
-  -endl
-  -repeat {round(@#/@*,1,1)} -l[{@**$>}-{min(@**$>+@*-1,@#-1)}]
-    -parallel ${arg{@#!=@*}}
-  -endl -done
+  -v - -m "_apply_parallel : $*"
+  command1="" command2=""
+  -if {@#>@*} -repeat @* -if $> command1=$command1,-_apply_parallel[$>] -else command1=-_apply_parallel[$>] -endif -done -endif
+  -repeat {@#%@*} -if $> command2=$command2,-_apply_parallel[$>] -else command2=-_apply_parallel[$>] -endif -done
+  N={int(@#/@*)} -if $N -repeat $N -l[{@**$>}-{@**($>+1)-1}] -parallel $command1 -endl -done -endif
+  N={@#%@*} -if $N -l[-$N--1] -parallel $command2 -endl -endif
   -uncommand _apply_parallel -v +
 
 #@gmic apply_parallel_channels : "command"
