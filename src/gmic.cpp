@@ -3415,7 +3415,7 @@ CImg<char> gmic::substitute_item(const char *const source,
               error(images,"Item substitution '{expression}': %s",
                     e_ptr?e_ptr+2:e.what());
             }
-        }
+        } else error(images,"Item substitution '{}': empty braces.");
         continue;
 
         // '@{..}' and ${..} expressions.
@@ -3889,7 +3889,8 @@ CImg<char> gmic::substitute_item(const char *const source,
                   CImg<char> text(strsiz+1), _text = text.get_shared_points(0,strsiz-1,0,0,0);
                   _text = CImg<T>(img.data(),strsiz,1,1,1,true);
                   text.back() = 0;
-                  gmic_strreplace(text.data());
+                  cimg_for(_text,ps,char) *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
+                    *ps==','?_comma:*ps=='\"'?_dquote:*ps=='@'?_arobace:*ps;
                   _text.move_to(substituted_items);
                 }
               }
