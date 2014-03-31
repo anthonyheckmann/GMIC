@@ -8912,7 +8912,7 @@ apply_parallel :
   command1="" command2=""
   -if {@#>@*} -repeat @* -if $> command1=$command1,-_apply_parallel[$>] -else command1=-_apply_parallel[$>] -endif -done -endif
   -repeat {@#%@*} -if $> command2=$command2,-_apply_parallel[$>] -else command2=-_apply_parallel[$>] -endif -done
-  N={int(@#/@*)} -if $N -repeat $N -l[{@**$>}-{@**($>+1)-1}] -parallel $command1 -endl -done -endif
+  N={int(@#/@*)} -repeat $N -l[{@**$>}-{@**($>+1)-1}] -parallel $command1 -endl -done
   N={@#%@*} -if $N -l[-$N--1] -parallel $command2 -endl -endif
   -uncommand _apply_parallel -v +
 
@@ -9399,8 +9399,6 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
     -l[1--1] -r {@{-max_w}+1},100%,1,1,0,0,0.5 -a z -endl
   -endl
   w=@{-2,w} h=@{-2,h}
-
-  -o pouet{?}.cimgz
 
   # Transform selected image to ascii art.
   -repeat {@#-2} -l[$>,-2,-1]
@@ -19106,7 +19104,8 @@ gimp_deblur_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gimp : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2013/03/29</i>.</small>")
 gimp_unsharp_goldmeinel:
-  -gimp_parallel_overlap "-deblur_goldmeinel $* -if $5 -c 0,255 -else -n 0,255 -endif",$6,$7
+  -deblur_goldmeinel $* -if $5 -c 0,255 -else -n 0,255 -endif
+#  -gimp_parallel_overlap "-deblur_goldmeinel $* -if $5 -c 0,255 -else -n 0,255 -endif",$6,$7
 
 gimp_unsharp_goldmeinel_preview:
   -gimp_split_preview "-gimp_unsharp_goldmeinel $*",$-1
@@ -19154,7 +19153,8 @@ gimp_unsharp_octave_preview :
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical")
 #@gimp : sep = separator(), note = note("<small>Author : <i>J&#233;r&#244;me Boulanger</i>.      Latest update: <i>2013/03/29</i>.</small>")
 gimp_unsharp_richardsonlucy :
-  -gimp_parallel_overlap "-deblur_richardsonlucy $* -if $4 -c 0,255 -else -n 0,255 -endif",$5,$6
+  -deblur_richardsonlucy $* -if $4 -c 0,255 -else -n 0,255 -endif
+#  -gimp_parallel_overlap "-deblur_richardsonlucy $* -if $4 -c 0,255 -else -n 0,255 -endif",$5,$6
 
 gimp_unsharp_richardsonlucy_preview :
   -gimp_split_preview "-gimp_unsharp_richardsonlucy $*",$-1

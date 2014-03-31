@@ -1725,7 +1725,7 @@ _gmic_def()
 		return 0
 		;;
 		"-display_histogram" | "--display_histogram")
-		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1},_cut_value. >") )
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1},_expression. >") )
 		return 0
 		;;
 		"-display_parametric" | "--display_parametric")
@@ -3741,7 +3741,7 @@ _gmic_def()
 		return 0
 		;;
 		"-dh" | "--dh")
-		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1},_cut_value. >") )
+		COMPREPLY=( $(compgen -W "_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={0|1},_expression. >") )
 		return 0
 		;;
 		"-dp" | "--dp")

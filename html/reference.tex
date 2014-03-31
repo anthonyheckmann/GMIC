@@ -687,12 +687,12 @@ Render graph plot from selected image data.
 
 \subsection{\emph{-display\_histogram\index{-display\_histogram}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_width$>$0,\_height$>$0,\_clusters$>$0,\_min\_value[\%],\_max\_value[\%],\_show\_axes=\{ 0 ~$|$~ 1 \},\_cut\_value.}}\\~\\
+{\small \texttt{\_width$>$0,\_height$>$0,\_clusters$>$0,\_min\_value[\%],\_max\_value[\%],\_show\_axes=\{ 0 ~$|$~ 1 \},\_expression.}}\\~\\
 Render a channel-by-channel histogram.
 ~\\If selected image has several slices, the rendering is performed for all input slices.
-~\\'cut\_value' can be \{ -1=no-cut ~$|$~ $>$=0 \}.
+~\\'expression' is a mathematical expression used to transform the histogram data for visualization purpose.
 ~\\(\emph{eq. to} {\small \texttt{'-dh'}}).
-~\\~\\\textbf{Default values}: {\small \texttt{'width=512', 'height=300', 'clusters=256', 'min\_value=0\%', 'max\_value=100\%', 'show\_axes=1'} and \texttt{'cut\_value=-1'.}}
+~\\~\\\textbf{Default values}: {\small \texttt{'width=512', 'height=300', 'clusters=256', 'min\_value=0\%', 'max\_value=100\%', 'show\_axes=1'} and \texttt{'expression=i'.}}
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def5.jpg}\\
 {\footnotesize \textbf{Example 5~:} \texttt{image.jpg --display\_histogram 512,300}}
 \end{center}

@@ -635,14 +635,14 @@ _width>32,_height>32,_plot_type,_vertex_type,_xmin,_xmax,_ymin,_ymax,_xlabel,_yl
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def4.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">128,1,1,1,'cos(x/10+?)' --display_graph 400,300,3</div></div></td><td><tt>128,1,1,1,'cos(x/10+?)' --display_graph 400,300,3</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="display_histogram"><font color="green">&nbsp;&nbsp;<b>-display_histogram</b>:</font></a>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={ 0 | 1 },_cut_value.
+_width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={ 0 | 1 },_expression.
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Render a channel-by-channel histogram.
 <br/>If selected image has several slices, the rendering is performed for all input slices.
-<br/>'cut_value' can be { -1=no-cut | >=0 }.
+<br/>'expression' is a mathematical expression used to transform the histogram data for visualization purpose.
 <br/><i><font color="blue">(eq. to '-dh').</font></i>
-<br/><br/><b>Default values</b>: 'width=512', 'height=300', 'clusters=256', 'min_value=0%', 'max_value=100%', 'show_axes=1' and 'cut_value=-1'.
+<br/><br/><b>Default values</b>: 'width=512', 'height=300', 'clusters=256', 'min_value=0%', 'max_value=100%', 'show_axes=1' and 'expression=i'.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def5.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --display_histogram 512,300</div></div></td><td><tt>image.jpg --display_histogram 512,300</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="display_parametric"><font color="green">&nbsp;&nbsp;<b>-display_parametric</b>:</font></a>
 <p style="margin-left:150px"><tt><i><font color="purple">
