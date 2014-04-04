@@ -19645,8 +19645,9 @@ _gimp_emulate_film :
 #-----------------------
 
 #@gimp B&amp;W films - collage : gimp_emulate_film_collage_bw, gimp_no_preview
-#@gimp : Image size = float(256,16,1024)
+#@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
 #@gimp : Output type = choice("Table","Multiple layers")
 #@gimp : sep = separator()
 #@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>B&amp;W</i> film emulation presets
@@ -19656,11 +19657,12 @@ _gimp_emulate_film :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_bw :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
-  _nbc=$2 _output_type=$3 -_gimp_emulate_film_collage @{-_gimp_emulate_film_bw}
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_bw}
 
 #@gimp Instant - collage [consumer] : gimp_emulate_film_collage_instant_consumer, gimp_no_preview
-#@gimp : Image size = float(256,16,1024)
+#@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
 #@gimp : Output type = choice("Table","Multiple layers")
 #@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Instant [consumer]</i> film emulation presets
 #@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
@@ -19669,11 +19671,12 @@ gimp_emulate_film_collage_bw :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_instant_consumer :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
-  _nbc=$2 _output_type=$3 -_gimp_emulate_film_collage @{-_gimp_emulate_film_instant_consumer}
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_instant_consumer}
 
 #@gimp Instant - collage [pro] : gimp_emulate_film_collage_instant_pro, gimp_no_preview
-#@gimp : Image size = float(256,16,1024)
+#@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
 #@gimp : Output type = choice("Table","Multiple layers")
 #@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Instant [pro]</i> film emulation presets
 #@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
@@ -19682,11 +19685,12 @@ gimp_emulate_film_collage_instant_consumer :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_instant_pro :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
-  _nbc=$2 _output_type=$3 -_gimp_emulate_film_collage @{-_gimp_emulate_film_instant_pro}
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_instant_pro}
 
 #@gimp Negative - collage [color] : gimp_emulate_film_collage_negative_color, gimp_no_preview
-#@gimp : Image size = float(256,16,1024)
+#@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
 #@gimp : Output type = choice("Table","Multiple layers")
 #@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Negative [color]</i> film emulation presets
 #@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
@@ -19695,11 +19699,12 @@ gimp_emulate_film_collage_instant_pro :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_negative_color :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
-  _nbc=$2 _output_type=$3 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_color}
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_color}
 
 #@gimp Negative - collage [new] : gimp_emulate_film_collage_negative_new, gimp_no_preview
-#@gimp : Image size = float(256,16,1024)
+#@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
 #@gimp : Output type = choice("Table","Multiple layers")
 #@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Negative [new]</i> film emulation presets
 #@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
@@ -19708,11 +19713,12 @@ gimp_emulate_film_collage_negative_color :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_negative_new :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
-  _nbc=$2 _output_type=$3 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_new}
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_new}
 
 #@gimp Negative - collage [old] : gimp_emulate_film_collage_negative_old, gimp_no_preview
-#@gimp : Image size = float(256,16,1024)
+#@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
 #@gimp : Output type = choice("Table","Multiple layers")
 #@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Negative [old]</i> film emulation presets
 #@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
@@ -19721,11 +19727,12 @@ gimp_emulate_film_collage_negative_new :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_negative_old :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
-  _nbc=$2 _output_type=$3 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_old}
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_negative_old}
 
 #@gimp Other effects - collage : gimp_emulate_film_collage_others, gimp_no_preview
-#@gimp : Image size = float(256,16,1024)
+#@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
 #@gimp : Output type = choice("Table","Multiple layers")
 #@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Others</i> film emulation presets
 #@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
@@ -19734,11 +19741,12 @@ gimp_emulate_film_collage_negative_old :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_others :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
-  _nbc=$2 _output_type=$3 -_gimp_emulate_film_collage @{-_gimp_emulate_film_others}
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_others}
 
 #@gimp Slide - collage [color] : gimp_emulate_film_collage_colorslide, gimp_no_preview
-#@gimp : Image size = float(256,16,1024)
+#@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
 #@gimp : Output type = choice("Table","Multiple layers")
 #@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Slide [color]</i> film emulation presets
 #@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
@@ -19747,7 +19755,7 @@ gimp_emulate_film_collage_others :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/10/28</i>.</small>")
 gimp_emulate_film_collage_colorslide :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
-  _nbc=$2 _output_type=$3 -_gimp_emulate_film_collage @{-_gimp_emulate_film_colorslide}
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_colorslide}
 
 _gimp_emulate_film_collage :
   $=arg -progress 0
@@ -19756,11 +19764,11 @@ _gimp_emulate_film_collage :
     --l[0]
       -_gimp_emulate_film[0] 1,$preset,0,1,0,0,1,0
       ({'$preset'}) -replace[-1] {'_'},32 -f[-1] if(x==0&&i>={'a'}&&i<={'z'},i+{'A'}-{'a'},i) title=@{-1,t} -rm[-1]
-      -text_outline[-1] $title,2,2,13,2,1,255
+      -text_outline[-1] $title,2,2,$_label_size,2,1,255
     -endl
     -progress {(1+$>)*100/$#}
   -done
-  -text_outline[0] "Original image",2,2,13,2,1,255
+  -text_outline[0] "Original image",2,2,$_label_size,2,1,255
   -if {!$_output_type} -frame 1,1,0 -frame 5,5,255 -- 255 -append_tiles {min($_nbc,@#)} -+ 255 -endif
 
 #@gimp _
