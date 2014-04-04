@@ -23564,12 +23564,21 @@ gmicol_animate_imageobject3d_preview :
 #@gmicol clone("Fourier transform")
 #@gmicol clone("Fourier watermark")
 
-# Local Variables:
+# Local Variables:xgx
 # mode: sh
 # End:
 #
 # (End of G'MIC custom commands)
 
+foo2 :
+  -e "$1"
+  $1
+
+foo4 :
+  -foo2 "-foo2 \"$1\",$2",$2
+
 foo :
- -apply_parallel_overlap "-mirror x -if 1 -blur 10 -endif",0,16
- -apply_parallel_overlap "-mirror x -if 1 -blur 10 -endif ",0,16
+  -foo4 "-mirror x -if 1 -blur 10 -endif",0
+
+bug :
+  -apply_parallel_overlap "-mirror x -if 1 -blur 10 -endif",0,20
