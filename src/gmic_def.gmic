@@ -1558,7 +1558,7 @@ _display_graph : -check "${1=640}>32 && ${2=480}>32" -skip ${3=1},${4=0},${5=0},
 #@gmic dh : eq. to '-display_histogram'.
 dh :
   -v - __s="$?" -v +
-  -_display_histogram $*
+  -_display_histogram $"*"
 
 #@gmic display_histogram : _width>0,_height>0,_clusters>0,_min_value[%],_max_value[%],_show_axes={ 0 | 1 },_expression.
 #@gmic : Render a channel-by-channel histogram.
@@ -1569,7 +1569,7 @@ dh :
 #@gmic : $ image.jpg --display_histogram 512,300
 display_histogram :
   -v - __s="$?" -v +
-  -_$0 $*
+  -_$0 $"*"
 
 _display_histogram : -check "${1=512}>0 && ${2=300}>0 && ${3=256}>0" -skip ${4=0%},${5=100%},${6=1},"${7=i}"
   -e[0--3] "Render $1x$2 channel-by-channel histogram of image"$__s", with $3 clusters, minimum value $4 and maximum value $5."
