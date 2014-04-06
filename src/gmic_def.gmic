@@ -8976,7 +8976,8 @@ _apply_parallel_overlap8 :
   -_apply_parallel_overlap2 "-_apply_parallel_overlap4 \"$1\",$2",$2
 
 _apply_parallel_overlap16 :
-  -_apply_parallel_overlap4 "-_apply_parallel_overlap4 \"$1\",$2",$2
+  -_apply_parallel_overlap2 "-_apply_parallel_overlap8 \"$1\",$2",$2
+#  -_apply_parallel_overlap4 "-_apply_parallel_overlap4 \"$1\",$2",$2
 
 #@gmic check : expression : (*)
 #@gmic : Evaluate specified expression and display an error message if evaluated to false.
@@ -20249,14 +20250,18 @@ gimp_transparent_diff :
 
 #@gimp Split tones : gimp_split_tones, gimp_split_tones_preview(0)
 #@gimp : Number of tones = int(3,2,10)
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
+#@gimp : Smoothness = float(0,0,10)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/05</i>.</small>")
 gimp_split_tones :
   -remove_opacity -repeat @# -l[$<]
-    --tones $1 -r[^0] [0] -*[^0] [0] -rm[0]
+    --tones $1 -b[^0] $2% --+[^0]
+    -/[^0,-1] [-1] -rm[-1] -*[^0] 255
+    -r[^0] 100%,100%,1,{s+@{0,s}},0,0,0,0,0,1
+    -j[^0] [0] -mv[0] @#
   -endl -done
 
 gimp_split_tones_preview :
-  -gimp_split_tones $1 -append_tiles ,
+  -gimp_split_tones $* -append_tiles ,
 
 
 #@gimp _<b>Lights &amp; Shadows</b>
@@ -23586,15 +23591,5 @@ gmicol_animate_imageobject3d_preview :
 #
 # (End of G'MIC custom commands)
 
-foo2 :
-  -e "$1"
-  $1
-
-foo4 :
-  -foo2 "-foo2 \"$1\",$2",$2
-
-foo :
-  -foo4 "-mirror x -if 1 -blur 10 -endif",0
-
 bug :
-  -apply_parallel_overlap "-mirror x -if 1 -blur 10 -endif",0,20
+  -apply_parallel_overlap "-mirror x -if 1 -blur 10 -endif",0,16
