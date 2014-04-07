@@ -20256,19 +20256,30 @@ gimp_transparent_diff :
 
 #@gimp Split tones : gimp_split_tones, gimp_split_tones_preview(0)
 #@gimp : Number of tones = int(3,2,10)
-#@gimp : Smoothness = float(0,0,10)
+#@gimp : Start of mid-tones = int(85,0,255)
+#@gimp : End of mid-tones = int(170,0,255)
+#@gimp : Smoothness = float(0.5,0,5)
+#@gimp : Alpha = choice("Binary","Scalar")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/05</i>.</small>")
 gimp_split_tones :
+  sval=$2 eval={max($2,$3)}
   -remove_opacity -repeat @# -l[$<]
-    --tones $1 -b[^0] $2% --+[^0]
-    -/[^0,-1] [-1] -rm[-1] -*[^0] 255
-    -r[^0] 100%,100%,1,{s+@{0,s}},0,0,0,0,0,1
-    -j[^0] [0] -mv[0] @#
+    --luminance -rv
+    -repeat {$1-1}
+      [1]
+      val0={$sval+($eval-$sval)*$>/($1-2)}
+      val1={$sval+($eval-$sval)*($>+1)/($1-2)-1}
+      --t2[0] $val0,$val1
+      -if $5 -*[-1] [0] -b[-1] $4% -n[-1] 0,255  # Scalar alpha.
+      -else -b[-1] $4% -n[-1] 0,255  # Binary alpha.
+      -endif
+      -a[-2,-1] c
+    -done
+    -rm[0] -rv
   -endl -done
 
 gimp_split_tones_preview :
-  -gimp_split_tones $* -append_tiles ,
-
+  -gimp_split_tones $* -rv -to_a -append_tiles ,
 
 #@gimp _<b>Lights &amp; Shadows</b>
 #----------------------------------
