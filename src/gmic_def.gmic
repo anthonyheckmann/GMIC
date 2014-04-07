@@ -23622,3 +23622,14 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
+
+foo :
+#  -z 0,0,{w-(w%2)},{h-(h%2)}
+
+  -periodize_poisson
+  -fftpolar[-1]
+
+  --mirror[-1] x -+[-2,-1] -/[-1] 2
+
+  -ifftpolar
+#  -c 0,255
