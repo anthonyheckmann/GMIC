@@ -6032,6 +6032,21 @@ pde_flow : -skip ${1=10},${2=30},${3=laplacian},${4=0}
   -endl -done
   -if $4 -s x,$1 -endif -v +
 
+#@gmic periodize_poisson
+#@gmic : Periodize selected images using a Poisson solver in Fourier space.
+#@gmic : $ image.jpg --periodize_poisson -array 2,2,2
+periodize_poisson :
+  -e[^-1] "Periodize image$? using Poisson solver in Fourier space."
+  -v - -repeat @# -l[$>]
+    -s c -repeat @# -l[$>]
+      mM={im},{iM} sum=@{0,+}
+      -laplacian -fft[-1]
+      100%,100%,1,1,'-(4-2*cos(2*x*pi/w)-2*cos(2*y*pi/h))'
+      -=[-1] 1 -/[-3,-2] [-1] -rm[-1] -=[-2] $sum -=[-1] 0
+      -ifft -rm[-1] -c $mM
+    -endl -done -a c
+  -endl -done -v +
+
 #@gmic red_eye : 0<=_threshold<=100,_smoothness>=0,0<=attenuation<=1
 #@gmic : Attenuate red-eye effect in selected images.
 #@gmic : Default values: 'threshold=75', 'smoothness=3.5' and 'attenuation=0.1'.
