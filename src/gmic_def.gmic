@@ -13504,15 +13504,16 @@ _x_tictactoe6 : # Generate a +- diagonal stroke and his mask.
 #@gmic : Launch the image waves demo.
 x_waves :
   -e[] "\n
------- Image waves ----------------------\n
+------ Image waves --------------------------\n
 ----\n
 ---- Left mouse button to drop balls.\n
 ---- Right mouse button to rotate view.\n
 ---- Keys 'CTRL+D' to double window size.\n
 ---- Keys 'CTRL+C' to reset window size.\n
+---- Keys 'CTRL+F' to switch fullscreen mode.\n
 ---- Keys 'ESC' or 'Q' to exit.\n
 ----\n
------------------------------------------"
+---------------------------------------------"
   -v -
   -if {!@#} -l[] # Generate fractal image
     200,200 x={-1.06-?*0.1} y={-0.26-?*0.1}
