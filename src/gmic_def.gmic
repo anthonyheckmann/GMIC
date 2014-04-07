@@ -8960,7 +8960,7 @@ _apply_parallel_overlap2 :
 
 _apply_parallel_overlap4 :
   -if {max(w,h)/min(w,h)>=3}
-    -_apply_parallel_overlap2 "-_apply_parallel_overlap2 \"$1\",$2",$2
+    -_apply_parallel_overlap2 "-_apply_parallel_overlap2 "@{"-quote $1"}",$2",$2
   -else
     ovx={round(if(@{"-is_percent $2"},w*$2,$2))} w2={int(w/2)}
     ovy={round(if(@{"-is_percent $2"},h*$2,$2))} h2={int(h/2)}
@@ -8977,7 +8977,6 @@ _apply_parallel_overlap8 :
 
 _apply_parallel_overlap16 :
   -_apply_parallel_overlap2 "-_apply_parallel_overlap8 \"$1\",$2",$2
-#  -_apply_parallel_overlap4 "-_apply_parallel_overlap4 \"$1\",$2",$2
 
 #@gmic check : expression : (*)
 #@gmic : Evaluate specified expression and display an error message if evaluated to false.
@@ -23590,6 +23589,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-bug :
-  -apply_parallel_overlap "-mirror x -if 1 -blur 10 -endif",0,16
