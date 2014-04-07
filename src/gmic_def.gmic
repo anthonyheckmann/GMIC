@@ -23584,7 +23584,7 @@ gmicol_animate_imageobject3d_preview :
 #@gmicol clone("Fourier transform")
 #@gmicol clone("Fourier watermark")
 
-# Local Variables:xgx
+# Local Variables:
 # mode: sh
 # End:
 #
