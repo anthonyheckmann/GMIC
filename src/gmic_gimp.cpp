@@ -85,6 +85,7 @@ bool is_block_preview = false;                // Flag to block preview computati
 void **event_infos;                           // Infos that are passed to the GUI callback functions.
 int image_id = 0;                             // The image concerned by the plug-in execution.
 unsigned int indice_faves = 0;                // The starting index of favorite filters.
+unsigned int nb_available_filters = 0;        // The number of available filters (non-testing).
 std::FILE *logfile = 0;                       // The log file if any.
 GimpRunMode run_mode;                         // Run-mode used to call the plug-in.
 GtkTreeStore *tree_view_store = 0;            // The list of the filters as a GtkTreeView model.
@@ -825,9 +826,8 @@ void flush_tree_view(GtkWidget *const tree_view) {
   gtk_tree_view_remove_column(GTK_TREE_VIEW(tree_view),gtk_tree_view_get_column(GTK_TREE_VIEW(tree_view),0));
   GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
   char tree_view_title[64] = { 0 };
-  cimg_snprintf(tree_view_title,sizeof(tree_view_title),t(" Available filters (%u) :"),gmic_entries.size()-1);
+  cimg_snprintf(tree_view_title,sizeof(tree_view_title),t(" Available filters (%u/%u) :"),nb_available_filters,gmic_entries.size()-1);
   GtkTreeViewColumn *column = gtk_tree_view_column_new_with_attributes(tree_view_title,renderer,"markup",1,NULL);
-
   gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view),column);
 }
 
@@ -987,6 +987,8 @@ CImgList<char> update_filters(const bool try_net_update) {
   char line[256*1024] = { 0 }, preview_command[256] = { 0 }, arguments[16384] = { 0 }, entry[256] = { 0 }, locale[16] = { 0 };
   std::strcpy(locale,get_locale());
   int level = 0, err = 0;
+  bool is_testing = false;
+  nb_available_filters = 0;
   cimg_snprintf(line,sizeof(line),"#@gimp_%s ",locale);
 
   // Use English for default language if no translated filters found.
@@ -1026,6 +1028,13 @@ CImgList<char> update_filters(const bool try_net_update) {
                 break;
               }
             }
+
+            // Detect if filter is in 'Testing/' (won't be count in number of filters).
+            GtkWidget *const markup2ascii = gtk_label_new(0);
+            gtk_label_set_markup(GTK_LABEL(markup2ascii),nentry);
+            const char *_nentry = gtk_label_get_text(GTK_LABEL(markup2ascii));
+            is_testing = !std::strcmp(_nentry,"Testing");
+
             if (!is_duplicate) {
               gtk_tree_store_append(tree_view_store,&parent[level],level?&parent[level-1]:0);
               gtk_tree_store_set(tree_view_store,&parent[level],0,0,1,nentry,-1);
@@ -1033,13 +1042,10 @@ CImgList<char> update_filters(const bool try_net_update) {
                                                                          &parent[level]);
               CImg<char>::string(nentry).move_to(gmic_1stlevel_names);
               CImg<char>::string(treepath).move_to(gmic_1stlevel_entries);
-              GtkWidget *const markup2ascii = gtk_label_new(0);
-              gtk_label_set_markup(GTK_LABEL(markup2ascii),nentry);
-              const char *_nentry = gtk_label_get_text(GTK_LABEL(markup2ascii));
               unsigned int order = 0;
               for (unsigned int i = 0; i<4; ++i) { order<<=8; if (*_nentry) order|=(unsigned char)cimg::uncase(*(_nentry++)); }
-              gtk_widget_destroy(markup2ascii);
             }
+            gtk_widget_destroy(markup2ascii);
           }
           ++level;
         }
@@ -1078,6 +1084,7 @@ CImgList<char> update_filters(const bool try_net_update) {
             for (unsigned int i = 0; i<3; ++i) { order<<=8; if (*_nentry) order|=cimg::uncase(*(_nentry++)); }
             gtk_widget_destroy(markup2ascii);
           }
+          if (!is_testing) ++nb_available_filters;  // Count only non-testing filters.
         }
       }
     } else { // Line is the continuation of an entry.
