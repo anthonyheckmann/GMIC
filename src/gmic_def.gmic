@@ -6413,7 +6413,7 @@ fft82float :
 fftpolar :
   -e[^-1] "Compute fourier transform of image$?, as centered magnitude/phase images."
   -v - -repeat @# -l[$<]
-    -fft -complex2polar -shift {-int(w/2)},{-int(h/2)},{-int(d/2)},0,2
+    -fft -complex2polar -shift {-round(w/2)},{-round(h/2)},{-round(d/2)},0,2
   -endl -done -v +
 
 #@gmic histogram : _nb_levels>0[%],_value0[%],_value1[%] : (+)
@@ -6490,7 +6490,7 @@ hough : -check "${1=512}>0 && ${2=$1}>0" -skip ${3=1}
 ifftpolar :
   -e[^-1] "Compute inverse fourier transform of image$?, from centered magnitude/phase images."
   -v - -repeat {int(@#/2)} -l[$>,{$>+1}]
-    -shift {int(w/2)},{int(h/2)},{int(d/2)},0,2 -polar2complex -ifft -rm[-1]
+    -shift {round(w/2)},{round(h/2)},{round(d/2)},0,2 -polar2complex -ifft -rm[-1]
   -endl -done -v +
 
 #@gmic isophotes : _nb_levels>0
