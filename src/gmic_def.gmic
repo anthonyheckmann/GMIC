@@ -4739,7 +4739,7 @@ autocrop_seq : -skip ${1=auto}
   x0={arg(1,$coords)} y0={arg(2,$coords)} z0={arg(3,$coords)}
   x1={arg(4,$coords)} y1={arg(5,$coords)} z1={arg(6,$coords)}
   -if {$x0>$x1" || "$y0>$y1" || "$z0>$z1} -i[0--2] 0 -rm[1--1:2]
-  -else -crop $x0,$y0,$z0,$x1,$y1,$z1
+  -else -z $x0,$y0,$z0,$x1,$y1,$z1
   -endif
   -v +
 
@@ -6760,7 +6760,7 @@ ball : -check "${1=64}>0 && ${5=0.8}>=0 && $5<=8 && ${6=1}>=0 $6<=8 && ${7=1.5}>
   -e[^-1] "Input $1x$1 ball with color (${2-4}), specular light $5, specular size $6 and shadow factor $7."
   -v - -l[]
   {2*$1},{2*$1} -= 1,65%,30% -distance 1 -* -1
-  --n 0,1 -pow[1] $7 -*[1] 1.4 --*[1] $3 --*[1] $4 -*[1] $2 -a[^0] c
+  --n 0,1 -^[1] $7 -*[1] 1.4 --*[1] $3 --*[1] $4 -*[1] $2 -a[^0] c
   -ge[0] {100-10*$6}% -b[0] {3*$6}% -n[0] 0,{$5*255} -rv -+ -c 0,255
   100%,100% -circle[1] 50%,50%,34%,1,1 -*[0] [1] -*[-1] 255 -a c
   -r $1,$1,1,4,2
@@ -9407,8 +9407,8 @@ img2ascii : -skip "${1= !\042\#$%&\047()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
   -l[]
     ({'"$1"'}) -repeat {w}
       C={`92`}@{-dec2oct\ @{0,$>}}
-      0 -text[-1] $C,0,0,$2,1,1
-      0 -text[-1] $C,0,0,$4,1,1
+      0 -t[-1] $C,0,0,$2,1,1
+      0 -t[-1] $C,0,0,$4,1,1
     -done -rm[0]
     -= -1 -= -1,0,100% -autocrop -= 0 -= 0,0,100%
     -l[0--2:2] -r {@{-max_w}+1},100%,1,1,0,0,0.5 -b $3 -n 0,255 -a z -endl
@@ -9787,7 +9787,7 @@ drop_shadow : -check "${3=5}>=0 && ${4=0}>=0 && $4<=1" -skip ${1=20},${2=$1},${5
     dx={if(@{-is_percent\ $1},w*$1,$1)}
     dy={if(@{-is_percent\ $2},h*$2,$2)}
     sigma={if(@{-is_percent\ $3},max(w,h)*$3,$3)}
-    w={w} h={h} s={s} --channels 100% coords=@{-autocrop_coords[-1]\ 0} -rm[-1] -crop $coords  # Crop part with opaque pixels.
+    w={w} h={h} s={s} --channels 100% coords=@{-autocrop_coords[-1]\ 0} -rm[-1] -z $coords  # Crop part with opaque pixels.
     -r {w+abs($dx)},{h+abs($dy)},1,100%,0,0,{if($dx>0,0,1)},{if($dy>0,0,1)} -r[-1] {w+4*$sigma},{h+4*$sigma},1,100%,0,0,0.5,0.5
     --channels[-1] 100%
     -if {!$4} -shift[-1] $dx,$dy # Flat shadow.
@@ -10076,7 +10076,7 @@ polaroid : -check "${1=10}>=0 && ${2=20}>=0"
 polygonize : -check "${1=300}>=0 && ${2=2%}>=0 && ${3=0.1%}>=0 && ${4=10%}>0 && ${5=$4}>0"
   -e[^-1] "Polygonize image$? with warp amplitude $1, smoothness $2, minimal area $3 and resolutions ($4,$5)."
   -v -  -repeat @# -l[$>]
-    --b $2 -gradient_norm[-1] -gradient[-1] -a[-2,-1] c -channels[-1] 0,2 -*[-1] {1/0.1+max(abs(im),abs(iM))}
+    --b $2 -gradient_norm[-1] -g[-1] -a[-2,-1] c -channels[-1] 0,2 -*[-1] {1/0.1+max(abs(im),abs(iM))}
     resx={max(1,round(if(@{-is_percent\ $4},w*$4,w/$4)-1))}
     resy={max(1,round(if(@{-is_percent\ $5},h*$5,h/$5)-1))}
     -plane3d 1,1,$resx,$resy -*3d[-1] @{0,w-1},@{0,h-1},1
@@ -10099,7 +10099,7 @@ polygonize : -check "${1=300}>=0 && ${2=2%}>=0 && ${3=0.1%}>=0 && ${4=10%}>0 && 
 poster_edges : -check "${1=40}>=0 && $1<=100 && ${2=5}>=0 && $2<=100 && ${3=0.5}>=0 && ${4=10}>=0 && ${5=12}>=0 && $5<=15 && ${6=0}>=0"
   -e[^-1] "Apply poster edge on image$?, with edge threshold $1, edge shade $2, edge thickness $3, edge antialiasing $4, $5 level of posterization and posterization antialiasing $6."
   -v - -repeat @# -l[$>] -split_opacity -l[0]
-    --gradient xy,1 -a[-2,-1] c -norm[-1] -b[-1] $3 -n[-1] 0,255
+    --g xy,1 -a[-2,-1] c -norm[-1] -b[-1] $3 -n[-1] 0,255
     -apply_curve[-1] 1,0,1,{max(0,(100-($1%)^0.1*100)*255%)},0.99,{min(255,(101-($1%)^0.1*100+$2)*255%)},0.01,255,0 -c[-1] 0,1
     -if $4 -smooth[-1] {min(50,$4)},0,1,{$4/40},{$4/40},0.8,90 -endif
     -if $5 -autoindex[0] {round((4-sqrt($5+1))*32+2)} -endif
@@ -10469,7 +10469,7 @@ raindrops : -check "${2=0.1}>=0 && ${3=1}>=0 && isint(${4=0}) && $4>=0" -skip ${
       -i[-2] (0,1,0;1,0,1;0,1,0) -/[-2] 2 [-1]
       -repeat $4 --convolve[-1] [-3],1 --[-1] [-3] -rm[-3] -done -rm[-3,-2]
     -endif
-    -gradient[-1] -a[-2,-1] c -*[-1] {$1/(1e-5+max(abs(im),abs(iM)))}
+    -g[-1] -a[-2,-1] c -*[-1] {$1/(1e-5+max(abs(im),abs(iM)))}
     -warp[-2] [-1],1 -rm[-1]
   -endl -done -v +
 
@@ -12640,7 +12640,7 @@ _pacman_map_level1 :
    2,1,2,-3,1,2,1,-3,0,2,1,-5,2,-4,1,2,-3,1,0,-3,1,-2,0,1,2,-3,1,0,-3,1,-2,0,1,2,-9,0,1,2,-3,1,0,-2,1,-3,0,1,2,1,-3,0,1,-4,\
    0,1,2,1,0,1,0,1,-2,-3,1,2,1,0,1,0,-3,1,-3,0,2,-2,0,1,-4,-3,1,2,-5,1,0,1,-2,0,1,-5,2,-2,0,1,-2,0,1,2,-3,1,2,-6,1,2,-3,1,2,\
    -4,1,-9,2,0,1,2,-3,1,2,-3,1,2,-2,1,2,-3,1,2,1,-3,2,-2,1,3,-3,1,2,1,2,-4,1,2,-3,1,2,1,2,-4,1,-10,2,-11,1)
-  -uncompress_rle[-1] --mirror[-1] x -crop[-1] 1,100% -a[-2,-1] x
+  -uncompress_rle[-1] --mirror[-1] x -z[-1] 1,100% -a[-2,-1] x
   _rlevel=33 _glevel=33 _blevel=255
 
 _pacman_map_level2 :
@@ -12648,7 +12648,7 @@ _pacman_map_level2 :
    2,-2,1,-5,2,1,-3,2,-4,1,2,-5,1,0,1,-2,0,1,2,-5,1,0,1,-2,0,1,2,-5,1,0,1,-2,0,1,-3,2,1,-4,-3,1,0,1,2,1,0,-2,1,-5,0,1,2,1,0,1,\
    -2,-5,1,2,-2,0,1,-2,-5,1,2,1,0,-3,1,-4,0,1,2,1,-4,-3,1,-3,2,-3,1,0,1,-2,0,1,2,1,-3,2,-2,0,1,-2,0,1,2,-3,1,2,1,0,-4,1,2,-3,1,\
    2,1,0,-2,1,-7,2,1,-2,0,1,2,-3,1,2,1,2,-4,1,2,1,-3,2,1,-4,2,1,3,1,2,-5,1,2,-2,1,2,1,2,-5,1,2,-2,1,-9,2,-12,1)
-  -uncompress_rle[-1] --mirror[-1] x -crop[-1] 1,100% -a[-2,-1] x
+  -uncompress_rle[-1] --mirror[-1] x -z[-1] 1,100% -a[-2,-1] x
   _rlevel=200 _glevel=33 _blevel=33
 
 _pacman_map_level3 :
@@ -12656,7 +12656,7 @@ _pacman_map_level3 :
    1,2,-3,1,0,1,2,-2,1,-5,2,1,0,1,-2,2,-5,1,2,1,0,-4,1,-5,2,1,-4,0,1,2,-3,1,2,1,0,-2,1,0,1,2,-3,1,2,1,0,1,-2,0,1,-3,2,1,2,-2,0,1,\
    -2,-3,1,2,1,2,1,0,-3,1,-2,0,1,2,1,2,1,-6,0,1,2,1,2,-2,1,0,-2,1,-2,0,1,2,1,2,-2,1,0,-2,1,-2,0,1,-6,2,-5,1,2,-4,1,2,-2,1,-3,-3,2,\
    1,-3,2,0,-3,1,2,1,2,1,2,-4,1,3,-2,2,1,-5,2,-2,1,2,-3,1,2,-3,1,2,-2,1,2,-3,1,2,-3,1,2,-2,1,-10,2,-11,1)
-  -uncompress_rle[-1] --mirror[-1] x -crop[-1] 1,100% -a[-2,-1] x
+  -uncompress_rle[-1] --mirror[-1] x -z[-1] 1,100% -a[-2,-1] x
   _rlevel=33 _glevel=200 _blevel=255
 
 _pacman_map_level4 :
@@ -12664,7 +12664,7 @@ _pacman_map_level4 :
    -2,1,2,-2,1,2,-2,1,2,1,-7,2,-2,1,2,1,2,-2,1,2,-2,1,-4,2,1,2,-2,1,2,-2,1,2,-2,1,2,1,-7,2,-2,1,2,-3,1,-10,0,1,-5,-2,1,0,-3,1,-5,0,1,\
    -10,0,1,-2,-3,1,-5,-6,1,-8,0,1,2,-9,0,1,2,-2,1,2,-2,1,2,-2,1,2,1,2,-2,1,2,-2,1,2,-2,1,2,1,-10,2,1,2,-2,1,2,-2,1,2,-3,0,1,2,-2,1,2,\
    -2,1,2,0,-3,1,-3,2,3,-4,2,1,0,1,2,-2,1,2,-2,1,2,-2,1,0,1,2,-2,1,2,-2,1,2,1,-2,0,1,-7,2,1,-2,-9,1,-2,0)
-  -uncompress_rle[-1] --mirror[-1] x -crop[-1] 1,100% -a[-2,-1] x
+  -uncompress_rle[-1] --mirror[-1] x -z[-1] 1,100% -a[-2,-1] x
   _rlevel=200 _glevel=200 _blevel=33
 
 _pacman_map_level5 :
@@ -12672,7 +12672,7 @@ _pacman_map_level5 :
    -3,1,2,1,-4,0,1,-6,2,1,2,1,0,-3,1,0,-4,1,2,1,0,-3,1,0,-4,1,2,1,-8,0,1,2,-3,1,0,1,0,-2,1,0,1,2,-3,1,0,1,0,1,-2,0,1,2,-4,0,1,0,1,-2,\
    0,1,2,1,0,-3,1,0,-4,1,2,1,-8,0,1,2,-3,1,0,-3,1,0,-2,1,-5,2,1,-3,2,-4,1,2,1,2,1,2,-6,1,2,1,2,1,2,-4,1,3,-2,2,1,-5,2,0,1,2,-3,1,2,-3,\
    1,2,-2,1,-5,2,1,-3,2,-2,1,2,-3,1,2,1,2,-4,1,2,-3,1,2,1,2,-4,1,-5,2,1,-4,2,-11,1)
-  -uncompress_rle[-1] --mirror[-1] x -crop[-1] 1,100% -a[-2,-1] x
+  -uncompress_rle[-1] --mirror[-1] x -z[-1] 1,100% -a[-2,-1] x
   _rlevel=200 _glevel=255 _blevel=33
 
 _pacman_map_level6 :
@@ -12680,7 +12680,7 @@ _pacman_map_level6 :
    -2,0,1,2,-2,1,0,-3,1,2,1,-2,0,2,1,-4,0,1,2,1,0,1,2,-2,-2,1,0,1,2,1,0,1,2,1,0,1,-2,0,1,2,1,0,1,2,1,0,1,-2,0,1,2,1,0,1,2,-2,-4,1,2,\
    1,-2,0,2,1,-4,0,1,2,-2,0,1,2,-2,1,0,-2,1,0,2,1,0,1,-6,2,1,2,1,0,-3,1,0,-4,1,2,1,-8,0,1,2,-4,1,0,-3,1,0,1,-10,2,-5,1,2,-6,1,3,-9,\
    2,1,2,-2,1,2,-7,1,-10,2,-11,1)
-  -uncompress_rle[-1] --mirror[-1] x -crop[-1] 1,100% -a[-2,-1] x
+  -uncompress_rle[-1] --mirror[-1] x -z[-1] 1,100% -a[-2,-1] x
   _rlevel=255 _glevel=130 _blevel=233
 
 #@gmic x_paint
@@ -14006,7 +14006,7 @@ compress_gmic :
       -if {{$head'!='$head_std}" || "(i[6]!={'" "'}" && "i[6]!={':'})} -rm[-1] -continue
       -endif
     -else
-      -l[-1] -split +,32,35 -if {@#>2} -k[0] -endif -a y -endl
+      -l[-1] -s +,32,35 -if {@#>2} -k[0] -endif -a y -endl
       -autocrop[-1] 32 -if {!w} -rm[-1] -continue -endif
     -endif
   -endl -done
@@ -14027,7 +14027,7 @@ compress_gmic_gimp :
       -if {$head'!='$head_std} -rm[-1] -continue
       -endif
     -else
-      -l[-1] -split +,32,35 -if {@#>2} -k[0] -endif -a y -endl
+      -l[-1] -s +,32,35 -if {@#>2} -k[0] -endif -a y -endl
       -autocrop[-1] 32 -if {!w} -rm[-1] -continue -endif
     -endif
   -endl -done
@@ -14217,7 +14217,7 @@ img2str :
   -repeat {s} c=$>
     -repeat {d} z=$>
       -repeat {h} y=$>
-        --crop[-1] 0,$y,$z,$c,100%,$y,$z,$c
+        --z[-1] 0,$y,$z,$c,100%,$y,$z,$c
         -u @{}@-1
         -rm[-1]
         -if {$y!=h-1} -u @{}; -endif
@@ -14719,7 +14719,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
 
   # Compute player highest chips count.
   #------------------------------------
-  --l[scores] -s y -discard -1 -unroll x -- 100 -cumul -f iM -a y -z 0,0 -endl
+  --l[scores] -s y -discard -1 -y x -- 100 -cumul -f iM -a y -z 0,0 -endl
   --f[-1] y -a[-2,-1] x -sort[-1] -,y
   1,100%,1,1,'y+1' -a[-2,-1] x -mirror[-1] x
   -f[-1] '>if(x,i,if(i(2,y)==i(2,y-1),i(0,y-1),i))'  # Manage ax-aequo ranks.
@@ -14728,7 +14728,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
 
   # Compute player lowest chips count.
   #------------------------------------
-  --l[scores] -s y -discard -1 -unroll x -- 100 -cumul -f im -a y -z 0,0 -endl
+  --l[scores] -s y -discard -1 -y x -- 100 -cumul -f im -a y -z 0,0 -endl
   --f[-1] y -a[-2,-1] x -sort[-1] -,y
   1,100%,1,1,'y+1' -a[-2,-1] x -mirror[-1] x
   -f[-1] '>if(x,i,if(i(2,y)==i(2,y-1),i(0,y-1),i))'  # Manage ax-aequo ranks.
@@ -15360,7 +15360,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   # Display list of filters (sorted alphabetically) on stdout.
   -if $2
     -v + -e[] "> Output list of filters in stdout.\n" -v -
-    -exec "date +%Y,%m,%d >"@{-path_tmp}/date.dlm
+    -x "date +%Y,%m,%d >"@{-path_tmp}/date.dlm
     @{-path_tmp}/date.dlm
     -echo_stdout "*** List of filters in the G\47MIC plug-in for GIMP ("$nb_filters" filters, on "{i}/{i(1)}/{i(2)}") ***\n"
     -rm[-1]
@@ -16129,7 +16129,7 @@ gimp_puzzle :
   -repeat @# -l[$<]
     w={w} h={h} -to_rgb
     -puzzle $w,$h,$1,$2,$3,$4,$5
-    --b[-1] $6%,0 -gradient[-1] xy -+[-2,-1] -n[-1] -$7,$7 -+[0,-1]  # Relief.
+    --b[-1] $6%,0 -g[-1] xy -+[-2,-1] -n[-1] -$7,$7 -+[0,-1]  # Relief.
     --b[-1] $8%,0 -n[-1] 0,1 -*[-1] -1 -+[-1] 1 -n[-1] {(255-$9)/255},1 -*[0,-1] -c 0,255  # Outline.
 
     -if {$10!=100||$11||$12||$13||$14||$15||$16}
@@ -16442,7 +16442,7 @@ gimp_pen_drawing_preview :
 gimp_polygonize :
   -polygonize $1,$2,{$3^2},$4,$5
   -if $9 -repeat @# -l[$>]  # has outline.
-    --norm -gradient[-1] xy,1 -neq[-2,-1] 0 -or[-2,-1] -r[-1] 100%,100%,1,4
+    --norm -g[-1] xy,1 -neq[-2,-1] 0 -or[-2,-1] -r[-1] 100%,100%,1,4
     -replace_color[-1] 0,0,1,1,1,1,$6,$7,$8,$9
     -blend alpha
   -endl -done -endif
@@ -16505,7 +16505,7 @@ gimp_rodilius_preview :
 gimp_shapeism :
   -repeat @# -l[$>]
     -to_rgb
-    --gradient_norm -b[-1] $13% -pow[-1] $12 -quantize[-1] $6,0,0
+    --gradient_norm -b[-1] $13% -^[-1] $12 -quantize[-1] $6,0,0
     100%,100%,1,2
     -repeat $6
 
@@ -16685,7 +16685,7 @@ gimp_charcoal :
   -repeat @# -l[$>] -split_opacity -l[0]
     -compose_channels max
     w={w} h={h}
-    -if $5 -resize[-1] 150%,150%,1,1,6 -endif
+    -if $5 -r[-1] 150%,150%,1,1,6 -endif
     -if $4 -equalize[-1] -n[-1] 0,255 -endif
     -sharpen {$1*3} -cut 0,255
     -if $6 --t2 $7,$8 -endif  # Add highlights layer if required.
@@ -16693,7 +16693,7 @@ gimp_charcoal :
     -if {!$15} -eq[0] 0 -endif
     -or
     --*[0] $10 --*[0] $11 -*[0] $9
-    -append[-3--1] c -replace_color 0,0,0,0,0,$12,$13,$14
+    -a[-3--1] c -replace_color 0,0,0,0,0,$12,$13,$14
     -r $w,$h,1,100%,2
   -endl -a c -endl -done
 
@@ -17839,8 +17839,8 @@ gimp_detect_skin_preview :
 #@gimp : note = note("<small>Author: <i>J&#233;rome Ferrari</i>.      Latest update: <i>2011/01/14</i>.</small>")
 #@gimp : note = link("Filter explained here","http://www.flickr.com/groups/gmic/discuss/72157625798533482")
 gimp_hsv_equalizer :
-  -repeat @# -local[@{>,-1}]
-  -to_rgb -rgb2hsv -split c
+  -repeat @# -l[@{>,-1}]
+  -to_rgb -rgb2hsv -s c
 # From now on 0,1,2 are H,S,V
 #3 masks:
   --f[0] if(abs(i-$2)<$3/2|abs(i-$2-360)<$3/2|abs(i-$2+360)<$3/2,1,0)
@@ -17862,23 +17862,22 @@ gimp_hsv_equalizer :
   -if {$16>=0} --*[5] -$16 -else --*[5] {1/(1+$16)-1} -endif -+[-1] 1
   -*[-1,-2,-3] -^[2,-1]
 #reconstruction
-  -rm[3,4,5] -append[0,1,2] c -hsv2rgb
-  -endlocal -done
+  -rm[3,4,5] -a[0,1,2] c -hsv2rgb
+  -endl -done
 
 gimp_hsv_equalizer_preview :
--local[-1]
+  -l[-1]
   -if {$1==0} -gimp_hsv_equalizer $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16
   -else
-    -to_rgb -rgb2hsv -split c
-    (0,359) -resize[-1] [-2],{@{0,h}/10},1,1,3 [-1] -f[-1] 1	#create lower band
+    -to_rgb -rgb2hsv -s c
+    (0,359) -r[-1] [-2],{@{0,h}/10},1,1,3 [-1] -f[-1] 1	#create lower band
     -j[0] [3],0,91% -j[1] [4],0,91% -j[2] [4],0,91% -rm[-1,-2] #paste lower band
     --f[0] if(abs(i-$2)<$3/2|abs(i-$2-360)<$3/2|abs(i-$2+360)<$3/2,1,0)
     --f[0] if(abs(i-$7)<$8/2|abs(i-$7-360)<$8/2|abs(i-$7+360)<$8/2,1,0)
     --f[0] if(abs(i-$12)<$13/2|abs(i-$12-360)<$13/2|abs(i-$12+360)<$13/2,1,0) #masks
     -or[-3--1] -+[-1] 0.33 -/[-1] 1.33	#1 and 0.25
-    -*[2,-1] -append c -hsv2rgb
-  -endif
--endlocal
+    -*[2,-1] -a c -hsv2rgb
+  -endif -endl
 
 #@gimp Mixer [RGB] : gimp_mix_rgb, gimp_mix_rgb_preview(1)
 #@gimp : Red contrast = float(1,0,4)
@@ -18688,7 +18687,7 @@ gimp_textured_glass :
     -if $7 -plasma[-1] 1,1,$7 -else -rand[-1] 0,1 -endif
     -g[-1] xy
     -if $5
-      --gradient_norm[-3] -+[-1] 1 -b[-1] $6 -pow[-1] -$5
+      --gradient_norm[-3] -+[-1] 1 -b[-1] $6 -^[-1] -$5
       -*[-3] [-1] -*[-2,-1]
     -endif
     -blur_xy[-2,-1] $3,$4
@@ -18811,7 +18810,7 @@ _gimp_blur_dof :
       -endif
     -endl -if $11 -k[0] -endif -a c -endl -done
   -elif {@#>1} # User-defined DOF (as bottom layer).
-    -luminance[-1] -n[-1] 0,1 -pow[-1] {10^$12}
+    -luminance[-1] -n[-1] 0,1 -^[-1] {10^$12}
     -repeat {@#-1} --r[-1] @{$>,w},@{$>,h},1,1,3 -l[$>,-1] -split_opacity[0]
       -__gimp_dof_blur[0,-1] $2,0,$1,$4
     -a c -endl -done -rm[-1]
@@ -18965,7 +18964,7 @@ gimp_8bits :
     -r $1%,$1%,1,100%,2
     --luminance -sharpen[-1] $2 -otsu[-1] 256 -blend[-2,-1] shapeaverage0
     -l[-1] -s c -quantize $3,1,1 -a c -endl
-    -resize[-1] $w,$h,1,100%,1
+    -r[-1] $w,$h,1,100%,1
   -endl -done
 
 gimp_8bits_preview :
@@ -19641,7 +19640,7 @@ _gimp_emulate_film :
     dir=@{-path_user}
     -if {!@{-is_windows}}
       dir=$dir/.gmic_film_presets
-      -if $dir -else -exec "mkdir "$dir -endif
+      -if $dir -else -x "mkdir "$dir -endif
     -endif
     -if {narg($_force_redownload)}
       -i http://gmic.sourceforge.net/data_film_presets/$2.cimgz -o[-1] $dir/gmic_$2.cimgz
@@ -20829,7 +20828,7 @@ gimp_plaid_texture :
     w={w} h={h} s={s}
     -rows $1%
     -b $5% -sharpen $6
-    -resize $w,$h,1,$s,2
+    -r $w,$h,1,$s,2
     --rotate[0] $3,1,2,50%,50%
     -repeat {$2-1} --rotate[0] {$3+$4*($>+1)/($2-1)},1,2,50%,50% -+[-2,-1] -done -rm[0]
     -/ $2
@@ -20936,7 +20935,7 @@ gimp_stained_glass :
     -rgb2lab[-1] -sh[-1] 1,2 -*[-1] $5 -rm[-1] -lab2rgb[-1]
     -apply_gamma[-1] {10^$6} --[-1] 128 -*[-1] $7 -+[-1] {128+$8}
     -c[-1] 0,255
-  -endl -append c -endl -done
+  -endl -a c -endl -done
 
 gimp_stained_glass_preview :
   -gimp_split_preview "-gimp_stained_glass $*",$-1
@@ -21543,7 +21542,7 @@ gimp_blocks3d :
     -if $20
       [-1],[-1],1,3,-1
       -object3d[-1] [0],$8%,$9%,0,1,3,0,1 -rm[0]
-      -gradient[-1] xy,1 -+[-2,-1] -norm[-1] -neq[-1] 0
+      -g[-1] xy,1 -+[-2,-1] -norm[-1] -neq[-1] 0
       --r[-1] 100%,100%,1,3
       -sh[-1] 0,0 -*[-1] $17 -rm[-1]
       -sh[-1] 1,1 -*[-1] $18 -rm[-1]
@@ -23077,7 +23076,7 @@ gmicol_adjust_colors_preview :
 #@gmicol : Bottom coordinate = float(75,0,100)
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/18</i>.</small>")
 gmicol_crop :
-  -crop $1%,$2%,$3%,$4%
+  -z $1%,$2%,$3%,$4%
 
 gmicol_crop_preview :
   -rectangle $1%,$2%,$3%,$4%,0.5,128
@@ -23124,7 +23123,7 @@ gmicol_histogram_preview :
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/23</i>.</small>")
 gmicol_resize :
   -if {$1==0}
-    -resize $2%,$2%,1,100%,6
+    -r $2%,$2%,1,100%,6
   -elif {$1==1}
     -resize2dx $3,6
   -else

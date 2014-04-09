@@ -361,7 +361,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Molt verb\303\263s (arxiu)");
     _t("Debug mode (console)","Depuraci\303\263 (consola)");
     _t("Debug mode (logfile)","Depuraci\303\263 (arxiu)");
-    _t(" Available filters (%u + %u) :"," Filtres disponibles (%u) :");
+    _t(" Available filters (%u) :"," Filtres disponibles (%u) :");
     _t("_Maximize","_Maximitzar");
     _t("_Restore","_Restaurar");
     _t("Update","Actualitzaci\303\263");
@@ -412,7 +412,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Heel uitgebreid (logfile)");
     _t("Debug mode (console)","Debug mode (console)");
     _t("Debug mode (logfile)","Debug mode (logfile)");
-    _t(" Available filters (%u + %u) :"," Beschikbare filters (%u) :");
+    _t(" Available filters (%u) :"," Beschikbare filters (%u) :");
     _t("_Maximize","_Maximaliseren");
     _t("_Restore","_Vermindering");
     _t("Rename","Hernoemen");
@@ -462,7 +462,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Mode tr\303\250s verbeux (fichier log)");
     _t("Debug mode (console)","Mode d\303\251bogage (console)");
     _t("Debug mode (logfile)","Mode d\303\251bogage (fichier log)");
-    _t(" Available filters (%u + %u) :"," Filtres disponibles (%u) :");
+    _t(" Available filters (%u) :"," Filtres disponibles (%u) :");
     _t("_Maximize","_Maximiser");
     _t("_Restore","_R\303\251duire");
     _t("Update","Actualiser");
@@ -513,7 +513,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Sehr ausf\303\274hrlich (Logfile)");
     _t("Debug mode (console)","Debug-Modus (Konsole)");
     _t("Debug mode (logfile)","Debug-Modus (Logfile)");
-    _t(" Available filters (%u + %u) :"," Verf\303\274gbare Filter (%u) :");
+    _t(" Available filters (%u) :"," Verf\303\274gbare Filter (%u) :");
     _t("Rename","Umbenennen");
   }
 
@@ -561,7 +561,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Messaggi Dettagliati (logfile)");
     _t("Debug mode (console)","Debug Mode (console)");
     _t("Debug mode (logfile)","Debug Mode (logfile)");
-    _t(" Available filters (%u + %u) :"," Filtri disponibili (%u) :");
+    _t(" Available filters (%u) :"," Filtri disponibili (%u) :");
     _t("Update","Aggiornare");
   }
 
@@ -609,7 +609,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Dok\305\202adny (plik log)");
     _t("Debug mode (console)","Debugowanie (konsola)");
     _t("Debug mode (logfile)","Debugowanie (plik log)");
-    _t(" Available filters (%u + %u) :"," Dost\304\231pne filtry (%u) :");
+    _t(" Available filters (%u) :"," Dost\304\231pne filtry (%u) :");
     _t("_Maximize","_Maksymalizuj");
     _t("_Restore","_Cofnij");
     _t("Update","Uaktualnij");
@@ -660,7 +660,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Modo verbose ampliada (arquivo)");
     _t("Debug mode (console)","Modo Debug (console)");
     _t("Debug mode (logfile)","Modo Debug (arquivo)");
-    _t(" Available filters (%u + %u) :"," Filtros dispon\303\255veis (%u) :");
+    _t(" Available filters (%u) :"," Filtros dispon\303\255veis (%u) :");
     _t("_Maximize","_Maximizar");
     _t("_Restore","Restaurar");
     _t("Update","Atualizar");
@@ -711,7 +711,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Vrlo op\305\241irno (log fajl)");
     _t("Debug mode (console)","Mod za otklanjanje programskih gre\305\241aka (konzola)");
     _t("Debug mode (logfile)","Mod za otklanjanje programskih gre\305\241aka (log fajl)");
-    _t(" Available filters (%u + %u) :"," Raspolo\305\276ivi filteri (%u) :");
+    _t(" Available filters (%u) :"," Raspolo\305\276ivi filteri (%u) :");
     _t("_Maximize","_Maksimizirati");
     _t("_Restore","_Vratiti");
     _t("Rename","Preimenovati");
@@ -761,7 +761,7 @@ const char *t(const char *const s) {
     _t("Very verbose (logfile)","Muy detallado (archivo_registro)");
     _t("Debug mode (console)","Depuraci\303\263n (consola)");
     _t("Debug mode (logfile)","Depuraci\303\263n (archivo_registro)");
-    _t(" Available filters (%u + %u) :"," Filtros disponibles (%u) :");
+    _t(" Available filters (%u) :"," Filtros disponibles (%u) :");
     _t("_Maximize","_Maximizar");
     _t("_Restore","_Restaurar");
     _t("Update","Actualitzaci\303\263n");
@@ -826,7 +826,7 @@ void flush_tree_view(GtkWidget *const tree_view) {
   gtk_tree_view_remove_column(GTK_TREE_VIEW(tree_view),gtk_tree_view_get_column(GTK_TREE_VIEW(tree_view),0));
   GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
   char tree_view_title[64] = { 0 };
-  cimg_snprintf(tree_view_title,sizeof(tree_view_title),t(" Available filters (%u + %u) :"),nb_available_filters,gmic_entries.size()-1-nb_available_filters);
+  cimg_snprintf(tree_view_title,sizeof(tree_view_title),t(" Available filters (%u) :"),nb_available_filters);
   GtkTreeViewColumn *column = gtk_tree_view_column_new_with_attributes(tree_view_title,renderer,"markup",1,NULL);
   gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view),column);
 }
