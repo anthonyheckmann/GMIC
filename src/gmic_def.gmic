@@ -6204,6 +6204,54 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=2%}>=0 && ${3=0.5%}>=0"
 #@gmic : Default value: 'scheme=2'.
 #@gmic : $ image.jpg -structuretensors -abs -pow 0.2
 
+#@gmic syntexturize : _width[%]>0,_height[%]>0
+#@gmic : Resynthetize 'width'x'height' versions of selected micro-textures by phase randomization.
+#@gmic : The texture synthesis algorithm is a straightforward implementation of the method described in :
+#@gmic : http://www.ipol.im/pub/art/2011/ggm_rpn/
+#@gmic : Default values: 'width=height=100%'.
+#@gmic : $ image.jpg -crop 2,282,50,328 -syntexturize 320,320
+syntexturize : -check "${1=100%}>0 && ${2=$1}>0"
+  -e[^-1] "Resynthetize $1x$2 versions of texture$? by phase randomization."
+  -v - -repeat @# -l[$>]
+
+    # Prepare input image data.
+    mM={im},{iM} -repeat {s} -sh[-1] $>,$> sum$>=@{-1,+} var$>=@{-1,iv} -rm[-1] -done  # Retrieve some stats for post-normalization.
+    nw={if(@{-is_percent\ $1},$1*w,$1)}
+    nh={if(@{-is_percent\ $2},$2*h,$2)}
+    -repeat {s} sum$>={${sum$>}*$nw*$nh/(w*h)} -done # Re-estimate output (0,0) frequency.
+
+    -if {$nw>w||$nh>h} # Spot extension required when rendering on bigger image.
+      -periodize_poisson
+      100%,100% -rectangle[-1] 5,5,{w-6},{h-6},1,1 -b[-1] 2 -n[-1] 0,1
+      $nw,$nh,1,@{-2,s} -fc[-1] @{-average_color[-3]}
+      -j[-1] [-3],{(w-@{-2,w})/2},{(h-@{-2,h})/2},0,0,1,[-2]
+      -rm[-3,-2]
+    -else
+      -r $nw,$nh,1,100%,0,0,0.5,0.5
+      -periodize_poisson
+    -endif
+    -fft
+
+    # Compute coherent random phase.
+    100%,100% -rand[-1] {-pi},{pi}
+    -=[-1] 0
+    -if {!(w%2)} -=[-1] {(?<0.5)*pi},{int(w/2)} -endif
+    -if {!(h%2)} -=[-1] {(?<0.5)*pi},0,{int(h/2)} -endif
+    -if {!(h%2)&&!(h%2)} -=[-1] {(?<0.5)*pi},{int(w/2)},{int(h/2)} -endif
+
+    # Add random phase to fft of input image.
+    --sin[-1] -cos[-2]
+    --*[-4,-1] --*[-4,-3] -+[-2,-1]
+    -*[-5,-3] -*[-3,-2] --[-3,-2]
+
+    # Get synthetized result and normalize it.
+    -repeat {s} -=[-2] ${sum$>},0,0,0,$> -=[-1] 0,0,0,0,$> -done
+    -ifft -rm[-1]
+    -repeat {s} -sh[-1] $>,$> avg={ia} --[-1] $avg -*[-1] {sqrt(${var$>}/if(iv,iv,1))} -+[-1] $avg -rm[-1] -done
+    -c $mM
+
+  -endl -done -v +
+
 #@gmic tv_flow : _nb_iter>=0,_dt,_sequence_flag={ 0 | 1 }
 #@gmic : Apply iterations of the total variation flow on selected images.
 #@gmic : Default values: 'nb_iter=10', 'dt=30' and 'keep_sequence=0'.
@@ -23623,13 +23671,5 @@ gmicol_animate_imageobject3d_preview :
 #
 # (End of G'MIC custom commands)
 
-foo :
-#  -z 0,0,{w-(w%2)},{h-(h%2)}
 
-  -periodize_poisson
-  -fftpolar[-1]
-
-  --mirror[-1] x -+[-2,-1] -/[-1] 2
-
-  -ifftpolar
-#  -c 0,255
+# overlay, soft light, hard light, grain merge
