@@ -23464,6 +23464,7 @@ gmicol_rotate :
 #@gmicol clone("Quick copyright")
 #@gmicol clone("Rainbow")
 #@gmicol clone("Random color ellipses")
+#@gmicol clone("Resynthetize texture")
 
 #@gmicol RGB distribution : gmicol_rgb_distribution, gmicol_rgb_distribution_preview
 #@gmicol : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/19</i>.</small>")
