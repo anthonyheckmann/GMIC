@@ -20918,6 +20918,19 @@ gimp_polka_dots :
 gimp_color_ellipses :
   -color_ellipses $1,$2,$3
 
+#@gimp Resynthetize texture : syntexturize, gimp_syntexturize_preview(1)
+#@gimp : Width = int(1024,32,8192)
+#@gimp : Height = int(1024,32,8192)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator()
+#@gimp : note = note{"<small><b>Note:</b> This filter tries to re-synthetize a <b>micro</b>-texture (given as the input image) onto an output (seamless) image with an arbitrary size.
+#@gimp : It uses a phase randomization technique, as described in:</small>"}
+#@gimp : link = link("Micro-Texture Synthesis by Phase Randomization","http://www.ipol.im/pub/art/2011/ggm_rpn/")
+#@gimp : note = note("<small>This filter is based on the work of <i>Bruno Galerne</i>, <i>Yann Gousseau</i> and <i>Jean-Michel Morel</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i> and <i>J&#233;rome Boulanger</i>.      Latest update: <i>2014/04/09</i>.</small>")
+gimp_syntexturize_preview :
+  -gimp_split_preview "-syntexturize 100%",$-1
+
 #@gimp Rorschach : gimp_rorschach, gimp_rorschach
 #@gimp : Scale = float(3,0,10)
 #@gimp : Mirror = choice(1,"None","x-axis","y-axis","xy-axes")
