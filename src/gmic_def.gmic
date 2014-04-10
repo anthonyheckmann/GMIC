@@ -1803,7 +1803,7 @@ _display_warp : -check "${1=15}>0"
   -e[0--3] "Render 2d warping field"$__s", with cell size $1."
   -v - -repeat @# -l[$>]
     -if {d!=1||s!=2}
-      -error[0--3] "Invalid image ["{@#-$>-1}"]: Dimensions "{w}","{h}","{d}","{s}" does not represent a 2d field of 2d vectors."
+      -error[0--3] "Command '-display_warp': Invalid image ["{@#-$>-1}"]: Dimensions "{w}","{h}","{d}","{s}" does not represent a 2d field of 2d vectors."
     -endif
     -i[0] 100%,100%,1,1,1 -grid[0] $1,$1 -nm[0] @{1,n}
     -warp[0] [1],1,1,0 -rm[1]
@@ -3318,7 +3318,7 @@ eigen2tensor :
       -s[-3] c
       --[-5] [-3] --[-4] [-3] -*[-2] [-5] -*[-1] [-4]
       (1^0^0^1^0^1) -r[-1] [-3] -*[-1] [-4] -rm[-6--4] -+[-3--1]
-    -else -error[0--3] "Invalid image ["{@#-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d eigenvectors."
+    -else -error[0--3] "Command '-eigen2tensor': Invalid image ["{@#-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d eigenvectors."
     -endif
   -nm $nm,1 -endl -done -v +
 
@@ -3392,7 +3392,7 @@ image_integral :
 #@gmic : $ image.jpg -uniform_distribution {2^5},3 -mirror[-1] x --map_clut
 map_clut :
   -e[^-1] "Map color LUT image, using image$?."
-  -if {@#<2} -error[0--2] "This command requires at least two images to work properly !"  -endif
+  -if {@#<2} -error[0--2] "Command '-map_clut': requires at least two images to work properly !"  -endif
   -v - -to_color[0--2] -to_rgb[-1]
   l={round((w*h*d)^(1/3))} -r[-1] $l,$l,$l,3,-1
   -repeat {@#-1} -l[$>,-1] -split_opacity[0] -/[0] {256/$l}
@@ -3658,7 +3658,7 @@ vector2tensor :
     -s c
     -if {@#==2} --sqr[-1] -*[-2] [-3] -sqr[-3]
     -elif {@#==3} --sqr[-2] --*[-3] [-2] --sqr[-3] -*[-5,-4] [-6] -sqr[-6]
-    -else -error[0--4] "Invalid image ["{@#-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d vectors."
+    -else -error[0--4] "Command '-vector2tensor': Invalid image ["{@#-$>-1}"] : Dimensions "{w}","{h}","{d}","{s}" does not represent a field of 2d or 3d vectors."
     -endif
     -a c
   -endl -done -v +
@@ -4478,7 +4478,7 @@ to_a :
 to_color :
   -e[^-1] "Force image$? to be in color mode."
   -v - -repeat @# -l[$>]
-    -if {s>4} -error[] "Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
+    -if {s>4} -error[] "Command '-to_color': Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
     -elif {s==2} -r 100%,100%,1,4,0,1,0,0,0,1
     -elif {s==1} -r 100%,100%,1,3,1
     -endif
@@ -4494,7 +4494,7 @@ to_colormode : -skip ${1=0}
   -elif {$1==4} -to_rgba
   -else
     s=1 -repeat @#
-      -if {@{$>,s}>4} -error "Image ["$>"] is not a G,GA,RGB or RGBA image."
+      -if {@{$>,s}>4} -error "Command '-to_colormode': Image ["$>"] is not a G,GA,RGB or RGBA image."
       -else s={max($s,@{$>,s})}
       -endif
     -done -to_colormode $s
@@ -4506,7 +4506,7 @@ to_colormode : -skip ${1=0}
 to_gray :
   -e[^-1] "Force image$? to be in GRAY mode."
   -v - -repeat @# -l[$>]
-    -if {s>4} -error[] "Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
+    -if {s>4} -error[] "Command '-to_gray': Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
     -elif {s>=3} -channels 0,2 -luminance
     -elif {s==2} -r 100%,100%,100%,1,0
     -endif
@@ -4517,7 +4517,7 @@ to_gray :
 to_graya :
   -e[^-1] "Force image$? to be in GRAYA mode."
   -v - -repeat @# -l[$>]
-    -if {s>4} -error[] "Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
+    -if {s>4} -error[] "Command '-to_graya': Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
     -elif {s==4} --channels 3 -channels[-2] 0,2 -luminance[-2] -a c
     -elif {s==3} -luminance -channels 0,1 -sh[-1] 1,1 -f[-1] 255 -rm[-1]
     -elif {s==1} -channels 0,1 -sh[-1] 1,1 -f[-1] 255 -rm[-1]
@@ -4549,7 +4549,7 @@ to_pseudogray : -check "isint(${1=5}) && $1>=0 && isint(${3=8}) && $3>0" -skip $
 to_rgb :
    -e[^-1] "Force image$? to be in RGB mode."
    -v - -repeat @# -l[$>]
-     -if {s>4} -error[] "Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
+     -if {s>4} -error[] "Command '-to_rgb': Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
      -elif {s==4} -channels 0,2
      -elif {s==2} -channels 0,0 -r 100%,100%,100%,3
      -elif {s==1} -r 100%,100%,100%,3
@@ -4561,7 +4561,7 @@ to_rgb :
 to_rgba :
    -e[^-1] "Force image$? to be in RGBA mode."
    -v - -repeat @# -l[$>]
-     -if {s>4} -error[] "Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
+     -if {s>4} -error[] "Command '-to_rgba': Image ["@{<,-1}"] is not a G,GA,RGB or RGBA image."
      -elif {s==3} -channels 0,3 -sh[-1] 3,3 -f[-1] 255 -rm[-1]
      -elif {s==2} -r 100%,100%,100%,4 -sh[-1] 2,2 -f[-1] [-2] -rm[-1]
      -elif {s==1} -r 100%,100%,100%,4 -sh[-1] 3,3 -f[-1] 255 -rm[-1]
@@ -5625,7 +5625,7 @@ divergence :
     -if {s==1} -g x,0
     -elif {s==2} -s c -g[-2] x,0 -g[-1] y,0 -+
     -elif {s==3} -s c -g[-3] x,0 -g[-2] y,0 -g[-1] z,0 -+
-    -else -error[] "Cannot compute divergence of image ["$>"] (has "{s}">3 channels)."
+    -else -error[] "Command '-divergence': Cannot compute divergence of image ["$>"] (has "{s}">3 channels)."
     -endif
   -endl -done -v +
 
@@ -5756,17 +5756,17 @@ _haar : # Mono-scale direct haar transform.
 
 _haar_x : # Direct haar transform along the x-axis.
   -if {w<=1} -return -endif
-  -if {w%2} -error[0--6] "Invalid image width="{w}" (is not even)." -endif
+  -if {w%2} -error[0--6] "Command '-haar': Invalid image width="{w}" (is not even)." -endif
   --shift -1 -r 50% ---[1] [0] -+[0,1] -/ {sqrt(2)} -a x
 
 _haar_y : # Direct haar transform along the y-axis.
   -if {h<=1} -return -endif
-  -if {h%2} -error[0--6] "Invalid image height="{h}" (is not even)." -endif
+  -if {h%2} -error[0--6] "Command '-haar': Invalid image height="{h}" (is not even)." -endif
   --shift 0,-1 -r 100%,50% ---[1] [0] -+[0,1] -/ {sqrt(2)} -a y
 
 _haar_z : # Direct haar transform along the z-axis.
   -if {d<=1} -return -endif
-  -if {d%2} -error[0--6] "Invalid image depth="{h}" (is not even)." -endif
+  -if {d%2} -error[0--6] "Command '-haar': Invalid image depth="{h}" (is not even)." -endif
   --shift 0,0,-1 -r 100%,100%,50% ---[1] [0] -+[0,1] -/ {sqrt(2)} -a z
 
 #@gmic heat_flow : _nb_iter>=0,_dt,_keep_sequence={ 0 | 1 }
@@ -5821,17 +5821,17 @@ _ihaar : # Mono-scale inverse haar transform.
 
 _ihaar_x : # Inverse haar transform along the x-axis.
   -if {w<=1} -return -endif
-  -if {w%2} -error[0--6] "Invalid image width="{w}" (is not even)." -endif
+  -if {w%2} -error[0--6] "Command '-ihaar': Invalid image width="{w}" (is not even)." -endif
   -s x,2 -r 200% (-1,1) -*[-2,-1] -+ -/ {sqrt(2)}
 
 _ihaar_y : # Inverse haar transform along the y-axis.
   -if {h<=1} -return -endif
-  -if {h%2} -error "Invalid image height="{h}" (is not even)." -endif
+  -if {h%2} -error "Command '-ihaar': Invalid image height="{h}" (is not even)." -endif
   -s y,2 -r 100%,200% (-1;1) -r[-1] @{-2,w} -*[-2,-1] -+ -/ {sqrt(2)}
 
 _ihaar_z : # Inverse haar transform along the z-axis.
   -if {d<=1} -return -endif
-  -if {d%2} -error "Invalid image depth="{h}" (is not even)." -endif
+  -if {d%2} -error "Command '-ihaar': Invalid image depth="{h}" (is not even)." -endif
   -s z,2 -r 100%,100%,200% (-1/1) -r[-1] @{-2,w},@{-2,h} -*[-2,-1] -+ -/ {sqrt(2)}
 
 #@gmic inn
@@ -6663,7 +6663,7 @@ pointcloud : -check "${1=0}<3" -skip ${2=0},${3=0},${4=0}
   -e[^-1] "Convert image$? to point clouds, in "@{-arg\ 2+($1>=0)*$1-($1<0),{-$1}-opacity,binary,cumulative,labeling}" mode,"\
           "with ($2,$3,$4) as maximal dimensions."
   -v - -repeat @# -l[$>] nm=@{0,n}
-    -if {"d>1 || s>1"} -error "Invalid input image "{w}x{h}x{d}x{s}". Should be NxMx1x1." -endif
+    -if {"d>1 || s>1"} -error "Command '-pointcloud': Invalid input image "{w}x{h}x{d}x{s}". Should be NxMx1x1." -endif
 
     # Retrieve coordinates and color infos.
     -rows 0,{max(2,h-1)}
@@ -7630,7 +7630,7 @@ apply_pose3d :
     -s3d -r[2] 3,@{2,h/3},1,1,-1 -i[3] 1,@{2,h},1,1,1 -a[2,3] x
     -i[3] ($1,$5,$9;$2,$6,$10;$3,$7,$11;$4,$8,$12) -**[2,3]
     -r[2] 1,@{2,3*h},1,1,-1 -a y
-  -else -error "Image ["{@#-$>-1}"] does not represent a 3d object."
+  -else -error "Command '-apply_pose3d': Image ["{@#-$>-1}"] does not represent a 3d object."
   -endif -endl -done -v +
 
 #@gmic arrow3d : x0,y0,z0,x1,y1,z1,_radius[%]>=0,_head_length[%]>=0,_head_radius[%]>=0
@@ -8998,7 +8998,7 @@ apply_parallel_overlap : -check "${2=0}>=0 && isint(${3=0}) && $3>=0"
   -v - N={if($3,max(1,round($3)),@*)} N={2^int(log2(min(16,$N)))} -v +
   -e[^-1] "Apply parallelized command '$1' on image$?, with overlap $2 and "$N" threads."
   -v -
-  -m "_check1 : -if {@#!=1} -error[0--9] \"Specified command '$1' changes the size of the image stack.\" -endif"
+  -m "_check1 : -if {@#!=1} -error[0--9] \"Command '-apply_parallel': Specified command '$1' changes the size of the image stack.\" -endif"
   -repeat @# -l[$>]
     -_apply_parallel_overlap$N "$1",$2
   -endl -done
@@ -9169,7 +9169,7 @@ rprogress : -skip ${2=""}
     -progress $m _progress_bounds=$_progress_bounds,{$m+$nm*($M-$m)/100},{$m+$nM*($M-$m)/100}  # Push new bounds.
     -_rprogress "$1"
     -progress $M ($_progress_bounds) _progress_bounds=@{-1,0--3} -rm[-1] # Pop bounds.
-  -else -error[0--3] "Command '-rprogress' : Invalid argument '$*'."
+  -else -error[0--3] "Command '-rprogress': Invalid argument '$*'."
   -endif
   -v +
 
@@ -10856,7 +10856,7 @@ blend : -skip ${1=alpha},${2=1},${3=0},${4=1}
   -v - s0="" s1="(reverted layers) " -v +
   -e[^-1] "Blend image$? two-by-two, using '$1' mode "${s{$3!=0}}"and opacity $2."
   -v - -l[] code=@{-_blend_$1}
-  -onfail -v + -error[0--2] "Unknown blending mode '$1' requested."
+  -onfail -v + -error[0--2] "Command '-blend': Unknown blending mode '$1' requested."
   -endl
   -repeat {int(@#/2)} -l[$>,{$>+1}] -if $3 -rv -endif
     -r[1] [0],[0],[0],100%,0,0,0.5,0.5 # Align spatial dimensions for mask and base image.
@@ -13664,7 +13664,7 @@ _xpink :
   -if {!@{-is_windows}}
     -x "which "${prefix}${1}" >/dev/null 2>&1"
     -if {@{}!=0} prefix="" -x "which "$1" >/dev/null 2>&1"
-	  -if {@{}!=0} -error "executable (pink.)"$1" not found in PATH, status = "@{}"!! Returning!!\n" -return -endif
+	  -if {@{}!=0} -error "Executable (pink.)"$1" not found in PATH, status = "@{}"!! Returning!!\n" -return -endif
 	-endif
     -output_pink3d ${filename}.pnk -x ${prefix}${1}" "${filename}".pnk $2 "${filename}"_o.pnk >/dev/null 2>&1"
   -else
@@ -13672,9 +13672,9 @@ _xpink :
   -endif
   status=@{}
   -file_rm ${filename}.pnk
-  -if {$status!=0\ &&\ {$1'!='seuilauto}} -error "exec Status is "${status}"." -return
+  -if {$status!=0\ &&\ {$1'!='seuilauto}} -error "Exec status is "${status}"." -return
   -elif ${filename}_o.pnk -i ${filename}_o.pnk -file_rm ${filename}_o.pnk -k[-1]
-  -else -error "exec Error!!" -endif
+  -else -error "Exec error!!" -endif
 
 _xpinks :
   s=@{-1,s} -if {$s>1} -s[-1] c -endif
@@ -13934,7 +13934,7 @@ alert : -skip "${1=[G\47MIC Alert]},${2=This is an alert box.},${3=OK}"
 
     # Enter event loop.
     -repeat 9 -if {!@{!$>}} disp=$> -break -endif -done   # Find available display window.
-    -if {!narg($disp)} -error[0--4] "Cannot open display window for alert box." -endif
+    -if {!narg($disp)} -error[0--4] "Command '-alert': Cannot open display window for alert box." -endif
 
     selected={if($#==3,0,-1)} clicked=-1
     -do
@@ -14634,7 +14634,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
   -repeat @# -l[$>]
     -s -,{'\ '}
     -if @#
-      -if {@#!=4} -error[0--4] "Invalid score file (line "{$>+1}" defines "@#" items instead of 4)." -endif
+      -if {@#!=4} -error[0--4] "Command '-gpt': Invalid score file (line "{$>+1}" defines "@#" items instead of 4)." -endif
       player$>_name=@{0,t}
       player$>_url=@{1,t}
       player$>_file=@{2,t}
@@ -19317,7 +19317,7 @@ gimp_split_details :
     -else N={int(sqrt($nb_imgs))} M={round($nb_imgs/$N,1,1)} -split_tiles $M,$N -k[0-{$nb_imgs-1}]
     -endif
     -rm[0] -l[^0] -- 128 -repeat @# -*[$>] {arg($>+4,$vlist)/127} -done -endl -+ -c 0,255
-  -onfail -error "Cannot recompose image, decompose it before trying to recompose it !"
+  -onfail -error "Command '-gimp_split_details': Cannot recompose image, decompose it before trying to recompose it !"
   -endl -done
 
   -else -repeat @# -l[$<]
@@ -20737,7 +20737,7 @@ gimp_shapes :
       -endif
     -endl -done
   -else # Custom shapes.
-    -if {@#<=$2} -error[] "Some layers are missing in 'Custom layers' mode ("{$2+1}" expected at least, "@#" provided)." -endif
+    -if {@#<=$2} -error[] "Command '-gimp_shapes': Some layers are missing in 'Custom layers' mode ("{$2+1}" expected at least, "@#" provided)." -endif
     -to_colormode[0-{$2-1}] @{-max_s[0-{$2-1}]} -remove_opacity[$2--1]
     -repeat {@#-$2} -l[0-{$2-1},{$2+$>}]
       -norm[-1] w={w} h={h} -r[-1] $3%,$3%,1,1,2
@@ -20848,7 +20848,7 @@ _gimp_shapes17 :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/06/24</i>.</small>")
 gimp_pack_sprites :
   -if $6 # With mask.
-    -if {@#<2} -error[] "Masking requires at least two input layers ! (please check that 'Input Layers' is correctly set)." -endif
+    -if {@#<2} -error[] "Command '-gimp_pack_sprites': Masking requires at least two input layers ! (please check that 'Input Layers' is correctly set)." -endif
     -repeat {@#-1} -l[$>] -to_rgba -split_opacity --neq[1] 0 -*[0] [-1] -a c -autocrop 0 -endl -done
     -remove_empty[0--2] --channels[-1] 100% -channels[-1] -4,0 -mv[-1] 0
     -pack_sprites[0--2] ${1-5}
@@ -23690,9 +23690,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-foo :
-  -warn "WARN !"
-  -error "ERROR !"
-
-
