@@ -4,8 +4,7 @@
 <body>
 
 <h1>-gradient_norm</h1>
-<p><img src="img/_gradient_norm_askrigg.jpg" title="Askrigg, North Yorkshire, England. Kreuzschnabel, Wikimedia Commons" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="200" width="200" /></p>
-<p>This command replaces each pixel in an input image with the <a target="_parent" href="http://en.wikipedia.org/wiki/Euclidean_distance">Euclidean measure</a> of the vector composed of the <a target="_parent" href="_gradient.shtml">gradients</a> in the width (x), height (y) and depth (z) directions, as measured from the pixel, in each channel of the image.</p>
+<p><img src="img/_gradient_norm_askrigg.jpg" title="Askrigg, North Yorkshire, England. Kreuzschnabel, Wikimedia Commons" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="200" width="200" />This command replaces each pixel in an input image with the <a target="_parent" href="http://en.wikipedia.org/wiki/Euclidean_distance">Euclidean measure</a> of the vector composed of the <a target="_parent" href="_gradient.shtml">gradients</a> in the width (x), height (y) and depth (z) directions, as measured from the pixel, in each channel of the image.</p>
 <p>For a three channel RGB image, the vector has nine components, three for each x, y and z direction in each channel:</p>
 <p><img src="img/_gradient_norm_gradnorm.jpg" height="43" width="579" /></p>
 <p>The command renders in white or light gray to a single channel grayscale output image rapid transitions of intensity among each of the various channels of the input image. It is particularly sensitive to edges, but it is not limited to edge detection.</p>
@@ -21,8 +20,8 @@
 <td><a target="_parent" href="http://www.particularart.com/static/media/uploads/command_reference/gradient_norm/gradnormgraph.png" title="Click for larger image" alt="Image and its gradient norm."><img src="img/_gradient_norm_gradnormgraph_small.jpg" title="Image and Gradient Norm" height="200" width="267" /></a></td>
 </tr>
 <tr>
-<td>This greyscale image of an engolated Gaussian illustrates a number of transitions, from the inpulses of the gray border to a variety of transitions of abrupt and gradual nature in the Gaussian itself. </td>
-<td>Gradient_norm reports on how rapidly an intensity is changing in at least one channel of an original image. Note how the border has become a double line; gradient_norm is sensitive to both the transition from black to grey and grey to black. Similarly, the Gaussian has become a pair of parallel marks, recording the relatively rapid transitions both to and from the Gaussian's peak. </td>
+<td>This greyscale image of an engolated Gaussian illustrates a number of transitions, from the inpulses of the gray border to a variety of transitions of abrupt and gradual nature in the Gaussian itself.</td>
+<td>Gradient_norm reports on how rapidly an intensity is changing in at least one channel of an original image. Note how the border has become a double line; gradient_norm is sensitive to both the transition from black to grey and grey to black. Similarly, the Gaussian has become a pair of parallel marks, recording the relatively rapid transitions both to and from the Gaussian's peak.</td>
 <td>This is a graph of the middle horizontal section of images one (red) and two (green). The intensity of the pixels in the second image are a function of the change in intensity of the first image. The local maxima of the gradient norm correspond with inflection points of the changing intensities of the first image. The local minima of the gradient norm correspond with local maxima and minima in the original image.</td>
 </tr>
 </tbody>

@@ -234,9 +234,9 @@ struct gmic {
                      gmic_list<char> commands[256],
                      gmic_list<char> commands_has_arguments[256],
                      const bool add_debug_infos=false);
-  gmic_image<char> scope2string(const bool is_last_slash=true) const;
-  gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection,
-                                const bool is_last_slash=true) const;
+  gmic_image<char> scope2string() const;
+  gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection) const;
+  gmic_image<char> scope2string(const gmic_image<unsigned int>* scope_selection) const;
 
   gmic_image<unsigned int> selection2cimg(const char *const string, const unsigned int indice_max,
                                           const gmic_list<char>& names,

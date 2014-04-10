@@ -394,6 +394,7 @@ _gmic_def()
 	      -normalized_cross_correlation --normalized_cross_correlation\
 	      -phase_correlation --phase_correlation\
 	      -pde_flow --pde_flow\
+	      -periodize_poisson --periodize_poisson\
 	      -red_eye --red_eye\
 	      -remove_hotpixels --remove_hotpixels\
 	      -remove_pixels --remove_pixels\
@@ -406,6 +407,7 @@ _gmic_def()
 	      -solve_poisson --solve_poisson\
 	      -split_details --split_details\
 	      -structuretensors --structuretensors\
+	      -syntexturize --syntexturize\
 	      -tv_flow --tv_flow\
 	      -unsharp --unsharp\
 	      -unsharp_octave --unsharp_octave\
@@ -1231,6 +1233,7 @@ _gmic_def()
 	      normalized_cross_correlation\
 	      phase_correlation\
 	      pde_flow\
+	      periodize_poisson\
 	      red_eye\
 	      remove_hotpixels\
 	      remove_pixels\
@@ -1243,6 +1246,7 @@ _gmic_def()
 	      solve_poisson\
 	      split_details\
 	      structuretensors\
+	      syntexturize\
 	      tv_flow\
 	      unsharp\
 	      unsharp_octave\
@@ -2490,6 +2494,10 @@ _gmic_def()
 		;;
 		"-structuretensors" | "--structuretensors")
 		COMPREPLY=( $(compgen -W "_scheme >") )
+		return 0
+		;;
+		"-syntexturize" | "--syntexturize")
+		COMPREPLY=( $(compgen -W "_width[%]>0,_height[%]>0 >") )
 		return 0
 		;;
 		"-tv_flow" | "--tv_flow")

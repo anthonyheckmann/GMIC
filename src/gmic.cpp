@@ -2106,36 +2106,36 @@ gmic::gmic(const char *const commands_line, const char *const custom_commands,
 
 // Get current scope as a string.
 //-------------------------------
-CImg<char> gmic::scope2string(const bool is_last_slash) const {
+CImg<char> gmic::scope2string(const CImg<unsigned int> *const scope_selection) const {
+  if (scope_selection && !*scope_selection) return CImg<char>("./",3);
+  CImgList<char> input_scope;
+  if (!scope_selection) input_scope.assign(scope,true);
+  else cimg_forY(*scope_selection,l) input_scope.insert(scope[(*scope_selection)[l]],~0U,true);
   CImgList<char> res;
-  const unsigned int siz = (unsigned int)scope.size();
-  if (siz<=8) res.assign(scope);
+  const unsigned int siz = (unsigned int)input_scope.size();
+  if (siz<=8) res.assign(input_scope,false);
   else {
     res.assign(8);
-    res[0].assign(scope[0]);
-    res[1].assign(scope[1]);
-    res[2].assign(scope[2]);
+    res[0].assign(input_scope[0],false);
+    res[1].assign(input_scope[1],false);
+    res[2].assign(input_scope[2],false);
     res[3].assign("..",3);
-    res[4].assign(scope[siz-4]);
-    res[5].assign(scope[siz-3]);
-    res[6].assign(scope[siz-2]);
-    res[7].assign(scope[siz-1]);
+    res[4].assign(input_scope[siz-4],false);
+    res[5].assign(input_scope[siz-3],false);
+    res[6].assign(input_scope[siz-2],false);
+    res[7].assign(input_scope[siz-1],false);
   }
   cimglist_for(res,l) res[l].back() = '/';
-  if (!is_last_slash) --(res.back()._width);
   CImg<char>::vector(0).move_to(res);
   return res>'x';
 }
 
-CImg<char> gmic::scope2string(const CImg<unsigned int>& scope_selection,
-                              const bool is_last_slash) const {
-  const CImg<char> def_scope("./",3);
-  if (!scope_selection) return def_scope;
-  CImgList<char> res(scope_selection.height());
-  cimglist_for(res,l) res[l].assign(scope[scope_selection(l)]).back() = '/';
-  if (!is_last_slash) --(res.back()._width);
-  CImg<char>::vector(0).move_to(res);
-  return res>'x';
+CImg<char> gmic::scope2string() const {
+  return scope2string(0);
+}
+
+CImg<char> gmic::scope2string(const CImg<unsigned int>& scope_selection) const {
+  return scope2string(&scope_selection);
 }
 
 // Parse items from a G'MIC command line.
