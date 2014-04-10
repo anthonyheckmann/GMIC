@@ -2230,28 +2230,6 @@ gmic& gmic::print(const char *format, ...) {
   return *this;
 }
 
-// Print warning message.
-//-----------------------
-gmic& gmic::warn(const char *format, ...) {
-  if (verbosity<0 && !is_debug) return *this;
-  va_list ap;
-  va_start(ap,format);
-  CImg<char> message(1024+512,1,1,1,0);
-  cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string().data());
-  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,message.width());
-  va_end(ap);
-  gmic_strreplace(message);
-  if (*message!='\r')
-    for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
-  nb_carriages = 1;
-  std::fprintf(cimg::output(),
-               "%s[gmic]%s %s%s%s",
-               cimg::t_red,scope2string().data(),cimg::t_bold,message.data(),cimg::t_normal);
-  std::fflush(cimg::output());
-  return *this;
-}
-
 // Print error message, and quit interpreter.
 //-------------------------------------------
 gmic& gmic::error(const char *const format, ...) {
@@ -2667,29 +2645,7 @@ gmic& gmic::print(const CImgList<T>& list, const CImg<unsigned int>& scope_selec
 // Print warning message.
 //-----------------------
 template<typename T>
-gmic& gmic::warn(const CImgList<T>& list, const char *format, ...) {
-  if (verbosity<0 && !is_debug) return *this;
-  va_list ap;
-  va_start(ap,format);
-  CImg<char> message(1024+512,1,1,1,0);
-  cimg_snprintf(message,512,"*** Warning in %s *** ",scope2string().data());
-  cimg_vsnprintf(message.data() + std::strlen(message),1024,format,ap);
-  gmic_ellipsize(message,message.width());
-  va_end(ap);
-  gmic_strreplace(message);
-  if (*message!='\r')
-    for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
-  nb_carriages = 1;
-  std::fprintf(cimg::output(),
-               "[gmic]-%u%s %s%s%s%s",
-               list.size(),scope2string().data(),cimg::t_bold,cimg::t_red,message.data(),
-               cimg::t_normal);
-  std::fflush(cimg::output());
-  return *this;
-}
-
-template<typename T>
-gmic& gmic::warn(const CImgList<T>& list, const CImg<unsigned int>& scope_selection,
+gmic& gmic::warn(const CImgList<T>& list, const CImg<unsigned int> *const scope_selection,
                  const char *format, ...) {
   if (verbosity<0 && !is_debug) return *this;
   va_list ap;
@@ -2703,7 +2659,7 @@ gmic& gmic::warn(const CImgList<T>& list, const CImg<unsigned int>& scope_select
   if (*message!='\r')
     for (unsigned int i = 0; i<nb_carriages; ++i) std::fputc('\n',cimg::output());
   nb_carriages = 1;
-  if (scope_selection)
+  if (!scope_selection || *scope_selection)
     std::fprintf(cimg::output(),
                  "[gmic]-%u%s %s%s%s%s",
                  list.size(),scope2string(scope_selection).data(),
@@ -3182,7 +3138,7 @@ gmic& gmic::display_plots(const CImgList<T>& images, const CImgList<char>& image
   if (empty_indices) {
     const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
     const char *const eselec = _eselec.data();
-    warn(images,"Command '-plot': Image%s %s empty.",
+    warn(images,0,"Command '-plot': Image%s %s empty.",
          eselec,empty_indices.size()>1?"are":"is");
   }
 
@@ -6900,7 +6856,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                                                                            palette(2,k)));
                   }
                   if (!vertices)
-                    warn(images,"Command '-isoline3d': Isovalue %g%s not found in image [%u].",
+                    warn(images,0,"Command '-isoline3d': Isovalue %g%s not found in image [%u].",
                          value,sep=='%'?"%":"",ind);
                   vertices.object3dtoCImg3d(primitives,colors,false);
                   gmic_apply(img,replace(vertices));
@@ -6991,11 +6947,11 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   }
                   if (!vertices) {
                     if (img.depth()>1)
-                      warn(images,
+                      warn(images,0,
                            "Command '-isosurface3d': Isovalue %g%s not found in image [%u].",
                            value,sep=='%'?"%":"",ind);
                     else
-                      warn(images,
+                      warn(images,0,
                            "Command '-isosurface3d': Image [%u] has a single slice, "
                            "isovalue %g%s not found.",
                            ind,value,sep=='%'?"%":"");
@@ -7915,7 +7871,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               if (empty_indices) {
                 const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
                 const char *const eselec = _eselec.data();
-                warn(images,"Command '-output': Image%s %s empty.",
+                warn(images,0,"Command '-output': Image%s %s empty.",
                      eselec,empty_indices.size()>1?"are":"is");
               }
               cimg_forY(selection,l)
@@ -7989,7 +7945,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               if (empty_indices) {
                 const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
                 const char *const eselec = _eselec.data();
-                warn(images,"Command '-output': Image%s %s empty.",
+                warn(images,0,"Command '-output': Image%s %s empty.",
                      eselec,empty_indices.size()>1?"are":"is");
               }
               cimg_forY(selection,l)
@@ -8059,7 +8015,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               if (empty_indices) {
                 const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
                 const char *const eselec = _eselec.data();
-                warn(images,"Command '-output': Image%s %s empty.",
+                warn(images,0,"Command '-output': Image%s %s empty.",
                      eselec,empty_indices.size()>1?"are":"is");
               }
               cimg_forY(selection,l)
@@ -8101,7 +8057,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               if (empty_indices) {
                 const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
                 const char *const eselec = _eselec.data();
-                warn(images,"Command '-output': Image%s %s empty.",
+                warn(images,0,"Command '-output': Image%s %s empty.",
                      eselec,empty_indices.size()>1?"are":"is");
               }
               cimg_forY(selection,l)
@@ -8138,7 +8094,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               if (empty_indices) {
                 const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
                 const char *const eselec = _eselec.data();
-                warn(images,"Command '-output': Image%s %s empty.",
+                warn(images,0,"Command '-output': Image%s %s empty.",
                      eselec,empty_indices.size()>1?"are":"is");
               }
               cimg_forY(selection,l)
@@ -8177,7 +8133,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               if (empty_indices) {
                 const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
                 const char *const eselec = _eselec.data();
-                warn(images,"Command '-output': Image%s %s empty.",
+                warn(images,0,"Command '-output': Image%s %s empty.",
                      eselec,empty_indices.size()>1?"are":"is");
               }
               cimg_forY(selection,l)
@@ -8293,7 +8249,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 if (empty_indices) {
                   const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
                   const char *const eselec = _eselec.data();
-                  warn(images,"Command '-output': Image%s %s empty.",
+                  warn(images,0,"Command '-output': Image%s %s empty.",
                        eselec,empty_indices.size()>1?"are":"is");
                 }
                 cimg_forY(selection,l)
@@ -8314,7 +8270,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 if (empty_indices) {
                   const CImg<char> _eselec = selection2string(empty_indices>'y',images_names,true);
                   const char *const eselec = _eselec.data();
-                  warn(images,"Command '-output': Image%s %s empty.",
+                  warn(images,0,"Command '-output': Image%s %s empty.",
                        eselec,empty_indices.size()>1?"are":"is");
                 }
                 cimg_forY(selection,l)
@@ -10454,7 +10410,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                   colors.assign(primitives.size(),1,3,1,1,200);
                 } else {
                   vertices.assign();
-                  warn(images,
+                  warn(images,0,
                        "Command '-streamline3d': Empty streamline starting from "
                        "(%g%s,%g%s,%g%s) in image [%u].",
                        x,sepx=='%'?"%":"",
@@ -10493,7 +10449,7 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
                 colors.assign(primitives.size(),1,3,1,1,200);
               } else {
                 vertices.assign();
-                warn(images,
+                warn(images,0,
                      "Command '-streamline3d': Empty streamline starting from (%g,%g,%g) "
                      "in expression '%s'.",
                      x,y,z,formula);
@@ -10998,8 +10954,8 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
             gmic_substitute_args();
             CImg<char> str(argument,std::strlen(argument)+1);
             cimg::strunescape(str);
-            if (is_restriction) warn(images,selection,"%s",str.data());
-            else warn(images,"%s",str.data());
+            if (is_restriction) warn(images,&selection,"%s",str.data());
+            else warn(images,0,"%s",str.data());
             ++position; continue;
           }
 

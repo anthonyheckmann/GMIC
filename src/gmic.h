@@ -261,11 +261,8 @@ struct gmic {
   gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
 	      const char *format, ...);
 
-  gmic& warn(const char *format, ...);
   template<typename T>
-  gmic& warn(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& warn(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
+  gmic& warn(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
              const char *format, ...);
 
   gmic& error(const char *format, ...);
