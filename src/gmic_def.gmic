@@ -2443,15 +2443,15 @@ _document_gmic :
     -frame 1,1,0 -frame 4,4,255
   -endl -done
   N=@# -repeat $N -l[$>]
-    {w},24,1,3,255
+    {w},16,1,3,255
     -if {w>75}
-      -if {$N>1} -if {w>110} -t[-1] Image\ [$>]:,3,3,17 -else -t[-1] [$>]:,3,3,17 -endif -endif
+      -if {$N>1} -if {w>110} -t[-1] Image\ [$>]:,3,3,15 -else -t[-1] [$>]:,3,3,15 -endif -endif
       -if ${IS_3D$>} 0 -t[-1] (3d\ object),0,0,13,1,255
       -else 0 -t[-1] (${W$>}x${H$>}x${D$>}x${S$>}),0,0,13,1,255
       -endif
       -negative[-1] -n[-1] 0,255 -+[-1] 164 -c[-1] 0,255 -to_rgb[-1]
-      -j[-2] [-1],{@{-2,w}-w-5},{@{-2,h}-h-5} -rm[-1]
-    -else -t[-1] [$>]:,3,3,17 -endif
+      -j[-2] [-1],{@{-2,w}-w-5},{@{-2,h}-h-1} -rm[-1]
+    -else -t[-1] [$>]:,3,3,15 -endif
     -rv[-2,-1] -a[-2,-1] y
   -endl -done
   -- 255 -append_tiles , -+ 255
