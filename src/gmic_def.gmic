@@ -6209,7 +6209,7 @@ split_details : -check "isint(${1=4}) && $1>0 && ${2=2%}>=0 && ${3=0.5%}>=0"
 #@gmic : The texture synthesis algorithm is a straightforward implementation of the method described in :
 #@gmic : http://www.ipol.im/pub/art/2011/ggm_rpn/
 #@gmic : Default values: 'width=height=100%'.
-#@gmic : $ image.jpg -crop 2,282,50,328 -syntexturize 320,320
+#@gmic : $ image.jpg -crop 2,282,50,328 --syntexturize 320,320
 syntexturize : -check "${1=100%}>0 && ${2=$1}>0"
   -e[^-1] "Resynthetize $1x$2 versions of texture$? by phase randomization."
   -v - -repeat @# -l[$>]
