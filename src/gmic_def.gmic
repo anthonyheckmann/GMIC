@@ -15475,7 +15475,7 @@ _after :
 
 gimp_split_preview :
   -repeat @#
-    -if {$2==0} -e[] "$1" -l[-1] $1 -endl -mv[-1] 0 -continue -endif  # No split.
+    -if {$2==0} -l[-1] $1 -endl -mv[-1] 0 -continue -endif  # No split.
     -if {!($2%2)} # Vertical split.
       -s[-1] x,2
       -if {$2==2} -l[-1] $1 -endl -to_colormode[-2,-1] 0 -_before -_after    # Forward vertical.
@@ -19394,7 +19394,7 @@ gimp_map_tones_fast_preview :
 #@gimp : Contrast = float(1,0,4)
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(1,0,2)
+#@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
@@ -19409,60 +19409,69 @@ _gimp_emulate_film_bw :
 gimp_emulate_film_bw_preview :
   -gimp_split_preview "-gimp_emulate_film_bw $*",$-1
 
-#@gimp Grain : gimp_grain, gimp_grain_preview(0)
-#@gimp : Amplitude = float(40,0,512)
-#@gimp : Tone smoothness = float(5,0,15)
-#@gimp : Grain type = choice("Gaussian","Uniform")
-#@gimp : Channel(s) = choice(2,"All","RGBA","RGB","Luminance","Blue/red chrominances","Blue chrominance","Red chrominance","Lightness","ab-components","a-component","b-component","Hue","Saturation","Value","Key","Green chrominance","ch-components","c-component","h-component","Red","Green","Blue","Alpha")
+#@gimp Grain : gimp_emulate_grain, gimp_emulate_grain_preview(1)
+#@gimp : Preset = choice{"TM-400","Standard"}
+#@gimp : Blend mode = choice(1,"Alpha","Grain merge","Hard light","Overlay","Soft light")
+#@gimp : Opacity = float(0.3,0,1)
+#@gimp : Colored grain = bool()
 #@gimp : sep = separator()
-#@gimp : note = note("<small><b>Shadows:</b></small>")
-#@gimp : Strength = float(0.8,0,1)
-#@gimp : Scale = float(0.5,0,2)
-#@gimp : Channel correlation = float(0.5,0,1)
+#@gimp : Gamma = float(0,-1.2,1.2)
+#@gimp : Contrast = float(1,0,4)
+#@gimp : Brightness = float(0,-255,255)
+#@gimp : Hue = float(0,-180,180)
+#@gimp : Saturation = float(0,0,1)
 #@gimp : sep = separator()
-#@gimp : note = note("<small><b>Mid-tones:</b></small>")
-#@gimp : Strength = float(1,0,1)
-#@gimp : Scale = float(0,0,2)
-#@gimp : Channel correlation = float(0.5,0,1)
-#@gimp : sep = separator()
-#@gimp : note = note("<small><b>Highlights:</b></small>")
-#@gimp : Strength = float(0.6,0,1)
-#@gimp : Scale = float(0.2,0,2)
-#@gimp : Channel correlation = float(0.5,0,1)
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/21</i>.</small>")
-gimp_grain :
-  -repeat @# -l[$>] -apply_channels "-_gimp_grain ${1-13}",$4,0 -endl -done
+#@gimp : Preview grain alone = bool()
+#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/10</i>.</small>")
+gimp_emulate_grain :
+  -__gimp_emulate_grain @{-arg\ {1+$1},@{-_gimp_emulate_grain}},${2-9},0
 
-_gimp_grain :
-  -if {!$1} -return -endif
-  s={s} --luminance
+_gimp_emulate_grain :
+  -u grain_tm400,grain_standard
 
-  # Shadows.
-  -if $5
-    100%,100%,1,$s -noise[-1] 1,$3 -b[-1] $6 -*[-1] {(1-$7)/max(abs(im),abs(iM))}
-    100%,100%,1,1 -noise[-1] 1,$3 -b[-1] $6 -*[-1] {$7/max(abs(im),abs(iM))}
-    -+[-2,-1] --t2[1] 0,85 -b[-1] $2 -n[-1] 0,1 -*[-2,-1] -*[-1] $5
+gimp_emulate_grain_preview :
+  -gimp_split_preview "-_gimp_emulate_grain_preview $*",$-1
+
+_gimp_emulate_grain_preview :
+  -__gimp_emulate_grain @{-arg\ {1+$1},@{-_gimp_emulate_grain}},${2-10}
+
+__gimp_emulate_grain :
+  bm0=alpha bm1=grainmerge bm2=hardlight bm3=overlay bm4=softlight
+  dir=@{-path_user}
+  -if {!@{-is_windows}}
+    dir=$dir/.gmic_film_presets
+    -if $dir -else -x "mkdir "$dir -endif
+  -endif
+  -if {narg($_force_redownload)}
+    -i http://gmic.sourceforge.net/data_film_presets/$1.cimgz -o[-1] $dir/gmic_$1.cimgz
+  -else
+    -if $dir/gmic_$1.cimgz -i $dir/gmic_$1.cimgz
+    -else -i http://gmic.sourceforge.net/data_film_presets/$1.cimgz -o[-1] $dir/gmic_$1.cimgz
+    -endif
   -endif
 
-  # Midlights.
-  -if $8
-    100%,100%,1,$s -noise[-1] 1,$3 -b[-1] $9 -*[-1] {(1-$10)/max(abs(im),abs(iM))}
-    100%,100%,1,1 -noise[-1] 1,$3 -b[-1] $9 -*[-1] {$10/max(abs(im),abs(iM))}
-    -+[-2,-1] --t2[1] 86,169 -b[-1] $2 -n[-1] 0,1 -*[-2,-1] -*[-1] $8
-  -endif
+  -repeat {@#-1} -l[$>,-1] -split_opacity
+    --syntexturize[-1] @{0,w},@{0,h}
+    -if $4
+      --syntexturize[-2] @{0,w},@{0,h}
+      --syntexturize[-3] @{0,w},@{0,h}
+      -a[-3--1] c
+    -endif
 
-  # Highlights.
-  -if $11
-    100%,100%,1,$s -noise[-1] 1,$3 -b[-1] $12 -*[-1] {(1-$13)/max(abs(im),abs(iM))}
-    100%,100%,1,1 -noise[-1] 1,$3 -b[-1] $12 -*[-1] {$13/max(abs(im),abs(iM))}
-    -+[-2,-1] --t2[1] 170,256 -b[-1] $2 -n[-1] 0,1 -*[-2,-1] -*[-1] $11
-  -endif
+    -apply_gamma[-1] {10^$5}                                # Gamma correction
+    --[-1] 128 -*[-1] $6 -+[-1] 128 -+[-1] $7 -c[-1] 0,255  # B&W contrast and brightness.
+    -if {$8||$9}
+      -to_color[-1] -rgb2hsv[-1]
+      -sh[-1] 0,0 -+[-1] $8 -%[-1] 360 -rm[-1]
+      -sh[-1] 1,1 -+[-1] $9 -rm[-1]
+      -hsv2rgb[-1]
+    -endif
+    -if $10 -rv[0,-1] -rm[-1]
+    -else -blend[0,-1] ${bm$2},$3
+    -endif
 
-  -rm[1] -+[-3--1] -n[-1] -$1,$1 -+ -c 0,255
-
-gimp_grain_preview :
-  -gimp_split_preview "-gimp_grain $*",$-1
+  -endl -done -rm[-1]
 
 #@gimp Instant [consumer] : gimp_emulate_film_instant_consumer, gimp_emulate_film_instant_consumer_preview(1)
 #@gimp : Preset = choice{"None",
@@ -19481,7 +19490,7 @@ gimp_grain_preview :
 #@gimp : Contrast = float(1,0,4)
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(1,0,2)
+#@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
@@ -19525,7 +19534,7 @@ gimp_emulate_film_instant_consumer_preview :
 #@gimp : Contrast = float(1,0,4)
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(1,0,2)
+#@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
@@ -19558,7 +19567,7 @@ gimp_emulate_film_instant_pro_preview :
 #@gimp : Contrast = float(1,0,4)
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(1,0,2)
+#@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
@@ -19580,7 +19589,7 @@ gimp_emulate_film_negative_color_preview :
 #@gimp : Contrast = float(1,0,4)
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(1,0,2)
+#@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
@@ -19610,7 +19619,7 @@ gimp_emulate_film_negative_new_preview :
 #@gimp : Contrast = float(1,0,4)
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(1,0,2)
+#@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
@@ -19641,7 +19650,7 @@ gimp_emulate_film_negative_old_preview :
 #@gimp : Contrast = float(1,0,4)
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(1,0,2)
+#@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
@@ -19666,7 +19675,7 @@ gimp_emulate_film_others_preview :
 #@gimp : Contrast = float(1,0,4)
 #@gimp : Brightness = float(0,-255,255)
 #@gimp : Hue = float(0,-180,180)
-#@gimp : Saturation = float(1,0,2)
+#@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
@@ -19702,10 +19711,10 @@ _gimp_emulate_film :
   -repeat @# -l[$>] -split_opacity
     -apply_gamma[0] {10^$3}                            # Gamma correction
     --[0] 128 -*[0] $4 -+[0] 128 -+[0] $5 -c[0] 0,255  # B&W contrast and brightness.
-    -if {$6||$7!=1||$8}
+    -if {$6||$7||$8}
       -rgb2hsv[0]
       -sh[0] 0,0 -+[-1] $6 -%[-1] 360 -rm[-1]
-      -sh[0] 1,1 -*[-1] $7 -rm[-1]
+      -sh[0] 1,1 -+[-1] $7 -c[-1] 0,1 -rm[-1]
       -hsv2rgb[0]
       -if $8 -n[0] 0,255 -endif
     -endif
@@ -23684,6 +23693,3 @@ gmicol_animate_imageobject3d_preview :
 # End:
 #
 # (End of G'MIC custom commands)
-
-
-# overlay, soft light, hard light, grain merge
