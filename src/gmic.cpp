@@ -2263,7 +2263,7 @@ gmic& gmic::error(const char *const format, ...) {
   else cimg_snprintf(full_message,full_message.width(),
                      "*** Error in %s *** %s",
                      scope2string().data(),message.data());
-  full_message.move_to(status);
+  CImg<char>::string(full_message).move_to(status);
   message.assign();
   throw gmic_exception(0,status);
   return *this;
@@ -2704,7 +2704,7 @@ gmic& gmic::error(const CImgList<T>& list, const CImg<unsigned int> *const scope
   else cimg_snprintf(full_message,full_message.width(),
                      "*** Error in %s *** %s",
                      scope2string().data(),message.data());
-  full_message.move_to(status);
+  CImg<char>::string(full_message).move_to(status);
   message.assign();
   throw gmic_exception(command,status);
   return *this;
