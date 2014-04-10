@@ -3894,7 +3894,7 @@ CImg<char> gmic::substitute_item(const char *const source,
           is_return = false;
         }
         if (status.width()>1)
-          CImg<char>(status.data(),status.width()-1).move_to(substituted_items);
+          CImg<char>(status.data(),std::strlen(status)).move_to(substituted_items);
         continue;
       }
     }
