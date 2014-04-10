@@ -255,27 +255,21 @@ struct gmic {
 				   unsigned int variables_sizes[256]);
 
   gmic& print(const char *format, ...);
+  gmic& error(const char *format, ...);
+  gmic& debug(const char *format, ...);
+
   template<typename T>
-  gmic& print(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
+  gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
 	      const char *format, ...);
 
   template<typename T>
   gmic& warn(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
              const char *format, ...);
 
-  gmic& error(const char *format, ...);
-
   template<typename T>
   gmic& error(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
 	      const char *const command, const char *format, ...);
 
-  template<typename T>
-  gmic& _arg_error(const gmic_list<T>& list, const char *const command,
-		   const char *const argument);
-
-  gmic& debug(const char *format, ...);
   template<typename T>
   gmic& debug(const gmic_list<T>& list, const char *format, ...);
 
