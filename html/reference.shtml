@@ -2980,7 +2980,7 @@ _width[%]>0,_height[%]>0
 <br/>The texture synthesis algorithm is a straightforward implementation of the method described in :
 <br/>&nbsp;http://www.ipol.im/pub/art/2011/ggm_rpn/
 <br/><br/><b>Default values</b>: 'width=height=100%'.
-<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def323.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -crop 2,282,50,328 -syntexturize 320,320</div></div></td><td><tt>image.jpg -crop 2,282,50,328 -syntexturize 320,320</tt></td></tr>
+<br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def323.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -crop 2,282,50,328 --syntexturize 320,320</div></div></td><td><tt>image.jpg -crop 2,282,50,328 --syntexturize 320,320</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="tv_flow"><font color="green">&nbsp;&nbsp;<b>-tv_flow</b>:</font></a>
 <p style="margin-left:150px"><tt><i><font color="purple">
 _nb_iter>=0,_dt,_sequence_flag={ 0 | 1 }
