@@ -95,7 +95,7 @@ DEBUG_CFLAGS = -Dcimg_verbosity=3 -g
 
 # Flags to enable optimizations.
 ifeq ($(CC),g++)
-OPT_CFLAGS = -O3 -mtune=generic # -fno-tree-pre # -ffast-math
+OPT_CFLAGS = -O3 -fno-ipa-sra -mtune=generic # -fno-tree-pre # -ffast-math
 endif
 ifeq ($(CC),clang++)
 OPT_CFLAGS = -O1
