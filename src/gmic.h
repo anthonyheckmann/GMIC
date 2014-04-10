@@ -266,13 +266,11 @@ struct gmic {
              const char *format, ...);
 
   gmic& error(const char *format, ...);
+
   template<typename T>
-  gmic& error(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& error(const char *const command, const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& error(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
-	      const char *format, ...);
+  gmic& error(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
+	      const char *const command, const char *format, ...);
+
   template<typename T>
   gmic& _arg_error(const gmic_list<T>& list, const char *const command,
 		   const char *const argument);

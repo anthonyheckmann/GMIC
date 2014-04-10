@@ -19385,7 +19385,7 @@ gimp_map_tones_fast_preview :
 #----------------------------
 
 #@gimp Add grain : gimp_emulate_grain, gimp_emulate_grain_preview(0)
-#@gimp : Preset = choice{"Standard","TM-400"}
+#@gimp : Preset = choice{"ORWO NP20 - GDR","TM-400"}
 #@gimp : Blend mode = choice(1,"Alpha","Grain merge","Hard light","Overlay","Soft light")
 #@gimp : Opacity = float(0.2,0,1)
 #@gimp : Colored grain = bool()
