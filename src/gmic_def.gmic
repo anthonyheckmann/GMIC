@@ -19442,7 +19442,7 @@ __gimp_emulate_grain :
     -endif
   -endif
 
-  -repeat {@#-1} -l[$>,-1] -split_opacity
+  -repeat {@#-1} -l[$>,-1] -split_opacity[0]
     --syntexturize[-1] @{0,max(10,100*w/$4)},@{0,max(10,100*h/$4)}
     -if $5 --syntexturize[-2] {w},{h} --syntexturize[-3] {w},{h} -a[-3--1] c -endif
     -r[-1] @{0,w},@{0,h},1,100%,5 -c[-1] 0,255
@@ -19454,11 +19454,11 @@ __gimp_emulate_grain :
       -sh[-1] 1,1 -+[-1] $10 -rm[-1]
       -hsv2rgb[-1]
     -endif
-    -if $11 -rv[0,-1] -rm[-1]
+    -if $11 -k[0,-1] -rv
     -else -blend[0,-1] ${bm$2},$3
     -endif
 
-  -endl -done -rm[-1]
+  -a[^-1] c -endl -done -rm[-1]
 
 #@gimp B&amp;W films : gimp_emulate_film_bw, gimp_emulate_film_bw_preview(1)
 #@gimp : Preset = choice{"None",
@@ -19730,7 +19730,7 @@ _gimp_emulate_film :
       -hsv2rgb[0]
       -if $8 -n[0] 0,255 -endif
     -endif
-  -endl -done
+  -a c -endl -done
 
 #@gimp <i>[Collages]</i>
 #-----------------------
@@ -23784,6 +23784,9 @@ x_2048 :
 
 # Manage left move.
 _x_2048_shift :
+
+  -w 0 -d
+
   -s y -repeat 4 -l[$>]
     -discard 0 -y x
     -if {i(0)&&i(0)==i(1)} -f {i(0)+1},0,{i(2)},{i(3)} -endif
