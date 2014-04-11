@@ -1039,40 +1039,40 @@ update_tutorial_html :
   -v - -rm -m "add_page : -__update_tutorial_html $""*"
 
   # Init list of pages to retrieve.
-  # -add_page /,1700,index,_index
-  # -add_page basics,4000
-  # -add_page beginners-cookbook,1000
-  # -add_page beginners-cookbook/cauldron,3500
-  # -add_page beginners-cookbook/road-systems,2500
-  # -add_page beginners-cookbook/stained-glass,4000
-  # -add_page command-decorations,3500
-  # -add_page command-guide,5500
-  # -add_page command-guide/-bandpass,5000
-  # -add_page command-guide/-blur,2000
-  # -add_page command-guide/-blur_angular,700
-  # -add_page command-guide/-blur_linear,700
-  # -add_page command-guide/-blur_radial,700
-  # -add_page command-guide/-blur_selective,3500
-  # -add_page command-guide/-blur_x,700
-  # -add_page command-guide/-blur_xy,700
-  # -add_page command-guide/-blur_xyz,700
-  # -add_page command-guide/-blur_y,700
-  # -add_page command-guide/-blur_z,2500
-  # -add_page command-guide/-convolve,3500
-  # -add_page command-guide/-deriche,1500
-  # -add_page command-guide/-display,2000
-  # -add_page command-guide/-gaussian,2000
-  # -add_page command-guide/-gradient,2000
+  -add_page /,1700,index,_index
+  -add_page basics,4000
+  -add_page beginners-cookbook,1000
+  -add_page beginners-cookbook/cauldron,3500
+  -add_page beginners-cookbook/road-systems,2500
+  -add_page beginners-cookbook/stained-glass,4000
+  -add_page command-decorations,3500
+  -add_page command-guide,5500
+  -add_page command-guide/-bandpass,5000
+  -add_page command-guide/-blur,2000
+  -add_page command-guide/-blur_angular,700
+  -add_page command-guide/-blur_linear,700
+  -add_page command-guide/-blur_radial,700
+  -add_page command-guide/-blur_selective,3500
+  -add_page command-guide/-blur_x,700
+  -add_page command-guide/-blur_xy,700
+  -add_page command-guide/-blur_xyz,700
+  -add_page command-guide/-blur_y,700
+  -add_page command-guide/-blur_z,2500
+  -add_page command-guide/-convolve,3500
+  -add_page command-guide/-deriche,1500
+  -add_page command-guide/-display,2000
+  -add_page command-guide/-gaussian,2000
+  -add_page command-guide/-gradient,2000
   -add_page command-guide/-gradient_norm,1300
-  # -add_page command-guide/-mix_rgb,4000
-  # -add_page command-guide/-norm,700
-  # -add_page command-guide/-orientation,4000
-  # -add_page command-guide/-warp,4000
-  # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
-  # -add_page images,1500
-  # -add_page images/conjuring-images,1000
-  # -add_page images/images-as-datasets,3500
-  # -add_page images/images-have-edges,1000
+  -add_page command-guide/-mix_rgb,4000
+  -add_page command-guide/-norm,700
+  -add_page command-guide/-orientation,4000
+  -add_page command-guide/-warp,4000
+  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
+  -add_page images,1500
+  -add_page images/conjuring-images,1000
+  -add_page images/images-as-datasets,3500
+  -add_page images/images-have-edges,1000
 
   # Prepare folder structure.
   -v + -e[] "\n  * Prepare folder structure." -v -
@@ -1089,6 +1089,7 @@ update_tutorial_html :
   -x "cd img && ln -fs ../../convert_raw_img/* ."
   -x "ln -fs ../convert_raw.html ../convert_raw.shtml ."
   -x "ln -fs ../tutorial_toc.html ."
+  -x "ln -fs ../highslide ."
 
   # Create images for toc tree.
   11,11,1,3,255 -frame 1,1,0 -line 3,50%,{w-4},50%,1,0 --line 50%,3,50%,{h-4},1,0
@@ -1165,7 +1166,13 @@ _update_tutorial_html :
   # Add header and footer.
   -i[0] ({'"<!DOCTYPE html>"\n\
           "<html lang=\"en-us\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">"\n\
-          "<link rel=\"stylesheet\" href=\"../tutorial.css\">"\n\
+          "<link rel=\"stylesheet\" href=\"tutorial.css\">"\n\
+          "<script type=\"text/javascript\" src=\"highslide/highslide.js\"></script>"\n\
+          "<link rel=\"stylesheet\" type=\"text/css\" href=\"highslide/highslide.css\" />"\n\
+          "<script type=\"text/javascript\">"\n\
+          "hs.graphicsDir = 'highslide/graphics/';"\n\
+          "hs.wrapperClassName = 'wide-border';"\n\
+          "</script>"\n\
           "<body>"\n\n'})
   ({'\n</body></html>'})
   -y -a y
@@ -1208,9 +1215,9 @@ _update_tutorial_html :
           -endif
           -rm[-1]
         -endif
-      -elif {$baselink'=='"http://www.particularart.com/static/media/uploads"}
-         relink=$link
-         -v + -e[] "    > Local (media) link '"$link"' found." -v -
+#      -elif {$baselink'=='"http://www.particularart.com/static/media/uploads"}
+#         relink=$link
+#         -v + -e[] "    > Local (media) link '"$link"' found." -v -
        -else -l # External link.
          0 -nm[-1] $link ext=@{-1,x} -rm[-1]
          -if {narg($ext)} ext=@{-struncase\ $ext} -endif
@@ -1226,7 +1233,9 @@ _update_tutorial_html :
              -onfail relink=$link -v + -e[] "    > Failed to retrieve image link '"$link"'." -v - -rm
              -endl
            -endif
-           -rm[0] -i[0] ({'$relink'}) -y[0]
+           -rm[0] -i[0] ({'$relink'})
+           -i[2] ({'" class=\"highslide\" onclick=\"return hs.expand(this)\""'})
+           -y[0,2]
          -else
            -v + -e[] "    > External link '"$link"' found." -v -
          -endif
@@ -1238,27 +1247,33 @@ _update_tutorial_html :
 
   # Manage embedded images.
   -s +,{'"<img"'}
-  -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<img"}} -l[$>]
-    -s +,{'"src=\""'}
-    -l[2]
-      -s +,{'\"'} link=@{0,t}
-      relink=img/$5_@{-basename\ $link} 0 -nm[-1] $relink relink=@{-1,f}@{-1,b}.jpg -rm[-1]
-      -if $relink -v + -e[] "    > Image '"$link"' relinked to '"$relink"'." -v -
-      -else
-        -l[] -i $link -k[0] is_opaque=0
-        -split_opacity -if {@#==1" || "ia>250} is_opaque=1 -endif -a c
-        -if $is_opaque -to_rgb -frame 1,1,0 -frame 10,10,245
-        -else -to_rgba -i[0] 100%,100%,1,3 -fc[0] 245,245,245 -blend alpha
+  -repeat @# -if {$>>0" && "{@{{$>-1},t}'=='"<img"}}
+    -l[$>]
+      -s +,{'"src=\""'}
+      -l[2]
+        -s +,{'\"'} link=@{0,t}
+        relink=img/$5_@{-basename\ $link} 0 -nm[-1] $relink relink=@{-1,f}@{-1,b}.jpg -rm[-1]
+        -if $relink -v + -e[] "    > Image '"$link"' relinked to '"$relink"'." -v -
+        -else
+          -l[] -i $link -k[0] is_opaque=0
+          -split_opacity -if {@#==1" || "ia>250} is_opaque=1 -endif -a c
+          -if $is_opaque -to_rgb -frame 1,1,0 -frame 10,10,245
+          -else -to_rgba -i[0] 100%,100%,1,3 -fc[0] 245,245,245 -blend alpha
+          -endif
+          -o $relink,60 -rm -x "git add "$relink
+          -v + -e[] "    > Image '"$link"' converted and relinked to '"$relink"'." -v -
+          -onfail relink=$link -v + -e[] "      > Failed to retrieve image '"$link"'." -v - -rm
+          -endl
         -endif
-        -o $relink,60 -rm -x "git add "$relink
-        -v + -e[] "    > Image '"$link"' converted and relinked to '"$relink"'." -v -
-        -onfail relink=$link -v + -e[] "      > Failed to retrieve image '"$link"'." -v - -rm
-        -endl
-      -endif
-      -rm[0] -i[0] ({'$relink'}) -y[0]
+        -rm[0] -i[0] ({'$relink'}) -y[0]
+#        -a y -s +,{'>'} -i[2] ({'</a>'}) -y[2] # Highslide stuff : close the '<a>' tag.
+      -endl
+      -a y
     -endl
-    -a y
-  -endl -endif -done
+ #   -l[{$>-1}] # Highslide stuff : each image must considered as a link to itself.
+ #     -rm ({'"<a href=\""$relink"\" class=\"highslide\" onclick=\"return hs.expand(this)\"><img"'}) -y
+ #   -endl
+  -endif -done
   -a y
 
   # Set all links targets to "_parent"
