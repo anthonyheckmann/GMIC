@@ -2779,8 +2779,8 @@ text2img : -skip "${2= }"
 #@gmic : Depending on how your G'MIC version has been compiled, some datatypes may be unavailable
 #@gmic : (typically datatypes different from 'float').
 
-#@gmic uncommand : command_name : * : (*)
-#@gmic : Discard last definition of specified custom command.
+#@gmic uncommand : command_name[,_command_name2,...] : * : (*)
+#@gmic : Discard last definition of specified custom commands.
 #@gmic : Set argument to '*' for discarding all existing custom commands.
 
 #@gmic uniform_distribution : nb_levels>=1,spectrum>=1

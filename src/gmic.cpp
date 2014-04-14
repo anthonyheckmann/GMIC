@@ -10780,26 +10780,32 @@ gmic& gmic::_parse(const CImgList<char>& commands_line, unsigned int& position,
               }
               print(images,0,"Discard definitions of all custom commmands (%u command%s discarded).",
                     nb_commands,nb_commands>1?"s":"");
-            } else { // Discard a single custom command.
-              print(images,0,"Discard last definition of custom command '%s'",argument_text);
-              CImg<char> arg_command(argument,std::strlen(argument)+1);
-              gmic_strreplace(arg_command);
-              bool is_removed = false;
-              if (*arg_command) {
-                const int ind = gmic_hashcode(arg_command,false);
-                cimglist_for(commands_names[ind],l)
-                  if (!std::strcmp(commands_names[ind][l],arg_command)) {
-                    commands_names[ind].remove(l);
-                    commands[ind].remove(l);
-                    commands_has_arguments[ind].remove(l);
-                    is_removed = true; break;
-                  }
+            } else { // Discard one or several custom command.
+              CImgList<char> command_list = CImg<char>::string(argument).get_split(',',false,false);
+              print(images,0,"Discard last definition of custom command%s '%s'",
+                    command_list.width()>1?"s":"",
+                    argument_text);
+              unsigned int nb_removed = 0;
+              cimglist_for(command_list,l) {
+                CImg<char> &arg_command = command_list[l];
+                arg_command.resize(1,arg_command.height()+1,1,1,0);
+                gmic_strreplace(arg_command);
+                if (*arg_command) {
+                  const int ind = gmic_hashcode(arg_command,false);
+                  cimglist_for(commands_names[ind],l)
+                    if (!std::strcmp(commands_names[ind][l],arg_command)) {
+                      commands_names[ind].remove(l);
+                      commands[ind].remove(l);
+                      commands_has_arguments[ind].remove(l);
+                      ++nb_removed; break;
+                    }
+                }
               }
               if (verbosity>=0 || is_debug) {
                 unsigned int siz = 0;
                 for (unsigned int l = 0; l<256; ++l) siz+=commands[l].size();
-                std::fprintf(cimg::output()," (%s, %u command%s left).",
-                             is_removed?"found":"not found",siz,siz>1?"s":"");
+                std::fprintf(cimg::output()," (%u found, %u command%s left).",
+                             nb_removed,siz,siz>1?"s":"");
                 std::fflush(cimg::output());
               }
             }
