@@ -11288,36 +11288,37 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
 -----------------------------------------"
   -v - -l[]
   parallel_mode={3-if($1!=2,$1,@*>2)}
-  300,420,1,3 --plasma[-1] 1,1,5 -n[-1] 0,230 -sh[-1] 0,1 -/[-1] 2.2 -rm[-1] -water[-1] 100 -*[-1] 0.15
+  300,440,1,3 --plasma[-1] 1,1,5 -n[-1] 0,230 -sh[-1] 0,1 -/[-1] 2.2 -rm[-1] -water[-1] 100 -*[-1] 0.15
   100%,100%,1,3
-  0 -t[-1] "1- Blobs editor\n"\
-           "2- Bouncing balls\n"\
-           "3- Fire effect\n"\
-           "4- Fireworks\n"\
-           "5- Fish-eye effect\n"\
-           "6- Fourier filtering\n"\
-           "7- Histogram demo\n"\
-           "8- Hough transform\n"\
-           "9- Jawbreaker\n"\
-           "10- The game of life\n"\
-           "11- Light effect\n"\
-           "12- Mandelbrot explorer\n"\
-           "13- 3d metaballs\n"\
-           "14- Minesweeper\n"\
-           "15- Minimal path\n"\
-           "16- Pacman\n"\
-           "17- Paint\n"\
-           "18- Plasma effect\n"\
-           "19- RGB quantization\n"\
-           "20- 3d reflection\n"\
-           "21- 3d rubber object\n"\
-           "22- Shade bobs\n"\
-           "23- Spline editor\n"\
-           "24- Tetris\n"\
-           "25- Tic-tac-toe\n"\
-           "26- Image waves\n"\
-           "27- Fractal whirls",0,0,13,1,255,255,255
-  commands=-x_blobs,-x_bouncing,-x_fire,-x_fireworks,-x_fisheye,-x_fourier,-x_histogram,-x_hough,\
+  0 -t[-1] "1- 2048 game\n"\
+           "2- Blobs editor\n"\
+           "3- Bouncing balls\n"\
+           "4- Fire effect\n"\
+           "5- Fireworks\n"\
+           "6- Fish-eye effect\n"\
+           "7- Fourier filtering\n"\
+           "8- Histogram demo\n"\
+           "9- Hough transform\n"\
+           "10- Jawbreaker\n"\
+           "11- The game of life\n"\
+           "12- Light effect\n"\
+           "13- Mandelbrot explorer\n"\
+           "14- 3d metaballs\n"\
+           "15- Minesweeper\n"\
+           "16- Minimal path\n"\
+           "17- Pacman\n"\
+           "18- Paint\n"\
+           "19- Plasma effect\n"\
+           "20- RGB quantization\n"\
+           "21- 3d reflection\n"\
+           "22- 3d rubber object\n"\
+           "23- Shade bobs\n"\
+           "24- Spline editor\n"\
+           "25- Tetris\n"\
+           "26- Tic-tac-toe\n"\
+           "27- Image waves\n"\
+           "28- Fractal whirls",0,0,13,1,255,255,255
+  commands=-x_2048,-x_blobs,-x_bouncing,-x_fire,-x_fireworks,-x_fisheye,-x_fourier,-x_histogram,-x_hough,\
            -x_jawbreaker,-x_life,-x_light,-x_mandelbrot,-x_metaballs3d,-x_minesweeper,-x_minimal_path,\
            -x_pacman,-x_paint,-x_plasma,-x_quantize_rgb,-x_reflection3d,-x_rubber3d,-x_shadebobs,\
            -x_spline,-x_tetris,-x_tictactoe,-x_waves,-x_whirl
@@ -11357,7 +11358,7 @@ demo : -check "isint(${1=2}) && $1>=0 && $1<=2"
 
     # Manage mouse events.
     y={@{!,y}*@{0,h}/@{!,h}}
-    -if {$y>=0} y={max(0,min(26,int(($y-$y0)/13)))} -j[0] [{if($selected>=0,5,4)}],0,{$y0+13*$y},0,0,0.2 -endif # Menu location.
+    -if {$y>=0} y={max(0,min(27,int(($y-$y0)/13)))} -j[0] [{if($selected>=0,5,4)}],0,{$y0+13*$y},0,0,0.2 -endif # Menu location.
 
     -w[0] -wait 20
     -if {@{!,CTRLLEFT}&&@{!,D}} -w[0] 200%,200% -elif {@{!,CTRLLEFT}&&@{!,C}} -w[0] 100%,100% -endif
