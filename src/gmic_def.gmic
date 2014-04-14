@@ -11492,7 +11492,7 @@ x_2048 :
             x={i(0,$>,0,0)} y={i(0,$>,0,1)} n={i(0,$>,0,2)}
             -if {$x>0&&@{0,i($x-1,$y)}==$n}
               -=[0] 0,$x,$y -=[0] {$n+1},{$x-1},$y insert_new=1 is_fusion=1 score={$score+2^($n+1)}
-              is_success={$is_success||$n==5}
+              is_success={$is_success||$n==10}
             -endif
           -done
           -rm[-1]
