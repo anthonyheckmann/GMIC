@@ -11433,7 +11433,7 @@ x_2048 :
     -w[1] 100%,100%,0,"[G\47MIC] 2048 game"
 
     # Check for a lost game.
-    --+[0] 1 -f[-1] 'j(-1)==i||j(1)==i||j(0,-1)==i||j(1,0)==i||!i'
+    --+[0] 1 -f[-1] 'j(-1)==i||j(1)==i||j(0,-1)==i||j(1,0)==i||i==1'
     -if $is_success # Game won.
       -alert "Game Over !","You win !","OK"
       -break
