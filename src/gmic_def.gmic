@@ -2023,10 +2023,7 @@ _document_gmic_footer_html : -skip $1
   -v +
   -e[] @{-eoff}@{-doff}"<p style=\"margin-left:100px\"><font color=\"blue\"><b>[ Total number of commands: "$_command" ]</b></font>"
   -v -
-  -uncommand don
-  -uncommand doff
-  -uncommand eon
-  -uncommand eoff
+  -uncommand don,doff,eon,eoff
 
 # Define document_gmic commands for XML output.
 _document_gmic_header_xml :
@@ -2124,8 +2121,7 @@ _document_gmic_footer_xml : -skip $1
   -e[] @{-doff}"</section>
 \n</gmic-package>"
   -v -
-  -uncommand don
-  -uncommand doff
+  -uncommand don,doff
 
 _document_gmic_replace_xml :
   -replace_str "&","&amp;" # Replace '&'
@@ -2257,8 +2253,7 @@ _document_gmic_footer_latex :
 \n\n\\end{document}"
     -v -
   -endif
-  -uncommand eon
-  -uncommand eoff
+  -uncommand eon,eoff
 
 _document_gmic_replace_latex :
   -replace_str "\\","\\\\textbackslash "  # Replace '\'
@@ -11445,7 +11440,7 @@ x_2048 :
 
     # Manage user events.
     -wait
-    is_shift=0 -uncommand shift2048 -uncommand ishift2048 -uncommand vshift2048
+    is_shift=0 -uncommand shift2048,ishift2048,vshift2048
     -if @{!,ARROWLEFT}
       -m "shift2048:" -m "ishift2048:" -m "vshift2048:"
       is_shift=1
@@ -11521,7 +11516,7 @@ x_2048 :
     -endif
 
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
-  -rm -w 0 -endl -uncommand _x_2048_setrandom -uncommand _x_2048_object3d -v +
+  -rm -w 0 -endl -uncommand _x_2048_setrandom,_x_2048_object3d -v +
 
 #@gmic x_blobs
 #@gmic : Launch the blobs editor.
