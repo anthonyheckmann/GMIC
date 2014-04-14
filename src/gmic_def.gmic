@@ -1061,6 +1061,7 @@ update_tutorial_html :
   -add_page command-guide/-convolve,3500
   -add_page command-guide/-deriche,1500
   -add_page command-guide/-display,2000
+  -add_page command-guide/-distance,5500
   -add_page command-guide/-gaussian,2000
   -add_page command-guide/-gradient,2000
   -add_page command-guide/-gradient_norm,1300
@@ -23776,7 +23777,7 @@ x_2048 :
     -endif
 
   -while {@!" && "!@{!,ESC}" && "!@{!,Q}}
-  -endl -v +
+  -rm -w 0 -endl -v +
 
 # Manage move in a single (left) direction.
 _x_2048_shift :
