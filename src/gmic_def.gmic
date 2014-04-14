@@ -23791,7 +23791,7 @@ x_2048 :
         # Tile shifts.
         -shift2048[0]
         --s[0] y -discard[-4--1] 0 -y[-4--1] x -r[-4--1] 4,1,1,1,0,0 -a[-4--1] y
-        --==[-2,-1] insert_new={$insert_new||!im} -rm[-1]
+        --==[0,-1] insert_new={$insert_new||!im} -rm[-1]
 
         -rv[0,-1] -rm[-1]
 #        -w 0 -d
