@@ -19622,6 +19622,8 @@ __gimp_emulate_grain :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More infos at:</small>")
+#@gimp : link = link{"Film Emulation Presets in G'MIC (GIMP)","http://blog.patdavid.net/2013/08/film-emulation-presets-in-gmic-gimp.html"}
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_bw :
   -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
@@ -19654,6 +19656,8 @@ gimp_emulate_film_bw_preview :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More infos at:</small>")
+#@gimp : link = link{"Film Emulation Presets in G'MIC (GIMP)","http://blog.patdavid.net/2013/08/film-emulation-presets-in-gmic-gimp.html"}
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_instant_consumer :
   -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
@@ -19698,6 +19702,8 @@ gimp_emulate_film_instant_consumer_preview :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More infos at:</small>")
+#@gimp : link = link{"Film Emulation Presets in G'MIC (GIMP)","http://blog.patdavid.net/2013/08/film-emulation-presets-in-gmic-gimp.html"}
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_instant_pro :
   -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
@@ -19731,6 +19737,8 @@ gimp_emulate_film_instant_pro_preview :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More infos at:</small>")
+#@gimp : link = link{"Film Emulation Presets in G'MIC (GIMP)","http://blog.patdavid.net/2013/08/film-emulation-presets-in-gmic-gimp.html"}
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_negative_color :
   -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
@@ -19753,6 +19761,8 @@ gimp_emulate_film_negative_color_preview :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More infos at:</small>")
+#@gimp : link = link{"Film Emulation Presets in G'MIC (GIMP)","http://blog.patdavid.net/2013/08/film-emulation-presets-in-gmic-gimp.html"}
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_negative_new :
   -_gimp_emulate_film $1,@{-arg\ {max(1,4*$1+$2-3)},@{-_$0}},${3--1}
@@ -19783,6 +19793,8 @@ gimp_emulate_film_negative_new_preview :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More infos at:</small>")
+#@gimp : link = link{"Film Emulation Presets in G'MIC (GIMP)","http://blog.patdavid.net/2013/08/film-emulation-presets-in-gmic-gimp.html"}
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_negative_old :
   -_gimp_emulate_film $1,@{-arg\ {max(1,4*$1+$2-3)},@{-_$0}},${3--1}
@@ -19814,7 +19826,7 @@ gimp_emulate_film_negative_old_preview :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_others :
   -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
 
@@ -19837,7 +19849,9 @@ gimp_emulate_film_others_preview :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/15</i>.</small>")
+#@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been provided by <b>Juan Melara</b>, and are freely available at:</small>")
+#@gimp : link = link("Print Film Emulation LUTs For Download","http://juanmelara.com.au/print-film-emulation-luts-for-download/")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>Juan Melara</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/15</i>.</small>")
 gimp_emulate_film_print :
   -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
 
@@ -19865,6 +19879,8 @@ gimp_emulate_film_print_preview :
 #@gimp : Saturation = float(0,-1,1)
 #@gimp : Post-normalize = bool(0)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small><b>Note:</b> The color LUTs used in this section have been designed by <b>Patrick David</b>. More infos at:</small>")
+#@gimp : link = link{"Film Emulation Presets in G'MIC (GIMP)","http://blog.patdavid.net/2013/08/film-emulation-presets-in-gmic-gimp.html"}
 #@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/08/29</i>.</small>")
 gimp_emulate_film_colorslide :
   -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
