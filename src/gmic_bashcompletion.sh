@@ -736,6 +736,7 @@ _gmic_def()
 	      -transition_plasma --transition_plasma\
 	      -transition3d --transition3d\
 	      -demo --demo\
+	      -x_2048 --x_2048\
 	      -x_blobs --x_blobs\
 	      -x_bouncing --x_bouncing\
 	      -x_fire --x_fire\
@@ -1575,6 +1576,7 @@ _gmic_def()
 	      transition_plasma\
 	      transition3d\
 	      demo\
+	      x_2048\
 	      x_blobs\
 	      x_bouncing\
 	      x_fire\
@@ -1813,7 +1815,7 @@ _gmic_def()
 		return 0
 		;;
 		"-uncommand" | "--uncommand")
-		COMPREPLY=( $(compgen -W "command_name *") )
+		COMPREPLY=( $(compgen -W "command_name[,_command_name2,...] *") )
 		return 0
 		;;
 		"-uniform_distribution" | "--uniform_distribution")
@@ -3165,7 +3167,7 @@ _gmic_def()
 		return 0
 		;;
 		"-map_sprites" | "--map_sprites")
-		COMPREPLY=( $(compgen -W "_nb_scales>=1,_allow_rotation={0=none|1=90deg.|2=180deg.} >") )
+		COMPREPLY=( $(compgen -W "_nb_sprites>=1,_allow_rotation={0=none|1=90deg.|2=180deg.} >") )
 		return 0
 		;;
 		"-puzzle" | "--puzzle")

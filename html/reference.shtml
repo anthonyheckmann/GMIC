@@ -886,11 +886,11 @@ datatype
 <br/>(typically datatypes different from 'float').
 </tt></p><p style="margin-left:20px"><a id="uncommand"><font color="green">&nbsp;&nbsp;<b>-uncommand (*)</b>:</font></a>
 <p style="margin-left:150px"><tt><i><font color="purple">
-command_name |<br/>
+command_name[,_command_name2,...] |<br/>
 *
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Discard last definition of specified custom command.
+<p style="margin-left:100px"><tt>Discard last definition of specified custom commands.
 <br/>Set argument to '*' for discarding all existing custom commands.
 </tt></p><p style="margin-left:20px"><a id="uniform_distribution"><font color="green">&nbsp;&nbsp;<b>-uniform_distribution</b>:</font></a>
 <p style="margin-left:150px"><tt><i><font color="purple">
@@ -4605,10 +4605,10 @@ M>0,_N>0
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def515.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg --linearize_tiles 16</div></div></td><td><tt>image.jpg --linearize_tiles 16</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="map_sprites"><font color="green">&nbsp;&nbsp;<b>-map_sprites</b>:</font></a>
 <p style="margin-left:150px"><tt><i><font color="purple">
-_nb_scales>=1,_allow_rotation={ 0=none | 1=90 deg. | 2=180 deg. }
+_nb_sprites>=1,_allow_rotation={ 0=none | 1=90 deg. | 2=180 deg. }
 
 </font></i></tt></p>
-<p style="margin-left:100px"><tt>Map set of sprites (defined as the 'nb_scales' latest images of the selection) to other selected images,
+<p style="margin-left:100px"><tt>Map set of sprites (defined as the 'nb_sprites' latest images of the selection) to other selected images,
 <br/>&nbsp;according to the luminosity of their pixel values.
 <br/><table style="margin-left:100px" width="75%" bgcolor="#EEEEEE" bordercolor="black" border="1" cellpadding="4" cellspacing="0"><tr><td colspan="2" bgcolor="#777777"><font color="white"><b>Example(s) of use:</b></font></td></tr><tr><td width="40"><div><a href="img/gmic_def516.jpg" class="highslide" onclick="return hs.expand(this)"><font color="blue">(view)</font></a><div class="highslide-caption">image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16</div></div></td><td><tt>image.jpg -r2dy 48 -repeat 16 -ball {8+2*$>},@{-RGB} -*[-1] {(1+$>)/16} -done -map_sprites 16</tt></td></tr>
 </table></tt></p><p style="margin-left:20px"><a id="puzzle"><font color="green">&nbsp;&nbsp;<b>-puzzle</b>:</font></a>
@@ -5338,6 +5338,9 @@ _run_in_parallel={ 0=no | 1=yes | 2=auto }
 
 </font></i></tt></p>
 <p style="margin-left:100px"><tt>Show a menu to select and view all G'MIC interactive demos.
+</tt></p><p style="margin-left:20px"><a id="x_2048"><font color="green">&nbsp;&nbsp;<b>-x_2048</b>:</font></a>
+
+<p style="margin-left:100px"><tt>Launch the 2048 game.
 </tt></p><p style="margin-left:20px"><a id="x_blobs"><font color="green">&nbsp;&nbsp;<b>-x_blobs</b>:</font></a>
 
 <p style="margin-left:100px"><tt>Launch the blobs editor.
@@ -6096,7 +6099,7 @@ _scorefile,_number_of_sessions>=0
 <font color="green"><b>&nbsp;&nbsp;-frame </b>:</font>
 <font color="blue"><i>eq. to '-frame_xy'</i></font><br/>
 </p>
-<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 836 ]</b></font>
+<p style="margin-left:100px"><font color="blue"><b>[ Total number of commands: 837 ]</b></font>
 <h2><a id="section13"><font color="brown"><u>Examples of use</u></font></a>&nbsp;&nbsp;<a href="#toc"><img src="img/back_top.png"></img></a></h2>
 <pre> 'gmic' is a generic image processing tool which can be used in a wide variety of situations. 
  The few examples below illustrate possible uses of this tool: 

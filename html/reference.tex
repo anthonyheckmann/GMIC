@@ -968,9 +968,9 @@ Set pixel datatype for all images of the list.
 
 \subsection{\emph{-uncommand\index{-uncommand}} (*)}\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{command\_name}}~~~$|$\\
+{\small \texttt{command\_name[,\_command\_name2,...]}}~~~$|$\\
 \hspace*{2.2cm}{\small \texttt{*}}\\~\\
-Discard last definition of specified custom command.
+Discard last definition of specified custom commands.
 ~\\Set argument to '*' for discarding all existing custom commands.
 
 
@@ -5339,8 +5339,8 @@ Linearize MxN tiles on selected images.
 
 \subsection{\emph{-map\_sprites\index{-map\_sprites}} }\vspace*{-0.5em}
 ~\\\textbf{Arguments: } 
-{\small \texttt{\_nb\_scales$>$=1,\_allow\_rotation=\{ 0=none ~$|$~ 1=90 deg. ~$|$~ 2=180 deg. \}}}\\~\\
-Map set of sprites (defined as the 'nb\_scales' latest images of the selection) to other selected images,
+{\small \texttt{\_nb\_sprites$>$=1,\_allow\_rotation=\{ 0=none ~$|$~ 1=90 deg. ~$|$~ 2=180 deg. \}}}\\~\\
+Map set of sprites (defined as the 'nb\_sprites' latest images of the selection) to other selected images,
 according to the luminosity of their pixel values.
 \begin{center}\includegraphics[keepaspectratio=true,height=7cm,width=\textwidth]{img/gmic_def516.jpg}\\
 {\footnotesize \textbf{Example 516~:} \texttt{image.jpg -r2dy 48 -repeat 16 -ball \{8+2*\$$>$\},@\{-RGB\} -*[-1] \{(1+\$$>$)/16\} -done -map\_sprites 16}}
@@ -6176,6 +6176,10 @@ Create 3d transition sequence between selected consecutive images.
 ~\\\textbf{Arguments: } 
 {\small \texttt{\_run\_in\_parallel=\{ 0=no ~$|$~ 1=yes ~$|$~ 2=auto \}}}\\~\\
 Show a menu to select and view all G'MIC interactive demos.
+
+
+\subsection{\emph{-x\_2048\index{-x\_2048}} }\vspace*{-0.5em}
+Launch the 2048 game.
 
 
 \subsection{\emph{-x\_blobs\index{-x\_blobs}} }\vspace*{-0.5em}
