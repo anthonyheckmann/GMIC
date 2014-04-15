@@ -19824,6 +19824,32 @@ _gimp_emulate_film_others :
 gimp_emulate_film_others_preview :
   -gimp_split_preview "-gimp_emulate_film_others $*",$-1
 
+#@gimp Print films : gimp_emulate_film_print, gimp_emulate_film_print_preview(1)
+#@gimp : Preset = choice{"None","Fuji 3510 (Constlclip)","Fuji 3510 (Constlmap)","Fuji 3510 (Cuspclip)",
+#@gimp : "Fuji 3513 (Constlclip)","Fuji 3513 (Constlmap)","Fuji 3513 (Cuspclip)",
+#@gimp : "Kodak 2383 (Constlclip)","Kodak 2383 (Constlmap)","Kodak 2383 (Cuspclip)",
+#@gimp : "Kodak 2393 (Constlclip)","Kodak 2393 (Constlmap)","Kodak 2393 (Cuspclip)"}
+#@gimp : sep = separator()
+#@gimp : Gamma = float(0,-1.2,1.2)
+#@gimp : Contrast = float(1,0,4)
+#@gimp : Brightness = float(0,-255,255)
+#@gimp : Hue = float(0,-180,180)
+#@gimp : Saturation = float(0,-1,1)
+#@gimp : Post-normalize = bool(0)
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>Patrick David</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/15</i>.</small>")
+gimp_emulate_film_print :
+  -_gimp_emulate_film $1,@{-arg\ $1,@{-_$0}},${2--1}
+
+_gimp_emulate_film_print :
+  -u fuji3510_constlclip,fuji3510_constlmap,fuji3510_cuspclip,\
+     fuji3513_constlclip,fuji3513_constlmap,fuji3513_cuspclip,\
+     kodak2383_constlclip,kodak2383_constlmap,kodak2383_cuspclip,\
+     kodak2393_constlclip,kodak2393_constlmap,kodak2393_cuspclip
+
+gimp_emulate_film_print_preview :
+  -gimp_split_preview "-gimp_emulate_film_print $*",$-1
+
 #@gimp Slide [color] : gimp_emulate_film_colorslide, gimp_emulate_film_colorslide_preview(1)
 #@gimp : Preset = choice{"None",
 #@gimp : "Agfa Precisa 100","Fuji Astia 100F","Fuji FP 100C","Fuji Provia 100F","Fuji Provia 400F","Fuji Provia 400X","Fuji Sensia 100",
@@ -19983,6 +20009,20 @@ gimp_emulate_film_collage_others :
   -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
   _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_others}
 
+#@gimp Print films - collage : gimp_emulate_film_collage_print, gimp_no_preview
+#@gimp : Image size = float(512,16,1024)
+#@gimp : Columns for collage = int(4,1,8)
+#@gimp : Label size = int(16,10,100)
+#@gimp : Output type = choice("Table","Multiple layers")
+#@gimp : note = note{"<small><b>Note:</b> This filter will create a collage of all available <i>Others</i> film emulation presets
+#@gimp : to show you how those presets modify the look of your image. It will also download all corresponding color profiles
+#@gimp : (this may take some time at the first run).
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/15</i>.</small>")
+gimp_emulate_film_collage_print :
+  -k[0] -to_rgb -if {max(w,h)>$1} -if {w>h} -r2dx $1 -else -r2dy $1 -endif -endif
+  _nbc=$2 _label_size=$3 _output_type=$4 -_gimp_emulate_film_collage @{-_gimp_emulate_film_print}
+
 #@gimp Slide - collage [color] : gimp_emulate_film_collage_colorslide, gimp_no_preview
 #@gimp : Image size = float(512,16,1024)
 #@gimp : Columns for collage = int(4,1,8)
@@ -20038,6 +20078,7 @@ gimp_emulate_film_download :
                                @{-_gimp_emulate_film_negative_new},\
                                @{-_gimp_emulate_film_negative_old},\
                                @{-_gimp_emulate_film_others},\
+                               @{-_gimp_emulate_film_print},\
                                @{-_gimp_emulate_film_colorslide},\
                                @{-_gimp_emulate_grain}
   -l[] -progress 0
