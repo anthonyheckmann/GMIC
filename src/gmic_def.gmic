@@ -20889,17 +20889,20 @@ gimp_marble :
 
 #@gimp Make seamless : gimp_make_seamless, gimp_make_seamless_preview(1)
 #@gimp : Equalize light = float(0,0,100)
+#@gimp : sep = separator(),
+#@gimp : Preview original = bool(0)
+#@gimp : Tiled preview = choice("None","2x2","3x3","4x4")
+#@gimp : Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note{"<small><b>Note:</b> This filter helps in converting your input pattern as a <b>seamless</b> (a.k.a periodic) texture.</small>"}
-#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/16</i>.</small>")
 gimp_make_seamless :
   -repeat @# -l[$>]
-    -split_details 2 -b[0] {$1/20}% -+
+    -if $1 --b {21-$1/50}% --[0] [1] -fc[-1] @{-average_color[-1]} -+ -endif
   -endl -done
-  -periodize_poisson
+  -periodize_poisson -c 0,255
 
 gimp_make_seamless_preview :
-  -gimp_split_preview "-gimp_make_seamless $*",$-1
+  -gimp_split_preview "-if {!$2} -gimp_make_seamless $* -endif -if $3 -array {$3+1},{$3+1} -endif",$-1
 
 #@gimp Maze : gimp_maze, gimp_maze
 #@gimp : Cell size = int(24,1,256)
