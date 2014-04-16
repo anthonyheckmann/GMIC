@@ -2411,16 +2411,25 @@ gmic& gmic::add_commands(std::FILE *const file,
                          CImgList<char> commands_has_arguments[256],
                          const bool add_debug_infos) {
   if (!file) return *this;
-  std::fseek(file,0,SEEK_END);
-  const long siz = std::ftell(file);
-  std::rewind(file);
-  if (siz>0) {
-    CImg<char> buffer(siz+1);
-    if (std::fread(buffer.data(),sizeof(char),siz,file)) {
-      buffer[siz] = 0;
-      try { add_commands(buffer.data(),commands_names,commands,commands_has_arguments,
-                         add_debug_infos?(filename?filename:"(FILE*)"):0); }
-      catch (...) { std::fclose(file); throw; }
+
+  // Try reading it first as a .cimg file.
+  try {
+    CImg<char> buffer;
+    buffer.load_cimg(file);
+    add_commands(buffer.data(),commands_names,commands,commands_has_arguments,
+                 add_debug_infos?(filename?filename:"(FILE*)"):0);
+  } catch (...) {
+    std::rewind(file);
+    std::fseek(file,0,SEEK_END);
+    const long siz = std::ftell(file);
+    std::rewind(file);
+    if (siz>0) {
+      CImg<char> buffer(siz+1);
+      if (std::fread(buffer.data(),sizeof(char),siz,file)) {
+        buffer[siz] = 0;
+        add_commands(buffer.data(),commands_names,commands,commands_has_arguments,
+                     add_debug_infos?(filename?filename:"(FILE*)"):0);
+      }
     }
   }
   return *this;

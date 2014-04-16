@@ -15565,8 +15565,10 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   # Save reordered .gmic file.
   -v + -e[] "> Save output .gmic file.\n" -v -
   --a y -if {h>1} -r[-1] 1,{h-1},1,1,0,0,0,1 -endif # Remove leading '\n'.
-  -o[-1] raw:$HOME/.update$1.gmic,uchar
-  -x "scp "$HOME/.update$1.gmic" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
+
+  -o[-1] raw:$HOME/.update$1.gmic,char
+  -o[-1] cimgz:/tmp/gmic_update$1,char
+  -x "scp "/tmp/gmic_update$1" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
   -rm[-1]
 
   # Display list of filters (sorted alphabetically) on stdout.
@@ -16058,10 +16060,10 @@ gimp_gmicky_preview :
 #@gimp : - <b>2013/06/03</b> : version <i>1.5.6.0</i>.\n
 #@gimp : - <b>2013/09/09</b> : version <i>1.5.7.0</i>.\n
 #@gimp : - <b>2013/12/07</b> : version <i>1.5.8.0</i>.\n
-#@gimp : - <span foreground="purple"><b>2014/03/21</b> : version <i>1.5.8.5</i> (Current stable).</span>\n
+#@gimp : - <span foreground="purple"><b>2014/04/16</b> : version <i>1.5.8.6</i> (Current stable).</span>\n
 #@gimp : "}
-#@gimp : link = link("View latest changelog","http://www.flickr.com/groups/gmic/discuss/72157641941880853/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/03/21</i>.</small>")
+#@gimp : link = link("View latest changelog","https://www.flickr.com/groups/gmic/discuss/72157642897164453/")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/16</i>.</small>")
 
 #@gimp _<b>Arrays &amp; tiles</b>
 #--------------------------------

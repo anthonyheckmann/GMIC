@@ -906,32 +906,55 @@ CImgList<char> update_filters(const bool try_net_update) {
       file = std::fopen(filename_tmp,"rb");
     }
 
-    // Check for gzip compressed version of the file.
-    if (file && (std::fscanf(file," #@gmi%c",&sep)!=1 || sep!='c')) { // G'MIC header not found -> perhaps a .gz compressed file ?
-      std::fclose(file);
-      cimg_snprintf(command,sizeof(command),"%s.gz",filename_tmp);
-      std::rename(filename_tmp,command);
-      if (get_verbosity_mode()) {
-        cimg_snprintf(command,sizeof(command),_gmic_path "gunzip %s.gz",
-                      filename_tmp);
-        std::fprintf(cimg::output(),
-                     "\n[gmic_gimp]./update/ %s\n",
-                     command);
-        std::fflush(cimg::output());
-      } else
-        cimg_snprintf(command,sizeof(command),_gmic_path "gunzip --quiet %s.gz",
-                      filename_tmp);
-      cimg::system(command);
-      file = std::fopen(filename_tmp,"rb");
-      if (!file) { cimg_snprintf(command,sizeof(command),"%s.gz",filename_tmp); std::remove(command); }
-    }
+    // Download succeeded, check file content and uncompress it if necessary.
+    if (file) {
 
-    if (file) { // Copy file to its final location.
-      std::fclose(file);
-      CImg<unsigned char>::get_load_raw(filename_tmp).save_raw(filename);
-      std::remove(filename_tmp);
-    } else invalid_servers.insert(sources[l]);
+      // Check for gzip compressed version of the file.
+      if (std::fscanf(file," #@gmi%c",&sep)!=1 || sep!='c') { // G'MIC header not found -> perhaps a .gz compressed file ?
+        std::fclose(file);
+        cimg_snprintf(command,sizeof(command),"%s.gz",filename_tmp);
+        std::rename(filename_tmp,command);
+        if (get_verbosity_mode()) {
+          cimg_snprintf(command,sizeof(command),_gmic_path "gunzip %s.gz",
+                        filename_tmp);
+          std::fprintf(cimg::output(),
+                       "\n[gmic_gimp]./update/ %s\n",
+                       command);
+          std::fflush(cimg::output());
+        } else
+          cimg_snprintf(command,sizeof(command),_gmic_path "gunzip --quiet %s.gz",
+                        filename_tmp);
+        cimg::system(command);
+        file = std::fopen(filename_tmp,"rb");
+        if (!file) { // If failed, go back to initial state.
+          cimg_snprintf(command,sizeof(command),"%s.gz",filename_tmp);
+          std::rename(command,filename_tmp);
+          file = std::fopen(filename_tmp,"rb");
+        }
+      }
 
+      // Eventually, uncompress .cimgz file.
+      if (file && (std::fscanf(file," #@gmi%c",&sep)!=1 || sep!='c')) {
+        std::rewind(file);
+        bool is_cimg = true;
+        try {
+          CImg<char> buffer; buffer.load_cimg(file); std::fclose(file);
+          buffer.save_raw(filename_tmp); file = std::fopen(filename_tmp,"rb"); }
+        catch (...) { is_cimg = false; std::rewind(file); }
+        if (get_verbosity_mode())
+          std::fprintf(cimg::output(),
+                       "\n[gmic_gimp]./update/ File '%s' was%s in .cimg[z] format.\n",
+                       filename_tmp,is_cimg?"":" not");
+      }
+
+      // Copy file to its final location.
+      if (file && (!std::fscanf(file," #@gmi%c",&sep)!=1 && sep=='c')) {
+        std::fclose(file);
+        CImg<char>::get_load_raw(filename_tmp).save_raw(filename);
+        std::remove(filename_tmp);
+      } else invalid_servers.insert(sources[l]); // Failed in recognizing file header.
+
+    } else invalid_servers.insert(sources[l]);  // Failed in downloading file.
     gimp_progress_pulse();
   }
   gimp_progress_set_text(" G'MIC : Update filters...");
