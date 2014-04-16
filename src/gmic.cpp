@@ -3681,7 +3681,8 @@ CImg<char> gmic::substitute_item(const char *const source,
           case 'n' :
             if (!subset[1]) {
               cimg_snprintf(substr,substr.width(),"%s",images_names[nind].data());
-              cimg_for(substr,ps,char) *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
+              for (char *ps = substr.data(); *ps; ++ps)
+                *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
                 *ps==','?_comma:*ps=='\"'?_dquote:*ps=='@'?_arobace:*ps;
             }
             else is_substitution_done = false;
@@ -3692,7 +3693,8 @@ CImg<char> gmic::substitute_item(const char *const source,
               const char *const basename = cimg::basename(substr);
               if (substr.data()!=basename)
                 substr.draw_image(CImg<char>::string(basename));
-              cimg_for(substr,ps,char) *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
+              for (char *ps = substr.data(); *ps; ++ps)
+                *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
                 *ps==','?_comma:*ps=='\"'?_dquote:*ps=='@'?_arobace:*ps;
             } else is_substitution_done = false;
             break;
@@ -3700,7 +3702,8 @@ CImg<char> gmic::substitute_item(const char *const source,
             if (!subset[1]) {
               cimg_snprintf(substr,substr.width(),"%s",
                             cimg::split_filename(images_names[nind].data()));
-              cimg_for(substr,ps,char) *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
+              for (char *ps = substr.data(); *ps; ++ps)
+                *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
                 *ps==','?_comma:*ps=='\"'?_dquote:*ps=='@'?_arobace:*ps;
             }
             else is_substitution_done = false;
@@ -3711,7 +3714,8 @@ CImg<char> gmic::substitute_item(const char *const source,
               char *const basename = const_cast<char*>(cimg::basename(_substr));
               *basename = 0;
               std::strcpy(substr,_substr);
-              cimg_for(substr,ps,char) *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
+              for (char *ps = substr.data(); *ps; ++ps)
+                *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
                 *ps==','?_comma:*ps=='\"'?_dquote:*ps=='@'?_arobace:*ps;
             } else is_substitution_done = false;
             break;
@@ -3776,7 +3780,8 @@ CImg<char> gmic::substitute_item(const char *const source,
                   CImg<char> text(strsiz+1), _text = text.get_shared_points(0,strsiz-1,0,0,0);
                   _text = CImg<T>(img.data(),strsiz,1,1,1,true);
                   text.back() = 0;
-                  cimg_for(_text,ps,char) *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
+                  for (char *ps = _text.data(); *ps; ++ps)
+                    *ps = *ps=='$'?_dollar:*ps=='{'?_lbrace:*ps=='}'?_rbrace:
                     *ps==','?_comma:*ps=='\"'?_dquote:*ps=='@'?_arobace:*ps;
                   _text.move_to(substituted_items);
                 }
