@@ -15567,8 +15567,9 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
   --a y -if {h>1} -r[-1] 1,{h-1},1,1,0,0,0,1 -endif # Remove leading '\n'.
 
   -o[-1] raw:$HOME/.update$1.gmic,char
-  -o[-1] cimgz:/tmp/gmic_update$1,char
-  -x "scp "/tmp/gmic_update$1" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
+  -o[-1] /tmp/.update$1.cimgz,char
+  -x "scp "$HOME/.update$1.gmic" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
+  -x "scp "/tmp/.update$1.cimgz" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.cimgz
   -rm[-1]
 
   # Display list of filters (sorted alphabetically) on stdout.
@@ -19217,22 +19218,22 @@ gimp_watermark_visible :
 #@gimp : Threshold = float(0,0,10)
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
-#@gimp : Gain = float(0,-2,2)
+#@gimp : Gain = float(0,-4,4)
 #@gimp : sep = separator(), note = note("<small><b>Medium scale:</b></small>")
 #@gimp : Threshold = float(0,0,10)
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
-#@gimp : Gain = float(0,-2,2)
+#@gimp : Gain = float(0,-4,4)
 #@gimp : sep = separator(), note = note("<small><b>Small scale:</b></small>")
 #@gimp : Threshold = float(0,0,10)
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
-#@gimp : Gain = float(0,-2,2)
+#@gimp : Gain = float(0,-4,4)
 #@gimp : sep = separator(), note = note("<small><b>Fine scale:</b></small>")
 #@gimp : Threshold = float(0,0,10)
 #@gimp : Smoothness = float(0,0,10)
 #@gimp : Smoothness type = choice(2,"Gaussian","Bilateral","Diffusion")
-#@gimp : Gain = float(0,-2,2)
+#@gimp : Gain = float(0,-4,4)
 #@gimp : sep = separator()
 #@gimp : Parallel processing = choice("Auto","One thread","Two threads","Four threads","Eight threads","Sixteen threads")
 #@gimp : Spatial overlap = int(32,0,256)
@@ -20883,6 +20884,16 @@ gimp_marble :
   -repeat @# -l[$>] -split_opacity -l[0]
     -marble $1/10,$2/10,$3,$4,$5,$6,$7,$8,$9%,$10%
   -endl -a c -endl -done
+
+#@gimp Make seamless : gimp_make_seamless, gimp_make_seamless_preview(1)
+#@gimp : note = note{"<small><b>Note:</b> This filter helps in converting your input pattern as a <b>seamless</b> (a.k.a periodic) texture.</small>"}
+#@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/16</i>.</small>")
+gimp_make_seamless : -skip $*
+  -periodize_poisson
+
+gimp_make_seamless_preview :
+  -gimp_split_preview "-gimp_make_seamless 0",$-1
 
 #@gimp Maze : gimp_maze, gimp_maze
 #@gimp : Cell size = int(24,1,256)

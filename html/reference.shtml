@@ -700,7 +700,7 @@ _format={ ascii | html | latex | xml | bash | images },_image_path,_write_wrappe
 <p style="margin-left:100px"><tt>Create documentation of .gmic command files (loaded as raw 'uchar' images), in specified format.
 <br/><br/><b>Default values</b>: 'format=ascii', 'image_path=""' and 'write_wrapper=1'.
 
-<br/>Example(s) : raw:filename.gmic,uchar -document_gmic html,img
+<br/>Example(s) : raw:filename.gmic,char -document_gmic html,img
 </tt></p><p style="margin-left:20px"><a id="echo"><font color="green">&nbsp;&nbsp;<b>-echo (*)</b>:</font></a>
 <p style="margin-left:150px"><tt><i><font color="purple">
 message
