@@ -938,7 +938,7 @@ CImgList<char> update_filters(const bool try_net_update) {
         std::rewind(file);
         bool is_cimg = true;
         try {
-          CImg<char> buffer; buffer.load_cimg(file); std::fclose(file);
+          CImg<unsigned char> buffer; buffer.load_cimg(file); std::fclose(file);
           buffer.save_raw(filename_tmp); file = std::fopen(filename_tmp,"rb"); }
         catch (...) { is_cimg = false; std::rewind(file); }
         if (get_verbosity_mode())
@@ -950,7 +950,7 @@ CImgList<char> update_filters(const bool try_net_update) {
       // Copy file to its final location.
       if (file && (!std::fscanf(file," #@gmi%c",&sep)!=1 && sep=='c')) {
         std::fclose(file);
-        CImg<char>::get_load_raw(filename_tmp).save_raw(filename);
+        CImg<unsigned char>::get_load_raw(filename_tmp).save_raw(filename);
         std::remove(filename_tmp);
       } else invalid_servers.insert(sources[l]); // Failed in recognizing file header.
 

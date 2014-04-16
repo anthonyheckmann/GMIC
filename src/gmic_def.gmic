@@ -1138,7 +1138,7 @@ _update_tutorial_html :
   # Get web page.
   -v + -e[] "    > Retrieve page '"$url"'." -v -
   -x "wget -q "$url" -O __tmp.html"
-  -i raw:__tmp.html,uchar
+  -i raw:__tmp.html,char
 
   # Discard or replace undesired text.
   -discard 13
@@ -1281,7 +1281,7 @@ _update_tutorial_html :
   -replace_str "<a ","<a target=\"_parent\" "
 
   # Save .html page.
-  -o raw:$4,uchar
+  -o raw:$4,char
   -x "git add $4"
   -rm
 
@@ -1298,7 +1298,7 @@ _update_tutorial_html :
      "</div></div><div id=\"footer\"><img src=\"images/footer.jpg\" /></div></div>"\n\
      "<!--#include file=\"copyright.html\" -->"\n\
      "<!--#include file=\"footer.html\" -->"\n'})
-  -o raw:$3,uchar
+  -o raw:$3,char
   -x "git add $3"
   -rm -v +
 
@@ -1828,7 +1828,7 @@ _display_warp : -check "${1=15}>0"
 #@gmic document_gmic : _format={ ascii | html | latex | xml | bash | images },_image_path,_write_wrapper={ 0 | 1 }
 #@gmic : Create documentation of .gmic command files (loaded as raw 'uchar' images), in specified format.
 #@gmic : Default values: 'format=ascii', 'image_path=""' and 'write_wrapper=1'.\n
-#@gmic : Example(s) : raw:filename.gmic,uchar -document_gmic html,img
+#@gmic : Example(s) : raw:filename.gmic,char -document_gmic html,img
 document_gmic : -skip ${1="ascii"},${2=""},${3=1}
   -if {!@#} -return -endif
   -v -1
@@ -2480,13 +2480,13 @@ _document_gmic :
 #@gmic : Output specified message, appending it to specified output file.
 #@gmic : (similar to '-echo' for specified output file stream).
 echo_file : -skip "${2='\n'}"
-  -v - ({"'${2--1}\n'"}) -o[-1] raw:$1,uchar -rm[-1] -v +
+  -v - ({"'${2--1}\n'"}) -o[-1] raw:$1,char -rm[-1] -v +
 
 #@gmic echo_stdout : message
 #@gmic : Output specified message, on the standard output (stdout).
 #@gmic : (similar to '-echo' for output on standard output instead of standard error).
 echo_stdout :
-  -v - ({'"$*"\n'}) -o[-1] -.raw,uchar -rm[-1] -v +
+  -v - ({'"$*"\n'}) -o[-1] -.raw,char -rm[-1] -v +
 
 #@gmic function1d : 0<=smoothness<=1,x0>=0,y0,x1>=0,y1,...,xn>=0,yn
 #@gmic : Input continuous 1d function from specified list of keypoints (xk,yk)
@@ -2595,7 +2595,7 @@ output_ggr : -skip "${2=}"
       ({'$start" "$mid" "$end" "$r" "$g" "$b" "$a" "$r" "$g" "$b" "$a" 0 0\n"'})
     -done
     -rm[0] -a x
-    -if {$N>1} -o raw:@{"-filename \"$1\",$>"},uchar -else -o raw:"$1",uchar -endif
+    -if {$N>1} -o raw:@{"-filename \"$1\",$>"},char -else -o raw:"$1",char -endif
     -rm
   -endl -done -v +
 
@@ -13860,7 +13860,7 @@ output_pink3d :
     -else                                # 3d image, save as PINK PPM extension.
       ({'P5\n{w}\ {h}\ {d}\n255\n'})
       --channels[-2] 0 -y[-1] x -a[-2,-1] x
-      -o[-1] raw:${filename$>},uchar
+      -o[-1] raw:${filename$>},char
       -rm[-1]
     -endif
   -endl -done -v +
@@ -14793,7 +14793,7 @@ gpt : -skip "${1=https://tschumperle.users.greyc.fr/gpt.raw}" -skip ${2=0},${3=0
 
   # Load score file and generate score field.
   #------------------------------------------
-  -rm -i raw:$1,uchar -s[-1] -,10 -transpose                           # Split score file into lines.
+  -rm -i raw:$1,char -s[-1] -,10 -transpose                            # Split score file into lines.
   -repeat @# -if {i=={'#'}} -rm[-1] -else -mv[-1] 0 -endif -done       # Remove comment lines.
   -repeat @# -l[$>]
     -s -,{'\ '}
@@ -15353,15 +15353,15 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
      "_nb_sources={$_nb_sources+1} filename=@{\"-basename $""1\"} "\
      "-v + -e[] \"  \"$_nb_sources\". \"$filename\"  \" -v - "\
      "-l[] "\
-     "  -i raw:$""1,uchar -v + -e[] \"      [retrieved from source '$""1']\n\" -v - "\
+     "  -i raw:$""1,char -v + -e[] \"      [retrieved from source '$""1']\n\" -v - "\
      "  -l "\
-     "    -o raw:/tmp/$filename,uchar "\
+     "    -o raw:/tmp/$filename,char "\
      "    -x \"scp /tmp/\"$filename\" ronounours,gmic@web.sourceforge.net:htdocs/include/\" "\
      "    -v + -e[] \"      [archived]\n\" -v - "\
      "  -onfail -v + -e[] \"      [could not be archived!]\n\" -v - -endl "\
      "-onfail -l[] "\
      "  source=http://gmic.sourceforge.net/include/$filename "\
-     "  -i raw:$source,uchar -v + -e[] \"      [retrieved from archive '\"$source\"']\n\" -v - "\
+     "  -i raw:$source,char -v + -e[] \"      [retrieved from archive '\"$source\"']\n\" -v - "\
      "  -onfail -v + -e[] \"      [error, not reachable!]\n\" -v -"\
      "  -endl -endl"
   -m "calibrate_name : "\
