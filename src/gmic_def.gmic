@@ -23686,6 +23686,7 @@ gmicol_rotate :
 #@gmicol clone("Hearts")
 #@gmicol clone("Lava")
 #@gmicol clone("Marble")
+#@gmicol clone("Make seamless")
 #@gmicol clone("Mineral mosaic")
 #@gmicol clone("Mosaic")
 #@gmicol clone("Op art")
