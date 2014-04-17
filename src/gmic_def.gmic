@@ -20897,7 +20897,7 @@ gimp_marble :
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/16</i>.</small>")
 gimp_make_seamless :
   -repeat @# -l[$>]
-    -if $1 --b {21-$1/50}% --[0] [1] -fc[-1] @{-average_color[-1]} -+ -endif
+    -if $1 --b {20.5-$1/50}% --[0] [1] -fc[-1] @{-average_color[-1]} -+ -endif
   -endl -done
   -periodize_poisson -c 0,255
 
