@@ -948,7 +948,7 @@ CImgList<char> update_filters(const bool try_net_update) {
       }
 
       // Copy file to its final location.
-      if (file && (!std::fscanf(file," #@gmi%c",&sep)!=1 && sep=='c')) {
+      if (file && std::fscanf(file," #@gmi%c",&sep)==1 && sep=='c') {
         std::fclose(file);
         CImg<unsigned char>::get_load_raw(filename_tmp).save_raw(filename);
         std::remove(filename_tmp);

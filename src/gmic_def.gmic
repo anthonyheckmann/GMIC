@@ -3374,7 +3374,8 @@ int82float :
   -v - -repeat @# -l[$>]
     -s c -repeat @# -l[$>]
       -sh[-1] {h-1},{h-1},0,0 m=@{-1,t} -rm[-1]
-      -rows 0,{h-2} -s y,3 -*[-3] 65536 -*[-2] 256 -or -n $m
+      -rows 0,{h-2} -s y,3 -*[-3] 65536 -*[-2] 256 -or
+      -skip @{-n\ $m}
     -endl -done -a c
   -endl -done -v +
 
@@ -15638,9 +15639,9 @@ _update_gmic_gimp_move :
 # Generate a splitted preview, with arguments "command",_split_type.
 # 'split_type' can be { 0=no split | 1=forw. horiz. | 2=forw. vert. | 3=back. horiz. | 4=back. vert. | 5=dupl. horiz. | 6=dupl. vert. }
 _before :
-  0 -t[-1] "Before",1,-1,16,1,1
+  0 -t[-1] "Before",1,-1,13,1,1 -r[-1] {w+4},{h+4},1,1,0,0,0.5,0.5
 _after :
-  0 -t[-1] "After",1,-1,16,1,1
+  0 -t[-1] "After",1,-1,13,1,1 -r[-1] {w+4},{h+4},1,1,0,0,0.5,0.5
 
 gimp_split_preview :
   -repeat @#
@@ -15660,7 +15661,7 @@ gimp_split_preview :
       -endif
       -line[-3] 0,0,@{-3,w},0,1,0,0,0,255 -a[-4,-3] y
     -endif
-    --dilate[-2,-1] 3 -*[-4,-3] 255 -to_colormode[-4,-3] @{-5,s} # If splited, display "before/after" text.
+    --dilate[-2,-1] 5 -*[-4,-3] 255 -to_colormode[-4,-3] @{-5,s} # If splited, display "before/after" text.
     -j[-5] [-4],1,1,0,0,0.8,[-2] -j[-5] [-3],{@{-5,w}-w-1},{@{-5,h}-h-1},0,0,0.8,[-1]
     -rm[-4--1]
   -mv[-1] 0 -done
@@ -15705,7 +15706,7 @@ _gimp_no_preview :
 #@gimp_en : note = note{"
 #@gimp_en : <span foreground="purple">( <b>G</b>REYC's <b>M</b>agic for <b>I</b>mage <b>C</b>omputing )</span>\n\nis proposed to you by"}
 #@gimp_en : note = link("David Tschumperl\303\251","http://tschumperle.users.greyc.fr/")
-#@gimp_en : note = link{"( IMAGE Team / GREYC Laboratory - CNRS UMR 6072 )","http://www.greyc.ensicaen.fr/EquipeImage"}
+#@gimp_en : note = link{"( IMAGE Team / GREYC Laboratory - CNRS UMR 6072 )","https://www.greyc.fr/node/36"}
 #@gimp_en : note = note{"
 #@gimp_en : This plug-in is based on our open-source libraries <b>G'MIC</b> and <b>CImg</b> (C++ Template Image Processing Library),
 #@gimp_en : available at:"}
@@ -15782,7 +15783,7 @@ gimp_logo_en :
 #@gimp_fr : note = note{"
 #@gimp_fr : <span foreground="purple">( <b>G</b>REYC's <b>M</b>agic for <b>I</b>mage <b>C</b>omputing )</span>\n\nvous est proposé par"}
 #@gimp_fr : note = link("David Tschumperl\303\251","http://tschumperle.users.greyc.fr/")
-#@gimp_fr : note = link{"( Equipe IMAGE / Laboratoire GREYC - CNRS UMR 6072 )","http://www.greyc.ensicaen.fr/EquipeImage"}
+#@gimp_fr : note = link{"( Equipe IMAGE / Laboratoire GREYC - CNRS UMR 6072 )","https://www.greyc.fr/node/36"}
 #@gimp_fr : note = note{"
 #@gimp_fr : Ce greffon est bas&#233; sur nos biblioth&#232;ques libres <b>G'MIC</b> et <b>CImg</b> (C++ Template Image Processing Library),
 #@gimp_fr : disponibles aux adresses :"}
@@ -15807,7 +15808,7 @@ gimp_logo_fr :
 #@gimp_ca : note = note{"
 #@gimp_ca : <span foreground="purple">( <b>G</b>REYC's <b>M</b>agic for <b>I</b>mage <b>C</b>omputing )</span>\n\n &#233;s una gentilesa de"}
 #@gimp_ca : note = link("David Tschumperl\303\251","http://tschumperle.users.greyc.fr/")
-#@gimp_ca : note = link{"( IMAGE Team / GREYC Laboratory - CNRS UMR 6072 )","http://www.greyc.ensicaen.fr/EquipeImage"}
+#@gimp_ca : note = link{"( IMAGE Team / GREYC Laboratory - CNRS UMR 6072 )","https://www.greyc.fr/node/36"}
 #@gimp_ca : note = note{"
 #@gimp_ca : Aquest connector est&#224; basat en les biblioteques de codi obert <b>G'MIC</b> i <b>CImg</b> (C++ Template Image Processing Library),
 #@gimp_ca : disponibles a :"}
@@ -15872,7 +15873,6 @@ gimp_logo_ca :
 #@gimp : <b> -</b> <i>Bernd Zeimetz</i> <small>(packaging)</small>
 #@gimp : <b> -</b> <i>Matthias Zepper</i> <small>(testing)</small>
 #@gimp : <b> -</b>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/30</i>.</small>")
 
 #@gimp Filter design : _none_, _none_
 #@gimp : note = note{"
@@ -15904,7 +15904,6 @@ gimp_logo_ca :
 #@gimp Filter sources : _none_, gimp_display_filter_sources
 #@gimp : note = note{"Here you can see the filter sources currently enabled in your plug-in.
 #@gimp : For most users, there will be only one URL listed there."}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/06/03</i>.</small>")
 gimp_display_filter_sources :
   -if @# -k[0] -remove_opacity -f 0 -else 256,256 -endif
   -l[] -gimp_filter_sources -y x -a y -onfail (0) -endl
@@ -15980,7 +15979,6 @@ gimp_display_filter_sources :
 #@gimp : link = link(0,"[21] Jean-Michel Webbe - Guadeloupe/France","http://cimg.sourceforge.net/img/postcard15.jpg")
 #@gimp : sep = separator()
 #@gimp : note = note{"\nMay the force be with you!"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/04/26</i>.</small>")
 gimp_friends :
   -if @# ratio={w/h} -else ratio=1 -endif
   -rm -_heart80x73 -scale3x -r 150%,150%,1,1,0,0,0.5,0.5
@@ -16007,7 +16005,6 @@ _heart80x73 :
 #@gimp : note = note{"<b><i>Roddy</i></b> is another mascot designed specifically for the <i>Artistic / Rodilius</i> filter of <b>G'MIC</b>."}
 #@gimp : note = note{"<b><i>Gmicky</i></b> and <b><i>Roddy</i></b> have been designed by "}
 #@gimp : link = link("Mahvelous Mahvin","http://www.mahvin.com/")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i> and <i>Mahvin</i>.      Latest update: <i>2011/05/27</i>.</small>")
 gimp_gmicky :
   -rm
   -if {$1==0} -gmicky
@@ -16048,7 +16045,6 @@ gimp_gmicky_preview :
 #@gimp : note = link{0,"G'MIC community on Google+.","https://plus.google.com/u/0/b/117441237982283011318/communities/100367598461382347439"}
 #@gimp : note = link{0,"G'MIC community on GimpChat.","http://www.gimpchat.com/viewforum.php?f=28"}
 #@gimp : note = link{0,"G'MIC community on Flickr.","http://www.flickr.com/groups/gmic/discuss/"}
-#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/17</i>.</small>")
 
 #@gimp Release notes : _none_, _none_
 #@gimp : note = note{"
@@ -16066,7 +16062,6 @@ gimp_gmicky_preview :
 #@gimp : - <span foreground="purple"><b>2014/04/16</b> : version <i>1.5.8.6</i> (Current stable).</span>\n
 #@gimp : "}
 #@gimp : link = link("View latest changelog","https://www.flickr.com/groups/gmic/discuss/72157642897164453/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/16</i>.</small>")
 
 #@gimp _<b>Arrays &amp; tiles</b>
 #--------------------------------
@@ -16572,7 +16567,7 @@ gimp_feltpen_preview :
 #@gimp : Gamma = float(0,-3,3)
 #@gimp : Smoothness = float(3,0,20)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/07</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/11/07</i>.</small>")
 gimp_poster_hope :
   -apply_gamma {10^$1} -poster_hope $2
 
@@ -16596,7 +16591,7 @@ gimp_kuwahara_preview :
 #@gimp : Radius = int(4,1,30)
 #@gimp : Canvas = float(10,0,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>Lyle Kroll, David Tschumperl&#233;</i>.      Latest update: <i>2011/09/21</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>Lyle Kroll</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/09/21</i>.</small>")
 #@gimp : note = link("Filter Explained here","http://www.gimpchat.com/viewtopic.php?f=10&t=2624")
 gimp_lylejk_painting :
   -repeat @#
@@ -16622,7 +16617,7 @@ _gimp_lylejk_painting :
 #@gimp : Smoothness = float(50,0,1000)
 #@gimp : Sharpen shades = bool(1)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>Lyle Kroll, Angelo Lama, David Tschumperl&#233;</i>.\nLatest update: <i>2011/02/28</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>Lyle Kroll</i>, <i>Angelo Lama</i> and <i>David Tschumperl&#233;</i>.\nLatest update: <i>2011/02/28</i>.</small>")
 gimp_painting : -skip ${4=0},${5=0}
   -repeat @# -l[$>]
     -to_colormode {max(3,s)} -split_opacity -rv
@@ -16676,7 +16671,7 @@ gimp_polygonize_preview :
 #@gimp : Posterization level = int(0,0,15)
 #@gimp : Posterization antialiasing = float(0,0,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233; and David Revoy</i>.      Latest update: <i>2012/11/30</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i> and <i>David Revoy</i>.      Latest update: <i>2012/11/30</i>.</small>")
 gimp_poster_edges :
   -if $1 -bilateral 10,$1 -endif
   -poster_edges ${2-7}
@@ -16929,7 +16924,7 @@ gimp_charcoal_preview :
 #@gimp : <i>Extrapolated colors</i> = the G'MIC generated layer with flat colors.\n\n
 #@gimp : <b>Warning:</b> Do not rely too much on the preview, it is probably not accurate !
 #@gimp : "}
-#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;, Timoth&#233;e Giet, David Revoy</i>.      Latest update: <i>2013/06/19</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>, <i>Timoth&#233;e Giet</i> and <i>David Revoy</i>.      Latest update: <i>2013/06/19</i>.</small>")
 #@gimp : link = link(0.5,"More infos on this filter","http://www.gimpchat.com/viewtopic.php?f=28&t=7567")
 gimp_colorize_comics :
   -if {@#<2} -return -endif
@@ -17209,7 +17204,7 @@ gimp_sketchbw_preview :
 #@gimp : Grain = float(0,0,100)
 #@gimp : Invert colors = bool(false)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>Antaron, Mahvin, David Tschumperl&#233;</i>.             Latest update: 2012/10/08.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>Antaron</i>, <i>Mahvin</i> and <i>David Tschumperl&#233;</i>.             Latest update: 2012/10/08.</small>")
 gimp_stamp :
   -repeat @# -l[$>] -split_opacity
     -norm -noise $5
@@ -19117,7 +19112,7 @@ gimp_blur_radial :
 #@gimp Lomo : gimp_lomo, gimp_lomo_preview(1)
 #@gimp : Vignette size = float(20,0,100)
 #@gimp : sep = separator(), Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-#@gimp : sep = separator(), note = note("<small>Authors: <i>J&#233;rome Boulanger, David Tschumperl&#233;</i>.      Latest update: <i>2012/06/06</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/06/06</i>.</small>")
 gimp_lomo :
   -remove_opacity -repeat @# -l[$>]
     --gaussian {100-$1}%,{100-$1}% -normalize[-1] 0,1 -*
@@ -20090,7 +20085,7 @@ _gimp_emulate_film_collage :
 #@gimp : - for <b>Unix</b>-like systems : <span color="blue"><tt>$HOME/.gmic_film_presets/</tt></span>\n
 #@gimp : - for <b>Windows</b> systems : <span color="blue"><tt>%APPDATA/</tt></span>
 #@gimp : "}
-#@gimp : sep = separator(), note = note("<small>Authors: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/16</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/16</i>.</small>")
 gimp_emulate_film_download :
   -_gimp_emulate_film_download @{-_gimp_emulate_film_bw},\
                                @{-_gimp_emulate_film_instant_consumer},\
@@ -22617,7 +22612,7 @@ gimp_animate_preview : -skip ${4=1},${5=0},${6=$5}
     -if {!$4} -columns[-2] 0,50% -columns[-1] 50%,100% -endif
     -a[-2,-1] x -r[-1] $width,$height,1,100%,2 -drgba[-1]
     -line[-1] 50%,0,50%,100%,1,0,0,0,255
-    -text_outline[-1] "Start",1,0,13,1,1,255 -text_outline[-1] "End",{w-23},{h-16},13,1,1,255
+    -text_outline[-1] "Start",1,0,13,2,1,255 -text_outline[-1] "End",{w-23},{h-16},13,2,1,255
   -mv[-1] 0 -done
 
 #@gimp 3d elevation [animated] : gimp_animate_elevation3d, gimp_animate_elevation3d_preview(1)
@@ -23205,14 +23200,14 @@ _gimp_custom_code :
   -_gimp_custom_code_start
 
 #@gimp Do nothing : gimp_do_nothing, gimp_do_nothing
-#@gimp : note = note("<b>Note</b> : This filters does nothing on the image. Use it to manipulate layers in conjunction with the input/output options of the G'MIC plug-in.")
+#@gimp : note = note("<small><b>Note</b> : This filters does nothing on the image. Use it to manipulate layers in conjunction with the input/output options of the G'MIC plug-in.</small>")
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_do_nothing :
 
 #@gimp GREYC Poker Tour : gimp_gpt, gimp_no_preview
 #@gimp : Score type = _choice(0,"All-times","Last 50 sessions","Last 25 sessions","Last 10 sessions","Last tournament 50","Last tournament 25","Last tournament 10")
-#@gimp : sep = separator(), note = note{"<b>Note</b> : This filters renders and displays the current score board for the <b>GPT (GREYC Poker Tour)</b>,
-#@gimp : a small and local poker tournament organized in our research lab."};
+#@gimp : sep = separator(), note = note{"<small><b>Note</b> : This filters renders and displays the current score board for the <b>GPT (GREYC Poker Tour)</b>,
+#@gimp : a small and local poker tournament organized in our research lab.</small>"};
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2011/03/27</i>.</small>")
 gimp_gpt :
   -gpt ,@{-_gimp_gpt$1}
@@ -23227,7 +23222,7 @@ _gimp_gpt6 : -u -10
 
 #@gimp Histogram analysis : _none_, gimp_display_histogram(1)
 #@gimp : Clusters = int(256,2,256)
-#@gimp : Monochrome = bool(0)
+#@gimp : Luminance only = bool(0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2010/12/29</i>.</small>")
 gimp_display_histogram :
   -to_rgb -if $2 -luminance -endif
@@ -23294,7 +23289,7 @@ gimp_solve_maze_preview :
 #@gmicol : <span foreground="purple">( <b>G</b>REYC's <b>M</b>agic for <b>I</b>mage <b>C</b>omputing <b>O</b>n-<b>L</b>ine)</span>\n\nis proposed to you by"}
 #@gmicol : note = link("S&#233;bastien Fourey","http://foureys.users.greyc.fr/")
 #@gmicol : note = link("David Tschumperl&#233;","http://tschumperle.users.greyc.fr/")
-#@gmicol : note = link{"( IMAGE Team / GREYC Laboratory - CNRS UMR 6072 )","http://www.greyc.ensicaen.fr/EquipeImage"}
+#@gmicol : note = link{"( IMAGE Team / GREYC Laboratory - CNRS UMR 6072 )","https://www.greyc.fr/node/36"}
 #@gmicol : note = note{"
 #@gmicol : This web-service is based on our software <b>G'MIC</b> available at:"}
 #@gmicol : note = link("http://gmic.sourceforge.net/")
@@ -23304,7 +23299,7 @@ gimp_solve_maze_preview :
 #@gmicol : note = note{"<b>G'MIC</b> is also available as a free plug-in for the image retouching software <b>GIMP</b>. Download it to get more filters
 #@gmicol : and features than in the online version, at:"}
 #@gmicol : note = link{"The G'MIC plug-in for GIMP","http://gmic.sourceforge.net/gimp.shtml"}
-#@gmicol : sep = separator(), note = note("<small>Authors: <i>S&#233;bastien Fourey, David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
+#@gmicol : sep = separator(), note = note("<small>Authors: <i>S&#233;bastien Fourey</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2012/10/11</i>.</small>")
 gmicol_logo_en :
   -gimp_logo_version{round(?(0.5,3.49))} "    - Online -\n    "[" "@{-strver}" "]
 
