@@ -15570,7 +15570,7 @@ update_gmic_gimp : -skip ${1=@.},${2=1}
 
   -o[-1] raw:$HOME/.update$1.gmic,char
   -o[-1] /tmp/.update$1.cimgz,char
-  -x "scp "$HOME/.update$1.gmic" ronounours,gmic@web.sourceforge.net:htdocs/"update1585.gmic # 1585 is the last version that does not support compressed updates.
+  -x "scp "$HOME/.update$1.gmic" ronounours,gmic@web.sourceforge.net:htdocs/"update1585.gmic # 1.5.8.5 is the last version that does not support compressed updates.
   -x "scp "/tmp/.update$1.cimgz" ronounours,gmic@web.sourceforge.net:htdocs/"update$1.gmic
   -rm[-1]
 
