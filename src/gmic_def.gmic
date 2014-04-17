@@ -20058,7 +20058,7 @@ _gimp_emulate_film_collage :
   -repeat $#
     preset=${arg{$>+1}}
     --l[0]
-      -_gimp_emulate_film[0] 1,$preset,0,1,0,0,1,0
+      -_gimp_emulate_film[0] 1,$preset,0,1,0,0,0,0,0
       ({'$preset'}) -replace[-1] {'_'},32 -f[-1] if(x==0&&i>={'a'}&&i<={'z'},i+{'A'}-{'a'},i) title=@{-1,t} -rm[-1]
       -text_outline[-1] $title,2,2,$_label_size,2,1,255
     -endl
