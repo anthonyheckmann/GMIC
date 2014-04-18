@@ -1046,37 +1046,39 @@ update_tutorial_html :
   -add_page beginners-cookbook/road-systems,2500
   -add_page beginners-cookbook/stained-glass,4000
   -add_page command-decorations,3500
-  -add_page command-guide,5500
-  -add_page command-guide/-bandpass,5000
-  -add_page command-guide/-blur,2000
-  -add_page command-guide/-blur_angular,700
-  -add_page command-guide/-blur_linear,700
-  -add_page command-guide/-blur_radial,700
-  -add_page command-guide/-blur_selective,3500
-  -add_page command-guide/-blur_x,700
-  -add_page command-guide/-blur_xy,700
-  -add_page command-guide/-blur_xyz,700
-  -add_page command-guide/-blur_y,700
-  -add_page command-guide/-blur_z,2500
-  -add_page command-guide/-convolve,3500
-  -add_page command-guide/-deriche,1500
-  -add_page command-guide/-display,2000
-  -add_page command-guide/-distance,5500
-  -add_page command-guide/-gaussian,2000
-  -add_page command-guide/-gradient,2000
-  -add_page command-guide/-gradient_norm,1300
-  -add_page command-guide/-mix_rgb,4000
-  -add_page command-guide/-norm,700
-  -add_page command-guide/-orientation,4000
-  -add_page command-guide/-warp,4000
-  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500
   -add_page images,1500
   -add_page images/conjuring-images,1000
   -add_page images/images-as-datasets,3500
   -add_page images/images-have-edges,1000
+  -add_page command-guide,5500
+  -add_page command-guide/-display,2000,,,commands-inputs-outputs
+  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500,,,commands-values-manipulation
+  -add_page command-guide/-norm,700,,,commands-values-manipulation
+  -add_page command-guide/-orientation,4000,,,commands-values-manipulation
+  -add_page command-guide/-mix_rgb,4000,,,commands-colors-manipulation
+  -add_page command-guide/-warp,4000,,,commands-geometry-manipulation
+  -add_page command-guide/-bandpass,5000,,,commands-filtering
+  -add_page command-guide/-blur,2000,,,commands-filtering
+  -add_page command-guide/-blur_angular,700,,,commands-filtering
+  -add_page command-guide/-blur_linear,700,,,commands-filtering
+  -add_page command-guide/-blur_radial,700,,,commands-filtering
+  -add_page command-guide/-blur_selective,3500,,,commands-filtering
+  -add_page command-guide/-blur_x,700,,,commands-filtering
+  -add_page command-guide/-blur_xy,700,,,commands-filtering
+  -add_page command-guide/-blur_xyz,700,,,commands-filtering
+  -add_page command-guide/-blur_y,700,,,commands-filtering
+  -add_page command-guide/-blur_z,2500,,,commands-filtering
+  -add_page command-guide/-convolve,3500,,,commands-filtering
+  -add_page command-guide/-deriche,1500,,,commands-filtering
+  -add_page command-guide/-gradient,2000,,,commands-filtering
+  -add_page command-guide/-gradient_norm,1300,,,commands-filtering
+  -add_page command-guide/-distance,5500,,,commands-features-extraction
+  -add_page command-guide/-gaussian,2000,,,commands-image-drawing
+  -add_page command-guide/-plasma,2500,,,commands-image-drawing
 
   # Prepare folder structure.
   -v + -e[] "\n  * Prepare folder structure." -v -
+  -x "ln -fs ../tutorial.css ."
   -x "ln -fs ../copyright.html ."
   -x "ln -fs ../favicon.ico ."
   -x "ln -fs ../favicon.png ."
@@ -1103,7 +1105,7 @@ update_tutorial_html :
     -o[-1] ${_output_html$>} -o[-1] ${_output_shtml$>}
   -done -rm[-1]
   -repeat $_N
-    -v + -_update_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>},${_parent$>} -v -
+    -v + -_update_tutorial_html[] ${_input$>},${_height$>},${_output_shtml$>},${_output_html$>},${_img_prefix$>},${_tocid$>} -v -
   -done
 
   # Clean temp files.
@@ -1111,12 +1113,15 @@ update_tutorial_html :
   -v + -e[] "  * All done !.\n\n"
 
 # Add page to the list of pages to explore.
-__update_tutorial_html : -skip ${3=""},${4=""}
+__update_tutorial_html : -skip ${3=""},${4=""},${5=""}
   -if {!narg($_N)} _N=0 -endif
   _input$_N=$1 _height$_N=$2
 
   # Determine parent id for toc.
-  ({'"$1"'}) -s -,{'/'} -if @# _parent$_N=@{0,t} -rm -else _parent$_N=index -endif
+  -if {narg("$5")} _tocid$_N="$5"
+  -else
+    ({'"$1"'}) -s -,{'/'} -if @# _tocid$_N=@{0,t} -rm -else _tocid$_N=index -endif
+  -endif
 
   # Determine output filenames.
   output_base=@{"-basename $1"}

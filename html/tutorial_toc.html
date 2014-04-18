@@ -1,70 +1,115 @@
 <script language="javascript">
-function foldOrUnfold(section) {
-    var e = document.getElementById('Subsection_'+section);
-    var button = document.getElementById('SectionButton_'+section);
-    if ( e.style.display == '' ) {
-	e.style.display = 'none';
-	button.style.backgroundPosition = '-13px 0px';
-    } else {
-	e.style.display = '';
-	button.style.backgroundPosition = '0px 0px';
-    }
-}
-function unfoldSingleSection( ) {
-    if ( gFilename == '' ) return;
-}
+  function foldOrUnfold(section) {
+  var e = document.getElementById('Subsection_'+section);
+  var button = document.getElementById('SectionButton_'+section);
+  if ( e.style.display == '' ) {
+  e.style.display = 'none';
+  button.style.backgroundPosition = '-13px 0px';
+  } else {
+  e.style.display = '';
+  button.style.backgroundPosition = '0px 0px';
+  }
+  }
+  function unfoldSingleSection( ) {
+  if ( gFilename == '' ) return;
+  }
 </script>
 <style>
-img.foldingButton { cursor: pointer; width: 13px; height: 13px; background: url(img/toc_buttons.png) -13px 0; }
-img.voidButton { cursor: auto; height: 13px; width: 13px; }
-ul.noMarker { list-style-type: none; }
+  img.foldingButton { cursor: pointer; width: 13px; height: 13px; background: url(img/toc_buttons.png) -13px 0; }
+  img.voidButton { cursor: auto; height: 13px; width: 13px; }
+  ul.noMarker { list-style-type: none; }
 </style>
 <p><i>This tutorial has been written by <a href="http://particularart.com/about/">Garry Osgood</a></i></p>
 <h1>Table of Contents</h1>
 <ul class="noMarker"  style="font-size:14px">
-<li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/index.shtml">Introduction</a></li>
-<li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/basics.shtml">Basics</a></li>
-<li><img id="SectionButton_images" class="foldingButton" onclick="foldOrUnfold('images');" src="img/toc_void.png" /> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/images.shtml">Images</a></li>
-<ul id="Subsection_images" style="display: none; font-size:13px">
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/images-as-datasets.shtml">Images as Data Sets</a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/conjuring-images.shtml">Conjuring Images out of the Aether and Other Generators</a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/images-have-edges.shtml">Images Have Edges. Now What?</a></li>
-</ul>
-<li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/command-decorations.shtml">Command Decorations</a></li>
-<li><img id="SectionButton_beginners-cookbook" class="foldingButton" onclick="foldOrUnfold('beginners-cookbook');" src="img/toc_void.png" /> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/beginners-cookbook.shtml">Beginners Cookbook</a></li>
-<ul id="Subsection_beginners-cookbook" style="display: none; font-size:13px">
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/cauldron.shtml">Cauldron, Anyone ?</a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/convert_raw.shtml">Convert Raw Image</a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/road-systems.shtml">Road Systems, Maybe, or Cells</a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/stained-glass.shtml">Stained Glass</a></li>
-</ul>
-<li><img id="SectionButton_command-guide0" class="foldingButton" onclick="foldOrUnfold('command-guide0');" src="img/toc_void.png" /> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/command-guide.shtml">Command Guide</a></li>
-<ul id="Subsection_command-guide0" style="display: none; font-size:13px">
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/trigometric-and-inverse-trigometric-commands.shtml">Trigometric And Inverse Trigometric Commands</a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_bandpass.shtml"><i>-bandpass</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur.shtml"><i>-blur</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_angular.shtml"><i>-blur_angular</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_linear.shtml"><i>-blur_linear</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_radial.shtml"><i>-blur_radial</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_selective.shtml"><i>-blur_selective</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_x.shtml"><i>-blur_x</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_xy.shtml"><i>-blur_xy</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_xyz.shtml"><i>-blur_xyz</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_y.shtml"><i>-blur_y</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_z.shtml"><i>-blur_z</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_convolve.shtml"><i>-convolve</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_deriche.shtml"><i>-deriche</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_display.shtml"><i>-display</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_distance.shtml"><i>-distance</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_gaussian.shtml"><i>-gaussian</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_gradient.shtml"><i>-gradient</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_gradient_norm.shtml"><i>-gradient_norm</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_mix_rgb.shtml"><i>-mix_rgb</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_norm.shtml"><i>-norm</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_orientation.shtml"><i>-orientation</i></a></li>
-<li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_warp.shtml"><i>-warp</i></a></li>
-</ul>
+
+  <!-- Introduction -->
+  <li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/index.shtml">Introduction</a></li>
+
+  <!-- Basics -->
+  <li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/basics.shtml">Basics</a></li>
+
+  <!-- Images -->
+  <li><img id="SectionButton_images" class="foldingButton" onclick="foldOrUnfold('images');" src="img/toc_void.png" /> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/images.shtml">Images</a></li>
+  <ul id="Subsection_images" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/images-as-datasets.shtml">Images as Data Sets</a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/conjuring-images.shtml">Conjuring Images out of the Aether and Other Generators</a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/images-have-edges.shtml">Images Have Edges. Now What?</a></li>
+  </ul>
+
+  <!-- Command Decorations -->
+  <li><img class="voidButton" src="img/toc_void.png"/> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/command-decorations.shtml">Command Decorations</a></li>
+
+  <!-- Beginners Cookbook -->
+  <li><img id="SectionButton_beginners-cookbook" class="foldingButton" onclick="foldOrUnfold('beginners-cookbook');" src="img/toc_void.png" /> <a target="_parent" href="http://gmic.sourceforge.net/tutorial/beginners-cookbook.shtml">Beginners Cookbook</a></li>
+  <ul id="Subsection_beginners-cookbook" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/cauldron.shtml">Cauldron, Anyone ?</a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/convert_raw.shtml">Convert Raw Image</a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/road-systems.shtml">Road Systems, Maybe, or Cells</a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/stained-glass.shtml">Stained Glass</a></li>
+  </ul>
+
+
+  <!-- Commands : Inputs/Outputs -->
+  <li><img id="SectionButton_command-inputs-outputs" class="foldingButton" onclick="foldOrUnfold('commands-inputs-outputs');" src="img/toc_void.png" /> <b>Commands: Inputs/Outputs</b></li>
+  <ul id="Subsection_commands-inputs-outputs" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_display.shtml"><i>-display</i></a></li>
+  </ul>
+
+  <!-- Commands : Values Manipulation -->
+  <li><img id="SectionButton_commands-values-manipulation" class="foldingButton" onclick="foldOrUnfold('commands-values-manipulation');" src="img/toc_void.png" /> <b>Commands: Value Manipulation</b></li>
+  <ul id="Subsection_commands-values-manipulation" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/trigometric-and-inverse-trigometric-commands.shtml">Trigometric And Inverse Trigometric Commands</a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_norm.shtml"><i>-norm</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_orientation.shtml"><i>-orientation</i></a></li>
+  </ul>
+
+  <!-- Commands : Colors Manipulation -->
+  <li><img id="SectionButton_commands-colors-manipulation" class="foldingButton" onclick="foldOrUnfold('commands-colors-manipulation');" src="img/toc_void.png" /> <b>Commands: Colors Manipulation</b></li>
+  <ul id="Subsection_commands-colors-manipulation" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_mix_rgb.shtml"><i>-mix_rgb</i></a></li>
+  </ul>
+
+  <!-- Commands : Geometry manipulation -->
+  <li><img id="SectionButton_commands-geometry-manipulation" class="foldingButton" onclick="foldOrUnfold('commands-geometry-manipulation');" src="img/toc_void.png" /> <b>Commands: Geometry Manipulation</b></li>
+  <ul id="Subsection_commands-geometry-manipulation" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_warp.shtml"><i>-warp</i></a></li>
+  </ul>
+
+  <!-- Commands : Filtering -->
+  <li><img id="SectionButton_commands-filtering" class="foldingButton" onclick="foldOrUnfold('commands-filtering');" src="img/toc_void.png" /> <b>Commands: Filtering</b></li>
+  <ul id="Subsection_commands-filtering" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_bandpass.shtml"><i>-bandpass</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur.shtml"><i>-blur</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_angular.shtml"><i>-blur_angular</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_linear.shtml"><i>-blur_linear</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_radial.shtml"><i>-blur_radial</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_selective.shtml"><i>-blur_selective</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_x.shtml"><i>-blur_x</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_xy.shtml"><i>-blur_xy</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_xyz.shtml"><i>-blur_xyz</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_y.shtml"><i>-blur_y</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_blur_z.shtml"><i>-blur_z</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_convolve.shtml"><i>-convolve</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_deriche.shtml"><i>-deriche</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_gradient.shtml"><i>-gradient</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_gradient_norm.shtml"><i>-gradient_norm</i></a></li>
+  </ul>
+
+  <!-- Commands : Features Extraction -->
+  <li><img id="SectionButton_commands-features-extraction" class="foldingButton" onclick="foldOrUnfold('commands-features-extraction');" src="img/toc_void.png" /> <b>Commands: Features Extraction</b></li>
+  <ul id="Subsection_commands-features-extraction" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_distance.shtml"><i>-distance</i></a></li>
+  </ul>
+
+  <!-- Commands : Image Drawing -->
+  <li><img id="SectionButton_commands-image-drawing" class="foldingButton" onclick="foldOrUnfold('commands-image-drawing');" src="img/toc_void.png" /> <b>Commands: Image Drawing</b></li>
+  <ul id="Subsection_commands-image-drawing" style="display: none; font-size:13px">
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_gaussian.shtml"><i>-gaussian</i></a></li>
+    <li><a target="_parent" href="http://gmic.sourceforge.net/tutorial/_plasma.shtml"><i>-plasma</i></a></li>
+  </ul>
+
 </ul>
 <script language="javascript">
-    foldOrUnfold( gFilename );
+  foldOrUnfold( gFilename );
 </script>

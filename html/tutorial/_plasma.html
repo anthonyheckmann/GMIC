@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="tutorial.css">
+<script type="text/javascript" src="highslide/highslide.js"></script>
+<link rel="stylesheet" type="text/css" href="highslide/highslide.css" />
+<script type="text/javascript">
+hs.graphicsDir = 'highslide/graphics/';
+hs.wrapperClassName = 'wide-border';
+</script>
+<body>
+
+<h1>-plasma</h1>
+<p><img src="img/_plasma_clouds.jpg" title="Blue skies, smiling at me; nothing but blue skies do I see." class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="300" width="300" />Plasma blends and perturbs an input image based on the<a target="_parent" href="http://en.wikipedia.org/wiki/Diamond-square_algorithm"> Diamond-Square Algorithm</a> producing an effect similar to hovering smoke, fog, thin altostratus cloud formations and other undulating hazes.</p>
+<p>G'MIC's implementation samples, blends, and perturbs either images or constant color fields (including black), in the latter case generating cloud-like patterns. Gray scale plasma patterns are often used as height maps for three dimensional mountainous terrain.</p>
+<p>As a sampling and blending algorithm, the command tends to preserve the local average intensity within imagery, but with a randomizing component, also introduces visual roughness. Thus plasma shares attributes with both blurring and noisemaking filters, often to singular effect.</p>
+<p>The algorithm proceeds in discrete stages from initially coarse- to fine-scale grids, the number of such being set by the <i>scale</i> parameter. At each stage, the algorithm samples the existing image at the current grid intersection points, blends these data into a set of interpolated points, then randomly perturbs these, the intensity of such controlled by <i>scale</i>, <i>alpha</i> and <i>beta</i> (see 'How the Parameters Interact', below). The new sample points, added to those present at the start of a stage, together compose the finer-mesh sampling grid of the next stage. When the fineness of the grid reaches pixel dimensions, the algorithm ceases.</p>
+<p><img src="img/_plasma_plasmagrid.jpg" title="Diamond-Square grids" class="img_block" style="margin: 3px; border: 0px solid #808080; float: left;" height="200" width="200" />The Diamond-Square algorithm draws its name from the formation of its sampling grid, which, at a particular stage, consists of horizontally and vertically aligned cells with sides of length <i>d</i>, (the &ldquo;squares&rdquo;) and a slightly finer grid with sides <i>d </i><i>&frasl;&nbsp;&radic;2</i> orientated at 45&deg; (the &ldquo;diamonds&rdquo;). The two sampling and blending grids operate in concert to minimize the formation of horizontally and vertically aligned artifacts that would be otherwise present with grids of a single orientation. The finer grid, consisting of the side midpoints and center points of the coarser grid, combine together with the square grid to form the <i>d /2</i> square grid of the next stage, from which the next stage diamond grid is derived.</p>
+<p>The format of the command is:</p>
+<p><code>plasma _alpha,_beta,_scale</code></p>
+<ol>
+<li><i>_alpha</i>: Controls perturbation effects in a scale-dependent way. These decrease as the algorithm progresses from coarse to fine grids. Use a non-negative floating point value.</li>
+<li><i>_beta:</i> Controls perturbation effects independent of scale. The effect of this component remains constant as the algorithm progresses. Use a non-negative floating point value</li>
+<li>_<i>scale</i>: Controls the size of features relative to overall image size and establishes the number of stages through which the algorithm progresses. A positive integer, <i>_scale</i> can range from zero to thirty one, but the useful range is dependent on the size of the input image. See 'How the Parameters Interact', below.</li>
+</ol>
+<h2>How the Parameters Interact</h2>
+<p>The Diamond-Square algorithm employs a combination of:</p>
+<ol>
+<li>averaging of grid points at one scale to arrive at the values of intermediary grid points for the next finer scale, a kind of interpolating, or blurring, effect, and</li>
+<li>perturbing the new intermediary grid point values with randomly derived offsets, these scaled by an amount set by <i>scale</i>, <i>alpha</i> and <i>beta</i>. A roughening effect.</li>
+</ol>
+<p>Beginning with a coarse-mesh grid, the Diamond-Square algorithm progresses through a series of grids, sample-averaging and perturbing the results at ever-so-finer scales, stopping at the 1 pixel scale.</p>
+<p><i>Scale</i> sets the number of grids which the algorithm uses, and from which follows directly the coarseness of the initial grid:</p>
+<p><i>d = 2<sup>s</sup> for <i>d</i>, length of sides of the initial grid, in pixels, and <i>s, scale</i>, given as a parameter.</i></p>
+<p>For large <i>scale</i> parameters, the mesh of the initial grid is very coarse, sample points are far apart and are averaged over a wide distance. Consequently, the very first samples tend to influence pixels over a very wide area and form the basis for large features. A large <i>scale</i> parameter also means that the algorithm will operate over many stages, each with sample points half the distance apart from each other as the previous grid, so that details arising from random perturbations occur at many scales, giving rise to nuanced effects.</p>
+<p>On the other hand, small <i>scale</i> parameters lead to initial grids that are already fine, so the range of influence that grid points have is limited and feature size in the final image is small. The number of grids that the algorithm runs through is also small, so the algorithm stops after only a few iterations, further limiting large-scale effects. A scale of one operating over a constant color field is barely distinguishable from random noise.</p>
+<p><i>Scale, alpha</i> and <i>beta</i> together establish the perturbation amount at each stage, <i>i</i>, of the algorithm, an amount that generally gets smaller as the algorithm progresses through ever finer grids, though the amount of decay depends on particular choices of the three parameters. Here are the relationships among them:</p>
+<p style="text-align: center;"><img src="img/_plasma_params.jpg" height="95" width="170" /></p>
+<p>As the algorithm progresses through the grids, <i>i</i>, from 1 to <i>s</i>, it computes a perturbation offset, <i>P<sub>i</sub></i>, which it adds to each new intermediary grid point. <i>P<sub>i</sub></i>, in turn, arises from a scaled decay factor, the product of <i>alpha,</i> the first parameter from the command line, and a grid-dependent scale factor, <i>d<sub>i</sub></i>. To this component, the algorithm adds a scale independent factor, <i>beta</i>, the second parameter from the command line. The grid-dependent decay factor, <i>d<sub>i</sub></i> begins as a relatively large factor, when the initial coarse grids are in play, but it decreases by powers of two as the finer grids come into play.</p>
+<ol>
+<li>If both <i>alpha</i> and <i>beta</i> are zero, <i>P<sub>i</sub></i> is zero and no random perturbations take place at any scale. the Diamond-square algorithm becomes a wholly averaging mechanism.</li>
+<li>For non-zero <i>alpha</i>, the scale dependent part of <i>P<sub>i</sub></i> is in play. A very small <i>alpha</i> can throttle this scale dependent factor, just as a very large <i>alpha</i> can make it dominant.</li>
+<li>For non-zero <i>beta</i>, the scale independent part of <i>P<sub>i</sub></i> is in play. This component does not change as the algorithm progresses through the grids, it furnishes a constant kind of noise that is present at all scales, a noise that dominates for <i>beta</i> larger than <i>alpha</i>.</li>
+</ol>
+<h2>Plasma Scale and Image Size</h2>
+<p>The size of the image virtually places a cap on the effect of <i>scale</i>. A normal plasm has a near-zero, perhaps slightly positive average. That is, the minimum value of a plasma-generated image is nearly equal in magnitude to the maximum value, and of opposite sign. But as one increases scale without increasing the size of the image, there comes a point when the features in the image do not grow larger. That is because the coarsest grids are larger than the image size itself &ndash; recall that these grow by powers of two.</p>
+<p>Instead, excessive scale shows up as an image bias. Both the image minimum and maximum grow in tandem. For really excessive values of scale, both the image minimum and maximum will be on the order of a million or ten million, yet be separated by a difference of only a hundred or so. When experimenting with plasmas, keep track of image minima and maxima: if they are not nearly equal and opposite, chances are that scale is uselessly large.</p>
+<p><em>Garry Osgood</em></p>
+
+
+
+
+</body></html>
