@@ -11047,6 +11047,56 @@ blend_median :
 _fade :
   -r[-2] [-3],5 -r[-1] [-2],3 -c[-1] $1%,$2% -n[-1] 0,1 -j[-3] [-2],0,0,0,0,1,[-1] -rm[-2,-1]
 
+#@gmic blend_seamless : _is_mixed_mode={ 0 | 1 },_feathering>=0.
+#@gmic : Blend selected images using a seamless blending mode (Poisson-based).
+#@gmic : Default values: 'is_mixed=0' and 'feathering=0'.
+blend_seamless : -check "isint(${2=0}) && $2>=0" -skip ${1=0}
+  -v - s0="non-mixed" s1="mixed"
+  -v + -e[^-1] "Blend image$? using seamless mode (Poisson-based), in "${s{$1!=0}}" mode and feathering $2." -v -
+  -to_a[^0] -r[^0] [0],[0],1,100%,0,0,0.5,0.5
+
+  -repeat {@#-1} -l[0,1]
+
+    # Get background average color.
+    --r[0] 1,1,1,100%,2 avg=@-1 -rm[-1]
+
+    # Compute mixed gradients of background and top layer.
+    -split_opacity[-1] -neq[-1] 0 -*[-2] [-1] -erode[-1] 3
+    -r {w+4},{h+4},1,100%,0,2,0.5,0.5
+    -gradient[0,1] xy,1
+    -*[-3,-2] [-1]
+    -r[2,3] 100%,100%,1,@{0,s}
+
+    # Modify mask if 'mixed' mode selected.
+    -if $1
+      --a[0,1] c --a[2,3] c -norm[-2,-1]
+      -<[-2,-1] -*[-2,-1]
+    -endif
+
+    # Compute the desired gradient map.
+    -if $2 -distance[-1] 0 -c[-1] 0,{1+$2} -n[-1] 0,1 -endif
+    -j[-5] [-3],0,0,0,0,1,[-1]
+    -j[-4] [-2],0,0,0,0,1,[-1]
+    -rm[-3--1]
+
+    # Compute divergence (right-hand term of Poisson eq.)
+    -gradient[0] x,-1 -gradient[1] y,-1 -+
+    -z 2,2,{w-3},{h-3}
+
+    # Inverse Laplacian.
+    -fft[0]
+    100%,100%,1,1,'-(4-2*cos(2*x*pi/w)-2*cos(2*y*pi/h))'
+    -=[-1] 1 -/[-3,-2] [-1] -rm[-1]
+    -=[-2] 0 -=[-1] 0
+    -ifft[-2,-1] -rm[-1]
+
+    # Renormalize.
+    --fc[-1] $avg
+    -+[-2,-1]
+    -c 0,255
+
+  -endl -done
+
 #@gmic fade_diamond : 0<=_start<=100,0<=_end<=100
 #@gmic : Create diamond fading from selected images.
 #@gmic : Default values: 'start=80' and 'end=90'.
@@ -20371,29 +20421,6 @@ gimp_blend_average_all :
     N=@# -+ -/ $N
   -endif
 
-#@gimp Blend [standard] : gimp_blend, gimp_blend
-#@gimp : Mode = choice("Add","Alpha","And","Average","Blue","Burn","Darken","Difference",
-#@gimp : "Divide","Dodge","Exclusion","Freeze","Grain extract","Grain merge","Green","Hard light",
-#@gimp : "Hard mix","Hue","Interpolation","Lighten","Lightness","Linear burn","Linear light","Luminance",
-#@gimp : "Multiply","Negation","Or","Overlay","Pin light","Red","Reflect","Saturation",
-#@gimp : "Shape Average","Shape Average0","Soft burn","Soft dodge","Soft light","Screen","Stamp","Subtract","Value",
-#@gimp : "Vivid light","Xor")
-#@gimp : Opacity = float(1,0,1)
-#@gimp : Revert layers = bool(0)
-#@gimp : sep = separator(), note = note{"<small><b>Note:</b>
-#@gimp : This filter needs two layers to work properly. Set the <i>Input layers</i> option to handle multiple input layers.
-#@gimp : </small>"}
-#@gimp : link = link("Reference page for G'MIC blending modes","https://sourceforge.net/p/gmic/wiki/Blending%20modes/")
-#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/01/21</i>.</small>")
-gimp_blend :
-  mode=@{-arg\ 1+$1,add,alpha,and,average,blue,burn,darken,difference,\
-       divide,dodge,exclusion,freeze,grainextract,grainmerge,green,hardlight,\
-       hardmix,hue,interpolation,lighten,lightness,linearburn,linearlight,luminance,\
-       multiply,negation,or,overlay,pinlight,red,reflect,saturation,\
-       shapeaverage,shapeaverage0,softburn,softdodge,softlight,screen,stamp,subtract,value,\
-       vividlight,xor}
-  -blend $mode,$2,{1-$3}
-
 #@gimp Blend [edges] : gimp_blend_edges, gimp_blend_edges(0)
 #@gimp : Opacity = float(1,0,1)
 #@gimp : Smoothness = float(0.8,0,5)
@@ -20459,6 +20486,44 @@ _gimp_blend_fade4 : [0],[0],1,1,"((x-w*($1+0.5))*(y-h*($2+0.5)))%(0.2*w*h*(1.001
 #@gimp : This filter needs at least two layers to work properly. Set the <i>Input layers</i> option to handle multiple input layers.
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/05/07</i>.</small>")
+
+#@gimp Blend [standard] : gimp_blend, gimp_blend
+#@gimp : Mode = choice("Add","Alpha","And","Average","Blue","Burn","Darken","Difference",
+#@gimp : "Divide","Dodge","Exclusion","Freeze","Grain extract","Grain merge","Green","Hard light",
+#@gimp : "Hard mix","Hue","Interpolation","Lighten","Lightness","Linear burn","Linear light","Luminance",
+#@gimp : "Multiply","Negation","Or","Overlay","Pin light","Red","Reflect","Saturation",
+#@gimp : "Shape Average","Shape Average0","Soft burn","Soft dodge","Soft light","Screen","Stamp","Subtract","Value",
+#@gimp : "Vivid light","Xor")
+#@gimp : Opacity = float(1,0,1)
+#@gimp : Revert layers = bool(0)
+#@gimp : sep = separator(), note = note{"<small><b>Note:</b>
+#@gimp : This filter needs two layers to work properly. Set the <i>Input layers</i> option to handle multiple input layers.
+#@gimp : </small>"}
+#@gimp : link = link("Reference page for G'MIC blending modes","https://sourceforge.net/p/gmic/wiki/Blending%20modes/")
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/01/21</i>.</small>")
+gimp_blend :
+  mode=@{-arg\ 1+$1,add,alpha,and,average,blue,burn,darken,difference,\
+       divide,dodge,exclusion,freeze,grainextract,grainmerge,green,hardlight,\
+       hardmix,hue,interpolation,lighten,lightness,linearburn,linearlight,luminance,\
+       multiply,negation,or,overlay,pinlight,red,reflect,saturation,\
+       shapeaverage,shapeaverage0,softburn,softdodge,softlight,screen,stamp,subtract,value,\
+       vividlight,xor}
+  -blend $mode,$2,{1-$3}
+
+#@gimp Blend [seamless] : gimp_blend_seamless, gimp_blend_seamless(1)
+#@gimp : Mixed mode = bool(0)
+#@gimp : Feathering = int(0,0,32)
+#@gimp : X-shift = float(0,-100,100)
+#@gimp : Y-shift = float(0,-100,100)
+#@gimp : sep = separator(), note = note{"<small><b>Note:</b>
+#@gimp : This filter needs at least two layers to work properly. Set the <i>Input layers</i> option to handle multiple input layers.
+#@gimp : \n\nAlso, please consider this filter as highly <b>experimental</b>, so please don't be upset by unexpected results :)
+#@gimp : </small>"}
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/20</i>.</small>")
+gimp_blend_seamless :
+  -rv
+  -to_a[^0] -shift[^0] $3%,$4%
+  -blend_seamless $1,$2
 
 #@gimp Align layers : gimp_align_layers, gimp_align_layers_preview
 #@gimp : Alignment type = choice(0,"Rigid","Non-rigid")
