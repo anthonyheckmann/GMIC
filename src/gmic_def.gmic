@@ -20510,15 +20510,15 @@ gimp_blend :
 #@gimp Blend [seamless] : gimp_blend_seamless, gimp_blend_seamless(1)
 #@gimp : Mixed mode = bool(0)
 #@gimp : Feathering = int(0,0,32)
+#@gimp : sep = separator()
 #@gimp : X-shift = float(0,-100,100)
 #@gimp : Y-shift = float(0,-100,100)
 #@gimp : sep = separator(), note = note{"<small><b>Note:</b>
 #@gimp : This filter needs at least two layers to work properly. Set the <i>Input layers</i> option to handle multiple input layers.
-#@gimp : \n\nAlso, please consider this filter as highly <b>experimental</b>, so please don't be upset by unexpected results :)
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/20</i>.</small>")
 gimp_blend_seamless :
-  -rv
+  -rv -r[^0] [0],[0],1,100%,0,0,0.5,0.5
   -to_a[^0] -shift[^0] $3%,$4%
   -blend_seamless $1,$2
 
