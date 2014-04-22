@@ -10858,9 +10858,9 @@ watermark_visible : -skip "${1=\251\ G\47MIC}" -check "${2=0.3}>0 && $2<1 && ${3
 #@gmic blend : blending_mode,0<=_opacity<=1,_revert_layer_order={ 0 | 1 }
 #@gmic : Blend selected G,GA,RGB or RGBA images, two-by-two, using specified mode.
 #@gmic : 'blending_mode' can be { add | alpha | and | average | blue | burn | darken | difference |
-#@gmic : divide | dodge | exclusion | freeze | grainextract | grainmerge | green | hardlight |
+#@gmic : divide | dodge | edges | exclusion | freeze | grainextract | grainmerge | green | hardlight |
 #@gmic : hardmix | hue | interpolation | lighten | lightness | linearburn | linearlight | luminance |
-#@gmic : multiply | negation | or | overlay | pinlight | red | reflect | saturation |
+#@gmic : multiply | negation | or | overlay | pinlight | red | reflect | saturation | seamless | seamless_mixed |
 #@gmic : screen | shapeaverage | shapeaverage0 | softburn | softdodge | softlight | stamp | subtract | value |
 #@gmic : vividlight | xor }.
 #@gmic : Default values: 'blending_mode=alpha', 'opacity=1' and 'revert_layers=0'.
@@ -10875,7 +10875,7 @@ watermark_visible : -skip "${1=\251\ G\47MIC}" -check "${2=0.3}>0 && $2<1 && ${3
 blend : -skip ${1=alpha},${2=1},${3=0},${4=1}
   -v - s0="" s1="(reverted layers) " -v +
   -e[^-1] "Blend image$? two-by-two, using '$1' mode "${s{$3!=0}}"and opacity $2."
-  -v - -l[] code=@{-_blend_$1}
+  -v - -l[] code=@{-_blend_$1[]}
   -onfail -v + -error[0--2] "Command '-blend': Unknown blending mode '$1' requested."
   -endl
   -repeat {int(@#/2)} -l[$>,{$>+1}] -if $3 -rv -endif
@@ -10928,6 +10928,8 @@ _blend_divide :
   -u "-+[1] 0.1 -^[1] -1 -*[1] [0] -*[1] 255 -c[1] 0,255"
 _blend_dodge :
   -u "--[1] 255.1 -^[1] -1 -*[1] [0] -*[1] -255 -c[1] 0,255"
+_blend_edges :
+  -u "--blend_edges 0.5 -rm[1]"
 _blend_exclusion :
   -u "--*[0,1] -/[2] -127.5 -+[1,2] -+[1] [0]"
 _blend_freeze :
@@ -20529,12 +20531,12 @@ _gimp_blend_fade4 : [0],[0],1,1,"((x-w*($1+0.5))*(y-h*($2+0.5)))%(0.2*w*h*(1.001
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/05/07</i>.</small>")
 
 #@gimp Blend [standard] : gimp_blend, gimp_blend
-#@gimp : Mode = choice("Add","Alpha","And","Average","Blue","Burn","Darken","Difference",
-#@gimp : "Divide","Dodge","Exclusion","Freeze","Grain extract","Grain merge","Green","Hard light",
+#@gimp : Mode = choice{"Add","Alpha","And","Average","Blue","Burn","Darken","Difference",
+#@gimp : "Divide","Dodge","Edges","Exclusion","Freeze","Grain extract","Grain merge","Green","Hard light",
 #@gimp : "Hard mix","Hue","Interpolation","Lighten","Lightness","Linear burn","Linear light","Luminance",
 #@gimp : "Multiply","Negation","Or","Overlay","Pin light","Red","Reflect","Saturation",
 #@gimp : "Shape Average","Shape Average0","Soft burn","Soft dodge","Soft light","Screen","Stamp","Subtract","Value",
-#@gimp : "Vivid light","Xor")
+#@gimp : "Vivid light","Xor"}
 #@gimp : Opacity = float(1,0,1)
 #@gimp : Revert layers = bool(0)
 #@gimp : sep = separator(), note = note{"<small><b>Note:</b>
@@ -20544,7 +20546,7 @@ _gimp_blend_fade4 : [0],[0],1,1,"((x-w*($1+0.5))*(y-h*($2+0.5)))%(0.2*w*h*(1.001
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/01/21</i>.</small>")
 gimp_blend :
   mode=@{-arg\ 1+$1,add,alpha,and,average,blue,burn,darken,difference,\
-       divide,dodge,exclusion,freeze,grainextract,grainmerge,green,hardlight,\
+       divide,dodge,edges,exclusion,freeze,grainextract,grainmerge,green,hardlight,\
        hardmix,hue,interpolation,lighten,lightness,linearburn,linearlight,luminance,\
        multiply,negation,or,overlay,pinlight,red,reflect,saturation,\
        shapeaverage,shapeaverage0,softburn,softdodge,softlight,screen,stamp,subtract,value,\
