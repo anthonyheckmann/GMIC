@@ -1039,41 +1039,42 @@ update_tutorial_html :
   -v - -rm -m "add_page : -__update_tutorial_html $""*"
 
   # Init list of pages to retrieve.
-  # -add_page /,1700,index,_index
-  # -add_page basics,4000
-  # -add_page beginners-cookbook,1000
-  # -add_page beginners-cookbook/cauldron,3500
-  # -add_page beginners-cookbook/road-systems,2500
-  # -add_page beginners-cookbook/stained-glass,4000
-  # -add_page command-decorations,3500
-  # -add_page images,1500
-  # -add_page images/conjuring-images,1000
-  # -add_page images/images-as-datasets,3500
-  # -add_page images/images-have-edges,1000
-  # -add_page command-guide,5500
-  # -add_page command-guide/-display,2000,,,commands-inputs-outputs
-  # -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500,,,commands-values-manipulation
-  # -add_page command-guide/-norm,700,,,commands-values-manipulation
-  # -add_page command-guide/-orientation,4000,,,commands-values-manipulation
-  # -add_page command-guide/-mix_rgb,4000,,,commands-colors-manipulation
-  # -add_page command-guide/-warp,4000,,,commands-geometry-manipulation
-  # -add_page command-guide/-bandpass,5000,,,commands-filtering
-  # -add_page command-guide/-blur,2000,,,commands-filtering
-  # -add_page command-guide/-blur_angular,700,,,commands-filtering
-  # -add_page command-guide/-blur_linear,700,,,commands-filtering
-  # -add_page command-guide/-blur_radial,700,,,commands-filtering
-  # -add_page command-guide/-blur_selective,3500,,,commands-filtering
-  # -add_page command-guide/-blur_x,700,,,commands-filtering
-  # -add_page command-guide/-blur_xy,700,,,commands-filtering
-  # -add_page command-guide/-blur_xyz,700,,,commands-filtering
-  # -add_page command-guide/-blur_y,700,,,commands-filtering
-  # -add_page command-guide/-blur_z,2500,,,commands-filtering
-  # -add_page command-guide/-convolve,3500,,,commands-filtering
-  # -add_page command-guide/-deriche,1500,,,commands-filtering
-  # -add_page command-guide/-gradient,2000,,,commands-filtering
-  # -add_page command-guide/-gradient_norm,1300,,,commands-filtering
-  # -add_page command-guide/-distance,5500,,,commands-features-extraction
-  # -add_page command-guide/-gaussian,2000,,,commands-image-drawing
+  -add_page /,1700,index,_index
+  -add_page basics,4000
+  -add_page beginners-cookbook,1000
+  -add_page beginners-cookbook/cauldron,3500
+  -add_page beginners-cookbook/road-systems,2500
+  -add_page beginners-cookbook/stained-glass,4000
+  -add_page command-decorations,3500
+  -add_page images,1500
+  -add_page images/conjuring-images,1000
+  -add_page images/images-as-datasets,3500
+  -add_page images/images-have-edges,1000
+  -add_page command-guide,5500
+  -add_page command-guide/-display,2000,,,commands-inputs-outputs
+  -add_page command-guide/trigometric-and-inverse-trigometric-commands,2500,,,commands-values-manipulation
+  -add_page command-guide/-norm,700,,,commands-values-manipulation
+  -add_page command-guide/-normalize,1700,,,commands-values-manipulation
+  -add_page command-guide/-orientation,4000,,,commands-values-manipulation
+  -add_page command-guide/-mix_rgb,4000,,,commands-colors-manipulation
+  -add_page command-guide/-warp,4000,,,commands-geometry-manipulation
+  -add_page command-guide/-bandpass,5000,,,commands-filtering
+  -add_page command-guide/-blur,2000,,,commands-filtering
+  -add_page command-guide/-blur_angular,700,,,commands-filtering
+  -add_page command-guide/-blur_linear,700,,,commands-filtering
+  -add_page command-guide/-blur_radial,700,,,commands-filtering
+  -add_page command-guide/-blur_selective,3500,,,commands-filtering
+  -add_page command-guide/-blur_x,700,,,commands-filtering
+  -add_page command-guide/-blur_xy,700,,,commands-filtering
+  -add_page command-guide/-blur_xyz,700,,,commands-filtering
+  -add_page command-guide/-blur_y,700,,,commands-filtering
+  -add_page command-guide/-blur_z,2500,,,commands-filtering
+  -add_page command-guide/-convolve,3500,,,commands-filtering
+  -add_page command-guide/-deriche,1500,,,commands-filtering
+  -add_page command-guide/-gradient,2000,,,commands-filtering
+  -add_page command-guide/-gradient_norm,1300,,,commands-filtering
+  -add_page command-guide/-distance,5500,,,commands-features-extraction
+  -add_page command-guide/-gaussian,2000,,,commands-image-drawing
   -add_page command-guide/-plasma,4500,,,commands-image-drawing
 
   # Prepare folder structure.
@@ -11157,7 +11158,7 @@ sub_alpha :
     -to_colormode 0 -r @{-max_whd},100%,0,0,0.5,0.5  # Normalize image dimensions.
 
     # Estimate minimal alpha-channel.
-    -->=[0,1] -*[2] 255
+    -->[0,1] -*[2] 255
     --[0,2] [1] -replace[2] 0,1
     -i[2] [0] -/[2,3]
     -compose_channels[2] max
@@ -19522,7 +19523,30 @@ gimp_unsharp :
 gimp_unsharp_preview :
   -gimp_split_preview "-gimp_unsharp $*",$-1
 
-#@gimp Split details : gimp_split_details, gimp_split_details_preview(0)
+#@gimp Split details [layers] : gimp_split_details_alpha, gimp_split_details_alpha_preview(1)
+#@gimp : Number of levels = int(6,2,8)
+#@gimp : Smoothness = float(0.25,0.1,2)
+#@gimp : sep = separator()
+#@gimp : Preview without alpha = bool(0)
+#@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/22</i>.</small>")
+gimp_split_details_alpha :
+  -remove_opacity
+  -repeat @# -l[$<]
+    -repeat {$1-1}
+      --b[-1] {($>+1)*$2}%
+      --sub_alpha[-2,-1] -mv[-1] 0 -rm[-2]
+    -done
+    -mv[-1] 0 -rv
+  -endl -done
+
+gimp_split_details_alpha_preview :
+  -gimp_split_details_alpha ${1-2}
+  -if $3 -remove_opacity[^-1] -else -to_rgba[-1] -endif
+  -drgba
+  -repeat @# -l[$>] -text_outline "\#"{1+$>},1,1,43,7,1,255 -endl -done
+  -append_tiles ,
+
+#@gimp Split details [tiled] : gimp_split_details, gimp_split_details_preview(0)
 #@gimp : Action = choice{"Decompose/update","Recompose"}
 #@gimp : sep = separator(), note = note("<small><b>Decompose options:</b></small>")
 #@gimp : Number of scales = int(3,2,16)
@@ -19540,7 +19564,7 @@ gimp_unsharp_preview :
 #@gimp : 5. When you are happy with the result, open the G'MIC plug-in once again, set parameter <i>Action</i> to <i>Recompose</i>, and click <i>OK</i>.\n
 #@gimp : 6. Get your final modified image alone.
 #@gimp : </small>"}
-#@gimp : sep = separator(), note = note("<small>Author: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/14</i>.</small>")
+#@gimp : sep = separator(), note = note("<small>Authors: <i>J&#233;rome Boulanger</i> and <i>David Tschumperl&#233;</i>.      Latest update: <i>2013/12/14</i>.</small>")
 gimp_split_details :
   -remove_opacity
   -if {$1==1} -repeat @# -l[$<]
