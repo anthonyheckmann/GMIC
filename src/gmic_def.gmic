@@ -20572,7 +20572,7 @@ gimp_blend_seamless :
   -to_a[^0] -shift[^0] $3%,$4%
   -if $5 # Output as separate layers
     --blend_seamless $1,$2
-    -k[0,-1] -rv --sub_alpha -rv[0,-1] -rm[-1]
+    -k[0,-1] -rv --sub_alpha 1 -rv[0,-1] -rm[-1]
   -else -blend_seamless $1,$2 # Output as a single layer.
   -endif
 
