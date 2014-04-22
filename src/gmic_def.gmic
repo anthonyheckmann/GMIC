@@ -19523,7 +19523,7 @@ gimp_unsharp :
 gimp_unsharp_preview :
   -gimp_split_preview "-gimp_unsharp $*",$-1
 
-#@gimp Split details [layers] : gimp_split_details_alpha, gimp_split_details_alpha_preview(1)
+#@gimp Split details [layers] : gimp_split_details_alpha, gimp_split_details_alpha_preview(0)
 #@gimp : Number of levels = int(6,2,8)
 #@gimp : Smoothness = float(0.25,0.1,2)
 #@gimp : sep = separator()
@@ -20551,12 +20551,14 @@ gimp_blend :
        vividlight,xor}
   -blend $mode,$2,{1-$3}
 
-#@gimp Blend [seamless] : gimp_blend_seamless, gimp_blend_seamless(1)
+#@gimp Blend [seamless] : gimp_blend_seamless, gimp_blend_seamless_preview(1)
 #@gimp : Mixed mode = bool(0)
 #@gimp : Feathering = int(0,0,32)
 #@gimp : sep = separator()
 #@gimp : X-shift = float(0,-100,100)
 #@gimp : Y-shift = float(0,-100,100)
+#@gimp : sep = separator()
+#@gimp : Output as separate layers = _bool(0)
 #@gimp : sep = separator(), note = note{"<small><b>Note:</b>
 #@gimp : This filter needs at least two layers to work properly. Set the <i>Input layers</i> option to handle multiple input layers.
 #@gimp : </small>"}
@@ -20564,7 +20566,14 @@ gimp_blend :
 gimp_blend_seamless :
   -rv -r[^0] [0],[0],1,100%,0,0,0.5,0.5
   -to_a[^0] -shift[^0] $3%,$4%
-  -blend_seamless $1,$2
+  -if $5 # Output as separate layers
+    --blend_seamless $1,$2
+    -k[0,-1] -rv --sub_alpha -rv[0,-1] -rm[-1]
+  -else -blend_seamless $1,$2 # Output as a single layer.
+  -endif
+
+gimp_blend_seamless_preview :
+  -gimp_blend_seamless ${1-4},0
 
 #@gimp Align layers : gimp_align_layers, gimp_align_layers_preview
 #@gimp : Alignment type = choice(0,"Rigid","Non-rigid")
