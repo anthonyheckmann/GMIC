@@ -20568,8 +20568,8 @@ gimp_blend :
 #@gimp : </small>"}
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/20</i>.</small>")
 gimp_blend_seamless :
-  -rv -r[^0] [0],[0],1,100%,0,0,0.5,0.5
-  -to_a[^0] -shift[^0] $3%,$4%
+  -rv -to_a[^0] -r[^0] [0],[0],1,100%,0,0,0.5,0.5
+  -shift[^0] $3%,$4%
   -if $5 # Output as separate layers
     --blend_seamless $1,$2
     -k[0,-1] -rv --sub_alpha 1 -rv[0,-1] -rm[-1]
