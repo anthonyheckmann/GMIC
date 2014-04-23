@@ -19528,8 +19528,9 @@ gimp_unsharp_preview :
 
 #@gimp Split details [layers] : gimp_split_details_alpha, gimp_split_details_alpha_preview(0)
 #@gimp : Number of levels = int(6,2,8)
-#@gimp : Smoothness = float(0.25,0.1,2)
-#@gimp : Opacity gain = float(1,1,10)
+#@gimp : Base scale = float(10,0,10)
+#@gimp : Details scale = float(1,0,20)
+#@gimp : Opacity gain = float(5,1,20)
 #@gimp : sep = separator()
 #@gimp : Preview without alpha = bool(0)
 #@gimp : sep = separator(), note = note("<small>Author: <i>David Tschumperl&#233;</i>.      Latest update: <i>2014/04/22</i>.</small>")
@@ -19537,15 +19538,24 @@ gimp_split_details_alpha :
   -remove_opacity
   -repeat @# -l[$<]
     -repeat {$1-1}
-      --b[-1] {($>+1)*$2}%
-      --sub_alpha[-2,-1] $3 -mv[-1] 0 -rm[-2]
+      s={$3+($2-$3)*$>/if($1-2>0,$1-2,1)}
+      --_gimp_split_details_alpha_blur[-1] $s
+      --sub_alpha[-2,-1] $4 -mv[-1] 0 -rm[-2]
     -done
     -mv[-1] 0 -rv
   -endl -done
 
+_gimp_split_details_alpha_blur :
+  -if {$1>=0.1} -b[-1] $1
+  -else
+    -if {$1>=0.05} (1,4,7,4,1;4,16,26,16,4;7,26,41,26,7;4,16,26,16,4;1,4,7,4,1)
+    -else (1,2,1;2,4,2;1,2,1) -endif
+    -normalize_sum[-1] -convolve[-2] [-1] -rm[-1]
+  -endif
+
 gimp_split_details_alpha_preview :
-  -gimp_split_details_alpha ${1-3}
-  -if $4 -remove_opacity[^-1] -else -to_rgba[-1] -endif
+  -gimp_split_details_alpha ${1-4}
+  -if $5 -remove_opacity[^-1] -else -to_rgba[-1] -endif
   -drgba
   -repeat @# -l[$>] -text_outline "\#"{1+$>},1,1,43,7,1,255 -endl -done
   -append_tiles ,
