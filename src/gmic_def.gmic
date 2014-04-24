@@ -1086,6 +1086,7 @@ update_tutorial_html :
   -x "ln -fs ../footer.html ."
   -x "ln -fs ../header.html ."
   -x "ln -fs ../header.css ."
+  -x "ln -fs ../jquery-1.11.0.min.js ."
   -x "ln -fs ../images ."
   -x "mkdir -p img"
   -x "cd img && ln -fs ../../img/logo4.jpg ."
