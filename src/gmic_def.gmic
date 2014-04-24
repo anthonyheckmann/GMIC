@@ -1085,6 +1085,7 @@ update_tutorial_html :
   -x "ln -fs ../favicon.png ."
   -x "ln -fs ../footer.html ."
   -x "ln -fs ../header.html ."
+  -x "ln -fs ../header.css ."
   -x "ln -fs ../images ."
   -x "mkdir -p img"
   -x "cd img && ln -fs ../../img/logo4.jpg ."
