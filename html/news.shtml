@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--#include file="header.html" -->
+<link href="style.css" rel="stylesheet" type="text/css">
+
+  <div id="bloc_option"><div id="top_bleu"><div id="text_top">Latest News</div></div>
+    <div id="center"><div id="text_centre_intro">
+
+        <p><ul><li>You can access all news on the official <a href="https://plus.google.com/117441237982283011318/posts">G'MIC Page on Google+</a>.</li></ul></p>
+
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/HJAcQKx9rb9"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/HPbcFoVDuQa"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/ULY85AHVG8P"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/Z4As8NnVcYw"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/dLVjnjRiezf"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/ApiZ117o1QM"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/aKhMha1K4fB"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/X9Ysz5KwzDg"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/ekTaitGhDsu"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/4dn2vpRVYk1"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/NUFVNmmLrKm"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/apSg6QQkzTh"></div>
+        <div class="g-post" data-href="https://plus.google.com/117441237982283011318/posts/ZTSzjPidyzJ"></div>
+
+    </div></div><div id="footer"><img src="images/footer.jpg" /></div></div>
+
+<!--#include file="copyright.html" -->
+<!--#include file="footer.html" -->
+

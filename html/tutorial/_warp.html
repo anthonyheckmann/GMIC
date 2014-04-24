@@ -58,7 +58,7 @@ hs.wrapperClassName = 'wide-border';
 <td><img src="img/_warp_wa_3.jpg" title="vector warp field" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>
 <h3>4.</h3>
-<p><code>...<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#append">-a</a>[-2,-1] c <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">-n</a>[-1] 0,100 <a target="_parent" href="_blur.shtml">-blur</a>[-1] 3...&nbsp; </code></p>
+<p><code>...<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#append">-a</a>[-2,-1] c <a target="_parent" href="_normalize.shtml">-n</a>[-1] 0,100 <a target="_parent" href="_blur.shtml">-blur</a>[-1] 3...&nbsp; </code></p>
 <p>We append the partial x and y gradients formally into a displacement field, which will warp the cloth sample in the following panel. Mere convention gives the displacement field a greenish/yellowish/reddish cast: the x displacement data coincides with the RGB red channel, the y displacement data coincides with the green channel.</p>
 <p>Normalizing the channel directly affects the warp. Here, we are warping the cloth in first quadrant directions only, as we have normalized the displacement vectors to only allow for positive x and y values. Had we normalized around zero, say -n[-1] -200,200, then displacement vectors would point in all compass directions. This choice of limiting vectors to first quadrant directions rests entirely on aesthetic notions of the particular artist.</p>
 <p>The <a target="_parent" href="_gradient.shtml">-gradient</a> command introduces some pixel noise which can give rise to random pixel displacements. At the price of softening the warp slightly, a <a target="_parent" href="_blur.shtml">-blur</a> around a neighborhood of three pixels avoids the issue.</p>
@@ -76,7 +76,7 @@ hs.wrapperClassName = 'wide-border';
 <td><img src="img/_warp_wa_5.jpg" title="warped pattern" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>
 <h3>6.</h3>
-<p><code>...-warp[-1] [-2],1,2,2,1 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">-n</a>[-1] 0,255...</code></p>
+<p><code>...-warp[-1] [-2],1,2,2,1 <a target="_parent" href="_normalize.shtml">-n</a>[-1] 0,255...</code></p>
 <p>Here the operand image is the texture at the end of the working set [-1], the displacement field is in the fourth panel, occupying [-2] slot of the working set. We opt for relative displacement, cubic interpolation, cyclic boundary policy, and we are not making an animation.</p>
 <p>For the fake cloth effect, the warping should not be too dramatic. Indeed, it should be barely noticable. Otherwise a strong warp might flip or tear the pattern, which would not be visually convincing.</p>
 <p>We control the degree of warping upstream by normalizing the displacement field to various magnitudes. In this example, we normalized the warp field in the range of&nbsp; 0 to 100 (see the commentary on the fourth panel).</p>
@@ -96,7 +96,7 @@ hs.wrapperClassName = 'wide-border';
 <td><img src="img/_warp_wa_7.jpg" title="shadows selected" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>
 <h3>8.</h3>
-<p><code>...<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#add">-add</a>[-1] 120 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#cut">-cut</a>[-1] 0,255 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">-n</a>[-1] 0,1...</code></p>
+<p><code>...<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#add">-add</a>[-1] 120 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#cut">-cut</a>[-1] 0,255 <a target="_parent" href="_normalize.shtml">-n</a>[-1] 0,1...</code></p>
 <p>We add a large offsetting constant to move highlight and midtone detail of the shadow pattern to values greater than 255 and then cut back to 255, leaving highlights and midtones an undifferentiated white; only the shadows, now much lighter, retain detail.</p>
 <p>In preparation for multiplying the shadow pattern with the final image (panel 9), we normalize the shadow pattern to the range 0,1, so as not to alter the image's dynamic range.</p>
 </td>
@@ -114,7 +114,7 @@ hs.wrapperClassName = 'wide-border';
 <td><img src="img/_warp_wa_9.jpg" title="color mods" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="256" width="256" /></td>
 <td>
 <h3>10.</h3>
-<p><code>...<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">-n</a>[0] -127,127 --<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#direction2rgb">direction2rgb</a>[0]...</code></p>
+<p><code>...<a target="_parent" href="_normalize.shtml">-n</a>[0] -127,127 --<a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#direction2rgb">direction2rgb</a>[0]...</code></p>
 For color variation, we again turn to the displacement field, now offsetting it so that its mean value is very nearly zero. We re-map the direction to which vectors point to a hue, the business of <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#direction2rgb">-direction2rgb</a>. This does not <em>quite</em> give the color breakdown the particular artists desire, but it is fairly close, as the downslope vectors point in very different directions from the upslope vectors - in terms of color, they are very nearly complementary. <br />
 <p><code>&nbsp; </code></p>
 </td>

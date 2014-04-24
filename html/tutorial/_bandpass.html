@@ -116,7 +116,7 @@ hs.wrapperClassName = 'wide-border';
 <tr>
 <td><img src="img/_bandpass_lmex_000003.jpg" title="Zero out land regions" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="200" width="200" /></td>
 <td>
-<p><code>...[0] <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">--n</a>[-1] 0,1 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#mul">-mul</a>[-2,-1]...</code></p>
+<p><code>...[0] <a target="_parent" href="_normalize.shtml">--n</a>[-1] 0,1 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#mul">-mul</a>[-2,-1]...</code></p>
 <p>To distinguish "land" from "sea", we harness the original bilevel image as a mask, normalizing it to the range of zero to one. When we multiply the penultimate and last pipeline images (landmasses and mask, respectively), the effects of the bandpass command are masked out in zero regions, by fiat, corresponding to "land."</p>
 </td>
 </tr>
@@ -137,7 +137,7 @@ hs.wrapperClassName = 'wide-border';
 <tr>
 <td>&nbsp;<img src="img/_bandpass_lmex_000006.jpg" title="finished shoreline" class="img_block" style="margin: 3px; border: 0px solid #808080;" height="200" width="200" /></td>
 <td>
-<p><code>...--lt[-1] 15 <code><a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#normalize">-normalize</a>[-1] 0,255 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#output">-o</a>[-1] lmc.png&para;</code></code></p>
+<p><code>...--lt[-1] 15 <code><a target="_parent" href="_normalize.shtml">-normalize</a>[-1] 0,255 <a target="_parent" href="http://gmic.sourceforge.net/reference.shtml#output">-o</a>[-1] lmc.png&para;</code></code></p>
 <p>A logic command, -lt 15 (less than intensity level 15). generates bivalue "True/False" images; pixels obtain either a zero or a one value. Since it is true that most pixels in the image have intensities less than fifteen, the image becomes largely white ("True"), except for the more intense wave traces around the land and the shoreline itself. The logic command, then, achived an image reversal and extracted the final pattern: two operations for the price of one.&nbsp;</p>
 <p>&nbsp;</p>
 </td>
